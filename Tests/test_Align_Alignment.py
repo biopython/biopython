@@ -3680,7 +3680,7 @@ class TestAlignmentFormat(unittest.TestCase):
         alignments = aligner.align(seq1, seq2)
         best_alignment = alignments[0]
 
-        best_alignment.terminal_columns = 80
+        Align.Alignment.terminal_columns = 80
         # target            0 -VQLQESDAELVKPGASVKIS--CKASGYTFT-DHVIHWVKQKPEQG--LEWIGYISPGNGDIKYNEKFKGKATLTADKSSSTAYMQLN-SL---------TS-------------EDSAVYLCKRGYY 100
         #                   0 -||||||...||||--|...|--|...||..|-|....|..|.|--|--|||.||.|-------|--------------|.||.|---|-||---------||-------------||.|.|.|.||-. 129
         # query             0 DVQLQESGPGLVKP--SQSQSLTCTVTGYSITSDYAWNWIRQFP--GNKLEWMGYMS-------Y--------------SGSTRY---NPSLRSRISITRDTSKNQFFLQLKSVTTEDTATYFCARG-W 100
@@ -3700,7 +3700,7 @@ class TestAlignmentFormat(unittest.TestCase):
         #
         self.assertEqual(len(str(best_alignment).split("\n")), 12)
 
-        best_alignment.terminal_columns = 200
+        Align.Alignment.terminal_columns = 200
         # target            0 -VQLQESDAELVKPGASVKIS--CKASGYTFT-DHVIHWVKQKPEQG--LEWIGYISPGNGDIKYNEKFKGKATLTADKSSSTAYMQLN-SL---------TS-------------EDSAVYLCKRGYY 100
         #                   0 -||||||...||||--|...|--|...||..|-|....|..|.|--|--|||.||.|-------|--------------|.||.|---|-||---------||-------------||.|.|.|.||-. 129
         # query             0 DVQLQESGPGLVKP--SQSQSLTCTVTGYSITSDYAWNWIRQFP--GNKLEWMGYMS-------Y--------------SGSTRY---NPSLRSRISITRDTSKNQFFLQLKSVTTEDTATYFCARG-W 100

@@ -1015,7 +1015,11 @@ class Alignment:
          - column_annotations - A dictionary with annotations describing each
                                 column in the alignment;
          - score              - The alignment score.
+
+         - terminal_columns - The number of columns used to format the alignment
     """
+
+    terminal_columns = None
 
     @classmethod
     def infer_coordinates(cls, lines):
@@ -1111,7 +1115,7 @@ class Alignment:
         parser.fill(coordinates)
         return sequences, coordinates
 
-    def __init__(self, sequences, coordinates=None, terminal_columns=None):
+    def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
 
         Arguments:
@@ -1120,7 +1124,6 @@ class Alignment:
          - coordinates - The sequence coordinates that define the alignment.
                          If None (the default value), assume that the sequences
                          align to each other without any gaps.
-         - terminal_columns - The number of columns used to format the alignment
         """
         self.sequences = sequences
         if coordinates is None:
@@ -1142,7 +1145,6 @@ class Alignment:
                         "sequences must have the same length if coordinates is None"
                     )
         self.coordinates = coordinates
-        self.terminal_columns = None
 
     def __array__(self, dtype=None, copy=None):
         if copy is False:
