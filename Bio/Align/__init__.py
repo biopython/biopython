@@ -48,6 +48,7 @@ from Bio.Seq import Seq
 from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError
 from Bio.Seq import SequenceDataAbstractBaseClass
+from Bio.Seq import _UndefinedSequenceData
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
@@ -1148,6 +1149,34 @@ class Alignment:
 
         if len(pwas) == 0:
             raise ValueError("No pairwise alignments provided.")
+
+        # Validate that all pairwise alignments share the same reference
+        first_seqs = [pwa.sequences[0] for pwa in pwas]
+        # Same length (all types of references)
+        if not all(len(first_seq) == len(first_seqs[0]) for first_seq in first_seqs):
+            raise ValueError("All reference sequences must have the same length.")
+
+        # Same sequence (defined sequences only)
+        string_first_seqs = []
+        for first_seq in first_seqs:
+            # Exclude undefined sequences
+            if isinstance(first_seq, Seq) and isinstance(
+                first_seq._data, _UndefinedSequenceData
+            ):
+                continue
+            elif isinstance(first_seq, SeqRecord) and (
+                first_seq.seq is None
+                or isinstance(first_seq.seq._data, _UndefinedSequenceData)
+            ):
+                continue
+            elif isinstance(first_seq, SeqRecord):
+                string_first_seqs.append(str(first_seq.seq).upper())
+            else:
+                string_first_seqs.append(str(first_seq).upper())
+
+        ungapped_templates = {t.replace("-", "") for t in string_first_seqs}
+        if len(ungapped_templates) > 1:
+            raise ValueError("All reference sequences must match (excluding gaps).")
 
         all_indices = [pwa.indices for pwa in pwas]
         i = 0

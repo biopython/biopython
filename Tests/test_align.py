@@ -33,6 +33,7 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Align import PairwiseAligner
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+import numpy as np
 
 
 class TestBasics(unittest.TestCase):
@@ -969,6 +970,14 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         self.assertEqual(str(msa[1]), "ACGGT")
         self.assertEqual(str(msa[2]), "A---T")
 
+        # Works with undefined sequences
+        pwa1_undefined = Alignment([Seq(None, 4), Seq(None, 5)], pwa1.coordinates)
+        pwa2_undefined = Alignment([Seq(None, 4), Seq(None, 2)], pwa2.coordinates)
+        msa_undefined = Alignment.from_pairwise_alignments(
+            [pwa1_undefined, pwa2_undefined]
+        )
+        self.assertTrue((msa_undefined.coordinates == msa.coordinates).all())
+
     def test_metadata_preservation(self):
         """Test that sequence metadata (IDs and descriptions) are preserved in the Alignment.
 
@@ -1004,11 +1013,25 @@ class TestFromPairwiseAlignments(unittest.TestCase):
     def test_mismatched_references(self):
         """Test that mismatched reference sequences raise a ValueError."""
         aligner = PairwiseAligner()
-        pwa1 = next(aligner.align("ACGT", "ACGGT"))
+        pwa1 = next(aligner.align("ACGAAAT", "ACGGT"))
         pwa2 = next(aligner.align("ACCT", "AT"))
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError) as context:
             Alignment.from_pairwise_alignments([pwa1, pwa2])
+        self.assertIn("All reference sequences must", str(context.exception))
+
+        # Works with undefined sequences
+        pwa1_undefined = Alignment([Seq(None, 7), Seq(None, 5)], pwa1.coordinates)
+        pwa2_undefined = Alignment([Seq(None, 4), Seq(None, 2)], pwa2.coordinates)
+        with self.assertRaises(ValueError) as context:
+            Alignment.from_pairwise_alignments([pwa1_undefined, pwa2_undefined])
+        self.assertIn("All reference sequences must", str(context.exception))
+
+        # Works with mix
+        pwa1_undefined = Alignment([Seq(None, 7), Seq(None, 5)], pwa1.coordinates)
+        with self.assertRaises(ValueError) as context:
+            Alignment.from_pairwise_alignments([pwa1_undefined, pwa2])
+        self.assertIn("All reference sequences must", str(context.exception))
 
     def test_empty_input(self):
         """Test that empty input raises a ValueError."""
