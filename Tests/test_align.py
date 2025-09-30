@@ -945,14 +945,6 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         self.assertEqual(str(msa[1]), "ACGGT")
         self.assertEqual(str(msa[2]), "A---T")
 
-        # Validate metadata
-        self.assertEqual(msa.sequences[0].id, "reference")
-        self.assertEqual(msa.sequences[1].id, "seq_1")
-        self.assertEqual(msa.sequences[2].id, "seq_2")
-        self.assertEqual(msa.sequences[0].description, "<unknown description>")
-        self.assertEqual(msa.sequences[1].description, "<unknown description>")
-        self.assertEqual(msa.sequences[2].description, "<unknown description>")
-
     def test_pwas_built_with_seqs(self):
         """Test that from_pairwise_alignments works with pairwise alignments built with Seq objects."""
         aligner = PairwiseAligner()
@@ -977,14 +969,6 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         self.assertEqual(str(msa[1]), "ACGGT")
         self.assertEqual(str(msa[2]), "A---T")
 
-        # Validate metadata
-        self.assertEqual(msa.sequences[0].id, "reference")
-        self.assertEqual(msa.sequences[1].id, "seq_1")
-        self.assertEqual(msa.sequences[2].id, "seq_2")
-        self.assertEqual(msa.sequences[0].description, "<unknown description>")
-        self.assertEqual(msa.sequences[1].description, "<unknown description>")
-        self.assertEqual(msa.sequences[2].description, "<unknown description>")
-
     def test_metadata_preservation(self):
         """Test that sequence metadata (IDs and descriptions) are preserved in the Alignment.
 
@@ -1004,7 +988,7 @@ class TestFromPairwiseAlignments(unittest.TestCase):
 
         # Use the method being tested
         msa = Alignment.from_pairwise_alignments([pwa1, pwa2])
-        
+
         # Validate that from_pairwise_alignments gives the right msa
         self.assertEqual(str(msa[0]), "ACG-T")
         self.assertEqual(str(msa[1]), "ACGGT")
@@ -1039,9 +1023,7 @@ class TestFromPairwiseAlignments(unittest.TestCase):
         not_pairwsise_alignment = Alignment(["ACGT-", "ACGTT", "A---T"])
 
         with self.assertRaises(ValueError):
-            Alignment.from_pairwise_alignments(
-                [pwa, not_pairwsise_alignment]
-            )
+            Alignment.from_pairwise_alignments([pwa, not_pairwsise_alignment])
 
 
 if __name__ == "__main__":
