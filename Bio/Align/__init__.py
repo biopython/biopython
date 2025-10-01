@@ -23,6 +23,7 @@ import warnings
 from abc import ABC
 from abc import abstractmethod
 from itertools import zip_longest
+from collections.abc import Iterable
 
 try:
     import numpy as np
@@ -47,8 +48,10 @@ from Bio.Seq import Seq
 from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError
 from Bio.Seq import SequenceDataAbstractBaseClass
+from Bio.Seq import _UndefinedSequenceData
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
+
 
 # Import errors may occur here if a compiled _pairwisealigner.c file or
 # compiled _codonaligner.c file (_pairwisealigner.pyd or _pairwisealigner.so,
@@ -1067,6 +1070,135 @@ class Alignment:
         coordinates = np.empty(shape, np.intp)
         parser.fill(coordinates)
         return sequences, coordinates
+
+    @classmethod
+    def from_alignments_with_same_reference(
+        cls, pwas: list["Alignment"] | tuple["Alignment"]
+    ) -> "Alignment":
+        """Create an Alignment from a list of pairwise alignments.
+
+        This method combines multiple pairwise alignments into
+        a single multiple sequence alignment. All alignments must have exactly two sequences and must share the same
+        reference sequence (ignoring gaps).
+
+        Args:
+            pwas: A list or tuple of Alignment objects representing pairwise alignments.
+
+        Returns:
+            An Alignment object representing a multiple sequence alignment.
+
+        Raises:
+            ValueError: If no pairwise alignments are provided, if any alignment does not have exactly two sequences,
+                        or if the reference sequences do not match across all alignments.
+        Example 1: Basic Usage with Strings
+            >>> from Bio.Seq import Seq
+            >>> from Bio.SeqRecord import SeqRecord
+            >>> from Bio.Align import PairwiseAligner, Alignment
+
+            Consider the following reference and sequences:
+            >>> reference_str = "ACGT"
+            >>> seq1_str = "ACGGT"
+            >>> seq2_str = "AT"
+
+            To produce pairwise alignments:
+            >>> aligner = PairwiseAligner()
+            >>> pwa1 = next(aligner.align(reference_str, seq1_str))
+            >>> pwa2 = next(aligner.align(reference_str, seq2_str))
+
+            The pairwise alignments would look like
+            >>> print(f"Reference: {pwa1[0]}")
+            Reference: ACG-T
+            >>> print(f"Seq1:      {pwa1[1]}")
+            Seq1:      ACGGT
+            >>> print(f"Reference: {pwa2[0]}")
+            Reference: ACGT
+            >>> print(f"Seq2:      {pwa2[1]}")
+            Seq2:      A--T
+
+            Now, we can combine these pairwise alignments into a multiple sequence alignment:
+            >>> msa = Alignment.from_alignments_with_same_reference([pwa1, pwa2])
+            >>> print(msa)
+            reference         0 ACG-T 4
+            seq_1             0 ACGGT 5
+            seq_2             0 A---T 2
+            <BLANKLINE>
+
+        Example 2: Using SeqRecord Objects with Metadata
+            Consider the following reference and sequences with metadata:
+            >>> reference_seqr = SeqRecord(Seq("ACGT"), id="reference", description="desc 1")
+            >>> seq1 = SeqRecord(Seq("ACGGT"), id="seq1", description="desc 2")
+            >>> seq2 = SeqRecord(Seq("AT"), id="seq2", description="desc 3")
+
+            To produce pairwise alignments:
+            >>> aligner = PairwiseAligner()
+            >>> pwa1 = next(aligner.align(reference_seqr, seq1))
+            >>> pwa2 = next(aligner.align(reference_seqr, seq2))
+
+            The msa retains the metadata from the original SeqRecord objects:
+            >>> msa = Alignment.from_alignments_with_same_reference([pwa1, pwa2])
+            >>> print(msa.format("fasta"))
+            >reference desc 1
+            ACG-T
+            >seq1 desc 2
+            ACGGT
+            >seq2 desc 3
+            A---T
+            <BLANKLINE>
+
+        """
+
+        if len(pwas) == 0:
+            raise ValueError("No pairwise alignments provided.")
+
+        # Validate that all pairwise alignments share the same reference
+        first_seqs = [pwa.sequences[0] for pwa in pwas]
+        # Same length (all types of references)
+        if not all(len(first_seq) == len(first_seqs[0]) for first_seq in first_seqs):
+            raise ValueError("All reference sequences must have the same length.")
+
+        # Same sequence (defined sequences only)
+        string_first_seqs = []
+        for first_seq in first_seqs:
+            # Exclude undefined sequences
+            if isinstance(first_seq, Seq) and isinstance(
+                first_seq._data, _UndefinedSequenceData
+            ):
+                continue
+            elif isinstance(first_seq, SeqRecord) and (
+                first_seq.seq is None
+                or isinstance(first_seq.seq._data, _UndefinedSequenceData)
+            ):
+                continue
+            elif isinstance(first_seq, SeqRecord):
+                string_first_seqs.append(str(first_seq.seq).upper())
+            else:
+                string_first_seqs.append(str(first_seq).upper())
+
+        ungapped_templates = {t.replace("-", "") for t in string_first_seqs}
+        if len(ungapped_templates) > 1:
+            raise ValueError("All reference sequences must match (excluding gaps).")
+
+        all_indices = [pwa.indices for pwa in pwas]
+        i = 0
+        while any(ind.shape[1] > i for ind in all_indices):
+            if any(ind.shape[1] > i and ind[0, i] == -1 for ind in all_indices):
+                for j, ind in enumerate(all_indices):
+                    if ind.shape[1] > i and ind[0, i] != -1:
+                        all_indices[j] = np.insert(ind, i, -1, axis=1)
+            i += 1
+
+        # Concatenate all indices vertically
+        print([ind.shape for ind in all_indices])
+        all_indices = np.concatenate(
+            [all_indices[0], *[ind[1:] for ind in all_indices[1:]]], axis=0
+        )
+        # Convert indices to coordinates
+        lines = []
+        for i in range(all_indices.shape[0]):
+            lines.append("".join("N" if v != -1 else "-" for v in all_indices[i, :]))
+        coordinates = Alignment.infer_coordinates(lines)
+        sequences = pwas[0].sequences + sum([pwa.sequences[1:] for pwa in pwas[1:]], [])
+        return cls(sequences, coordinates)
 
     def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
