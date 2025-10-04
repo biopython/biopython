@@ -472,6 +472,7 @@ possible, especially the following contributors:
 - Hussein Faara (first contribution)
 - Manuel Lera Ramirez
 - Jacob Beal (first contribution)
+- James Krieger
 - Jarrod Millman
 - João Rodrigues
 - Josha Inglis
