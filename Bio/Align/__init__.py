@@ -1075,53 +1075,70 @@ class Alignment:
     def from_alignments_with_same_reference(
         cls, pwas: list["Alignment"] | tuple["Alignment"]
     ) -> "Alignment":
-        """Create an Alignment from a list of pairwise alignments.
+        """Create an Alignment from a list of alignments.
 
-        This method combines multiple pairwise alignments into
-        a single multiple sequence alignment. All alignments must have exactly two sequences and must share the same
-        reference sequence (ignoring gaps).
+        This method combines multiple alignments into a single multiple sequence alignment.
+        All alignments must share the same reference sequence (ignoring gaps).
 
         Args:
-            pwas: A list or tuple of Alignment objects representing pairwise alignments.
+            pwas: A list or tuple of Alignment objects.
 
         Returns:
             An Alignment object representing a multiple sequence alignment.
 
         Raises:
-            ValueError: If no pairwise alignments are provided, if any alignment does not have exactly two sequences,
-                        or if the reference sequences do not match across all alignments.
+            ValueError: If no alignments are provided or if the reference
+            sequences do not match across all alignments.
+
         Example 1: Basic Usage with Strings
             >>> from Bio.Seq import Seq
             >>> from Bio.SeqRecord import SeqRecord
             >>> from Bio.Align import PairwiseAligner, Alignment
+            >>> import numpy as np
 
             Consider the following reference and sequences:
             >>> reference_str = "ACGT"
-            >>> seq1_str = "ACGGT"
-            >>> seq2_str = "AT"
+            >>> seq1_str = "ACT"
+            >>> seq2_str = "ACGGT"
+            >>> seq3_str = "AT"
 
-            To produce pairwise alignments:
+            To produce a pairwise alignment:
             >>> aligner = PairwiseAligner()
-            >>> pwa1 = next(aligner.align(reference_str, seq1_str))
-            >>> pwa2 = next(aligner.align(reference_str, seq2_str))
+            >>> pwa = next(aligner.align(reference_str, seq1_str))
 
-            The pairwise alignments would look like
-            >>> print(f"Reference: {pwa1[0]}")
-            Reference: ACG-T
-            >>> print(f"Seq1:      {pwa1[1]}")
-            Seq1:      ACGGT
-            >>> print(f"Reference: {pwa2[0]}")
+            To produce a three sequence alignment:
+            >>> coords = np.array([
+            ...     [0, 1, 2, 3, 3, 4],
+            ...     [0, 1, 2, 3, 4, 5],
+            ...     [0, 1, 1, 1, 1, 2]
+            ... ])
+
+            >>> not_pwa = Alignment([reference_str, seq2_str, seq3_str], coords)
+
+            The pairwise alignment would look like
+            >>> print(f"Reference: {pwa[0]}")
             Reference: ACGT
-            >>> print(f"Seq2:      {pwa2[1]}")
-            Seq2:      A--T
+            >>> print(f"Seq1:      {pwa[1]}")
+            Seq1:      AC-T
 
-            Now, we can combine these pairwise alignments into a multiple sequence alignment:
-            >>> msa = Alignment.from_alignments_with_same_reference([pwa1, pwa2])
-            >>> print(msa)
-            reference         0 ACG-T 4
-            seq_1             0 ACGGT 5
-            seq_2             0 A---T 2
-            <BLANKLINE>
+            The three sequence alignment would look like
+            >>> str(not_pwa[0])
+            'ACG-T'
+            >>> str(not_pwa[1])
+            'ACGGT'
+            >>> str(not_pwa[2])
+            'A---T'
+
+            Now, we can combine these alignments into a multiple sequence alignment:
+            >>> msa = Alignment.from_alignments_with_same_reference([pwa, not_pwa])
+            >>> str(msa[0])
+            'ACG-T'
+            >>> str(msa[1])
+            'AC--T'
+            >>> str(msa[2])
+            'ACGGT'
+            >>> str(msa[3])
+            'A---T'
 
         Example 2: Using SeqRecord Objects with Metadata
             Consider the following reference and sequences with metadata:
@@ -1187,11 +1204,24 @@ class Alignment:
                         all_indices[j] = np.insert(ind, i, -1, axis=1)
             i += 1
 
+        # Ensure all indices arrays have same column length
+        max_cols = max(ind.shape[1] for ind in all_indices)
+        padded_indices = []
+        for ind in all_indices:
+            if ind.shape[1] < max_cols:
+                # Pad with -1 (gaps) on the right
+                pad_width = max_cols - ind.shape[1]
+                pad_block = -1 * np.ones((ind.shape[0], pad_width), dtype=int)
+                ind = np.concatenate([ind, pad_block], axis=1)
+            padded_indices.append(ind)
+
+        all_indices = padded_indices
+
         # Concatenate all indices vertically
-        print([ind.shape for ind in all_indices])
         all_indices = np.concatenate(
             [all_indices[0], *[ind[1:] for ind in all_indices[1:]]], axis=0
         )
+
         # Convert indices to coordinates
         lines = []
         for i in range(all_indices.shape[0]):
