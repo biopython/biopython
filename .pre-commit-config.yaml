@@ -30,7 +30,7 @@ repos:
             '--config=lint.isort.order-by-type=false',
         ]
 -   repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 25.9.0
+    rev: 24.10.0
     hooks:
     -   id: black
         args: [--check,--target-version,py310]
