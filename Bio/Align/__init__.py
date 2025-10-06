@@ -1075,7 +1075,7 @@ class Alignment:
     def from_alignments_with_same_reference(
         cls, pwas: list["Alignment"] | tuple["Alignment"]
     ) -> "Alignment":
-        """Create an Alignment from a list of alignments.
+        """Create an Alignment from a list of alignments in which the first sequence is the same (reference sequence).
 
         This method combines multiple alignments into a single multiple sequence alignment.
         All alignments must share the same reference sequence (ignoring gaps).
