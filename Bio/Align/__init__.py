@@ -1225,8 +1225,12 @@ class Alignment:
         # Convert indices to coordinates
         lines = []
         for i in range(all_indices.shape[0]):
-            lines.append("".join("N" if v != -1 else "-" for v in all_indices[i, :]))
-        coordinates = Alignment.infer_coordinates(lines)
+            lines.append(
+                bytes(
+                    "".join("N" if v != -1 else "-" for v in all_indices[i, :]), "UTF8"
+                )
+            )
+        _, coordinates = Alignment.parse_printed_alignment(lines)
         sequences = pwas[0].sequences + sum([pwa.sequences[1:] for pwa in pwas[1:]], [])
         return cls(sequences, coordinates)
 

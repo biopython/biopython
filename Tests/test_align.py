@@ -1024,7 +1024,9 @@ class TestFromAlignmentsWithSameReference(unittest.TestCase):
         pwa1_undefined = Alignment([Seq(None, 7), Seq(None, 5)], pwa1.coordinates)
         pwa2_undefined = Alignment([Seq(None, 4), Seq(None, 2)], pwa2.coordinates)
         with self.assertRaises(ValueError) as context:
-            Alignment.from_alignments_with_same_reference([pwa1_undefined, pwa2_undefined])
+            Alignment.from_alignments_with_same_reference(
+                [pwa1_undefined, pwa2_undefined]
+            )
         self.assertIn("All reference sequences must", str(context.exception))
 
         # Works with mix
@@ -1048,15 +1050,9 @@ class TestFromAlignmentsWithSameReference(unittest.TestCase):
         seq4_str = "ACT"
 
         # Coordinates for each alignment
-        coords1 = np.array([
-            [0, 1, 2, 3, 3, 4],
-            [0, 1, 2, 3, 4, 5],
-            [0, 1, 1, 1, 1, 2]])
+        coords1 = np.array([[0, 1, 2, 3, 3, 4], [0, 1, 2, 3, 4, 5], [0, 1, 1, 1, 1, 2]])
 
-        coords2 = np.array([
-            [0, 1, 2, 3, 4],
-            [0, 1, 1, 2, 3],
-            [0, 1, 2, 2, 3]])
+        coords2 = np.array([[0, 1, 2, 3, 4], [0, 1, 1, 2, 3], [0, 1, 2, 2, 3]])
 
         # Generate input alignments
         alignment1 = Alignment([reference_str, seq1_str, seq2_str], coords1)
@@ -1089,19 +1085,14 @@ class TestFromAlignmentsWithSameReference(unittest.TestCase):
         seq3_str = "AT"
 
         # Coordinates for an alignment of three sequences
-        coords = np.array([
-            [0, 1, 2, 3, 3, 4],
-            [0, 1, 2, 3, 4, 5],
-            [0, 1, 1, 1, 1, 2]])
+        coords = np.array([[0, 1, 2, 3, 3, 4], [0, 1, 2, 3, 4, 5], [0, 1, 1, 1, 1, 2]])
 
         # Generate input alignments
         pwa = next(aligner.align(reference_str, seq1_str))
         not_pwa = Alignment([reference_str, seq2_str, seq3_str], coords)
-        print(not_pwa)
 
         # Use the method being tested
         msa = Alignment.from_alignments_with_same_reference([pwa, not_pwa])
-        print(msa)
 
         # Check that the output is of correct type
         self.assertIsInstance(msa, Alignment)
