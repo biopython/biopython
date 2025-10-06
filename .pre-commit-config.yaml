@@ -5,7 +5,7 @@
 #
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
@@ -15,7 +15,7 @@ repos:
     -   id: mixed-line-ending
         exclude: \.bb$
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.2
+    rev: v0.13.3
     hooks:
     # Run the Ruff linter.
     -   id: ruff
@@ -29,8 +29,8 @@ repos:
             '--config=lint.isort.force-single-line=true',
             '--config=lint.isort.order-by-type=false',
         ]
--   repo: https://github.com/psf/black
-    rev: 24.10.0
+-   repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 25.9.0
     hooks:
     -   id: black
         args: [--check,--target-version,py310]
@@ -42,13 +42,13 @@ repos:
             'flake8-rst-docstrings>=0.2.3',
         ]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.16.1
+    rev: v1.18.2
     hooks:
     -   id: mypy
         # equivalent to "files" in .mypy.ini
         files: '^(Bio|BioSQL)/'
 -   repo: https://github.com/asottile/blacken-docs
-    rev: 1.19.1
+    rev: 1.20.0
     hooks:
     -   id: blacken-docs
         additional_dependencies: [black==24.10.0]
