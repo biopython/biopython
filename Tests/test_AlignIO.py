@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for AlignIO module."""
+
 import string
 import unittest
 import warnings
@@ -64,7 +65,9 @@ class TestAlignIO_exceptions(unittest.TestCase):
         records = list(AlignIO.read(path, "clustal"))
         for t_format in self.t_formats:
             handle = StringIO()
-            self.assertRaises(Exception, AlignIO.write, [records], handle, t_format)
+            self.assertRaises(
+                (AttributeError, TypeError), AlignIO.write, [records], handle, t_format
+            )
 
 
 class TestAlignIO_reading(unittest.TestCase):
