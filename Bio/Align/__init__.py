@@ -1174,25 +1174,20 @@ class Alignment:
             raise ValueError("All reference sequences must have the same length.")
 
         # Same sequence (defined sequences only)
-        string_first_seqs = []
+        string_first_seqs = set()
         for first_seq in first_seqs:
-            # Exclude undefined sequences
-            if isinstance(first_seq, Seq) and isinstance(
-                first_seq._data, _UndefinedSequenceData
-            ):
+            try:
+                # Extract Seq from SeqRecord
+                first_seq = first_seq.seq
+            except AttributeError:  # Seq or string
+                pass
+            try:
+                # Convert Seq or string to uppercase string
+                string_first_seqs.add(str(first_seq).upper())
+            except UndefinedSequenceError:
                 continue
-            elif isinstance(first_seq, SeqRecord) and (
-                first_seq.seq is None
-                or isinstance(first_seq.seq._data, _UndefinedSequenceData)
-            ):
-                continue
-            elif isinstance(first_seq, SeqRecord):
-                string_first_seqs.append(str(first_seq.seq).upper())
-            else:
-                string_first_seqs.append(str(first_seq).upper())
 
-        ungapped_templates = {t.replace("-", "") for t in string_first_seqs}
-        if len(ungapped_templates) > 1:
+        if len(string_first_seqs) > 1:
             raise ValueError("All reference sequences must match (excluding gaps).")
 
         all_indices = [pwa.indices for pwa in pwas]
