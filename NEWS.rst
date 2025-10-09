@@ -94,8 +94,8 @@ possible, especially the following contributors:
 - Alan Medlar
 - Carlos Peña
 - Gert Hulselmans
-- Peter Cock
 - Michiel de Hoon
+- Peter Cock
 
 28 June 2024: Biopython 1.84
 ============================
