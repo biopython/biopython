@@ -84,12 +84,12 @@ install Biopython yourself. This is described below.
 Python Requirements
 ===================
 
-We currently recommend using Python 3.11 from http://www.python.org
+We currently recommend using Python 3.13 from http://www.python.org
 
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.10, 3.11, 3.12 and 3.13 -- see http://www.python.org
+- Python 3.10, 3.11, 3.12, 3.13 and 3.14 -- see http://www.python.org
 
 - PyPy3.10 v7.3.17 -- or later, see http://www.pypy.org
 

@@ -13,8 +13,8 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.86
 ===============================================
 
-This release of Biopython supports Python 3.10, 3.11, 3.12 and 3.13.  It
-has also been tested on PyPy3.10 v7.3.17.
+This release of Biopython supports Python 3.10, 3.11, 3.12, 3.13 and 3.14.  It
+has also been tested on PyPy3.10 v7.3.19.
 
 ``Bio.SearchIO`` now supports parsing the tabular and plain text output of
 `Infernal <http://eddylab.org/infernal/>` (v1.0.0+) RNA search tool. The
