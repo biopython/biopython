@@ -45,12 +45,17 @@ being used for additional metadata, typically from computational tools.
 
 ``Bio.PDB.PDBIO`` will now raise module specific warnings: ``Bio.PDB.PDBExceptions.PDBIOWarning``.
 
+
+The ``iplotx`` library is mentioned in the Tutorial as an option to visualise
+trees using complex style options.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Rachel Stern (first contribution)
 - Oliver Wissett (first contribution)
 - Samuel Prince (first contribution)
+- Fabio Zanini
 
 15 January 2025: Biopython 1.85
 ===============================

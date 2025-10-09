@@ -240,6 +240,35 @@ well as its descendents. The common ancestor of E and F turns out to be
 just under the root, and with this coloring we can see exactly where the
 root of the tree is.
 
+Drawing trees with iplotx
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For users seeking advanced styling options, Bio.Phylo trees are natively
+supported by the external library ``iplotx``:
+
+https://iplotx.readthedocs.io/en/latest/
+
+``iplotx`` enables customisation of many aspects of the visualisation,
+including layout, vertex and branch properties, cascading backgrounds,
+and labels. Here is a self-contained example.
+
+.. code:: pycon
+
+   >>> from Bio import Phylo
+   >>> import iplotx as ipx
+   >>> tree = Phylo.read("simple.dnd", "newick")
+   >>> ipx.tree(tree, leaf_deep=True, leaf_labels=True, style="tree")
+
+.. figure:: ../images/phylo-color-iplotx.png
+   :alt: A colorized tree drawn with ``iplotx.tree``.
+   :name: fig:phylo-color-iplotx
+   :width: 70.0%
+
+``iplotx`` has an extensive `gallery of examples <https://iplotx.readthedocs.io/en/latest/gallery/index.html>`__.
+
+Writing tree to file
+~~~~~~~~~~~~~~~~~~~~
+
 My, we’ve accomplished a lot! Let’s take a break here and save our work.
 Call the ``write`` function with a file name or handle — here we use
 standard output, to see what would be written — and the format
