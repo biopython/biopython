@@ -27,7 +27,7 @@ insertion followed by a deletion, and a deletion followed by an insertion all
 get assigned a score of 0.  The aligner then finds a large number of alignments
 that are logically the same, but have trivial differences between them.  For
 example, aligning AAACAAA to AAAGAAA previously yielded the following three
-alignments, all with score 6:
+alignments, all with score 6::
 
      AAACAAA        AAAC-AAA        AAA-CAAA
      AAAGAAA        AAA-GAAA        AAAG-AAA
@@ -53,9 +53,11 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Rachel Stern (first contribution)
-- Oliver Wissett (first contribution)
-- Samuel Prince (first contribution)
 - Fabio Zanini
+- Michiel de Hoon
+- Oliver Wissett (first contribution)
+- Peter Cock
+- Samuel Prince (first contribution)
 
 15 January 2025: Biopython 1.85
 ===============================
