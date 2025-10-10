@@ -43,6 +43,10 @@ on the majority of uses, as b-factor values are generally small (less than 100).
 999_999 are now clamped. The justification for this is the rise in the b-factor field
 being used for additional metadata, typically from computational tools.
 
+``Bio.Align`` now provides a method ``Alignment.from_alignments_with_same_reference``
+to construct a multiple sequence alignment from a collection of alignments
+that share the same reference sequence.
+
 ``Bio.PDB.PDBIO`` will now raise module specific warnings:
 ``Bio.PDB.PDBExceptions.PDBIOWarning``.
 
@@ -62,6 +66,7 @@ possible, especially the following contributors:
 - Oliver Wissett (first contribution)
 - Peter Cock
 - Samuel Prince (first contribution)
+- Cassie Bastress (first contribution)
 
 15 January 2025: Biopython 1.85
 ===============================
