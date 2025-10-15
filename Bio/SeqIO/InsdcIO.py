@@ -1011,7 +1011,6 @@ class GenBankWriter(_InsdcWriter):
 
     def _write_sequence(self, record):
         # Loosely based on code from Howard Salis
-        # TODO - Force lower case?
 
         try:
             data = _get_seq_string(record)
@@ -1025,7 +1024,8 @@ class GenBankWriter(_InsdcWriter):
             return
 
         # Catches sequence being None:
-        data = data.lower()
+        if data is None:
+            raise ValueError("No sequence provided")
         seq_len = len(data)
         self.handle.write("ORIGIN\n")
         for line_number in range(0, seq_len, self.LETTERS_PER_LINE):
