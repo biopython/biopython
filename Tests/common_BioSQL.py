@@ -74,8 +74,7 @@ def temp_db_filename():
 
 def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
     """Verify the database settings work for connecting."""
-    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
-    global SYSTEM, SQL_FILE
+    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA, SQL_FILE
     DBDRIVER = dbdriver
     DBTYPE = dbtype
     DBHOST = dbhost
