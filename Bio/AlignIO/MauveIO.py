@@ -217,7 +217,7 @@ class MauveWriter(SequentialAlignmentWriter):
             id_line = id_line.replace("\n", " ").replace("\r", " ")
             self.handle.write(id_line + "\n")
             for i in range(0, len(record.seq), 80):
-                self.handle.write(f"{record.seq[i:i + 80]}\n")
+                self.handle.write(f"{record.seq[i : i + 80]}\n")
 
 
 class MauveIterator(AlignmentIterator):

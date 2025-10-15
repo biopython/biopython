@@ -1291,8 +1291,7 @@ class BlastpXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual("gi|16080617|ref|NP_391444.1|", qresult.id)
         self.assertEqual(
-            "membrane bound lipoprotein [Bacillus subtilis "
-            "subsp. subtilis str. 168]",
+            "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
             qresult.description,
         )
         self.assertEqual(102, qresult.seq_len)
@@ -1526,8 +1525,7 @@ class BlastpXmlCases(unittest.TestCase):
 
         self.assertEqual("gi|16080617|ref|NP_391444.1|", qresult.id)
         self.assertEqual(
-            "membrane bound lipoprotein [Bacillus subtilis "
-            "subsp. subtilis str. 168]",
+            "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
             qresult.description,
         )
         self.assertEqual(102, qresult.seq_len)
@@ -1801,8 +1799,7 @@ class BlastpXmlCases(unittest.TestCase):
         hit = qresult[0]
         self.assertEqual("gi|16080617|ref|NP_391444.1|", hit.id)
         self.assertEqual(
-            "membrane bound lipoprotein [Bacillus "
-            "subtilis subsp. subtilis str. 168]",
+            "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
             hit.description,
         )
         self.assertEqual(6, len(hit.id_all))
@@ -2773,8 +2770,7 @@ class TblastnXmlCases(unittest.TestCase):
         counter += 1
         self.assertEqual("gi|16080617|ref|NP_391444.1|", qresult.id)
         self.assertEqual(
-            "membrane bound lipoprotein [Bacillus subtilis "
-            "subsp. subtilis str. 168]",
+            "membrane bound lipoprotein [Bacillus subtilis subsp. subtilis str. 168]",
             qresult.description,
         )
         self.assertEqual(102, qresult.seq_len)

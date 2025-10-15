@@ -1030,7 +1030,11 @@ class SeqRecord:
             for k, v in self.letter_annotations.items():  # type: ignore
                 if k in other.letter_annotations:
                     # avoid length checks, but otherwise equivalent to answer.letter_annotations[k] = v + other.letter_annotations[k]
-                    dict.__setitem__(answer.letter_annotations, k, v + other.letter_annotations[k])  # type: ignore
+                    dict.__setitem__(
+                        answer.letter_annotations,
+                        k,
+                        v + other.letter_annotations[k],  # type: ignore
+                    )
         except TypeError:
             print("Failed while try to concatenate letter annotations")
             raise
