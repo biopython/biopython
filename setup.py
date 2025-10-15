@@ -214,6 +214,11 @@ EXTENSIONS = [
         ["Bio/SeqUtils/_meltingtemp_exact.c"],
         extra_compile_args=["-O3", "-ffast-math"],
     ),
+    Extension(
+        "Bio.SeqUtils._meltingtemp_complete",
+        ["Bio/SeqUtils/_meltingtemp_complete.c"],
+        extra_compile_args=["-O3", "-ffast-math"],
+    ),
 ]
 
 
