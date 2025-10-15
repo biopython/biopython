@@ -100,7 +100,7 @@ def entry(db, id, format=None, field=None):
     EFetch, available in Biopython as Bio.Entrez.efetch(...), but that
     does not offer field extraction.
     """
-    global _entry_db_names, _entry_db_fields, fetch_db_formats
+    global _entry_db_names
     if _entry_db_names is None:
         _entry_db_names = _get_entry_dbs()
     if db not in _entry_db_names:
