@@ -20,8 +20,7 @@ except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError(
-        "Please install NumPy if you want to use Bio.Cluster. "
-        "See http://www.numpy.org/"
+        "Please install NumPy if you want to use Bio.Cluster. See http://www.numpy.org/"
     ) from None
 
 from . import _cluster  # type: ignore

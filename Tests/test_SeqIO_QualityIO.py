@@ -992,7 +992,6 @@ class TestSFF(unittest.TestCase):
 
 
 class NonFastqTests(unittest.TestCase):
-
     def test_fasta_as_fastq(self):
         for f in ("fastq", "fastq-sanger", "fastq-solexa", "fastq-illumina"):
             generator = SeqIO.parse("Fasta/elderberry.nu", f)

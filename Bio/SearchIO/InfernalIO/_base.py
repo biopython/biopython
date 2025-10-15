@@ -8,7 +8,6 @@
 
 """Bio.SearchIO base classes for Infernal-related code."""
 
-
 from Bio.SearchIO._model import Hit
 
 
