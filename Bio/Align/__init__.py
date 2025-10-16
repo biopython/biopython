@@ -1190,44 +1190,53 @@ class Alignment:
         if len(string_first_seqs) > 1:
             raise ValueError("All reference sequences must match (excluding gaps).")
 
-        all_indices = [pwa.indices for pwa in pwas]
-        i = 0
-        while any(ind.shape[1] > i for ind in all_indices):
-            if any(ind.shape[1] > i and ind[0, i] == -1 for ind in all_indices):
-                for j, ind in enumerate(all_indices):
-                    if ind.shape[1] > i and ind[0, i] != -1:
-                        all_indices[j] = np.insert(ind, i, -1, axis=1)
-            i += 1
+        # Collect sequences
+        reference_seq = pwas[0].sequences[0]
+        other_sequences = [seq for pwa in pwas for seq in pwa.sequences[1:]]
+        sequences = [reference_seq] + other_sequences
 
-        # Ensure all indices arrays have same column length
-        max_cols = max(ind.shape[1] for ind in all_indices)
-        padded_indices = []
-        for ind in all_indices:
-            if ind.shape[1] < max_cols:
-                # Pad with -1 (gaps) on the right
-                pad_width = max_cols - ind.shape[1]
-                pad_block = -1 * np.ones((ind.shape[0], pad_width), dtype=int)
-                ind = np.concatenate([ind, pad_block], axis=1)
-            padded_indices.append(ind)
+        coordinates = [pwa.coordinates.transpose() for pwa in pwas]
 
-        all_indices = padded_indices
+        # Validate reference coordinate start and end positions are the same
+        reference_starts = {c[0, 0] for c in coordinates}
+        reference_ends = {c[-1, 0] for c in coordinates}
 
-        # Concatenate all indices vertically
-        all_indices = np.concatenate(
-            [all_indices[0], *[ind[1:] for ind in all_indices[1:]]], axis=0
-        )
+        if len(reference_starts) != 1 or len(reference_ends) != 1:
+            raise ValueError("Reference coordinates do not align consistently across pairwise alignments.")
+        reference_position = reference_starts.pop()
 
-        # Convert indices to coordinates
-        lines = []
-        for i in range(all_indices.shape[0]):
-            lines.append(
-                bytes(
-                    "".join("N" if v != -1 else "-" for v in all_indices[i, :]), "UTF8"
-                )
-            )
-        _, coordinates = Alignment.parse_printed_alignment(lines)
-        sequences = pwas[0].sequences + sum([pwa.sequences[1:] for pwa in pwas[1:]], [])
-        return cls(sequences, coordinates)
+        coordinates = [iter(c) for c in coordinates]
+
+        msa_coordinates = []
+        positions = np.array([next(c) for c in coordinates])
+        next_positions = np.array([next(c) for c in coordinates])
+        msa_coordinates.append([reference_position] + list(positions[:, 1]))
+
+        while True:
+            if (next_positions == sys.maxsize).all():
+                break
+            target_steps = next_positions[:, 0] - reference_position
+            index = np.argmin(target_steps)
+            target_step = target_steps[index]
+            query_steps = next_positions[:, 1] - positions[:, 1]
+            query_step = query_steps[index]
+            reference_position += target_step
+            positions[index, :] = next_positions[index, :]
+            next_positions[index, :] = next(coordinates[index], sys.maxsize)
+            if target_step == 0:
+                if query_step == 0:
+                    continue
+            else:
+                for i, query_step in enumerate(query_steps):
+                    if i != index:
+                        if query_step > 0:
+                            positions[i, :] += target_step
+                        else:
+                            positions[i, 0] += target_step
+            msa_coordinates.append([reference_position] + list(positions[:, 1]))
+
+        msa_coordinates = np.array(msa_coordinates).transpose()
+        return cls(sequences, msa_coordinates)
 
     def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
@@ -4423,7 +4432,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
-        self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
+        # self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
         if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
             sA = np.frombuffer(sA, dtype=np.uint8).astype(np.int32)
@@ -4481,7 +4490,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def score(self, seqA, seqB, strand="+"):
         """Return the alignment score of two sequences using PairwiseAligner."""
-        self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
+        # self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
         if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
             seqA = np.frombuffer(seqA, dtype=np.uint8).astype(np.int32)
