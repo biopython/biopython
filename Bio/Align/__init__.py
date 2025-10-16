@@ -1211,34 +1211,48 @@ class Alignment:
             )
 
         reference_position = reference_starts.pop()
+        # Create iterators for each pairwise coordinate array
         coordinates = [iter(c) for c in paired_coordinates]
 
         msa_coordinates = []
+        # Initialize positions and next_positions arrays
         positions = np.array([next(c) for c in coordinates])
         next_positions = np.array([next(c) for c in coordinates])
+        # Add initial positions
         msa_coordinates.append([reference_position] + list(positions[:, 1]))
 
         while True:
+            # Iterate until all sequences are fully processed
             if (next_positions == sys.maxsize).all():
                 break
+            # For each sequence, determine the step size to the next reference position
             target_steps = next_positions[:, 0] - reference_position
+            # Find the minimum positive step size
             index = np.argmin(target_steps)
             target_step = target_steps[index]
+            # For each sequence, determine the step size to the next non-reference position
             query_steps = next_positions[:, 1] - positions[:, 1]
             query_step = query_steps[index]
+            # Move the reference position forward to the next
             reference_position += target_step
+            # Update positions and next_positions for the sequence with the minimum step
             positions[index, :] = next_positions[index, :]
             next_positions[index, :] = next(coordinates[index], sys.maxsize)
+            # If the reference and query both didn't advance, don't change positions
             if target_step == 0:
                 if query_step == 0:
                     continue
             else:
+                # The reference did andvace
                 for i, query_step in enumerate(query_steps):
-                    if i != index:
+                    if i != index:  # Skip the sequence that just advanced
                         if query_step > 0:
+                            # The query also advanced, so move both reference and query positions
                             positions[i, :] += target_step
                         else:
+                            # The query did not advance, so move only the reference position
                             positions[i, 0] += target_step
+            # Append the current positions to msa_coordinates
             msa_coordinates.append([reference_position] + list(positions[:, 1]))
 
         msa_coordinates = np.array(msa_coordinates).transpose()
