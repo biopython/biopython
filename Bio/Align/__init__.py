@@ -1195,17 +1195,23 @@ class Alignment:
         other_sequences = [seq for pwa in pwas for seq in pwa.sequences[1:]]
         sequences = [reference_seq] + other_sequences
 
-        coordinates = [pwa.coordinates.transpose() for pwa in pwas]
+        # Build per-query pairwise coordinate arrays of reference vs query.
+        paired_coordinates = []
+        for pwa in pwas:
+            coords = pwa.coordinates
+            for row_index in range(1, coords.shape[0]):
+                paired_coordinates.append(coords[[0, row_index], :].transpose())
 
-        # Validate reference coordinate start and end positions are the same
-        reference_starts = {c[0, 0] for c in coordinates}
-        reference_ends = {c[-1, 0] for c in coordinates}
-
+        # Validate that reference coordinate start and end positions are the same
+        reference_starts = {c[0, 0] for c in paired_coordinates}
+        reference_ends = {c[-1, 0] for c in paired_coordinates}
         if len(reference_starts) != 1 or len(reference_ends) != 1:
-            raise ValueError("Reference coordinates do not align consistently across pairwise alignments.")
-        reference_position = reference_starts.pop()
+            raise ValueError(
+                "Reference coordinates do not align consistently across pairwise alignments."
+            )
 
-        coordinates = [iter(c) for c in coordinates]
+        reference_position = reference_starts.pop()
+        coordinates = [iter(c) for c in paired_coordinates]
 
         msa_coordinates = []
         positions = np.array([next(c) for c in coordinates])
