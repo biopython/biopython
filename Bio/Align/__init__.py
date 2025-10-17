@@ -1073,7 +1073,7 @@ class Alignment:
 
     @classmethod
     def from_alignments_with_same_reference(
-        cls, pwas: list["Alignment"] | tuple["Alignment"]
+        cls, alignments: list["Alignment"] | tuple["Alignment"]
     ) -> "Alignment":
         """Create an Alignment from a list of alignments in which the first sequence is the same (reference sequence).
 
@@ -1081,7 +1081,7 @@ class Alignment:
         All alignments must share the same reference sequence (ignoring gaps).
 
         Args:
-            pwas: A list or tuple of Alignment objects.
+            alignments: A list or tuple of Alignment objects.
 
         Returns:
             An Alignment object representing a multiple sequence alignment.
@@ -1164,11 +1164,11 @@ class Alignment:
 
         """
 
-        if len(pwas) == 0:
+        if len(alignments) == 0:
             raise ValueError("No pairwise alignments provided.")
 
         # Validate that all pairwise alignments share the same reference
-        first_seqs = [pwa.sequences[0] for pwa in pwas]
+        first_seqs = [alignment.sequences[0] for alignment in alignments]
         # Same length (all types of references)
         if not all(len(first_seq) == len(first_seqs[0]) for first_seq in first_seqs):
             raise ValueError("All reference sequences must have the same length.")
@@ -1191,14 +1191,14 @@ class Alignment:
             raise ValueError("All reference sequences must match (excluding gaps).")
 
         # Collect sequences
-        reference_seq = pwas[0].sequences[0]
-        other_sequences = [seq for pwa in pwas for seq in pwa.sequences[1:]]
+        reference_seq = alignments[0].sequences[0]
+        other_sequences = [seq for alignment in alignments for seq in alignment.sequences[1:]]
         sequences = [reference_seq] + other_sequences
 
         # Build per-query pairwise coordinate arrays of reference vs query.
         paired_coordinates = []
-        for pwa in pwas:
-            coords = pwa.coordinates
+        for alignment in alignments:
+            coords = alignment.coordinates
             for row_index in range(1, coords.shape[0]):
                 paired_coordinates.append(coords[[0, row_index], :].transpose())
 
