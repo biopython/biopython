@@ -1243,7 +1243,7 @@ class Alignment:
                 if query_step == 0:
                     continue
             else:
-                # The reference did andvace
+                # The reference did advance
                 for i, query_step in enumerate(query_steps):
                     if i != index:  # Skip the sequence that just advanced
                         if query_step > 0:
