@@ -1660,6 +1660,7 @@ you can use the ``from_alignments_with_same_reference`` method as follows:
    'ACGGT'
    >>> str(combined_alignment[3])
    'A---T'
+
 The resulting alignment contains all sequences aligned to the shared reference.
 This method differs from :meth:`~Bio.Align.Alignment.map` and
 :meth:`~Bio.Align.Alignment.mapall` in that it *builds* a new multiple alignment
