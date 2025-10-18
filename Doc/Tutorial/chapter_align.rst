@@ -1642,11 +1642,7 @@ you can use the ``from_alignments_with_same_reference`` method as follows:
    >>> aligner = PairwiseAligner()
    >>> alignment_1 = next(aligner.align(reference_str, seq1_str))
 
-   >>> coords = np.array([
-   ...     [0, 1, 2, 3, 3, 4],
-   ...     [0, 1, 2, 3, 4, 5],
-   ...     [0, 1, 1, 1, 1, 2]
-   ... ])
+   >>> coords = np.array([[0, 1, 2, 3, 3, 4], [0, 1, 2, 3, 4, 5], [0, 1, 1, 1, 1, 2]])
    >>> alignment_2 = Alignment([reference_str, seq2_str, seq3_str], coords)
 
    >>> combined_alignment = Alignment.from_alignments_with_same_reference(
