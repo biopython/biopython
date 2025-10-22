@@ -1192,7 +1192,9 @@ class Alignment:
 
         # Collect sequences
         reference_seq = alignments[0].sequences[0]
-        other_sequences = [seq for alignment in alignments for seq in alignment.sequences[1:]]
+        other_sequences = [
+            seq for alignment in alignments for seq in alignment.sequences[1:]
+        ]
         sequences = [reference_seq] + other_sequences
 
         # Build per-query pairwise coordinate arrays of reference vs query.
