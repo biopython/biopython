@@ -58,7 +58,7 @@ repos:
     hooks:
     -   id: rstcheck
         args: [
-            '--ignore-roles=ref,numref,py:mod',
+            '--ignore-roles=ref,numref,py:mod,meth',
             --ignore-directives=toctree,
             --ignore-substitutions=version,
             --report-level=warning,

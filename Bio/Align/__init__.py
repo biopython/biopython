@@ -13,7 +13,6 @@ class, used in the Bio.AlignIO module.
 
 """
 
-import collections
 import copy
 import importlib
 import numbers
@@ -50,14 +49,12 @@ from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
+
 # Import errors may occur here if a compiled _pairwisealigner.c file or
 # compiled _codonaligner.c file (_pairwisealigner.pyd or _pairwisealigner.so,
 # or _codonaligner.pyd or _codonaligner.so) is missing or if the user is
 # importing from within the Biopython source tree, see PR #2007:
 # https://github.com/biopython/biopython/pull/2007
-
-
-from Bio import BiopythonWarning
 
 
 class MultipleSeqAlignment:
@@ -1067,6 +1064,195 @@ class Alignment:
         coordinates = np.empty(shape, np.intp)
         parser.fill(coordinates)
         return sequences, coordinates
+
+    @classmethod
+    def from_alignments_with_same_reference(
+        cls, alignments: list["Alignment"] | tuple["Alignment"]
+    ) -> "Alignment":
+        """Create an Alignment from a list of alignments in which the first sequence is the same (reference sequence).
+
+        This method combines multiple alignments into a single multiple sequence alignment.
+        All alignments must share the same reference sequence (ignoring gaps).
+
+        Args:
+            alignments: A list or tuple of Alignment objects.
+
+        Returns:
+            An Alignment object representing a multiple sequence alignment.
+
+        Raises:
+            ValueError: If no alignments are provided or if the reference
+            sequences do not match across all alignments.
+
+        Example 1: Basic Usage with Strings
+            >>> from Bio.Seq import Seq
+            >>> from Bio.SeqRecord import SeqRecord
+            >>> from Bio.Align import PairwiseAligner, Alignment
+            >>> import numpy as np
+
+            Consider the following reference and sequences:
+            >>> reference_str = "ACGT"
+            >>> seq1_str = "ACT"
+            >>> seq2_str = "ACGGT"
+            >>> seq3_str = "AT"
+
+            To produce a pairwise alignment:
+            >>> aligner = PairwiseAligner()
+            >>> pwa = next(aligner.align(reference_str, seq1_str))
+
+            To produce a three sequence alignment:
+            >>> coords = np.array([
+            ...     [0, 1, 2, 3, 3, 4],
+            ...     [0, 1, 2, 3, 4, 5],
+            ...     [0, 1, 1, 1, 1, 2]
+            ... ])
+
+            >>> not_pwa = Alignment([reference_str, seq2_str, seq3_str], coords)
+
+            The pairwise alignment would look like
+            >>> print(f"Reference: {pwa[0]}")
+            Reference: ACGT
+            >>> print(f"Seq1:      {pwa[1]}")
+            Seq1:      AC-T
+
+            The three sequence alignment would look like
+            >>> str(not_pwa[0])
+            'ACG-T'
+            >>> str(not_pwa[1])
+            'ACGGT'
+            >>> str(not_pwa[2])
+            'A---T'
+
+            Now, we can combine these alignments into a multiple sequence alignment:
+            >>> msa = Alignment.from_alignments_with_same_reference([pwa, not_pwa])
+            >>> str(msa[0])
+            'ACG-T'
+            >>> str(msa[1])
+            'AC--T'
+            >>> str(msa[2])
+            'ACGGT'
+            >>> str(msa[3])
+            'A---T'
+
+        Example 2: Using SeqRecord Objects with Metadata
+            Consider the following reference and sequences with metadata:
+            >>> reference_seqr = SeqRecord(Seq("ACGT"), id="reference", description="desc 1")
+            >>> seq1 = SeqRecord(Seq("ACGGT"), id="seq1", description="desc 2")
+            >>> seq2 = SeqRecord(Seq("AT"), id="seq2", description="desc 3")
+
+            To produce pairwise alignments:
+            >>> aligner = PairwiseAligner()
+            >>> pwa1 = next(aligner.align(reference_seqr, seq1))
+            >>> pwa2 = next(aligner.align(reference_seqr, seq2))
+
+            The msa retains the metadata from the original SeqRecord objects:
+            >>> msa = Alignment.from_alignments_with_same_reference([pwa1, pwa2])
+            >>> print(msa.format("fasta"))
+            >reference desc 1
+            ACG-T
+            >seq1 desc 2
+            ACGGT
+            >seq2 desc 3
+            A---T
+            <BLANKLINE>
+
+        """
+
+        if len(alignments) == 0:
+            raise ValueError("No pairwise alignments provided.")
+
+        # Validate that all pairwise alignments share the same reference
+        first_seqs = [alignment.sequences[0] for alignment in alignments]
+        # Same length (all types of references)
+        if not all(len(first_seq) == len(first_seqs[0]) for first_seq in first_seqs):
+            raise ValueError("All reference sequences must have the same length.")
+
+        # Same sequence (defined sequences only)
+        string_first_seqs = set()
+        for first_seq in first_seqs:
+            try:
+                # Extract Seq from SeqRecord
+                first_seq = first_seq.seq
+            except AttributeError:  # Seq or string
+                pass
+            try:
+                # Convert Seq or string to uppercase string
+                string_first_seqs.add(str(first_seq).upper())
+            except UndefinedSequenceError:
+                continue
+
+        if len(string_first_seqs) > 1:
+            raise ValueError("All reference sequences must match (excluding gaps).")
+
+        # Collect sequences
+        reference_seq = alignments[0].sequences[0]
+        other_sequences = [
+            seq for alignment in alignments for seq in alignment.sequences[1:]
+        ]
+        sequences = [reference_seq] + other_sequences
+
+        # Build per-query pairwise coordinate arrays of reference vs query.
+        paired_coordinates = []
+        for alignment in alignments:
+            coords = alignment.coordinates
+            for row_index in range(1, coords.shape[0]):
+                paired_coordinates.append(coords[[0, row_index], :].transpose())
+
+        # Validate that reference coordinate start and end positions are the same
+        reference_starts = {c[0, 0] for c in paired_coordinates}
+        reference_ends = {c[-1, 0] for c in paired_coordinates}
+        if len(reference_starts) != 1 or len(reference_ends) != 1:
+            raise ValueError(
+                "Reference coordinates do not align consistently across pairwise alignments."
+            )
+
+        reference_position = reference_starts.pop()
+        # Create iterators for each pairwise coordinate array
+        coordinates = [iter(c) for c in paired_coordinates]
+
+        msa_coordinates = []
+        # Initialize positions and next_positions arrays
+        positions = np.array([next(c) for c in coordinates])
+        next_positions = np.array([next(c) for c in coordinates])
+        # Add initial positions
+        msa_coordinates.append([reference_position] + list(positions[:, 1]))
+
+        while True:
+            # Iterate until all sequences are fully processed
+            if (next_positions == sys.maxsize).all():
+                break
+            # For each sequence, determine the step size to the next reference position
+            target_steps = next_positions[:, 0] - reference_position
+            # Find the minimum positive step size
+            index = np.argmin(target_steps)
+            target_step = target_steps[index]
+            # For each sequence, determine the step size to the next non-reference position
+            query_steps = next_positions[:, 1] - positions[:, 1]
+            query_step = query_steps[index]
+            # Move the reference position forward to the next
+            reference_position += target_step
+            # Update positions and next_positions for the sequence with the minimum step
+            positions[index, :] = next_positions[index, :]
+            next_positions[index, :] = next(coordinates[index], sys.maxsize)
+            # If the reference and query both didn't advance, don't change positions
+            if target_step == 0:
+                if query_step == 0:
+                    continue
+            else:
+                # The reference did advance
+                for i, query_step in enumerate(query_steps):
+                    if i != index:  # Skip the sequence that just advanced
+                        if query_step > 0:
+                            # The query also advanced, so move both reference and query positions
+                            positions[i, :] += target_step
+                        else:
+                            # The query did not advance, so move only the reference position
+                            positions[i, 0] += target_step
+            # Append the current positions to msa_coordinates
+            msa_coordinates.append([reference_position] + list(positions[:, 1]))
+
+        msa_coordinates = np.array(msa_coordinates).transpose()
+        return cls(sequences, msa_coordinates)
 
     def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
@@ -4262,7 +4448,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
-        self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
+        # self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
         if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
             sA = np.frombuffer(sA, dtype=np.uint8).astype(np.int32)
@@ -4320,7 +4506,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def score(self, seqA, seqB, strand="+"):
         """Return the alignment score of two sequences using PairwiseAligner."""
-        self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
+        # self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
         if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
             seqA = np.frombuffer(seqA, dtype=np.uint8).astype(np.int32)

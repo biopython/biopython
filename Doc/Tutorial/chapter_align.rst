@@ -1614,6 +1614,56 @@ each species:
    rn7.chr2  174256650
    <BLANKLINE>
 
+Using from_alignments_with_same_reference
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   
+The :meth:`~Bio.Align.Alignment.from_alignments_with_same_reference` method
+constructs a new multiple sequence alignment from a collection of pairwise
+alignments that all share the same reference sequence. This is useful when you
+have aligned several sequences independently to the same reference and want to
+combine those results into a single multiple alignment.
+
+Suppose you have a pairwise alignment of a reference sequence to sequence A and
+a multiple alignment of sequences B and C to the same reference. To merge
+these into a single multiple alignment of the reference and sequences A, B, and C,
+you can use the ``from_alignments_with_same_reference`` method as follows:
+
+.. code:: pycon
+
+   >>> from Bio.Seq import Seq
+   >>> from Bio.Align import PairwiseAligner, Alignment
+   >>> import numpy as np
+
+   >>> reference_str = "ACGT"
+   >>> seq1_str = "ACT"
+   >>> seq2_str = "ACGGT"
+   >>> seq3_str = "AT"
+
+   >>> aligner = PairwiseAligner()
+   >>> alignment_1 = next(aligner.align(reference_str, seq1_str))
+
+   >>> coords = np.array([[0, 1, 2, 3, 3, 4], [0, 1, 2, 3, 4, 5], [0, 1, 1, 1, 1, 2]])
+   >>> alignment_2 = Alignment([reference_str, seq2_str, seq3_str], coords)
+
+   >>> combined_alignment = Alignment.from_alignments_with_same_reference(
+   ...     [alignment_1, alignment_2]
+   ... )
+   >>> str(combined_alignment[0])
+   'ACG-T'
+   >>> str(combined_alignment[1])
+   'AC--T'
+   >>> str(combined_alignment[2])
+   'ACGGT'
+   >>> str(combined_alignment[3])
+   'A---T'
+
+The resulting alignment contains all sequences aligned to the shared reference.
+This method differs from :meth:`~Bio.Align.Alignment.map` and
+:meth:`~Bio.Align.Alignment.mapall` in that it *builds* a new multiple alignment
+directly from a set of pairwise alignments, rather than transforming an existing
+multiple alignment using mappings. Each input alignment must have the same
+reference sequence (in the same orientation), otherwise an error is raised.
+
 The ``mapall`` method can also be used to create a multiple alignment of
 codon sequences from a multiple sequence alignment of the corresponding
 amino acid sequences (see Section :ref:`sec:msa_codons`
