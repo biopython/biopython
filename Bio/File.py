@@ -75,7 +75,7 @@ def as_handle(handleish, mode="r", **kwargs):
         yield handleish
 
 
-def _open_for_random_access(filename):
+def _open_for_random_access(filename: str) -> object:
     """Open a file in binary mode, spot if it is BGZF format etc (PRIVATE).
 
     This functionality is used by the Bio.SeqIO and Bio.SearchIO index
