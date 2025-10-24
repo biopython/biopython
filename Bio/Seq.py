@@ -34,7 +34,7 @@ from Bio.Data import CodonTable
 from Bio.Data import IUPACData
 
 
-def _maketrans(complement_mapping):
+def _maketrans(complement_mapping: dict[str, str]) -> bytes:
     """Make a python string translation table (PRIVATE).
 
     Arguments:
