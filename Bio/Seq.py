@@ -2689,7 +2689,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
 # The functions work both on Seq objects, and on strings.
 
 
-def transcribe(dna):
+def transcribe(dna: Union[str, Seq, MutableSeq]) -> Union[str, Seq]:
     """Transcribe a DNA sequence into RNA.
 
     Following the usual convention, the sequence is interpreted as the
@@ -2713,7 +2713,7 @@ def transcribe(dna):
         return dna.replace("T", "U").replace("t", "u")
 
 
-def back_transcribe(rna):
+def back_transcribe(rna: Union[str, Seq, MutableSeq]) -> Union[str, Seq]:
     """Return the RNA sequence back-transcribed into DNA.
 
     If given a string, returns a new string object.
