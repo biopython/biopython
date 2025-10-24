@@ -2734,8 +2734,14 @@ def back_transcribe(rna):
 
 
 def _translate_str(
-    sequence, table, stop_symbol="*", to_stop=False, cds=False, pos_stop="X", gap=None
-):
+    sequence: Seq,
+    table: Union[str, int, CodonTable.CodonTable],
+    stop_symbol: str = "*",
+    to_stop: bool = False,
+    cds: bool = False,
+    pos_stop: str = "X",
+    gap: Optional[str] = None,
+) -> str:
     """Translate nucleotide string into a protein string (PRIVATE).
 
     Arguments:
@@ -2799,7 +2805,8 @@ def _translate_str(
     Bio.Data.CodonTable.TranslationError: Extra in frame stop codon 'TAG' found.
     """
     try:
-        table_id = int(table)
+        # TODO: only call int if table is of type int
+        table_id = int(table)  # type: ignore
     except ValueError:
         # Assume it's a table name
         # The same table can be used for RNA or DNA
@@ -2913,8 +2920,13 @@ def _translate_str(
 
 
 def translate(
-    sequence, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap=None
-):
+    sequence: Seq,
+    table: Union[str, int, CodonTable.CodonTable] = "Standard",
+    stop_symbol: str = "*",
+    to_stop: bool = False,
+    cds: bool = False,
+    gap: Optional[str] = None,
+) -> str:
     """Translate a nucleotide sequence into amino acids.
 
     If given a string, returns a new string object. Given a Seq or
@@ -3016,7 +3028,7 @@ def translate(
         return _translate_str(sequence, table, stop_symbol, to_stop, cds, gap=gap)
 
 
-def reverse_complement(sequence, inplace=False):
+def reverse_complement(sequence: Seq, inplace: bool = False) -> str:
     """Return the reverse complement as a DNA sequence.
 
     If given a string, returns a new string object.
@@ -3081,7 +3093,7 @@ def reverse_complement(sequence, inplace=False):
     return sequence[::-1]
 
 
-def reverse_complement_rna(sequence, inplace=False):
+def reverse_complement_rna(sequence: Seq, inplace: bool = False) -> str:
     """Return the reverse complement as an RNA sequence.
 
     If given a string, returns a new string object.
@@ -3146,7 +3158,7 @@ def reverse_complement_rna(sequence, inplace=False):
     return sequence[::-1]
 
 
-def complement(sequence, inplace=False):
+def complement(sequence: Seq, inplace: bool = False) -> str:
     """Return the complement as a DNA sequence.
 
     If given a string, returns a new string object.
@@ -3210,7 +3222,7 @@ def complement(sequence, inplace=False):
     return sequence.decode("ASCII")
 
 
-def complement_rna(sequence, inplace=False):
+def complement_rna(sequence: Seq, inplace: bool = False) -> str:
     """Return the complement as an RNA sequence.
 
     If given a string, returns a new string object.
