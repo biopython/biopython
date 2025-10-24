@@ -13,7 +13,6 @@ class, used in the Bio.AlignIO module.
 
 """
 
-import collections
 import copy
 import importlib
 import numbers
@@ -23,7 +22,6 @@ import warnings
 from abc import ABC
 from abc import abstractmethod
 from itertools import zip_longest
-from collections.abc import Iterable
 
 try:
     import numpy as np
@@ -48,7 +46,6 @@ from Bio.Seq import Seq
 from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError
 from Bio.Seq import SequenceDataAbstractBaseClass
-from Bio.Seq import _UndefinedSequenceData
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
@@ -58,9 +55,6 @@ from Bio.SeqRecord import SeqRecord
 # or _codonaligner.pyd or _codonaligner.so) is missing or if the user is
 # importing from within the Biopython source tree, see PR #2007:
 # https://github.com/biopython/biopython/pull/2007
-
-
-from Bio import BiopythonWarning
 
 
 class MultipleSeqAlignment:
