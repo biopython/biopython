@@ -260,6 +260,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Michiel de Hoon <https://github.com/mdehoon>
 - Micky Yun Chan <https://github.com/michiboo>
 - Mike Moritz <https://github.com/mikepmikepm35>
+- Mike Philippakis <https://github.com/mikeph52>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Mikel Martinez Goikoetxea <https://github.com/Mikel-MG>
 - Milind Luthra <https://github.com/milindl>
