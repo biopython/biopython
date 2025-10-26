@@ -217,7 +217,7 @@ class FastaIterator(SequenceIterator):
                     "\n"
                     "(2) Use SeqIO.parse with the 'fasta-pearson' format instead of "
                     "'fasta'. This format is consistent with the FASTA format defined "
-                    "by William Pearson's FASTA aligner software. Thie format allows "
+                    "by William Pearson's FASTA aligner software. This format allows "
                     "for comments before the first sequence; lines starting with the "
                     "';' character anywhere in the file are also regarded as comment "
                     "lines and are ignored.\n"
