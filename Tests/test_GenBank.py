@@ -8029,7 +8029,6 @@ KEYWORDS    """,
             annotations={"molecule_type": "DNA"},
         )
         handle = StringIO()
-
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonWarning)
             SeqIO.write(record, handle, "genbank")
@@ -8068,14 +8067,12 @@ KEYWORDS    """,
         )
         record.annotations["date"] = ["24-DEC-2015"]
         handle = StringIO()
-
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonWarning)
             SeqIO.write(record, handle, "genbank")
             handle.seek(0)
             gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
-
         record = SeqRecord(
             sequence_object,
             id="123456789",
@@ -8112,7 +8109,6 @@ KEYWORDS    """,
     def test_genbank_date_invalid(self):
         """Check if invalid dates are treated as default."""
         invalid_dates = ("invalid date", "29-2-1981", "35-1-2018", "1-1-80", "1-9-99")
-
         sequence_object = Seq("ATGC")
         for invalid_date in invalid_dates:
             record = SeqRecord(
@@ -8122,16 +8118,13 @@ KEYWORDS    """,
                 description="Test case for date parsing",
                 annotations={"molecule_type": "DNA"},
             )
-
             record.annotations["date"] = invalid_date
             handle = StringIO()
-
             # Silence Invalid dates warnings
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonWarning)
                 SeqIO.write(record, handle, "genbank")
             handle.seek(0)
-
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonWarning)
                 gb = SeqIO.read(handle, "genbank")
