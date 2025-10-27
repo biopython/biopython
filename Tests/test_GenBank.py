@@ -7754,14 +7754,14 @@ KEYWORDS    """,
             warnings.simplefilter("ignore", BiopythonWarning)
             record = SeqIO.read(path, "gb")
             gb = record.format("gb")
-            embl = record.format("embl")             
+            embl = record.format("embl")
         self.assertEqual(
             record.dbxrefs,
             [
                 "BioProject:PRJNA39555",
                 "Sequence Read Archive:SRX001885, SRX001121, SRX001531, SRX001530, SRX001529",
             ],
-        )       
+        )
         self.assertTrue(
             """
 DBLINK      BioProject: PRJNA39555
@@ -8034,7 +8034,7 @@ KEYWORDS    """,
             warnings.simplefilter("ignore", BiopythonWarning)
             SeqIO.write(record, handle, "genbank")
             handle.seek(0)
-            gb = SeqIO.read(handle, "gb")      
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_correct(self):
@@ -8048,12 +8048,12 @@ KEYWORDS    """,
             annotations={"molecule_type": "DNA"},
         )
         record.annotations["date"] = "24-DEC-2015"
-        handle = StringIO()       
+        handle = StringIO()
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", BiopythonWarning)
             SeqIO.write(record, handle, "genbank")
             handle.seek(0)
-            gb = SeqIO.read(handle, "gb")  
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
 
     def test_genbank_date_list(self):
@@ -8129,12 +8129,12 @@ KEYWORDS    """,
             # Silence Invalid dates warnings
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonWarning)
-                SeqIO.write(record, handle, "genbank") 
+                SeqIO.write(record, handle, "genbank")
             handle.seek(0)
 
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", BiopythonWarning)
-                gb = SeqIO.read(handle, "genbank")           
+                gb = SeqIO.read(handle, "genbank")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_longer_locus_line(self):
