@@ -248,10 +248,10 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
-        "License :: Freely Distributable",
+        "License-Expression: LicenseRef-Biopython-License-Agreement",
+        "License-File: LICENSE.rst",
         # Technically the "Biopython License Agreement" is not OSI approved,
-        # but is almost https://opensource.org/licenses/HPND so might put:
-        # 'License :: OSI Approved',
+        # but is almost https://opensource.org/licenses/HPND
         # To resolve this we are moving to dual-licensing with 3-clause BSD:
         # 'License :: OSI Approved :: BSD License',
         "Operating System :: OS Independent",
