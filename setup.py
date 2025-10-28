@@ -248,7 +248,7 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
-        "License-Expression: LicenseRef-Biopython-License-Agreement",
+        "License :: Freely Distributable",
         "License-File: LICENSE.rst",
         # Technically the "Biopython License Agreement" is not OSI approved,
         # but is almost https://opensource.org/licenses/HPND
