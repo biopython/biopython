@@ -249,7 +249,6 @@ setup(
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "License :: Freely Distributable",
-        "License-File: LICENSE.rst",
         # Technically the "Biopython License Agreement" is not OSI approved,
         # but is almost https://opensource.org/licenses/HPND
         # To resolve this we are moving to dual-licensing with 3-clause BSD:
