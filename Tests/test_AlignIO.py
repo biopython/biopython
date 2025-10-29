@@ -4,18 +4,13 @@
 # as part of this package.
 """Tests for AlignIO module."""
 
-import string
 import unittest
 import warnings
 from io import StringIO
 
 from Bio import AlignIO
-from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
-from Bio.Align import AlignInfo
 from Bio.Align import MultipleSeqAlignment
-from Bio.Data import IUPACData
-from Bio.motifs import Motif
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
