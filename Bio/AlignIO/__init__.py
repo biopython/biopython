@@ -13,13 +13,9 @@ in a PHYLIP file containing one or more alignments using Bio.AlignIO, or you
 can read in the sequences within these alignments using Bio.SeqIO.
 
 Bio.AlignIO is also documented at http://biopython.org/wiki/AlignIO and by
-a whole chapter in our tutorial:
+a whole chapter in our Tutorial_:
 
-* `HTML Tutorial`_
-* `PDF Tutorial`_
-
-.. _`HTML Tutorial`: https://biopython.org/docs/latest/Tutorial/index.html
-.. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+.. _Tutorial: https://biopython.org/docs/latest/Tutorial/index.html
 
 Input
 -----
