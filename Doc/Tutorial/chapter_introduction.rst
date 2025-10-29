@@ -193,14 +193,10 @@ Frequently Asked Questions (FAQ)
    was released.
 
 #. | *Where is the latest version of this document?*
-   | If you download a Biopython source code archive, it will include
-     the relevant version in both HTML and PDF formats. The latest
-     published version of this document (updated at each release) is
-     online:
-
-   -  http://biopython.org/DIST/docs/tutorial/Tutorial.html
-
-   -  http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+   | The latest published version of this document (updated at each
+     release) is online at https://biopython.org/docs/latest/ with
+     https://biopython.org/docs/dev/ for the documentation being worked
+     on for the next release.
 
 #. | *What is wrong with my sequence comparisons?*
    | There was a major change in Biopython 1.65 making the ``Seq`` and
