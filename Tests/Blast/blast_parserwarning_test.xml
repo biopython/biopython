@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>blastp</BlastOutput_program>
+  <BlastOutput_version>BLASTP 2.2.28+</BlastOutput_version>
+  <BlastOutput_reference>... reference text ...</BlastOutput_reference>
+  <BlastOutput_db>db</BlastOutput_db>
+  <BlastOutput_query-ID>Query_1</BlastOutput_query-ID>
+  <BlastOutput_query-def>query_def</BlastOutput_query-def>
+  <BlastOutput_query-len>100</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+      <Parameters_expect>10.0</Parameters_expect>
+      <Parameters_gap-open>11</Parameters_gap-open>
+      <Parameters_gap-extend>1</Parameters_gap-extend>
+      <Parameters_filter>F</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+  <BlastOutput_iterations>
+    <Iteration>
+      <Iteration_iter-num>1</Iteration_iter-num>
+      <Iteration_query-ID>Query_1</Iteration_query-ID>
+      <Iteration_query-def>query_def</Iteration_query-def>
+      <Iteration_query-len>100</Iteration_query-len>
+      <SomeNewUnsupportedTag>some_value</SomeNewUnsupportedTag>
+      <Iteration_hits></Iteration_hits>
+      <Iteration_stat>
+        <Statistics>
+          <Statistics_db-num>1</Statistics_db-num>
+          <Statistics_db-len>100</Statistics_db-len>
+          <Statistics_hsp-len>10</Statistics_hsp-len>
+          <Statistics_eff-space>1000</Statistics_eff-space>
+          <Statistics_kappa>0.041</Statistics_kappa>
+          <Statistics_lambda>0.267</Statistics_lambda>
+          <Statistics_entropy>0.14</Statistics_entropy>
+        </Statistics>
+      </Iteration_stat>
+    </Iteration>
+  </BlastOutput_iterations>
+</BlastOutput>
