@@ -100,8 +100,9 @@ class Tree(Nodes.Chain):
             if colon == -1 and nodecomment == -1:  # none
                 branch, comment = tree, [None]
             elif colon == -1 and nodecomment > -1:  # only special comment
-                branch, comment = tree[:nodecomment], self._get_values(
-                    tree[nodecomment:]
+                branch, comment = (
+                    tree[:nodecomment],
+                    self._get_values(tree[nodecomment:]),
                 )
             elif colon > -1 and nodecomment == -1:  # only numerical values
                 branch, comment = tree[:colon], self._get_values(tree[colon + 1 :])
@@ -110,8 +111,9 @@ class Tree(Nodes.Chain):
             ):  # taxon name ends at first colon or with special comment
                 branch, comment = tree[:colon], self._get_values(tree[colon + 1 :])
             else:
-                branch, comment = tree[:nodecomment], self._get_values(
-                    tree[nodecomment:]
+                branch, comment = (
+                    tree[:nodecomment],
+                    self._get_values(tree[nodecomment:]),
                 )
 
             return [branch, comment]
