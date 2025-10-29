@@ -46,7 +46,6 @@ import warnings
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
-from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
 
