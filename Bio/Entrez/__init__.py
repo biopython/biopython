@@ -23,7 +23,7 @@ a standard interface used in Python for reading data from a file, or
 in this case a remote network connection, and provides methods like
 ``.read()`` or offers iteration over the contents line by line. See
 also "What the heck is a handle?" in the Biopython Tutorial and
-Cookbook: http://biopython.org/DIST/docs/tutorial/Tutorial.html
+Cookbook: https://biopython.org/docs/latest/Tutorial/index.html
 http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 The handle returned by these functions can be either in text mode or
 in binary mode, depending on the data requested and the results

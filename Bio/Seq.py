@@ -15,7 +15,7 @@ See also the Seq_ wiki and the chapter in our tutorial:
  - `PDF Tutorial`_
 
 .. _Seq: http://biopython.org/wiki/Seq
-.. _`HTML Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.html
+.. _`HTML Tutorial`: https://biopython.org/docs/latest/Tutorial/index.html
 .. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
 
 """
