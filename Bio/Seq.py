@@ -10,13 +10,10 @@
 # package.
 """Provide objects to represent biological sequences.
 
-See also the Seq_ wiki and the chapter in our tutorial:
- - `HTML Tutorial`_
- - `PDF Tutorial`_
+See also the Seq_ wiki and the chapter in our Tutorial_.
 
 .. _Seq: http://biopython.org/wiki/Seq
-.. _`HTML Tutorial`: https://biopython.org/docs/latest/Tutorial/index.html
-.. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+.. _Tutorial: https://biopython.org/docs/latest/Tutorial/index.html
 
 """
 
