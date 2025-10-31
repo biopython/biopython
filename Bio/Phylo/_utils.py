@@ -288,6 +288,9 @@ def draw(
     axes=None,
     branch_labels=None,
     label_colors=None,
+    title=None,
+    xlabel=None,
+    ylabel=None,
     *args,
     **kwargs,
 ):
@@ -589,9 +592,14 @@ def draw(
         pass
     else:
         if name:
-            axes.set_title(name)
-    axes.set_xlabel("branch length")
-    axes.set_ylabel("taxa")
+            title = name
+        axes.set_title(title)
+    if xlabel is None:
+        xlabel = 'branch length'
+    axes.set_xlabel(xlabel)
+    if ylabel is None:
+        ylabel = 'taxa'
+    axes.set_ylabel(ylabel)
     # Add margins around the tree to prevent overlapping the axes
     xmax = max(x_posns.values())
     axes.set_xlim(-0.05 * xmax, 1.25 * xmax)
