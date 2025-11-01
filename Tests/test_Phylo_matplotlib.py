@@ -51,7 +51,9 @@ class UtilTests(unittest.TestCase):
         # Fancier options
         Phylo.draw(apaf, do_show=False, branch_labels={apaf.root: "Root"})
         Phylo.draw(
-            apaf, do_show=False, branch_labels=lambda c: c.branch_length  # noqa: E731
+            apaf,
+            do_show=False,
+            branch_labels=lambda c: c.branch_length,  # noqa: E731
         )
 
     def test_draw_with_label_colors_dict(self):

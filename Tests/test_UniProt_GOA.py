@@ -96,11 +96,7 @@ class GoaTests(unittest.TestCase):
         self.assertEqual(recs[0]["DB_Object_Symbol"], "YMR084W")
         self.assertEqual(
             recs[0]["DB_Object_Name"],
-            [
-                "Putative glutamine--fructose"
-                "-6-phosphate aminotransferase"
-                " [isomerizing]"
-            ],
+            ["Putative glutamine--fructose-6-phosphate aminotransferase [isomerizing]"],
         )
         self.assertEqual(recs[0]["DB_Object_Synonym"], ["YM084_YEAST", "YMR084W"])
         self.assertEqual(recs[0]["DB_Object_Type"], "protein")

@@ -47,7 +47,7 @@ def qUri(s):
 
 def cdao_to_obo(s):
     """Optionally converts a CDAO-prefixed URI into an OBO-prefixed URI."""
-    return f"obo:{cdao_elements[s[len('cdao:'):]]}"
+    return f"obo:{cdao_elements[s[len('cdao:') :]]}"
 
 
 def matches(s):
