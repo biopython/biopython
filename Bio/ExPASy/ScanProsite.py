@@ -83,8 +83,9 @@ class Parser(ExpatParser):
         """Initialize the class."""
         ExpatParser.__init__(self)
         self.firsttime = True
-    
+
     def _is_valid_xml(self, data: bytes) -> bool:
+        """Check if the data is valid XML."""
         try:
             ET.fromstring(data.decode("utf-8"))
             return True
