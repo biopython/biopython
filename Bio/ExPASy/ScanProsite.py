@@ -9,6 +9,7 @@ from urllib.parse import urlencode
 from urllib.request import urlopen
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
+import xml.etree.ElementTree as ET
 
 
 class Record(list):
@@ -82,6 +83,13 @@ class Parser(ExpatParser):
         """Initialize the class."""
         ExpatParser.__init__(self)
         self.firsttime = True
+    
+    def _is_valid_xml(self, data: bytes) -> bool:
+        try:
+            ET.fromstring(data.decode("utf-8"))
+            return True
+        except Exception:
+            return False
 
     def feed(self, data, isFinal=0):
         """Raise an Error if plain text is received in the data.
@@ -94,7 +102,7 @@ class Parser(ExpatParser):
         # The error message is (hopefully) contained in the data that was just
         # fed to the parser.
         if self.firsttime:
-            if data[:5].decode("utf-8") != "<?xml":
+            if not self._is_valid_xml(data):
                 raise ValueError(data)
         self.firsttime = False
         return ExpatParser.feed(self, data, isFinal)
@@ -121,18 +129,18 @@ class ContentHandler(handler.ContentHandler):
         """Define the beginning of a record and stores the search record."""
         self.element.append(name)
         self.content = ""
-        if self.element == ["matchset"]:
+        if self.element == ["scanprosite_response", "matchset"]:
             self.record = Record()
             self.record.n_match = int(attrs["n_match"])
             self.record.n_seq = int(attrs["n_seq"])
-        elif self.element == ["matchset", "match"]:
+        elif self.element == ["scanprosite_response", "matchset", "match"]:
             match = {}
             self.record.append(match)
 
     def endElement(self, name):
         """Define the end of the search record."""
         assert name == self.element.pop()
-        if self.element == ["matchset", "match"]:
+        if self.element == ["scanprosite_response", "matchset", "match"]:
             match = self.record[-1]
             if name in ContentHandler.integers:
                 match[name] = int(self.content)
