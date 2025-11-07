@@ -9,7 +9,6 @@ from urllib.parse import urlencode
 from urllib.request import urlopen
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
-import xml.etree.ElementTree as ET
 
 
 class Record(list):
@@ -84,14 +83,6 @@ class Parser(ExpatParser):
         ExpatParser.__init__(self)
         self.firsttime = True
 
-    def _is_valid_xml(self, data: bytes) -> bool:
-        """Check if the data is valid XML."""
-        try:
-            ET.fromstring(data.decode("utf-8"))
-            return True
-        except Exception:
-            return False
-
     def feed(self, data, isFinal=0):
         """Raise an Error if plain text is received in the data.
 
@@ -103,7 +94,7 @@ class Parser(ExpatParser):
         # The error message is (hopefully) contained in the data that was just
         # fed to the parser.
         if self.firsttime:
-            if not self._is_valid_xml(data):
+            if data[:22].decode("utf-8") != "<scanprosite_response>":
                 raise ValueError(data)
         self.firsttime = False
         return ExpatParser.feed(self, data, isFinal)
