@@ -10,6 +10,12 @@ from urllib.request import urlopen
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
 
+# October 28th 2020 it was recognised that between October 10th 2020 and October
+# 28th the main url of prosite changed from https://www.expasy.org to
+# https://prosite.expasy.org. Thus a change in the mirror was issued from
+# https://www.expasy.org to https://prosite.expasy.org.
+PROSITE_URL = "https://prosite.expasy.org"
+
 
 class Record(list):
     """Represents search results returned by ScanProsite.
@@ -27,16 +33,12 @@ class Record(list):
         self.warning = None
 
 
-# October 28th 2020 it was recognised that between October 10th 2020 and October
-# 28th the main url of prosite changed from https://www.expasy.org to
-# https://prosite.expasy.org. Thus a change in the mirror was issued from
-# https://www.expasy.org to https://prosite.expasy.org.
-def scan(seq="", mirror="https://prosite.expasy.org", output="xml", **keywords):
+def scan(seq="", mirror=PROSITE_URL, output="xml", **keywords):
     """Execute a ScanProsite search.
 
     Arguments:
      - mirror:   The ScanProsite mirror to be used
-                 (default: https://prosite.expasy.org).
+                 (default: PROSITE_URL).
      - seq:      The query sequence, or UniProtKB (Swiss-Prot,
                  TrEMBL) accession
      - output:   Format of the search results
