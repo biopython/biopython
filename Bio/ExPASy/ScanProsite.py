@@ -54,6 +54,8 @@ def scan(seq="", mirror=PROSITE_URL, output="xml", **keywords):
     Python object, by using the Bio.ExPASy.ScanProsite.read function.
 
     """
+    if output != "xml":
+        raise NotImplementedError("Only output='xml' is supported currently.")
     parameters = {"seq": seq, "output": output}
     for key, value in keywords.items():
         if value is not None:
