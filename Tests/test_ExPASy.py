@@ -15,6 +15,7 @@ from Bio import ExPASy
 # In order to check any records returned
 from Bio.ExPASy import Prodoc
 from Bio.ExPASy import Prosite
+from Bio.ExPASy import ScanProsite
 
 requires_internet.check()
 
@@ -50,6 +51,37 @@ class ExPASyOnlineTests(unittest.TestCase):
             "https://prosite.expasy.org/cgi-bin/prosite/get-prodoc-entry?PDOC00001",
         )
         self.assertIn("{PS00001; ASN_GLYCOSYLATION}", html)
+
+    def test_scanprosite_swissprot(self):
+        pattern = "P-x(2)-G-E-S-G(2)-[AS]"
+        result = ScanProsite.scan(
+            sig=pattern, mirror=ScanProsite.PROSITE_URL, output="xml", db="sp"
+        )
+        sequences = ScanProsite.read(result)
+        assert len(sequences) > 0
+
+    def test_scanprosite_trembl(self):
+        pattern = "P-x(2)-G-E-S-G(2)-[AS]"
+        result = ScanProsite.scan(
+            sig=pattern, mirror=ScanProsite.PROSITE_URL, output="xml", db="tr"
+        )
+        sequences = ScanProsite.read(result)
+        assert len(sequences) > 0
+
+    def test_scanprosite_pdb(self):
+        pattern = "P-x(2)-G-E-S-G(2)-[AS]"
+        result = ScanProsite.scan(
+            sig=pattern, mirror=ScanProsite.PROSITE_URL, output="xml", db="pdb"
+        )
+        sequences = ScanProsite.read(result)
+        assert len(sequences) > 0
+
+    def test_scanprosite_output_not_implemented(self):
+        pattern = "P-x(2)-G-E-S-G(2)-[AS]"
+        with self.assertRaises(NotImplementedError):
+            ScanProsite.scan(
+                sig=pattern, mirror=ScanProsite.PROSITE_URL, output="txt", db="sp"
+            )
 
 
 if __name__ == "__main__":
