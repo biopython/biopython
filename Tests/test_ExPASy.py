@@ -5,6 +5,7 @@
 
 """Testing Bio.ExPASy online code."""
 
+import io
 import unittest
 
 import requires_internet
@@ -82,6 +83,17 @@ class ExPASyOnlineTests(unittest.TestCase):
             ScanProsite.scan(
                 sig=pattern, mirror=ScanProsite.PROSITE_URL, output="txt", db="sp"
             )
+
+
+class ExPASyOfflineTests(unittest.TestCase):
+    """Test ExPASy offline with pre-saved data."""
+
+    def test_scanprosite_reads_xml(self):
+        with open("ExPASy/scanprosite_response.xml", "rb") as f:
+            example_xml = f.read()
+            handle = io.BytesIO(example_xml)
+            sequences = ScanProsite.read(handle)
+            assert len(sequences) == 1081
 
 
 if __name__ == "__main__":
