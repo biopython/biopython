@@ -13,7 +13,12 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.87
 ===============================================
 
-Pending.
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Michiel de Hoon
+- Peter Cock
+- Timothy Dennis (first contribution)
 
 28 October 2025: Biopython 1.86
 ===============================
@@ -65,14 +70,13 @@ trees using complex style options.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Cassie Bastress (first contribution)
 - Rachel Stern (first contribution)
 - Fabio Zanini
 - Michiel de Hoon
 - Oliver Wissett (first contribution)
 - Peter Cock
 - Samuel Prince (first contribution)
-- Cassie Bastress (first contribution)
-- Timothy Dennis (first contribution)
 
 15 January 2025: Biopython 1.85
 ===============================
