@@ -72,6 +72,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Samuel Prince (first contribution)
 - Cassie Bastress (first contribution)
+- Timothy Dennis (first contribution)
 
 15 January 2025: Biopython 1.85
 ===============================
