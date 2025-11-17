@@ -368,6 +368,13 @@ class MixinTests(unittest.TestCase):
         self.assertAlmostEqual(path[2].branch_length, 0.4)
         self.assertEqual(path[2].name, "C")
 
+    def test_missing_target_trace(self):
+        """TreeMixin: trace() method with missing target."""
+        tree = self.phylogenies[1]
+        with self.assertRaises(ValueError) as cm:
+            tree.trace("Aaa", "C")
+        self.assertEqual(str(cm.exception), "target 'Aaa' is not in this tree")
+
     # Information methods
 
     def test_common_ancestor(self):
