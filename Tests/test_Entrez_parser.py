@@ -12348,5 +12348,6 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
 
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
