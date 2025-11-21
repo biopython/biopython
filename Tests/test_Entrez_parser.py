@@ -9,6 +9,9 @@ import os
 import pickle
 import unittest
 from io import BytesIO
+from textwrap import dedent
+from unittest.mock import Mock, patch
+from urllib.parse import urlparse
 
 from Bio import Entrez
 from Bio import StreamModeError
@@ -12345,6 +12348,49 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         stream.seek(0)
         records = Entrez.parse(stream)
         self.assertRaises(CorruptedXMLError, next, records)
+
+
+class TlsEnforcementTest(unittest.TestCase):
+    """Test for DTD downloads enforcing TLS/SSL."""
+
+    def test_tls_enforced(self):
+        content = (
+            dedent(
+                """\
+                <?xml version="1.0"?>
+                <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN"
+                    "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+                <eInfoResult />
+                """
+            )
+            .replace("https", "http")
+            .encode("utf-8")
+        )
+
+        self.assertIn(b"http:", content)  # self-test, without TLS
+
+        handler = Entrez.Parser.DataHandler(
+            validate=True, escape=False, ignore_errors=False
+        )
+
+        handler.open_dtd_file = Mock(return_value=None)  # i.e. bypass cache read
+        handler.save_dtd_file = Mock()  # i.e. bypass cache write
+
+        mock_urlopen = Mock(
+            return_value=Mock(
+                read=Mock(return_value=b"<!ELEMENT eInfoResult (DbList|DbInfo|ERROR)>")
+            )
+        )
+
+        with patch("Bio.Entrez.Parser.urlopen", mock_urlopen):
+            handler.read(BytesIO(content))
+
+        expected_schemes = ["https"]  # i.e. now with TLS
+        actual_schemes = [
+            urlparse(call_.args[0]).scheme for call_ in mock_urlopen.call_args_list
+        ]
+
+        self.assertEqual(actual_schemes, expected_schemes)
 
 
 if __name__ == "__main__":
