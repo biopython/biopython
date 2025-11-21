@@ -520,6 +520,32 @@ class CopyTests(unittest.TestCase):
             self.assertIsNot(e.get_list()[0], ee.get_list()[0])
 
 
+class IndexingTests(unittest.TestCase):
+    """Tests for indexing SMCRA objects."""
+
+    def setUp(self):
+        parser = PDBParser(PERMISSIVE=True, QUIET=True)
+        self.structure = parser.get_structure("a", "PDB/1LCD.pdb")
+
+    def test_res_indexing(self):
+        chain = self.structure[0]["A"]  # Get first chain in the first model
+        all_residues = list(chain.get_residues())
+        res_positions = [
+            res.id[1] for res in all_residues if res.id[0] == " "
+        ]  # get only standard residues, e.g. (' ', 1, ' ') vs ('W', 56, ' ')
+
+        for res in res_positions:
+            self.assertIn(res, chain)  # check if residue is in chain
+            self.assertIsInstance(res, int)  # check if residue is an int
+
+            self.assertIn(
+                np.int64(res), chain
+            )  # check if residue is recognised in chain as an `np.int64`
+
+            with self.assertRaises(KeyError):
+                chain[oct(int(res))]  # the conversion should not work for octal strings
+
+
 class CenterOfMassTests(unittest.TestCase):
     """Tests calculating centers of mass/geometry."""
 

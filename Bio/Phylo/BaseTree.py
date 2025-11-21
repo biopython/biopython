@@ -434,7 +434,7 @@ class TreeMixin:
         """
         paths = [self.get_path(t) for t in _combine_args(targets, *more_targets)]
         # Validation -- otherwise izip throws a spooky error below
-        for p, t in zip(paths, targets):
+        for p, t in zip(paths, _combine_args(targets, *more_targets)):
             if p is None:
                 raise ValueError(f"target {t!r} is not in this tree")
         mrca = self.root

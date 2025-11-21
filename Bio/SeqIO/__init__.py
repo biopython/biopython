@@ -5,14 +5,10 @@
 # package.
 r"""Sequence input/output as SeqRecord objects.
 
-Bio.SeqIO is also documented at SeqIO_ and by a whole chapter in our tutorial:
-
-  - `HTML Tutorial`_
-  - `PDF Tutorial`_
+Bio.SeqIO is also documented at SeqIO_ and by a whole chapter in our Tutorial_:
 
 .. _SeqIO: http://biopython.org/wiki/SeqIO
-.. _`HTML Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.html
-.. _`PDF Tutorial`: http://biopython.org/DIST/docs/tutorial/Tutorial.pdf
+.. _Tutorial: https://biopython.org/docs/latest/Tutorial/index.html
 
 Input
 -----

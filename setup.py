@@ -250,8 +250,7 @@ setup(
         "Intended Audience :: Science/Research",
         "License :: Freely Distributable",
         # Technically the "Biopython License Agreement" is not OSI approved,
-        # but is almost https://opensource.org/licenses/HPND so might put:
-        # 'License :: OSI Approved',
+        # but is almost https://opensource.org/licenses/HPND
         # To resolve this we are moving to dual-licensing with 3-clause BSD:
         # 'License :: OSI Approved :: BSD License',
         "Operating System :: OS Independent",
@@ -261,6 +260,7 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Software Development :: Libraries :: Python Modules",

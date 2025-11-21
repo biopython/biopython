@@ -228,7 +228,6 @@ for rst in files:
             continue
 
         def funct(n, d, f):
-            global tutorial_base
             method = lambda x: None  # noqa: E731
             if f:
                 p = os.path.join(tutorial_base, f)
@@ -271,7 +270,6 @@ class TutorialTestCase(unittest.TestCase):
             )
 
     def tearDown(self):
-        global original_path
         os.chdir(original_path)
         # files currently don't get created during test with python3.5 and pypy
         # remove files created from chapter_phylo.tex

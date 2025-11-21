@@ -231,7 +231,6 @@ class TestRunner(unittest.TextTestRunner):
         output = StringIO()
         # Restore the language and thus default encoding (in case a prior
         # test changed this, e.g. to help with detecting command line tools)
-        global SYSTEM_LANG
         os.environ["LANG"] = SYSTEM_LANG
         # Always run tests from the Tests/ folder where run_tests.py
         # should be located (as we assume this with relative paths etc)

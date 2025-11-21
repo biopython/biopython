@@ -54,9 +54,15 @@ class WriteTest(unittest.TestCase):
         os.close(filenumber)
 
         try:
-            self.io.save(filename)
+            with warnings.catch_warnings():
+                # Truncated bfactor 1000009 to 999999 to fit wwPDB spec. Consider using mmCIF instead!
+                warnings.simplefilter("ignore", PDBIOWarning)
+                self.io.save(filename)
 
-            struct2 = self.parser.get_structure("1a8o", filename)
+            with warnings.catch_warnings():
+                # Used element 'SE' for Atom (name=SE) with given element 'E'
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct2 = self.parser.get_structure("1a8o", filename)
             nresidues = len(list(struct2.get_residues()))
 
             self.assertEqual(len(struct2), 1)
@@ -64,8 +70,8 @@ class WriteTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
-    def test_pdbio_write_preserve_numbering(self):
-        """Test writing PDB and preserve atom numbering."""
+    def test_pdbio_write_auto_numbering(self):
+        """Test writing PDB by default does not preserve atom numbering."""
         self.io.set_structure(self.structure)
 
         filenumber, filename = tempfile.mkstemp()
@@ -74,7 +80,10 @@ class WriteTest(unittest.TestCase):
         try:
             self.io.save(filename)  # default preserve_atom_numbering=False
 
-            struct = self.parser.get_structure("1a8o", filename)
+            with warnings.catch_warnings():
+                # Used element 'SE' for Atom (name=SE) with given element 'E'
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct = self.parser.get_structure("1a8o", filename)
             serials = [a.serial_number for a in struct.get_atoms()]
             og_serials = list(range(1, len(serials) + 1))
             self.assertEqual(og_serials, serials)
@@ -120,17 +129,23 @@ class WriteTest(unittest.TestCase):
             self.io.save(filename, preserve_atom_numbering=True)
         self.assertFalse(os.path.exists(filename))
 
-    def test_pdbio_write_auto_numbering(self):
-        """Test writing PDB and do not preserve atom numbering."""
+    def test_pdbio_write_preserve_numbering(self):
+        """Test writing PDB can preserve atom numbering."""
         self.io.set_structure(self.structure)
 
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
 
         try:
-            self.io.save(filename, preserve_atom_numbering=True)
+            with warnings.catch_warnings():
+                # Truncated bfactor 1000009 to 999999 to fit wwPDB spec. Consider using mmCIF instead!
+                warnings.simplefilter("ignore", PDBIOWarning)
+                self.io.save(filename, preserve_atom_numbering=True)
 
-            struct = self.parser.get_structure("1a8o", filename)
+            with warnings.catch_warnings():
+                # Used element 'SE' for Atom (name=SE) with given element 'E'
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct = self.parser.get_structure("1a8o", filename)
             serials = [a.serial_number for a in struct.get_atoms()]
             og_serials = [a.serial_number for a in self.structure.get_atoms()]
 
@@ -152,8 +167,14 @@ class WriteTest(unittest.TestCase):
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
-            self.io.save(filename)
-            struct2 = self.parser.get_structure("1a8o", filename)
+            with warnings.catch_warnings():
+                # Truncated bfactor 1000009 to 999999 to fit wwPDB spec. Consider using mmCIF instead!
+                warnings.simplefilter("ignore", PDBIOWarning)
+                self.io.save(filename)
+            with warnings.catch_warnings():
+                # Used element 'SE' for Atom (name=SE) with given element 'E'
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct2 = self.parser.get_structure("1a8o", filename)
             nresidues = len(list(struct2.get_residues()))
             self.assertEqual(nresidues, 1)
         finally:
@@ -173,8 +194,14 @@ class WriteTest(unittest.TestCase):
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
-            self.io.save(filename)
-            struct2 = self.parser.get_structure("1a8o", filename)
+            with warnings.catch_warnings():
+                # Truncated bfactor 1000009 to 999999 to fit wwPDB spec. Consider using mmCIF instead!
+                warnings.simplefilter("ignore", PDBIOWarning)
+                self.io.save(filename)
+            with warnings.catch_warnings():
+                # Used element 'SE' for Atom (name=SE) with given element 'E'
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct2 = self.parser.get_structure("1a8o", filename)
             nresidues = len(list(struct2.get_residues()))
             self.assertEqual(nresidues, 1)
 
@@ -197,8 +224,14 @@ class WriteTest(unittest.TestCase):
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
-            self.io.save(filename)
-            struct2 = self.parser.get_structure("1a8o", filename)
+            with warnings.catch_warnings():
+                # Truncated bfactor 1000009 to 999999 to fit wwPDB spec. Consider using mmCIF instead
+                warnings.simplefilter("ignore", PDBIOWarning)
+                self.io.save(filename)
+            with warnings.catch_warnings():
+                # Used element 'SE' for Atom (name=SE) with given element 'E'
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct2 = self.parser.get_structure("1a8o", filename)
             nresidues = len(list(struct2.get_residues()))
             self.assertEqual(nresidues, 1)
 
@@ -294,7 +327,10 @@ class WriteTest(unittest.TestCase):
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
         try:
-            self.io.save(filename)
+            with warnings.catch_warnings():
+                # Truncated bfactor 1000009 to 999999 to fit wwPDB spec. Consider using mmCIF instead!
+                warnings.simplefilter("ignore", PDBIOWarning)
+                self.io.save(filename)
             # Check if there are lines besides 'ATOM', 'TER' and 'END'
             with open(filename) as handle:
                 record_set = {line[0:6] for line in handle}
@@ -343,7 +379,9 @@ class WriteTest(unittest.TestCase):
         os.close(filenumber)
         try:
             self.io.save(filename)
-            struct2 = self.parser.get_structure("1lcd", filename)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct2 = self.parser.get_structure("1lcd", filename)
             confirm_numbering(struct2)
             confirm_single_end(filename)
         finally:
@@ -363,7 +401,10 @@ class WriteTest(unittest.TestCase):
         os.close(filenumber)
 
         try:
-            self.io.save(filename)
+            with warnings.catch_warnings():
+                # Truncated bfactor 1000009 to 999999 to fit wwPDB spec. Consider using mmCIF instead!
+                warnings.simplefilter("ignore", PDBIOWarning)
+                self.io.save(filename)
         finally:
             os.remove(filename)
 
@@ -385,7 +426,10 @@ class WriteTest(unittest.TestCase):
 
     def test_pdbio_write_high_b_factor(self):
         def check_pdb(filename, expected_bfactor):
-            struct = self.parser.get_structure("high_b", filename)
+            with warnings.catch_warnings():
+                # Used element 'SE' for Atom (name=SE) with given element 'E'
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                struct = self.parser.get_structure("high_b", filename)
             atom = next(struct.get_atoms())
             self.assertEqual(atom.bfactor, expected_bfactor)
 

@@ -10,31 +10,72 @@ https://www.open-bio.org/category/obf-projects/biopython/
 
 The latest news is at the top of this file.
 
-(In progress, not yet released): Biopython 1.86
+(In progress, not yet released): Biopython 1.87
 ===============================================
 
-This release of Biopython supports Python 3.10, 3.11, 3.12 and 3.13.  It
-has also been tested on PyPy3.10 v7.3.17.
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Michiel de Hoon
+- Peter Cock
+- Timothy Dennis (first contribution)
+
+28 October 2025: Biopython 1.86
+===============================
+
+This release of Biopython supports Python 3.10, 3.11, 3.12, 3.13 and 3.14.  It
+has also been tested on PyPy3.10 v7.3.19.
 
 ``Bio.SearchIO`` now supports parsing the tabular and plain text output of
 `Infernal <http://eddylab.org/infernal/>` (v1.0.0+) RNA search tool. The
-format are ``infernal-tab`` and ``infernal-text``.
+format names are ``infernal-tab`` and ``infernal-text``.
+
+The default value of the gap score of a ``PairwiseAligner`` object was changed
+in this release.  Previously, for consistency with ``Bio.pairwise2``, the
+default value for gap score was 0.  However, this means that a mismatch, an
+insertion followed by a deletion, and a deletion followed by an insertion all
+get assigned a score of 0.  The aligner then finds a large number of alignments
+that are logically the same, but have trivial differences between them.  For
+example, aligning AAACAAA to AAAGAAA previously yielded the following three
+alignments, all with score 6::
+
+     AAACAAA        AAAC-AAA        AAA-CAAA
+     AAAGAAA        AAA-GAAA        AAAG-AAA
+
+With the new default parameter for the gap score, only the first alignment is
+returned.
 
 ``Bio.PDB.PDBIO`` now ensures that b-factor values are always at most 6 characters to
 ensure that we do not violate the wwPDB specification. This should not have an impact
 on the majority of uses, as b-factor values are generally small (less than 100). When
 1000 \<= b-factor \< 10_000, the value is rounded to a single decimal place. When,
-10_000 \<= b-factor \< 999_999, the value is rounded to zero decimal place. Values above
-999_999 are now clamped. The justification for this is the rise in the b-factor field
-being used for additional metadata, typically from computational tools.
+10_000 \<= b-factor \< 999_999, the value is rounded to zero decimal places. Values
+above 999_999 are now clamped. The justification for this is the rise in the b-factor
+field being used for additional metadata, typically from computational tools.
 
-``Bio.PDB.PDBIO`` will now raise module specific warnings: ``Bio.PDB.PDBExceptions.PDBIOWarning``.
+``Bio.Align`` now provides a method ``Alignment.from_alignments_with_same_reference``
+to construct a multiple sequence alignment from a collection of alignments
+that share the same reference sequence.
+
+``Bio.PDB.PDBIO`` will now raise module specific warnings:
+``Bio.PDB.PDBExceptions.PDBIOWarning``.
+
+``Bio.PDB.SCADIO`` now supports object selection by color in the OpenSCAD
+output file.  This enables generation of separate STL files for each color for
+printing protein structures on multi-material 3D printers.
+
+The ``iplotx`` library is mentioned in the Tutorial as an option to visualise
+trees using complex style options.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Cassie Bastress (first contribution)
 - Rachel Stern (first contribution)
+- Fabio Zanini
+- Michiel de Hoon
 - Oliver Wissett (first contribution)
+- Peter Cock
 - Samuel Prince (first contribution)
 
 15 January 2025: Biopython 1.85
@@ -74,8 +115,8 @@ possible, especially the following contributors:
 - Alan Medlar
 - Carlos Peña
 - Gert Hulselmans
-- Peter Cock
 - Michiel de Hoon
+- Peter Cock
 
 28 June 2024: Biopython 1.84
 ============================
@@ -88,12 +129,12 @@ Our main documentation, the Biopython Tutorial and Cookbook, has been
 converted from LaTeX to reStructuredText, and combined with the existing API
 documentation, into a single more modern and navigable HTML output.
 
-Bio.Blast contains a new parser for BLAST XML output as a replacement for the
-old parser in Bio.Blast.NCBIXML. The main differences between the parsers is
-as follows:
+``Bio.Blast``` contains a new parser for BLAST XML output as a replacement for
+the old parser in ``Bio.Blast.NCBIXML```. The main differences between the
+parsers is as follows:
 
-* The old parser stores information in a Bio.Blast.NCBIXML.Blast object, with
-  attribute names based on plain-text Blast output. The new parser stores
+* The old parser stores information in a ``Bio.Blast.NCBIXML.Blast``` object,
+  with attribute names based on plain-text Blast output. The new parser stores
   information in a Bio.Blast.Record object. This class follows the DTD that
   describes the XML in terms of attribute names and dictionary key names,
   class structure, and object types. This makes it easier to find the detailed

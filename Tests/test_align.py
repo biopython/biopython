@@ -30,8 +30,10 @@ from Bio import motifs
 from Bio.Align import AlignInfo
 from Bio.Align import Alignment
 from Bio.Align import MultipleSeqAlignment
+from Bio.Align import PairwiseAligner
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+import numpy as np
 
 
 class TestBasics(unittest.TestCase):
@@ -394,7 +396,8 @@ T:   7.00   0.00   7.00   0.00   0.00   0.00   7.00   6.00   0.00   0.00   0.00 
 """,
         )
 
-        align_info = AlignInfo.SummaryInfo(msa)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            align_info = AlignInfo.SummaryInfo(msa)
         self.assertEqual(align_info.get_column(1), "AAAAAAA")
         self.assertEqual(align_info.get_column(7), "TTTATTT")
 
@@ -912,6 +915,196 @@ EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
         self.assertEqual(
             motif.counts.calculate_consensus(identity=0.6), "NTNGCNTNNNNNGNNGGNTGGNTCN"
         )
+
+
+class TestFromAlignmentsWithSameReference(unittest.TestCase):
+
+    def test_pwas_built_with_strings(self):
+        """Test that from_alignments_with_same_reference creates the correct Alignment when PWA inputs were built with strings"""
+        aligner = PairwiseAligner()
+
+        # Input sequences
+        reference_str = "ACGT"
+        seq1_str = "ACGGT"
+        seq2_str = "AT"
+
+        # Generate pairwise alignments
+        pwa1 = next(aligner.align(reference_str, seq1_str))
+        pwa2 = next(aligner.align(reference_str, seq2_str))
+
+        # Use the method being tested
+        msa = Alignment.from_alignments_with_same_reference([pwa1, pwa2])
+
+        # Check that the output is of correct type
+        self.assertIsInstance(msa, Alignment)
+
+        # Check the number of sequences in the MSA
+        self.assertEqual(len(msa), 3)
+
+        # Validate that from_alignments_with_same_reference gives the right msa
+        self.assertEqual(str(msa[0]), "ACG-T")
+        self.assertEqual(str(msa[1]), "ACGGT")
+        self.assertEqual(str(msa[2]), "A---T")
+
+    def test_pwas_built_with_seqs(self):
+        """Test that from_alignments_with_same_reference works with PWAs built with Seq objects."""
+        aligner = PairwiseAligner()
+
+        # Input sequences
+        reference_seq = Seq("ACGT")
+        seq1_seq = Seq("ACGGT")
+        seq2_seq = Seq("AT")
+
+        # Generate pairwise alignments
+        pwa1 = next(aligner.align(reference_seq, seq1_seq))
+        pwa2 = next(aligner.align(reference_seq, seq2_seq))
+
+        # Use the method being tested
+        msa = Alignment.from_alignments_with_same_reference([pwa1, pwa2])
+
+        # Check that the output is of correct type
+        self.assertIsInstance(msa, Alignment)
+
+        # Validate that from_alignments_with_same_reference gives the right msa
+        self.assertEqual(str(msa[0]), "ACG-T")
+        self.assertEqual(str(msa[1]), "ACGGT")
+        self.assertEqual(str(msa[2]), "A---T")
+
+        # Works with undefined sequences
+        pwa1_undefined = Alignment([Seq(None, 4), Seq(None, 5)], pwa1.coordinates)
+        pwa2_undefined = Alignment([Seq(None, 4), Seq(None, 2)], pwa2.coordinates)
+        msa_undefined = Alignment.from_alignments_with_same_reference(
+            [pwa1_undefined, pwa2_undefined]
+        )
+        self.assertTrue((msa_undefined.coordinates == msa.coordinates).all())
+
+    def test_metadata_preservation(self):
+        """Test that sequence metadata (IDs and descriptions) are preserved in the Alignment.
+
+        Sequence metadata may exist if pairwise alignments are built with SeqRecords.
+        This also tests that from_alignments_with_same_reference works with pairwise alignments built with SeqRecord objects.
+        """
+        aligner = PairwiseAligner()
+
+        # Input sequences
+        reference_seqr = SeqRecord(Seq("ACGT"), id="reference", description="desc 1")
+        seq1_seqr = SeqRecord(Seq("ACGGT"), id="seq1", description="desc 2")
+        seq2_seqr = SeqRecord(Seq("AT"), id="seq2", description="desc 3")
+
+        # Generate pairwise alignments
+        pwa1 = next(aligner.align(reference_seqr, seq1_seqr))
+        pwa2 = next(aligner.align(reference_seqr, seq2_seqr))
+
+        # Use the method being tested
+        msa = Alignment.from_alignments_with_same_reference([pwa1, pwa2])
+
+        # Validate that from_alignments_with_same_reference gives the right msa
+        self.assertEqual(str(msa[0]), "ACG-T")
+        self.assertEqual(str(msa[1]), "ACGGT")
+        self.assertEqual(str(msa[2]), "A---T")
+
+        # Check that id and description are retained
+        self.assertEqual(msa.sequences[0].id, "reference")
+        self.assertEqual(msa.sequences[1].id, "seq1")
+        self.assertEqual(msa.sequences[2].id, "seq2")
+        self.assertEqual(msa.sequences[0].description, "desc 1")
+        self.assertEqual(msa.sequences[1].description, "desc 2")
+
+    def test_mismatched_references(self):
+        """Test that mismatched reference sequences raise a ValueError."""
+        aligner = PairwiseAligner()
+        pwa1 = next(aligner.align("ACGAAAT", "ACGGT"))
+        pwa2 = next(aligner.align("ACCT", "AT"))
+
+        with self.assertRaises(ValueError) as context:
+            Alignment.from_alignments_with_same_reference([pwa1, pwa2])
+        self.assertIn("All reference sequences must", str(context.exception))
+
+        # Works with undefined sequences
+        pwa1_undefined = Alignment([Seq(None, 7), Seq(None, 5)], pwa1.coordinates)
+        pwa2_undefined = Alignment([Seq(None, 4), Seq(None, 2)], pwa2.coordinates)
+        with self.assertRaises(ValueError) as context:
+            Alignment.from_alignments_with_same_reference(
+                [pwa1_undefined, pwa2_undefined]
+            )
+        self.assertIn("All reference sequences must", str(context.exception))
+
+        # Works with mix
+        pwa1_undefined = Alignment([Seq(None, 7), Seq(None, 5)], pwa1.coordinates)
+        with self.assertRaises(ValueError) as context:
+            Alignment.from_alignments_with_same_reference([pwa1_undefined, pwa2])
+        self.assertIn("All reference sequences must", str(context.exception))
+
+    def test_empty_input(self):
+        """Test that empty input raises a ValueError."""
+        with self.assertRaises(ValueError):
+            Alignment.from_alignments_with_same_reference([])
+
+    def test_input_with_three_sequences(self):
+        """Test that the method works with input Alignments of three sequences"""
+        # Input sequences
+        reference_str = "ACGT"
+        seq1_str = "ACGGT"
+        seq2_str = "AT"
+        seq3_str = "AGT"
+        seq4_str = "ACT"
+
+        # Coordinates for each alignment
+        coords1 = np.array([[0, 1, 2, 3, 3, 4], [0, 1, 2, 3, 4, 5], [0, 1, 1, 1, 1, 2]])
+
+        coords2 = np.array([[0, 1, 2, 3, 4], [0, 1, 1, 2, 3], [0, 1, 2, 2, 3]])
+
+        # Generate input alignments
+        alignment1 = Alignment([reference_str, seq1_str, seq2_str], coords1)
+        alignment2 = Alignment([reference_str, seq3_str, seq4_str], coords2)
+
+        # Use the method being tested
+        msa = Alignment.from_alignments_with_same_reference([alignment1, alignment2])
+
+        # Check that the output is of correct type
+        self.assertIsInstance(msa, Alignment)
+
+        # Check the number of sequences in the MSA
+        self.assertEqual(len(msa), 5)
+
+        # Validate that from_alignments_with_same_reference gives the right msa
+        self.assertEqual(str(msa[0]), "ACG-T")
+        self.assertEqual(str(msa[1]), "ACGGT")
+        self.assertEqual(str(msa[2]), "A---T")
+        self.assertEqual(str(msa[3]), "A-G-T")
+        self.assertEqual(str(msa[4]), "AC--T")
+
+    def test_mixed_input(self):
+        """Test that the method works with input Alignments of mixed number of sequences"""
+        aligner = PairwiseAligner()
+
+        # Input sequences
+        reference_str = "ACGT"
+        seq1_str = "ACT"
+        seq2_str = "ACGGT"
+        seq3_str = "AT"
+
+        # Coordinates for an alignment of three sequences
+        coords = np.array([[0, 1, 2, 3, 3, 4], [0, 1, 2, 3, 4, 5], [0, 1, 1, 1, 1, 2]])
+
+        # Generate input alignments
+        pwa = next(aligner.align(reference_str, seq1_str))
+        not_pwa = Alignment([reference_str, seq2_str, seq3_str], coords)
+
+        # Use the method being tested
+        msa = Alignment.from_alignments_with_same_reference([pwa, not_pwa])
+
+        # Check that the output is of correct type
+        self.assertIsInstance(msa, Alignment)
+
+        # Check the number of sequences in the MSA
+        self.assertEqual(len(msa), 4)
+
+        # Validate that from_alignments_with_same_reference gives the right msa
+        self.assertEqual(str(msa[0]), "ACG-T")
+        self.assertEqual(str(msa[1]), "AC--T")
+        self.assertEqual(str(msa[2]), "ACGGT")
+        self.assertEqual(str(msa[3]), "A---T")
 
 
 if __name__ == "__main__":

@@ -108,14 +108,16 @@ NCBI said this API was no longer being maintained.
 
 Bio.SCOP
 --------
-The ``search`` function was deprecated in Release 1.84. The CGI API this
-wrapped is no longer available since SCOP moved to the EBI website.
+The ``search`` function was deprecated in Release 1.84, and removed in Release
+1.86.  The CGI API this wrapped is no longer available since SCOP moved to the
+EBI website.
 
 Bio.AlignInfo
 -------------
 The ``pos_specific_score_matrix`` method of the ``SummaryInfo`` class and the
-``PSSM`` class were deprecated in release 1.82, and removed in release 1.85. As
-an alternative, please use the ``alignment`` property of a ``MultipleSeqAlignment``
+``PSSM`` class were deprecated in release 1.82, and removed in release 1.85.
+The ``SummaryInfo`` class itself was deprecated in release 1.86.  As an
+alternative, please use the ``alignment`` property of a ``MultipleSeqAlignment``
 object to obtains a new-style ``Alignment`` object, and use it to create a
 ``Bio.motifs.Motif`` object. For example,
 
@@ -185,8 +187,9 @@ hmmlearn (https://pypi.org/project/hmmlearn/) instead.
 Bio.HMM
 -------
 The `Bio.HMM.DynamicProgramming`, `Bio.HMM.Trainer`, `Bio.HMM.MarkovModel`, and
-`Bio.HMM.Utilities` modules were deprecated in release 1.82. Consider using
-hmmlearn (https://pypi.org/project/hmmlearn/) instead.
+`Bio.HMM.Utilities` modules were deprecated in release 1.82, and removed in
+release 1.86. Consider using hmmlearn (https://pypi.org/project/hmmlearn/)
+instead.
 
 Bio.PDB.Polypeptide
 -------------------
@@ -228,8 +231,7 @@ deprecated in release 1.82, and removed in release 1.86. Instead of
 ``instances.search(sequence)``, ``sequence.search(instances)`` can be used,
 where sequence is a Seq object. This allows instances to have different lengths.
 The ``version`` parameter of the ``weblogo`` method of the ``Motif`` class in
-``Bio.motifs`` was deprecated in release 1.83. Using the parameter has no
-effect.
+``Bio.motifs`` was deprecated in release 1.83, and removed in release 1.86.
 
 The ``Instances`` class and the ``instances`` argument of the ``Motif`` class
 initializer in ``Bio.motifs`` were deprecated in release 1.82, and removed in
@@ -618,9 +620,9 @@ The Bio.SubsMat module was deprecated in Release 1.78, and removed in Release
 Bio.Align
 ---------
 The ``infer_coordinates`` class method of the ``Alignment`` class in
-``Bio.Align`` was deprecated in Release 1.84.  Instead,please use the
-``parse_printed_alignment`` method, which is much faster, and returns both the
-sequences after removing the gaps and the coordinates.
+``Bio.Align`` was deprecated in Release 1.84, and removed in Release 1.86.
+Instead, please use the ``parse_printed_alignment`` method, which is much
+faster, and returns both the coordinates and sequences after removing the gaps.
 
 The ``get_column`` method of the MultipleSeqAlignment was deprecated in
 Release 1.57 and removed in Release 1.69.
@@ -643,6 +645,21 @@ Attributes of the PairwiseAligner class referring to gap scores were renamed in
 Release 1.86, with the original name still available with a deprecation warning.
 These attributes were renamed to be consistent with the AlignmentCounts class
 and with the common nomenclature in the literature.
+
+The default value of the gap score of a PairwiseAligner object was changed in
+Release 1.86.  Previously, for consistency with Bio.pairwise2, the default
+value for gap score was 0.  However, this means that a mismatch, an insertion
+followed by a deletion, and a deletion followed by an insertion all get
+assigned a score of 0.  The aligner then finds a large number of alignments
+that are logically the same, but with trivial differences between them.  For
+example, aligning AAACAAA to AAAGAAA previously yielded the following three
+alignments, all with score 6:
+
+     AAACAAA        AAAC-AAA        AAA-CAAA
+     AAAGAAA        AAA-GAAA        AAAG-AAA
+
+With the new default parameter for the gap score, only the first alignment is
+returned.
 
 The ``alphabet`` attribute of the PairwiseAligner class was deprecated in
 Release 1.86. The attribute is still being stored, but it is not used in any

@@ -548,10 +548,7 @@ def coord_space(
     # a1 = acs[1]
     # a2 = acs[2]
 
-    global gtm
-    global gmry
-    global gmrz, gmrz2
-
+    # the gtm, gmry, gmrz, and gmrz2 variables are read from the global namespace
     tm = gtm
     mry = gmry
     mrz = gmrz

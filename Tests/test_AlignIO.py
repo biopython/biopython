@@ -3,18 +3,14 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for AlignIO module."""
-import string
+
 import unittest
 import warnings
 from io import StringIO
 
 from Bio import AlignIO
-from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
-from Bio.Align import AlignInfo
 from Bio.Align import MultipleSeqAlignment
-from Bio.Data import IUPACData
-from Bio.motifs import Motif
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -64,7 +60,9 @@ class TestAlignIO_exceptions(unittest.TestCase):
         records = list(AlignIO.read(path, "clustal"))
         for t_format in self.t_formats:
             handle = StringIO()
-            self.assertRaises(Exception, AlignIO.write, [records], handle, t_format)
+            self.assertRaises(
+                (AttributeError, TypeError), AlignIO.write, [records], handle, t_format
+            )
 
 
 class TestAlignIO_reading(unittest.TestCase):

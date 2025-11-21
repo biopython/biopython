@@ -1074,15 +1074,10 @@ static char _codonaligner__doc__[] =
 "C extension module implementing a dynamic programming algorithm to align a nucleotide sequence to an amino acid sequence";
 
 static struct PyModuleDef moduledef = {
-        PyModuleDef_HEAD_INIT,
-        "_codonaligner",
-        _codonaligner__doc__,
-        -1,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL
+    PyModuleDef_HEAD_INIT,
+    .m_name = "_codonaligner",
+    .m_doc = _codonaligner__doc__,
+    .m_size = -1,
 };
 
 PyObject *

@@ -7749,7 +7749,12 @@ KEYWORDS    """,
     def test_dblink_multiline(self):
         """Parse GenBank record with multiline DBLINK entries."""
         path = "GenBank/EZ116220.gb"
-        record = SeqIO.read(path, "gb")
+        # Silence too long warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            record = SeqIO.read(path, "gb")
+            gb = record.format("gb")
+            embl = record.format("embl")
         self.assertEqual(
             record.dbxrefs,
             [
@@ -7757,7 +7762,6 @@ KEYWORDS    """,
                 "Sequence Read Archive:SRX001885, SRX001121, SRX001531, SRX001530, SRX001529",
             ],
         )
-        gb = record.format("gb")
         self.assertTrue(
             """
 DBLINK      BioProject: PRJNA39555
@@ -7766,7 +7770,6 @@ KEYWORDS    """
             in gb,
             gb,
         )
-        embl = record.format("embl")
         self.assertIn("XX\nPR   Project:PRJNA39555;\nXX\n", embl)
 
     def test_dbline_gb_embl(self):
@@ -8026,9 +8029,11 @@ KEYWORDS    """,
             annotations={"molecule_type": "DNA"},
         )
         handle = StringIO()
-        SeqIO.write(record, handle, "genbank")
-        handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_correct(self):
@@ -8043,9 +8048,11 @@ KEYWORDS    """,
         )
         record.annotations["date"] = "24-DEC-2015"
         handle = StringIO()
-        SeqIO.write(record, handle, "genbank")
-        handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
 
     def test_genbank_date_list(self):
@@ -8060,11 +8067,12 @@ KEYWORDS    """,
         )
         record.annotations["date"] = ["24-DEC-2015"]
         handle = StringIO()
-        SeqIO.write(record, handle, "genbank")
-        handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
-
         record = SeqRecord(
             sequence_object,
             id="123456789",
@@ -8074,9 +8082,11 @@ KEYWORDS    """,
         )
         record.annotations["date"] = ["24-DEC-2015", "25-JAN-2016"]
         handle = StringIO()
-        SeqIO.write(record, handle, "genbank")
-        handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_datetime(self):
@@ -8099,7 +8109,6 @@ KEYWORDS    """,
     def test_genbank_date_invalid(self):
         """Check if invalid dates are treated as default."""
         invalid_dates = ("invalid date", "29-2-1981", "35-1-2018", "1-1-80", "1-9-99")
-
         sequence_object = Seq("ATGC")
         for invalid_date in invalid_dates:
             record = SeqRecord(
@@ -8109,12 +8118,16 @@ KEYWORDS    """,
                 description="Test case for date parsing",
                 annotations={"molecule_type": "DNA"},
             )
-
             record.annotations["date"] = invalid_date
             handle = StringIO()
-            SeqIO.write(record, handle, "genbank")
+            # Silence Invalid dates warnings
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                SeqIO.write(record, handle, "genbank")
             handle.seek(0)
-            gb = SeqIO.read(handle, "gb")
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                gb = SeqIO.read(handle, "genbank")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_longer_locus_line(self):

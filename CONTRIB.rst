@@ -80,6 +80,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Cam McMenamie <https://github.com/kamurani>
 - Carlos Pena <https://github.com/carlosp420>
 - Carlos Ríos <https://github.com/Crosvera>
+- Cassie Bastress <https://githiub.com/Cassiebastress>
 - Catherine Lesuisse <https://github.com/kaskales>
 - Cecilia Alsmark <Cecilia.Alsmark at domain ebc.uu.se>
 - Chad Parmet <https://github.com/cparmet>
@@ -118,6 +119,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Dimitris Kalafatis <https://github.com/dimi1729>
 - Edward Haigh <lambda at edwardhaigh dot com>
 - Edward Liaw <https://github.com/edliaw>
+- Ee Shan Shirley Liau <https://github.com/shirleyliau>
 - Emmanuel Noutahi <https://github.com/maclandrol>
 - Eric Rasche <https://github.com/erasche>
 - Eric Talevich <https://github.com/etal>
@@ -258,6 +260,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Michiel de Hoon <https://github.com/mdehoon>
 - Micky Yun Chan <https://github.com/michiboo>
 - Mike Moritz <https://github.com/mikepmikepm35>
+- Mike Philippakis <https://github.com/mikeph52>
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Mikel Martinez Goikoetxea <https://github.com/Mikel-MG>
 - Milind Luthra <https://github.com/milindl>
@@ -343,6 +346,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Tiago Antao <https://github.com/tiagoantao>
 - Tianyi Shi <https://github.com/TianyiShi2001>
 - Tim Burke <https://github.com/tipabu>
+- Timothy Dennis <https://github.com/timjden>
 - Tom Eulenfeld <https://github.com/trichter>
 - Tommy Carstensen <https://github.com/tommycarstensen>
 - Tyghe Vallard <https://github.com/necrolyte2>
@@ -364,6 +368,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Yair Benita <Y.Benita at domain pharm.uu.nl>
 - Yanbo Ye <https://github.com/lijax>
 - Yasar L. Ahmed <https://github.com/pyahmed>
+- Yen-Chung Chen <https://github.com/chenyenchung>
 - Yi Hsiao <https://github.com/hsiaoyi0504>
 - Yiming Qu <https://github.com/whatever60>
 - Yogesh Kulkarni <https://https://github.com/yogeshhk>

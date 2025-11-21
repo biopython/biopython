@@ -238,8 +238,7 @@ class DBServer:
         """Add a new database to the server and return it."""
         # make the database
         sql = (
-            "INSERT INTO biodatabase (name, authority, description)"
-            " VALUES (%s, %s, %s)"
+            "INSERT INTO biodatabase (name, authority, description) VALUES (%s, %s, %s)"
         )
         self.adaptor.execute(sql, (db_name, authority, description))
         return BioSeqDatabase(self.adaptor, db_name)
@@ -808,7 +807,6 @@ class BioSeqDatabase:
         """
         db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid, fetch_NCBI_taxonomy)
         num_records = 0
-        global _POSTGRES_RULES_PRESENT
         for cur_record in record_iterator:
             num_records += 1
             # Hack to work around BioSQL Bug 2839 - If using PostgreSQL and

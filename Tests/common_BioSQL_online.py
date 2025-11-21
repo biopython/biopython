@@ -42,8 +42,7 @@ SYSTEM = platform.system()
 
 def share_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
     """Make sure we can access the DB settings from this file."""
-    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
-    global SYSTEM, SQL_FILE
+    global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB
     DBDRIVER = dbdriver
     DBTYPE = dbtype
     DBHOST = dbhost
@@ -56,8 +55,7 @@ class TaxonomyTest(unittest.TestCase):
     """Test proper insertion and retrieval of taxonomy data."""
 
     def setUp(self):
-        global DBDRIVER, DBTYPE, DBHOST, DBUSER, DBPASSWD, TESTDB, DBSCHEMA
-        global SYSTEM, SQL_FILE
+        global TESTDB
 
         Entrez.email = "biopython@biopython.org"
         # create TESTDB

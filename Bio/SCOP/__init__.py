@@ -38,12 +38,6 @@ identifier (sid).
                   'sp' (species), 'px' (domain). Additional node types may
                   be added in the future.
 
-This module also provides code to access SCOP over the WWW.
-
-Functions:
- - search        -- Access the main CGI script (DEPRECATED, no longer available)..
- - _open         -- Internally used function.
-
 """
 
 import os
@@ -52,7 +46,6 @@ import warnings
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
-from Bio import BiopythonDeprecationWarning
 from Bio import SeqIO
 from Bio.Seq import Seq
 
@@ -916,60 +909,3 @@ class Astral:
                     "UPDATE astral SET " + astralEv_to_sql[ev] + "=1  WHERE sid=%s",
                     d.sid,
                 )
-
-
-def search(
-    pdb=None,
-    key=None,
-    sid=None,
-    disp=None,
-    dir=None,
-    loc=None,
-    cgi="http://scop.mrc-lmb.cam.ac.uk/legacy/search.cgi",
-    **keywds,
-):
-    """Access SCOP search and return a handle to the results (DEPRECATED).
-
-    Access search.cgi and return a handle to the results.  See the
-    online help file for an explanation of the parameters:
-    http://scop.mrc-lmb.cam.ac.uk/legacy/help.html
-
-    Raises an IOError if there's a network error.
-
-    This function is now DEPRECATED and will be removed in a future
-    release of Biopython because this search.cgi API is no longer
-    available with SCOP now hosted the the EBI.
-    """
-    warnings.warn(
-        "The SCOP search function is deprecated and will be removed"
-        " as the CGI based SCOP search is no longer availble online.",
-        BiopythonDeprecationWarning,
-    )
-    params = {"pdb": pdb, "key": key, "sid": sid, "disp": disp, "dir": dir, "loc": loc}
-    variables = {}
-    for k, v in params.items():
-        if v is not None:
-            variables[k] = v
-    variables.update(keywds)
-    return _open(cgi, variables)
-
-
-def _open(cgi, params=None, get=1):
-    """Open a handle to SCOP and return it (PRIVATE).
-
-    Open a handle to SCOP.  cgi is the URL for the cgi script to access.
-    params is a dictionary with the options to pass to it.  get is a boolean
-    that describes whether a GET should be used.
-
-    """
-    # Open a handle to SCOP.
-    if params is None:
-        params = {}
-    options = urlencode(params)
-    if get:  # do a GET
-        if options:
-            cgi += "?" + options
-        handle = urlopen(cgi)
-    else:  # do a POST
-        handle = urlopen(cgi, data=options)
-    return handle
