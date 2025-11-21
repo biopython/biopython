@@ -582,7 +582,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         handle = self.open_xsd_file(os.path.basename(schema))
         # if there is no local xsd file grab the url and parse the file
         if not handle:
-            handle = urlopen(schema)
+            handle = urlopen(with_tls(schema))
             text = handle.read()
             self.save_xsd_file(os.path.basename(schema), text)
             handle.close()
