@@ -40,6 +40,7 @@ with parsing the DTD, and the other half with the XML itself.
 
 import os
 import warnings
+import urllib
 import xml.etree.ElementTree as ET
 from collections import Counter
 from io import BytesIO
@@ -1128,7 +1129,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             # DTD is not available as a local file. Try accessing it through
             # the internet instead.
             try:
-                handle = urlopen(url)
+                handle = urlopen(with_tls(url))
             except OSError:
                 raise RuntimeError(f"Failed to access {filename} at {url}") from None
             text = handle.read()
@@ -1143,3 +1144,24 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.dtd_urls.pop()
         self.parser.StartElementHandler = self.startElementHandler
         return 1
+
+
+def with_tls(url: str) -> str:
+    """Activates TLS/SSL for the given URL, if not already active."""
+    parsed = urllib.parse.urlparse(url)
+
+    new_scheme = {
+        "http": "https",
+        "ftp": "ftps",
+    }.get(parsed.scheme, parsed.scheme)
+
+    return urllib.parse.urlunparse(
+        (
+            new_scheme,
+            parsed.netloc,
+            parsed.path,
+            parsed.params,
+            parsed.query,
+            parsed.fragment,
+        )
+    )
