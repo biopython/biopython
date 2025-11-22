@@ -26,10 +26,6 @@ jobs:
     steps:
     - uses: actions/checkout@v5
 
-    # Check for changes only on files changed by the PR/push
-    - uses: tj-actions/changed-files@v47
-      id: changed-files
-
     # Cache CI packages
     - uses: actions/cache@v4
       id: cache-precommit
@@ -53,7 +49,7 @@ jobs:
 
     - name: Run style checking via pre-commit
       run: |
-        pre-commit run --files ${{ steps.changed-files.outputs.all_changed_files }}
+        pre-commit run --all-files --show-diff-on-failure
 
   # Cache pip & python dependencies for Linux runner
   # since it is used in most actions.
