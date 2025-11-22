@@ -53,7 +53,7 @@ jobs:
 
     - name: Run style checking via pre-commit
       run: |
-        pre-commit run --files ${{ steps.changed-files.outputs.all_changed_files }}
+        pre-commit run --show-diff-on-failure --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   # Cache pip & python dependencies for Linux runner
   # since it is used in most actions.
