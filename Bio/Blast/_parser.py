@@ -962,9 +962,12 @@ class XMLHandler:
             assert len(query_seq_aligned) == align_len
             assert len(target_seq_aligned) == align_len
             (
-                target_seq_data,
-                query_seq_data,
-            ), coordinates = Alignment.parse_printed_alignment(
+                (
+                    target_seq_data,
+                    query_seq_data,
+                ),
+                coordinates,
+            ) = Alignment.parse_printed_alignment(
                 [target_seq_aligned, query_seq_aligned]
             )
             query_start = hsp.query_from - 1

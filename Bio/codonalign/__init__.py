@@ -594,8 +594,7 @@ def _get_codon_rec(
     if mode in (0, 1):
         if len(pro.seq.replace(gap_char, "")) * 3 != (span[1] - span[0]):
             raise ValueError(
-                f"Protein Record {pro.id} and "
-                f"Nucleotide Record {nucl.id} do not match!"
+                f"Protein Record {pro.id} and Nucleotide Record {nucl.id} do not match!"
             )
         aa_num = 0
         codon_seq = CodonSeq()
