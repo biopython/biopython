@@ -12,7 +12,6 @@ from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult
 from Bio.SearchIO._utils import read_forward
-from Bio.SearchIO._utils import removesuffix
 
 from ._base import _BaseHmmerTextIndexer
 
@@ -409,9 +408,8 @@ class Hmmer3TextParser:
                 # should strip from the beginning of the line. We can't call `strip()`
                 # since the similarity string might start with empty characters.
                 elif aln_prefix_len is not None:
-                    similarity = removesuffix(
-                        removesuffix(self.line[aln_prefix_len:], "\n"),
-                        "\r",
+                    similarity = (
+                        self.line[aln_prefix_len:].removesuffix("\n").removesuffix("\r")
                     )
                     if "similarity" not in annot:
                         annot["similarity"] = similarity
