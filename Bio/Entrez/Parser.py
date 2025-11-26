@@ -1113,7 +1113,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             except IndexError:
                 # Assume the default URL for DTDs if the top parent
                 # does not contain an absolute path
-                source = "http://www.ncbi.nlm.nih.gov/dtd/"
+                source = "https://www.ncbi.nlm.nih.gov/dtd/"
             else:
                 source = os.path.dirname(source)
             # urls always have a forward slash, don't use os.path.join
