@@ -581,6 +581,10 @@ class DataHandler(metaclass=DataHandlerMeta):
         handle = self.open_xsd_file(os.path.basename(schema))
         # if there is no local xsd file grab the url and parse the file
         if not handle:
+            if schema.startswith("http://"):
+                raise Exception
+            if not schema.startswith("https://"):
+                raise Exception
             handle = urlopen(schema)
             text = handle.read()
             self.save_xsd_file(os.path.basename(schema), text)
@@ -1030,6 +1034,7 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def open_dtd_file(self, filename):
         """Open specified DTD file."""
+        return None
         if DataHandler.local_dtd_dir is not None:
             path = os.path.join(DataHandler.local_dtd_dir, filename)
             try:
@@ -1049,6 +1054,7 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def open_xsd_file(self, filename):
         """Open specified XSD file."""
+        return None
         if DataHandler.local_xsd_dir is not None:
             path = os.path.join(DataHandler.local_xsd_dir, filename)
             try:
@@ -1068,6 +1074,7 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def save_dtd_file(self, filename, text):
         """Save DTD file to cache."""
+        return None
         if DataHandler.local_dtd_dir is None:
             return
         path = os.path.join(DataHandler.local_dtd_dir, filename)
@@ -1081,6 +1088,7 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def save_xsd_file(self, filename, text):
         """Save XSD file to cache."""
+        return None
         if DataHandler.local_xsd_dir is None:
             return
         path = os.path.join(DataHandler.local_xsd_dir, filename)
@@ -1127,6 +1135,10 @@ class DataHandler(metaclass=DataHandlerMeta):
         if not handle:
             # DTD is not available as a local file. Try accessing it through
             # the internet instead.
+            if url.startswith("http://"):
+                raise Exception
+            if not url.startswith("https://"):
+                raise Exception
             try:
                 handle = urlopen(url)
             except OSError:

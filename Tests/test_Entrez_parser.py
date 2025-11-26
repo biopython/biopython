@@ -4640,12 +4640,12 @@ class EFetchTest(unittest.TestCase):
         #                       retmode='xml', rettype='abstract')
         with open("Entrez/pubmed1.xml", "rb") as stream:
             record = Entrez.read(stream)
+        # fmt: off
+        self.assertEqual(record["PubmedBookArticle"], [])
+        record = record["PubmedArticle"]
         self.assertEqual(record[0]["MedlineCitation"].attributes["Owner"], "KIE")
         self.assertEqual(record[0]["MedlineCitation"].attributes["Status"], "MEDLINE")
         self.assertEqual(record[0]["MedlineCitation"]["PMID"], "12091962")
-        self.assertEqual(record[0]["MedlineCitation"]["DateCreated"]["Year"], "1991")
-        self.assertEqual(record[0]["MedlineCitation"]["DateCreated"]["Month"], "01")
-        self.assertEqual(record[0]["MedlineCitation"]["DateCreated"]["Day"], "22")
         self.assertEqual(record[0]["MedlineCitation"]["DateCompleted"]["Year"], "1991")
         self.assertEqual(record[0]["MedlineCitation"]["DateCompleted"]["Month"], "01")
         self.assertEqual(record[0]["MedlineCitation"]["DateCompleted"]["Day"], "22")
@@ -4743,7 +4743,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(
             record[0]["MedlineCitation"]["MedlineJournalInfo"]["NlmUniqueID"], "9891830"
         )
-        self.assertEqual(record[0]["MedlineCitation"]["CitationSubset"], ["E"])
+        self.assertEqual(record[0]["MedlineCitation"]["CitationSubset"], [])
         self.assertEqual(
             record[0]["MedlineCitation"]["MeshHeadingList"][0]["DescriptorName"],
             "AIDS Serodiagnosis",
@@ -4977,21 +4977,21 @@ class EFetchTest(unittest.TestCase):
             record[0]["MedlineCitation"]["GeneralNote"][2].attributes["Owner"], "KIE"
         )
         self.assertEqual(
-            record[0]["PubmedData"]["History"][0][0].attributes["PubStatus"], "pubmed"
+            record[0]["PubmedData"]["History"][0].attributes["PubStatus"], "pubmed"
         )
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Year"], "1990")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Month"], "4")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Day"], "1")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Hour"], "0")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Minute"], "0")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Year"], "1990")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Month"], "4")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Day"], "1")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Hour"], "0")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Minute"], "0")
         self.assertEqual(
-            record[0]["PubmedData"]["History"][0][1].attributes["PubStatus"], "medline"
+            record[0]["PubmedData"]["History"][1].attributes["PubStatus"], "medline"
         )
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Year"], "2002")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Month"], "7")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Day"], "16")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Hour"], "10")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Minute"], "1")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Year"], "2002")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Month"], "7")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Day"], "16")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Hour"], "10")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Minute"], "1")
         self.assertEqual(record[0]["PubmedData"]["PublicationStatus"], "ppublish")
         self.assertEqual(len(record[0]["PubmedData"]["ArticleIdList"]), 1)
         self.assertEqual(record[0]["PubmedData"]["ArticleIdList"][0], "12091962")
@@ -5001,15 +5001,12 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(record[1]["MedlineCitation"].attributes["Owner"], "NLM")
         self.assertEqual(record[1]["MedlineCitation"].attributes["Status"], "MEDLINE")
         self.assertEqual(record[1]["MedlineCitation"]["PMID"], "9997")
-        self.assertEqual(record[1]["MedlineCitation"]["DateCreated"]["Year"], "1976")
-        self.assertEqual(record[1]["MedlineCitation"]["DateCreated"]["Month"], "12")
-        self.assertEqual(record[1]["MedlineCitation"]["DateCreated"]["Day"], "30")
         self.assertEqual(record[1]["MedlineCitation"]["DateCompleted"]["Year"], "1976")
         self.assertEqual(record[1]["MedlineCitation"]["DateCompleted"]["Month"], "12")
         self.assertEqual(record[1]["MedlineCitation"]["DateCompleted"]["Day"], "30")
-        self.assertEqual(record[1]["MedlineCitation"]["DateRevised"]["Year"], "2003")
-        self.assertEqual(record[1]["MedlineCitation"]["DateRevised"]["Month"], "11")
-        self.assertEqual(record[1]["MedlineCitation"]["DateRevised"]["Day"], "14")
+        self.assertEqual(record[1]["MedlineCitation"]["DateRevised"]["Year"], "2019")
+        self.assertEqual(record[1]["MedlineCitation"]["DateRevised"]["Month"], "06")
+        self.assertEqual(record[1]["MedlineCitation"]["DateRevised"]["Day"], "09")
         self.assertEqual(
             record[1]["MedlineCitation"]["Article"].attributes["PubModel"], "Print"
         )
@@ -5017,21 +5014,15 @@ class EFetchTest(unittest.TestCase):
             record[1]["MedlineCitation"]["Article"]["Journal"]["ISSN"], "0006-3002"
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["Journal"]["ISSN"].attributes[
-                "IssnType"
-            ],
+            record[1]["MedlineCitation"]["Article"]["Journal"]["ISSN"].attributes["IssnType"],
             "Print",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["Journal"][
-                "JournalIssue"
-            ].attributes["CitedMedium"],
+            record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"].attributes["CitedMedium"],
             "Print",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"][
-                "Volume"
-            ],
+            record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["Volume"],
             "446",
         )
         self.assertEqual(
@@ -5039,21 +5030,15 @@ class EFetchTest(unittest.TestCase):
             "1",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"][
-                "PubDate"
-            ]["Year"],
+            record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["PubDate"]["Year"],
             "1976",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"][
-                "PubDate"
-            ]["Month"],
+            record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["PubDate"]["Month"],
             "Sep",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"][
-                "PubDate"
-            ]["Day"],
+            record[1]["MedlineCitation"]["Article"]["Journal"]["JournalIssue"]["PubDate"]["Day"],
             "28",
         )
         self.assertEqual(
@@ -5062,7 +5047,7 @@ class EFetchTest(unittest.TestCase):
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["Article"]["Journal"]["ISOAbbreviation"],
-            "Biochim. Biophys. Acta",
+            "Biochim Biophys Acta",
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["Article"]["ArticleTitle"],
@@ -5074,18 +5059,14 @@ class EFetchTest(unittest.TestCase):
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["Article"]["Abstract"]["AbstractText"],
-            "Electron paramagnetic resonance and magnetic susceptibility studies of Chromatium flavocytochrome C552 and its diheme flavin-free subunit at temperatures below 45 degrees K are reported. The results show that in the intact protein and the subunit the two low-spin (S = 1/2) heme irons are distinguishable, giving rise to separate EPR signals. In the intact protein only, one of the heme irons exists in two different low spin environments in the pH range 5.5 to 10.5, while the other remains in a constant environment. Factors influencing the variable heme iron environment also influence flavin reactivity, indicating the existence of a mechanism for heme-flavin interaction.",
+            ["Electron paramagnetic resonance and magnetic susceptibility studies of Chromatium flavocytochrome C552 and its diheme flavin-free subunit at temperatures below 45 degrees K are reported. The results show that in the intact protein and the subunit the two low-spin (S = 1/2) heme irons are distinguishable, giving rise to separate EPR signals. In the intact protein only, one of the heme irons exists in two different low spin environments in the pH range 5.5 to 10.5, while the other remains in a constant environment. Factors influencing the variable heme iron environment also influence flavin reactivity, indicating the existence of a mechanism for heme-flavin interaction."],
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["AuthorList"].attributes[
-                "CompleteYN"
-            ],
+            record[1]["MedlineCitation"]["Article"]["AuthorList"].attributes["CompleteYN"],
             "Y",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["AuthorList"][0].attributes[
-                "ValidYN"
-            ],
+            record[1]["MedlineCitation"]["Article"]["AuthorList"][0].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5104,7 +5085,7 @@ class EFetchTest(unittest.TestCase):
             ["Journal Article"],
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MedlineJournalInfo"]["Country"], "NETHERLANDS"
+            record[1]["MedlineCitation"]["MedlineJournalInfo"]["Country"], "Netherlands"
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["MedlineJournalInfo"]["MedlineTA"],
@@ -5129,14 +5110,14 @@ class EFetchTest(unittest.TestCase):
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["ChemicalList"][2]["RegistryNumber"],
-            "14875-96-8",
+            "42VZT0U6YR",
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["ChemicalList"][2]["NameOfSubstance"], "Heme"
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["ChemicalList"][3]["RegistryNumber"],
-            "7439-89-6",
+            "E1UOL152H7",
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["ChemicalList"][3]["NameOfSubstance"], "Iron"
@@ -5147,9 +5128,7 @@ class EFetchTest(unittest.TestCase):
             "Binding Sites",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][0][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][0]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5157,9 +5136,7 @@ class EFetchTest(unittest.TestCase):
             "Chromatium",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][1][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][1]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5167,9 +5144,7 @@ class EFetchTest(unittest.TestCase):
             "enzymology",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][1]["QualifierName"][
-                0
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][1]["QualifierName"][0].attributes["MajorTopicYN"],
             "Y",
         )
         self.assertEqual(
@@ -5177,9 +5152,7 @@ class EFetchTest(unittest.TestCase):
             "Cytochrome c Group",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][2][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][2]["DescriptorName"].attributes["MajorTopicYN"],
             "Y",
         )
         self.assertEqual(
@@ -5187,9 +5160,7 @@ class EFetchTest(unittest.TestCase):
             "Electron Spin Resonance Spectroscopy",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][3][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][3]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5197,18 +5168,14 @@ class EFetchTest(unittest.TestCase):
             "Flavins",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][4][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][4]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["MeshHeadingList"][5]["DescriptorName"], "Heme"
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][5][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][5]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5216,18 +5183,14 @@ class EFetchTest(unittest.TestCase):
             "Hydrogen-Ion Concentration",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][6][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][6]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["MeshHeadingList"][7]["DescriptorName"], "Iron"
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][7][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][7]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5235,9 +5198,7 @@ class EFetchTest(unittest.TestCase):
             "analysis",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][7]["QualifierName"][
-                0
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][7]["QualifierName"][0].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5245,9 +5206,7 @@ class EFetchTest(unittest.TestCase):
             "Magnetics",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][8][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][8]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5255,9 +5214,7 @@ class EFetchTest(unittest.TestCase):
             "Oxidation-Reduction",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][9][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][9]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5265,9 +5222,7 @@ class EFetchTest(unittest.TestCase):
             "Protein Binding",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][10][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][10]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5275,9 +5230,7 @@ class EFetchTest(unittest.TestCase):
             "Protein Conformation",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][11][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][11]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
         self.assertEqual(
@@ -5285,31 +5238,28 @@ class EFetchTest(unittest.TestCase):
             "Temperature",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["MeshHeadingList"][12][
-                "DescriptorName"
-            ].attributes["MajorTopicYN"],
+            record[1]["MedlineCitation"]["MeshHeadingList"][12]["DescriptorName"].attributes["MajorTopicYN"],
             "N",
         )
-        self.assertEqual(
-            record[1]["PubmedData"]["History"][0][0].attributes["PubStatus"], "pubmed"
-        )
-        self.assertEqual(record[1]["PubmedData"]["History"][0][0]["Year"], "1976")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][0]["Month"], "9")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][0]["Day"], "28")
-        self.assertEqual(
-            record[1]["PubmedData"]["History"][0][1].attributes["PubStatus"], "medline"
-        )
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Year"], "1976")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Month"], "9")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Day"], "28")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Hour"], "0")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Minute"], "1")
+        self.assertEqual(record[1]["PubmedData"]["History"][0].attributes["PubStatus"], "pubmed")
+        self.assertEqual(record[1]["PubmedData"]["History"][0]["Year"], "1976")
+        self.assertEqual(record[1]["PubmedData"]["History"][0]["Month"], "9")
+        self.assertEqual(record[1]["PubmedData"]["History"][0]["Day"], "28")
+        self.assertEqual(record[1]["PubmedData"]["History"][1].attributes["PubStatus"], "medline")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Year"], "1976")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Month"], "9")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Day"], "28")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Hour"], "0")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Minute"], "1")
         self.assertEqual(record[1]["PubmedData"]["PublicationStatus"], "ppublish")
-        self.assertEqual(len(record[1]["PubmedData"]["ArticleIdList"]), 1)
+        self.assertEqual(len(record[1]["PubmedData"]["ArticleIdList"]), 3)
         self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][0], "9997")
-        self.assertEqual(
-            record[1]["PubmedData"]["ArticleIdList"][0].attributes["IdType"], "pubmed"
-        )
+        self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][0].attributes["IdType"], "pubmed")
+        self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][1], "10.1016/0005-2795(76)90109-4")
+        self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][1].attributes["IdType"], "doi")
+        self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][2], "0005-2795(76)90109-4")
+        self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][2].attributes["IdType"], "pii")
+        # fmt: on
 
     def test_pubmed2(self):
         """Test parsing XML returned by EFetch, PubMed database (second test)."""
@@ -5319,12 +5269,12 @@ class EFetchTest(unittest.TestCase):
         #                       retmode="xml")
         with open("Entrez/pubmed2.xml", "rb") as stream:
             record = Entrez.read(stream)
+        # fmt: off
+        self.assertEqual(record["PubmedBookArticle"], [])
+        record = record["PubmedArticle"]
         self.assertEqual(record[0]["MedlineCitation"].attributes["Owner"], "NLM")
         self.assertEqual(record[0]["MedlineCitation"].attributes["Status"], "MEDLINE")
         self.assertEqual(record[0]["MedlineCitation"]["PMID"], "11748933")
-        self.assertEqual(record[0]["MedlineCitation"]["DateCreated"]["Year"], "2001")
-        self.assertEqual(record[0]["MedlineCitation"]["DateCreated"]["Month"], "12")
-        self.assertEqual(record[0]["MedlineCitation"]["DateCreated"]["Day"], "25")
         self.assertEqual(record[0]["MedlineCitation"]["DateCompleted"]["Year"], "2002")
         self.assertEqual(record[0]["MedlineCitation"]["DateCompleted"]["Month"], "03")
         self.assertEqual(record[0]["MedlineCitation"]["DateCompleted"]["Day"], "04")
@@ -5388,26 +5338,18 @@ class EFetchTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["MedlineCitation"]["Article"]["Abstract"]["AbstractText"],
-            "This study subdivides the cryopreservation procedure for Diplodus puntazzo spermatozoa into three key phases, fresh, prefreezing (samples equilibrated in cryosolutions), and postthawed stages, and examines the ultrastructural anomalies and motility profiles of spermatozoa in each stage, with different cryodiluents. Two simple cryosolutions were evaluated: 0.17 M sodium chloride containing a final concentration of 15% dimethyl sulfoxide (Me(2)SO) (cryosolution A) and 0.1 M sodium citrate containing a final concentration of 10% Me(2)SO (cryosolution B). Ultrastructural anomalies of the plasmatic and nuclear membranes of the sperm head were common and the severity of the cryoinjury differed significantly between the pre- and the postfreezing phases and between the two cryosolutions. In spermatozoa diluted with cryosolution A, during the prefreezing phase, the plasmalemma of 61% of the cells was absent or damaged compared with 24% in the fresh sample (P < 0.001). In spermatozoa diluted with cryosolution B, there was a pronounced increase in the number of cells lacking the head plasmatic membrane from the prefreezing to the postthawed stages (from 32 to 52%, P < 0.01). In both cryosolutions, damages to nuclear membrane were significantly higher after freezing (cryosolution A: 8 to 23%, P < 0.01; cryosolution B: 5 to 38%, P < 0.001). With cryosolution A, the after-activation motility profile confirmed a consistent drop from fresh at the prefreezing stage, whereas freezing and thawing did not affect the motility much further and 50% of the cells were immotile by 60-90 s after activation. With cryosolution B, only the postthawing stage showed a sharp drop of motility profile. This study suggests that the different phases of the cryoprocess should be investigated to better understand the process of sperm damage.",
+            ["This study subdivides the cryopreservation procedure for Diplodus puntazzo spermatozoa into three key phases, fresh, prefreezing (samples equilibrated in cryosolutions), and postthawed stages, and examines the ultrastructural anomalies and motility profiles of spermatozoa in each stage, with different cryodiluents. Two simple cryosolutions were evaluated: 0.17 M sodium chloride containing a final concentration of 15% dimethyl sulfoxide (Me(2)SO) (cryosolution A) and 0.1 M sodium citrate containing a final concentration of 10% Me(2)SO (cryosolution B). Ultrastructural anomalies of the plasmatic and nuclear membranes of the sperm head were common and the severity of the cryoinjury differed significantly between the pre- and the postfreezing phases and between the two cryosolutions. In spermatozoa diluted with cryosolution A, during the prefreezing phase, the plasmalemma of 61% of the cells was absent or damaged compared with 24% in the fresh sample (P < 0.001). In spermatozoa diluted with cryosolution B, there was a pronounced increase in the number of cells lacking the head plasmatic membrane from the prefreezing to the postthawed stages (from 32 to 52%, P < 0.01). In both cryosolutions, damages to nuclear membrane were significantly higher after freezing (cryosolution A: 8 to 23%, P < 0.01; cryosolution B: 5 to 38%, P < 0.001). With cryosolution A, the after-activation motility profile confirmed a consistent drop from fresh at the prefreezing stage, whereas freezing and thawing did not affect the motility much further and 50% of the cells were immotile by 60-90 s after activation. With cryosolution B, only the postthawing stage showed a sharp drop of motility profile. This study suggests that the different phases of the cryoprocess should be investigated to better understand the process of sperm damage.",]
         )
         self.assertEqual(
             record[0]["MedlineCitation"]["Article"]["Abstract"]["CopyrightInformation"],
             "Copyright 2001 Elsevier Science.",
         )
         self.assertEqual(
-            record[0]["MedlineCitation"]["Article"]["Affiliation"],
-            "Dipartimento di Scienze Ambientali, Universit\xe0 degli Studi della Tuscia, 01100 Viterbo, Italy.",
-        )
-        self.assertEqual(
-            record[0]["MedlineCitation"]["Article"]["AuthorList"].attributes[
-                "CompleteYN"
-            ],
+            record[0]["MedlineCitation"]["Article"]["AuthorList"].attributes["CompleteYN"],
             "Y",
         )
         self.assertEqual(
-            record[0]["MedlineCitation"]["Article"]["AuthorList"][0].attributes[
-                "ValidYN"
-            ],
+            record[0]["MedlineCitation"]["Article"]["AuthorList"][0].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5421,9 +5363,15 @@ class EFetchTest(unittest.TestCase):
             record[0]["MedlineCitation"]["Article"]["AuthorList"][0]["Initials"], "AR"
         )
         self.assertEqual(
-            record[0]["MedlineCitation"]["Article"]["AuthorList"][1].attributes[
-                "ValidYN"
-            ],
+            record[0]["MedlineCitation"]["Article"]["AuthorList"][0]["AffiliationInfo"][0]["Affiliation"],
+            "Dipartimento di Scienze Ambientali, Universit\xe0 degli Studi della Tuscia, 01100 Viterbo, Italy.",
+        )
+        self.assertEqual(
+            record[0]["MedlineCitation"]["Article"]["AuthorList"][0]["AffiliationInfo"][0]["Identifier"],
+            [],
+        )
+        self.assertEqual(
+            record[0]["MedlineCitation"]["Article"]["AuthorList"][1].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5437,9 +5385,7 @@ class EFetchTest(unittest.TestCase):
             record[0]["MedlineCitation"]["Article"]["AuthorList"][1]["Initials"], "F"
         )
         self.assertEqual(
-            record[0]["MedlineCitation"]["Article"]["AuthorList"][2].attributes[
-                "ValidYN"
-            ],
+            record[0]["MedlineCitation"]["Article"]["AuthorList"][2].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5453,9 +5399,7 @@ class EFetchTest(unittest.TestCase):
             record[0]["MedlineCitation"]["Article"]["AuthorList"][2]["Initials"], "L"
         )
         self.assertEqual(
-            record[0]["MedlineCitation"]["Article"]["AuthorList"][3].attributes[
-                "ValidYN"
-            ],
+            record[0]["MedlineCitation"]["Article"]["AuthorList"][3].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5469,14 +5413,11 @@ class EFetchTest(unittest.TestCase):
             record[0]["MedlineCitation"]["Article"]["AuthorList"][3]["Initials"], "S"
         )
         self.assertEqual(
-            record[0]["MedlineCitation"]["Article"]["AuthorList"][4].attributes[
-                "ValidYN"
-            ],
+            record[0]["MedlineCitation"]["Article"]["AuthorList"][4].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
-            record[0]["MedlineCitation"]["Article"]["AuthorList"][4]["LastName"],
-            "Moretti",
+            record[0]["MedlineCitation"]["Article"]["AuthorList"][4]["LastName"], "Moretti",
         )
         self.assertEqual(
             record[0]["MedlineCitation"]["Article"]["AuthorList"][4]["ForeName"], "F"
@@ -5485,9 +5426,7 @@ class EFetchTest(unittest.TestCase):
             record[0]["MedlineCitation"]["Article"]["AuthorList"][4]["Initials"], "F"
         )
         self.assertEqual(
-            record[0]["MedlineCitation"]["Article"]["AuthorList"][5].attributes[
-                "ValidYN"
-            ],
+            record[0]["MedlineCitation"]["Article"]["AuthorList"][5].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5542,7 +5481,7 @@ class EFetchTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["MedlineCitation"]["MedlineJournalInfo"]["Country"],
-            "United States",
+            "Netherlands",
         )
         self.assertEqual(
             record[0]["MedlineCitation"]["MedlineJournalInfo"]["MedlineTA"],
@@ -5752,21 +5691,21 @@ class EFetchTest(unittest.TestCase):
             "Y",
         )
         self.assertEqual(
-            record[0]["PubmedData"]["History"][0][0].attributes["PubStatus"], "pubmed"
+            record[0]["PubmedData"]["History"][0].attributes["PubStatus"], "pubmed"
         )
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Year"], "2001")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Month"], "12")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Day"], "26")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Hour"], "10")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][0]["Minute"], "0")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Year"], "2001")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Month"], "12")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Day"], "26")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Hour"], "10")
+        self.assertEqual(record[0]["PubmedData"]["History"][0]["Minute"], "0")
         self.assertEqual(
-            record[0]["PubmedData"]["History"][0][1].attributes["PubStatus"], "medline"
+            record[0]["PubmedData"]["History"][1].attributes["PubStatus"], "medline"
         )
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Year"], "2002")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Month"], "3")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Day"], "5")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Hour"], "10")
-        self.assertEqual(record[0]["PubmedData"]["History"][0][1]["Minute"], "1")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Year"], "2002")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Month"], "3")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Day"], "5")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Hour"], "10")
+        self.assertEqual(record[0]["PubmedData"]["History"][1]["Minute"], "1")
         self.assertEqual(record[0]["PubmedData"]["PublicationStatus"], "ppublish")
         self.assertEqual(record[0]["PubmedData"]["ArticleIdList"][0], "11748933")
         self.assertEqual(
@@ -5790,9 +5729,6 @@ class EFetchTest(unittest.TestCase):
             record[1]["MedlineCitation"].attributes["Status"], "PubMed-not-MEDLINE"
         )
         self.assertEqual(record[1]["MedlineCitation"]["PMID"], "11700088")
-        self.assertEqual(record[1]["MedlineCitation"]["DateCreated"]["Year"], "2001")
-        self.assertEqual(record[1]["MedlineCitation"]["DateCreated"]["Month"], "11")
-        self.assertEqual(record[1]["MedlineCitation"]["DateCreated"]["Day"], "08")
         self.assertEqual(record[1]["MedlineCitation"]["DateCompleted"]["Year"], "2001")
         self.assertEqual(record[1]["MedlineCitation"]["DateCompleted"]["Month"], "12")
         self.assertEqual(record[1]["MedlineCitation"]["DateCompleted"]["Day"], "20")
@@ -5845,7 +5781,7 @@ class EFetchTest(unittest.TestCase):
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["Article"]["Journal"]["ISOAbbreviation"],
-            "J. Magn. Reson.",
+            "J Magn Reson",
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["Article"]["ArticleTitle"],
@@ -5857,26 +5793,18 @@ class EFetchTest(unittest.TestCase):
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["Article"]["Abstract"]["AbstractText"],
-            "The sensitivity of (13)C NMR imaging can be considerably favored by detecting the (1)H nuclei bound to (13)C nuclei via scalar J-interaction (X-filter). However, the J-editing approaches have difficulty in discriminating between compounds with similar J-constant as, for example, different glucose metabolites. In such cases, it is almost impossible to get J-edited images of a single-compound distribution, since the various molecules are distinguishable only via their chemical shift. In a recent application of J-editing to high-resolution spectroscopy, it has been shown that a more efficient chemical selectivity could be obtained by utilizing the larger chemical shift range of (13)C. This has been made by introducing frequency-selective (13)C pulses that allow a great capability of indirect chemical separation. Here a double-resonance imaging approach is proposed, based on both J-editing and (13)C chemical shift editing, which achieves a powerful chemical selectivity and is able to produce full maps of specific chemical compounds. Results are presented on a multicompartments sample containing solutions of glucose and lactic and glutamic acid in water.",
+            ["The sensitivity of (13)C NMR imaging can be considerably favored by detecting the (1)H nuclei bound to (13)C nuclei via scalar J-interaction (X-filter). However, the J-editing approaches have difficulty in discriminating between compounds with similar J-constant as, for example, different glucose metabolites. In such cases, it is almost impossible to get J-edited images of a single-compound distribution, since the various molecules are distinguishable only via their chemical shift. In a recent application of J-editing to high-resolution spectroscopy, it has been shown that a more efficient chemical selectivity could be obtained by utilizing the larger chemical shift range of (13)C. This has been made by introducing frequency-selective (13)C pulses that allow a great capability of indirect chemical separation. Here a double-resonance imaging approach is proposed, based on both J-editing and (13)C chemical shift editing, which achieves a powerful chemical selectivity and is able to produce full maps of specific chemical compounds. Results are presented on a multicompartments sample containing solutions of glucose and lactic and glutamic acid in water."],
         )
         self.assertEqual(
             record[1]["MedlineCitation"]["Article"]["Abstract"]["CopyrightInformation"],
             "Copyright 2001 Academic Press.",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["Affiliation"],
-            "INFM and Department of Physics, University of L'Aquila, I-67100 L'Aquila, Italy.",
-        )
-        self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["AuthorList"].attributes[
-                "CompleteYN"
-            ],
+            record[1]["MedlineCitation"]["Article"]["AuthorList"].attributes["CompleteYN"],
             "Y",
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["AuthorList"][0].attributes[
-                "ValidYN"
-            ],
+            record[1]["MedlineCitation"]["Article"]["AuthorList"][0].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5889,10 +5817,13 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(
             record[1]["MedlineCitation"]["Article"]["AuthorList"][0]["Initials"], "C"
         )
+        self.assertEqual(record[1]["MedlineCitation"]["Article"]["AuthorList"][0]["Identifier"], [])
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["AuthorList"][1].attributes[
-                "ValidYN"
-            ],
+            record[1]["MedlineCitation"]["Article"]["AuthorList"][0]["AffiliationInfo"][0]["Affiliation"],
+            "INFM and Department of Physics, University of L'Aquila, I-67100 L'Aquila, Italy.",
+        )
+        self.assertEqual(
+            record[1]["MedlineCitation"]["Article"]["AuthorList"][1].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5906,9 +5837,7 @@ class EFetchTest(unittest.TestCase):
             record[1]["MedlineCitation"]["Article"]["AuthorList"][1]["Initials"], "C"
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["AuthorList"][2].attributes[
-                "ValidYN"
-            ],
+            record[1]["MedlineCitation"]["Article"]["AuthorList"][2].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5922,9 +5851,7 @@ class EFetchTest(unittest.TestCase):
             record[1]["MedlineCitation"]["Article"]["AuthorList"][2]["Initials"], "G"
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["AuthorList"][3].attributes[
-                "ValidYN"
-            ],
+            record[1]["MedlineCitation"]["Article"]["AuthorList"][3].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5938,9 +5865,7 @@ class EFetchTest(unittest.TestCase):
             record[1]["MedlineCitation"]["Article"]["AuthorList"][3]["Initials"], "R"
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["AuthorList"][4].attributes[
-                "ValidYN"
-            ],
+            record[1]["MedlineCitation"]["Article"]["AuthorList"][4].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5953,9 +5878,7 @@ class EFetchTest(unittest.TestCase):
             record[1]["MedlineCitation"]["Article"]["AuthorList"][4]["Initials"], "F"
         )
         self.assertEqual(
-            record[1]["MedlineCitation"]["Article"]["AuthorList"][5].attributes[
-                "ValidYN"
-            ],
+            record[1]["MedlineCitation"]["Article"]["AuthorList"][5].attributes["ValidYN"],
             "Y",
         )
         self.assertEqual(
@@ -5985,21 +5908,21 @@ class EFetchTest(unittest.TestCase):
             record[1]["MedlineCitation"]["MedlineJournalInfo"]["NlmUniqueID"], "9707935"
         )
         self.assertEqual(
-            record[1]["PubmedData"]["History"][0][0].attributes["PubStatus"], "pubmed"
+            record[1]["PubmedData"]["History"][0].attributes["PubStatus"], "pubmed"
         )
-        self.assertEqual(record[1]["PubmedData"]["History"][0][0]["Year"], "2001")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][0]["Month"], "11")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][0]["Day"], "9")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][0]["Hour"], "10")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][0]["Minute"], "0")
+        self.assertEqual(record[1]["PubmedData"]["History"][0]["Year"], "2001")
+        self.assertEqual(record[1]["PubmedData"]["History"][0]["Month"], "11")
+        self.assertEqual(record[1]["PubmedData"]["History"][0]["Day"], "9")
+        self.assertEqual(record[1]["PubmedData"]["History"][0]["Hour"], "10")
+        self.assertEqual(record[1]["PubmedData"]["History"][0]["Minute"], "0")
         self.assertEqual(
-            record[1]["PubmedData"]["History"][0][1].attributes["PubStatus"], "medline"
+            record[1]["PubmedData"]["History"][1].attributes["PubStatus"], "medline"
         )
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Year"], "2001")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Month"], "11")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Day"], "9")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Hour"], "10")
-        self.assertEqual(record[1]["PubmedData"]["History"][0][1]["Minute"], "1")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Year"], "2001")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Month"], "11")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Day"], "9")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Hour"], "10")
+        self.assertEqual(record[1]["PubmedData"]["History"][1]["Minute"], "1")
         self.assertEqual(record[1]["PubmedData"]["PublicationStatus"], "ppublish")
         self.assertEqual(record[1]["PubmedData"]["ArticleIdList"][0], "11700088")
         self.assertEqual(
@@ -6017,6 +5940,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(
             record[1]["PubmedData"]["ArticleIdList"][2].attributes["IdType"], "pii"
         )
+        # fmt: on
 
     def test_pubmed_html_tags(self):
         """Test parsing XML returned by EFetch, PubMed database with HTML tags."""
@@ -6025,6 +5949,7 @@ class EFetchTest(unittest.TestCase):
         # >>> Bio.Entrez.efetch(db='pubmed', retmode='xml', id='29106400')
         with open("Entrez/pubmed4.xml", "rb") as stream:
             records = Entrez.read(stream)
+        # fmt: off
         self.assertEqual(len(records), 2)
         self.assertEqual(len(records["PubmedBookArticle"]), 0)
         self.assertEqual(len(records["PubmedArticle"]), 1)
@@ -6352,6 +6277,7 @@ class EFetchTest(unittest.TestCase):
         self.assertEqual(
             len(records["PubmedArticle"][0]["MedlineCitation"]["ChemicalList"]), 2
         )
+        # fmt: on
 
     def test_pubmed_html_escaping(self):
         """Test parsing XML returned by EFetch, PubMed database with HTML tags and HTML escape characters."""
@@ -10421,761 +10347,19 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         self.assertEqual(record["body"]["disp-formula-group"], [])
         self.assertEqual(record["body"]["question-wrap"], [])
 
-    def test_omim(self):
-        """Test parsing XML returned by EFetch, OMIM database."""
-        # In OMIM show the full record for MIM number 601100 as XML
-        # To create the XML file, use
-        # >>> Bio.Entrez.efetch(db="omim", id="601100", retmode='xml',
-        #                       rettype='full')
-        with open("Entrez/ncbi_mim.xml", "rb") as stream:
-            record = Entrez.read(stream)
-        self.assertEqual(len(record), 1)
-        self.assertEqual(record[0]["Mim-entry_mimNumber"], "601100")
-        self.assertEqual(record[0]["Mim-entry_mimType"], "1")
-        self.assertEqual(record[0]["Mim-entry_mimType"].attributes["value"], "star")
-        self.assertEqual(
-            record[0]["Mim-entry_title"],
-            "STRESS 70 PROTEIN CHAPERONE, MICROSOME-ASSOCIATED, 60-KD; STCH",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_copyright"],
-            "Copyright (c) 1966-2008 Johns Hopkins University",
-        )
-        self.assertEqual(record[0]["Mim-entry_symbol"], "STCH")
-        self.assertEqual(record[0]["Mim-entry_locus"], "21q11.1")
-        self.assertEqual(len(record[0]["Mim-entry_text"]), 2)
-        self.assertEqual(record[0]["Mim-entry_text"][0]["Mim-text_label"], "TEXT")
-        self.assertEqual(
-            record[0]["Mim-entry_text"][0]["Mim-text_text"],
-            "The stress-70 chaperone family consists of proteins that bind to denatured or incorrectly folded polypeptides and play a major role in the processing of cytosolic and secretory proteins. {2:Otterson et al. (1994)} cloned a human cDNA encoding a predicted 471-amino acid protein (60 kD) which they designated STCH. {1:Brodsky et al. (1995)} stated that the protein sequence is very similar to that of HSP70 ({140550}) and BiP ({138120}). As with other members of the family, the STCH protein contains an ATPase domain at the amino terminus whose activity was shown to be independent of peptide stimulation. The protein was found to be microsome-associated and constitutively expressed in all cell types examined.",
-        )
-        self.assertEqual(len(record[0]["Mim-entry_text"][0]["Mim-text_neighbors"]), 1)
-        self.assertEqual(
-            record[0]["Mim-entry_text"][0]["Mim-text_neighbors"]["Mim-link"][
-                "Mim-link_num"
-            ],
-            "30",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_text"][0]["Mim-text_neighbors"]["Mim-link"][
-                "Mim-link_uids"
-            ],
-            "8131751,9358068,10675567,9488737,8757872,11048651,2559088,10982831,2105497,16572726,9083109,17181539,14508011,15028727,10651811,9108392,11599566,2661019,11836248,7594475,12406544,8536694,12389629,10430932,9177027,9837933,8522346,2928112,12834280,8702658",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_text"][0]["Mim-text_neighbors"]["Mim-link"][
-                "Mim-link_numRelevant"
-            ],
-            "0",
-        )
-        self.assertEqual(record[0]["Mim-entry_text"][1]["Mim-text_label"], "TEXT")
-        self.assertEqual(
-            record[0]["Mim-entry_text"][1]["Mim-text_text"],
-            "{1:Brodsky et al. (1995)} mapped the STCH gene to chromosome 21q11.1 with a high-resolution somatic cell hybrid panel for chromosome 21 and by fluorescence in situ hybridization with a YAC containing the gene. By interspecific backcross analysis, {3:Reeves et al. (1998)} mapped the mouse Stch gene to chromosome 16.",
-        )
-        self.assertEqual(len(record[0]["Mim-entry_text"][1]["Mim-text_neighbors"]), 1)
-        self.assertEqual(
-            record[0]["Mim-entry_text"][1]["Mim-text_neighbors"]["Mim-link"][
-                "Mim-link_num"
-            ],
-            "30",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_text"][1]["Mim-text_neighbors"]["Mim-link"][
-                "Mim-link_uids"
-            ],
-            "1354597,8244375,8597637,8838809,9143508,1427875,7806216,9852683,7835904,11060461,10083745,7789175,7806232,7513297,8020937,12014109,1769649,2045096,9747039,8034329,8088815,1783375,8275716,8020959,7956352,8020952,10198174,7655454,8750197,11272792",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_text"][1]["Mim-text_neighbors"]["Mim-link"][
-                "Mim-link_numRelevant"
-            ],
-            "0",
-        )
-        self.assertEqual(record[0]["Mim-entry_hasSummary"], "")
-        self.assertEqual(record[0]["Mim-entry_hasSummary"].attributes["value"], "false")
-        self.assertEqual(record[0]["Mim-entry_hasSynopsis"], "")
-        self.assertEqual(
-            record[0]["Mim-entry_hasSynopsis"].attributes["value"], "false"
-        )
-        self.assertEqual(len(record[0]["Mim-entry_editHistory"]), 6)
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][0]["Mim-edit-item_author"], "terry"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][0]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1999",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][0]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "3",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][0]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "9",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][1]["Mim-edit-item_author"], "carol"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][1]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1999",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][1]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "3",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][1]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "7",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][2]["Mim-edit-item_author"], "carol"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][2]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1998",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][2]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "7",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][2]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "8",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][3]["Mim-edit-item_author"], "terry"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][3]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1996",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][3]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "5",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][3]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "24",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][4]["Mim-edit-item_author"], "mark"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][4]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1996",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][4]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "3",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][4]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][5]["Mim-edit-item_author"], "mark"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][5]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1996",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][5]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "3",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_editHistory"][5]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_creationDate"]["Mim-edit-item"][
-                "Mim-edit-item_author"
-            ],
-            "Alan F. Scott",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_creationDate"]["Mim-edit-item"][
-                "Mim-edit-item_modDate"
-            ]["Mim-date"]["Mim-date_year"],
-            "1996",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_creationDate"]["Mim-edit-item"][
-                "Mim-edit-item_modDate"
-            ]["Mim-date"]["Mim-date_month"],
-            "3",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_creationDate"]["Mim-edit-item"][
-                "Mim-edit-item_modDate"
-            ]["Mim-date"]["Mim-date_day"],
-            "1",
-        )
-        self.assertEqual(len(record[0]["Mim-entry_references"]), 3)
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_number"], "1"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_origNumber"], "1"
-        )
-        self.assertEqual(record[0]["Mim-entry_references"][0]["Mim-reference_type"], "")
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_type"].attributes[
-                "value"
-            ],
-            "citation",
-        )
-        self.assertEqual(
-            len(record[0]["Mim-entry_references"][0]["Mim-reference_authors"]), 6
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][0][
-                "Mim-author_name"
-            ],
-            "Brodsky, G.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][0][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][1][
-                "Mim-author_name"
-            ],
-            "Otterson, G. A.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][1][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][2][
-                "Mim-author_name"
-            ],
-            "Parry, B. B.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][2][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][3][
-                "Mim-author_name"
-            ],
-            "Hart, I.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][3][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][4][
-                "Mim-author_name"
-            ],
-            "Patterson, D.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][4][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][5][
-                "Mim-author_name"
-            ],
-            "Kaye, F. J.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_authors"][5][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_primaryAuthor"],
-            "Brodsky",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_otherAuthors"], "et al."
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_citationTitle"],
-            "Localization of STCH to human chromosome 21q11.1.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_citationType"], "0"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_volume"], "30"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_journal"], "Genomics"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_pubDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1995",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_pubDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "0",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_pubDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "0",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_pages"][0][
-                "Mim-page_from"
-            ],
-            "627",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_pages"][0][
-                "Mim-page_to"
-            ],
-            "628",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_pubmedUID"], "8825657"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_ambiguous"], ""
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_ambiguous"].attributes[
-                "value"
-            ],
-            "false",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_noLink"], ""
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][0]["Mim-reference_noLink"].attributes[
-                "value"
-            ],
-            "false",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_number"], "2"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_origNumber"], "2"
-        )
-        self.assertEqual(record[0]["Mim-entry_references"][1]["Mim-reference_type"], "")
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_type"].attributes[
-                "value"
-            ],
-            "citation",
-        )
-        self.assertEqual(
-            len(record[0]["Mim-entry_references"][1]["Mim-reference_authors"]), 6
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][0][
-                "Mim-author_name"
-            ],
-            "Otterson, G. A.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][0][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][1][
-                "Mim-author_name"
-            ],
-            "Flynn, G. C.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][1][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][2][
-                "Mim-author_name"
-            ],
-            "Kratzke, R. A.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][2][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][3][
-                "Mim-author_name"
-            ],
-            "Coxon, A.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][3][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][4][
-                "Mim-author_name"
-            ],
-            "Johnston, P. G.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][4][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][5][
-                "Mim-author_name"
-            ],
-            "Kaye, F. J.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_authors"][5][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_primaryAuthor"],
-            "Otterson",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_otherAuthors"], "et al."
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_citationTitle"],
-            "Stch encodes the 'ATPase core' of a microsomal stress70 protein.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_citationType"], "0"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_volume"], "13"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_journal"], "EMBO J."
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_pubDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1994",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_pubDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "0",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_pubDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "0",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_pages"][0][
-                "Mim-page_from"
-            ],
-            "1216",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_pages"][0][
-                "Mim-page_to"
-            ],
-            "1225",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_pubmedUID"], "8131751"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_ambiguous"], ""
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_ambiguous"].attributes[
-                "value"
-            ],
-            "false",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_noLink"], ""
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][1]["Mim-reference_noLink"].attributes[
-                "value"
-            ],
-            "false",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_number"], "3"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_origNumber"], "3"
-        )
-        self.assertEqual(record[0]["Mim-entry_references"][2]["Mim-reference_type"], "")
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_type"].attributes[
-                "value"
-            ],
-            "citation",
-        )
-        self.assertEqual(
-            len(record[0]["Mim-entry_references"][2]["Mim-reference_authors"]), 4
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_authors"][0][
-                "Mim-author_name"
-            ],
-            "Reeves, R. H.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_authors"][0][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_authors"][1][
-                "Mim-author_name"
-            ],
-            "Rue, E.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_authors"][1][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_authors"][2][
-                "Mim-author_name"
-            ],
-            "Yu, J.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_authors"][2][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_authors"][3][
-                "Mim-author_name"
-            ],
-            "Kao, F.-T.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_authors"][3][
-                "Mim-author_index"
-            ],
-            "1",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_primaryAuthor"],
-            "Reeves",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_otherAuthors"], "et al."
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_citationTitle"],
-            "Stch maps to mouse chromosome 16, extending the conserved synteny with human chromosome 21.",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_citationType"], "0"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_volume"], "49"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_journal"], "Genomics"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_pubDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1998",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_pubDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "0",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_pubDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "0",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_pages"][0][
-                "Mim-page_from"
-            ],
-            "156",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_pages"][0][
-                "Mim-page_to"
-            ],
-            "157",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_pubmedUID"], "9570963"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_ambiguous"], ""
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_ambiguous"].attributes[
-                "value"
-            ],
-            "false",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_noLink"], ""
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_references"][2]["Mim-reference_noLink"].attributes[
-                "value"
-            ],
-            "false",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_attribution"][0]["Mim-edit-item_author"],
-            "Carol A. Bocchini - updated",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_attribution"][0]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_year"
-            ],
-            "1999",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_attribution"][0]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_month"
-            ],
-            "3",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_attribution"][0]["Mim-edit-item_modDate"]["Mim-date"][
-                "Mim-date_day"
-            ],
-            "7",
-        )
-        self.assertEqual(record[0]["Mim-entry_numGeneMaps"], "1")
-        self.assertEqual(len(record[0]["Mim-entry_medlineLinks"]), 1)
-        self.assertEqual(
-            record[0]["Mim-entry_medlineLinks"]["Mim-link"]["Mim-link_num"], "3"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_medlineLinks"]["Mim-link"]["Mim-link_uids"],
-            "8825657,8131751,9570963",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_medlineLinks"]["Mim-link"]["Mim-link_numRelevant"], "0"
-        )
-        self.assertEqual(len(record[0]["Mim-entry_proteinLinks"]), 1)
-        self.assertEqual(
-            record[0]["Mim-entry_proteinLinks"]["Mim-link"]["Mim-link_num"], "7"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_proteinLinks"]["Mim-link"]["Mim-link_uids"],
-            "148747550,67461586,48928056,30089677,2352621,1351125,460148",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_proteinLinks"]["Mim-link"]["Mim-link_numRelevant"], "0"
-        )
-        self.assertEqual(len(record[0]["Mim-entry_nucleotideLinks"]), 1)
-        self.assertEqual(
-            record[0]["Mim-entry_nucleotideLinks"]["Mim-link"]["Mim-link_num"], "5"
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_nucleotideLinks"]["Mim-link"]["Mim-link_uids"],
-            "148747549,55741785,48928055,2352620,460147",
-        )
-        self.assertEqual(
-            record[0]["Mim-entry_nucleotideLinks"]["Mim-link"]["Mim-link_numRelevant"],
-            "0",
-        )
-
     def test_taxonomy(self):
-        """Test parsing XML returned by EFetch, Taxonomy database."""
         # Access the Taxonomy database using efetch.
         # To create the XML file, use
         # >>> Bio.Entrez.efetch(db="taxonomy", id="9685", retmode="xml")
         with open("Entrez/taxonomy.xml", "rb") as stream:
             record = Entrez.read(stream)
+        # fmt: off
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["TaxId"], "9685")
         self.assertEqual(record[0]["ScientificName"], "Felis catus")
         self.assertEqual(record[0]["OtherNames"]["GenbankCommonName"], "domestic cat")
-        self.assertEqual(
-            record[0]["OtherNames"]["Synonym"][0], "Felis silvestris catus"
-        )
-        self.assertEqual(record[0]["OtherNames"]["Synonym"][1], "Felis domesticus")
+        self.assertEqual(record[0]["OtherNames"]["Synonym"][0], "Felis domesticus")
+        self.assertEqual(record[0]["OtherNames"]["Synonym"][1], "Felis silvestris catus")
         self.assertEqual(record[0]["OtherNames"]["CommonName"][0], "cat")
         self.assertEqual(record[0]["OtherNames"]["CommonName"][1], "cats")
         self.assertEqual(record[0]["OtherNames"]["Includes"][0], "Korat cats")
@@ -11190,94 +10374,96 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         )
         self.assertEqual(
             record[0]["Lineage"],
-            "cellular organisms; Eukaryota; Fungi/Metazoa group; Metazoa; Eumetazoa; Bilateria; Coelomata; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis",
+            "cellular organisms; Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Boreoeutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis",
         )
 
         self.assertEqual(record[0]["LineageEx"][0]["TaxId"], "131567")
         self.assertEqual(
             record[0]["LineageEx"][0]["ScientificName"], "cellular organisms"
         )
-        self.assertEqual(record[0]["LineageEx"][0]["Rank"], "no rank")
+        self.assertEqual(record[0]["LineageEx"][0]["Rank"], "cellular root")
         self.assertEqual(record[0]["LineageEx"][1]["TaxId"], "2759")
         self.assertEqual(record[0]["LineageEx"][1]["ScientificName"], "Eukaryota")
-        self.assertEqual(record[0]["LineageEx"][1]["Rank"], "superkingdom")
+        self.assertEqual(record[0]["LineageEx"][1]["Rank"], "domain")
         self.assertEqual(record[0]["LineageEx"][2]["TaxId"], "33154")
-        self.assertEqual(
-            record[0]["LineageEx"][2]["ScientificName"], "Fungi/Metazoa group"
-        )
-        self.assertEqual(record[0]["LineageEx"][2]["Rank"], "no rank")
+        self.assertEqual(record[0]["LineageEx"][2]["ScientificName"], "Opisthokonta")
+        self.assertEqual(record[0]["LineageEx"][2]["Rank"], "clade")
         self.assertEqual(record[0]["LineageEx"][3]["TaxId"], "33208")
         self.assertEqual(record[0]["LineageEx"][3]["ScientificName"], "Metazoa")
         self.assertEqual(record[0]["LineageEx"][3]["Rank"], "kingdom")
         self.assertEqual(record[0]["LineageEx"][4]["TaxId"], "6072")
         self.assertEqual(record[0]["LineageEx"][4]["ScientificName"], "Eumetazoa")
-        self.assertEqual(record[0]["LineageEx"][4]["Rank"], "no rank")
+        self.assertEqual(record[0]["LineageEx"][4]["Rank"], "clade")
         self.assertEqual(record[0]["LineageEx"][5]["TaxId"], "33213")
         self.assertEqual(record[0]["LineageEx"][5]["ScientificName"], "Bilateria")
-        self.assertEqual(record[0]["LineageEx"][5]["Rank"], "no rank")
-        self.assertEqual(record[0]["LineageEx"][6]["TaxId"], "33316")
-        self.assertEqual(record[0]["LineageEx"][6]["ScientificName"], "Coelomata")
-        self.assertEqual(record[0]["LineageEx"][6]["Rank"], "no rank")
-        self.assertEqual(record[0]["LineageEx"][7]["TaxId"], "33511")
-        self.assertEqual(record[0]["LineageEx"][7]["ScientificName"], "Deuterostomia")
-        self.assertEqual(record[0]["LineageEx"][7]["Rank"], "no rank")
-        self.assertEqual(record[0]["LineageEx"][8]["TaxId"], "7711")
-        self.assertEqual(record[0]["LineageEx"][8]["ScientificName"], "Chordata")
-        self.assertEqual(record[0]["LineageEx"][8]["Rank"], "phylum")
-        self.assertEqual(record[0]["LineageEx"][9]["TaxId"], "89593")
-        self.assertEqual(record[0]["LineageEx"][9]["ScientificName"], "Craniata")
-        self.assertEqual(record[0]["LineageEx"][9]["Rank"], "subphylum")
-        self.assertEqual(record[0]["LineageEx"][10]["TaxId"], "7742")
-        self.assertEqual(record[0]["LineageEx"][10]["ScientificName"], "Vertebrata")
-        self.assertEqual(record[0]["LineageEx"][10]["Rank"], "no rank")
-        self.assertEqual(record[0]["LineageEx"][11]["TaxId"], "7776")
-        self.assertEqual(record[0]["LineageEx"][11]["ScientificName"], "Gnathostomata")
-        self.assertEqual(record[0]["LineageEx"][11]["Rank"], "superclass")
-        self.assertEqual(record[0]["LineageEx"][12]["TaxId"], "117570")
-        self.assertEqual(record[0]["LineageEx"][12]["ScientificName"], "Teleostomi")
-        self.assertEqual(record[0]["LineageEx"][12]["Rank"], "no rank")
-        self.assertEqual(record[0]["LineageEx"][13]["TaxId"], "117571")
-        self.assertEqual(record[0]["LineageEx"][13]["ScientificName"], "Euteleostomi")
-        self.assertEqual(record[0]["LineageEx"][13]["Rank"], "no rank")
-        self.assertEqual(record[0]["LineageEx"][14]["TaxId"], "8287")
-        self.assertEqual(record[0]["LineageEx"][14]["ScientificName"], "Sarcopterygii")
-        self.assertEqual(record[0]["LineageEx"][14]["Rank"], "no rank")
+        self.assertEqual(record[0]["LineageEx"][5]["Rank"], "clade")
+        self.assertEqual(record[0]["LineageEx"][6]["TaxId"], "33511")
+        self.assertEqual(record[0]["LineageEx"][6]["ScientificName"], "Deuterostomia")
+        self.assertEqual(record[0]["LineageEx"][6]["Rank"], "clade")
+        self.assertEqual(record[0]["LineageEx"][7]["TaxId"], "7711")
+        self.assertEqual(record[0]["LineageEx"][7]["ScientificName"], "Chordata")
+        self.assertEqual(record[0]["LineageEx"][7]["Rank"], "phylum")
+        self.assertEqual(record[0]["LineageEx"][8]["TaxId"], "89593")
+        self.assertEqual(record[0]["LineageEx"][8]["ScientificName"], "Craniata")
+        self.assertEqual(record[0]["LineageEx"][8]["Rank"], "subphylum")
+        self.assertEqual(record[0]["LineageEx"][9]["TaxId"], "7742")
+        self.assertEqual(record[0]["LineageEx"][9]["ScientificName"], "Vertebrata")
+        self.assertEqual(record[0]["LineageEx"][9]["Rank"], "clade")
+        self.assertEqual(record[0]["LineageEx"][10]["TaxId"], "7776")
+        self.assertEqual(record[0]["LineageEx"][10]["ScientificName"], "Gnathostomata")
+        self.assertEqual(record[0]["LineageEx"][10]["Rank"], "clade")
+        self.assertEqual(record[0]["LineageEx"][11]["TaxId"], "117570")
+        self.assertEqual(record[0]["LineageEx"][11]["ScientificName"], "Teleostomi")
+        self.assertEqual(record[0]["LineageEx"][11]["Rank"], "clade")
+        self.assertEqual(record[0]["LineageEx"][12]["TaxId"], "117571")
+        self.assertEqual(record[0]["LineageEx"][12]["ScientificName"], "Euteleostomi")
+        self.assertEqual(record[0]["LineageEx"][12]["Rank"], "clade")
+        self.assertEqual(record[0]["LineageEx"][13]["TaxId"], "8287")
+        self.assertEqual(record[0]["LineageEx"][13]["ScientificName"], "Sarcopterygii")
+        self.assertEqual(record[0]["LineageEx"][13]["Rank"], "superclass")
+        self.assertEqual(record[0]["LineageEx"][14]["TaxId"], "1338369")
+        self.assertEqual(record[0]["LineageEx"][14]["ScientificName"], "Dipnotetrapodomorpha")
+        self.assertEqual(record[0]["LineageEx"][14]["Rank"], "clade")
         self.assertEqual(record[0]["LineageEx"][15]["TaxId"], "32523")
         self.assertEqual(record[0]["LineageEx"][15]["ScientificName"], "Tetrapoda")
-        self.assertEqual(record[0]["LineageEx"][15]["Rank"], "no rank")
+        self.assertEqual(record[0]["LineageEx"][15]["Rank"], "clade")
         self.assertEqual(record[0]["LineageEx"][16]["TaxId"], "32524")
         self.assertEqual(record[0]["LineageEx"][16]["ScientificName"], "Amniota")
-        self.assertEqual(record[0]["LineageEx"][16]["Rank"], "no rank")
+        self.assertEqual(record[0]["LineageEx"][16]["Rank"], "clade")
         self.assertEqual(record[0]["LineageEx"][17]["TaxId"], "40674")
         self.assertEqual(record[0]["LineageEx"][17]["ScientificName"], "Mammalia")
         self.assertEqual(record[0]["LineageEx"][17]["Rank"], "class")
         self.assertEqual(record[0]["LineageEx"][18]["TaxId"], "32525")
         self.assertEqual(record[0]["LineageEx"][18]["ScientificName"], "Theria")
-        self.assertEqual(record[0]["LineageEx"][18]["Rank"], "no rank")
+        self.assertEqual(record[0]["LineageEx"][18]["Rank"], "clade")
         self.assertEqual(record[0]["LineageEx"][19]["TaxId"], "9347")
         self.assertEqual(record[0]["LineageEx"][19]["ScientificName"], "Eutheria")
-        self.assertEqual(record[0]["LineageEx"][19]["Rank"], "no rank")
-        self.assertEqual(record[0]["LineageEx"][20]["TaxId"], "314145")
-        self.assertEqual(record[0]["LineageEx"][20]["ScientificName"], "Laurasiatheria")
-        self.assertEqual(record[0]["LineageEx"][20]["Rank"], "superorder")
-        self.assertEqual(record[0]["LineageEx"][21]["TaxId"], "33554")
-        self.assertEqual(record[0]["LineageEx"][21]["ScientificName"], "Carnivora")
-        self.assertEqual(record[0]["LineageEx"][21]["Rank"], "order")
-        self.assertEqual(record[0]["LineageEx"][22]["TaxId"], "379583")
-        self.assertEqual(record[0]["LineageEx"][22]["ScientificName"], "Feliformia")
-        self.assertEqual(record[0]["LineageEx"][22]["Rank"], "suborder")
-        self.assertEqual(record[0]["LineageEx"][23]["TaxId"], "9681")
-        self.assertEqual(record[0]["LineageEx"][23]["ScientificName"], "Felidae")
-        self.assertEqual(record[0]["LineageEx"][23]["Rank"], "family")
-        self.assertEqual(record[0]["LineageEx"][24]["TaxId"], "338152")
-        self.assertEqual(record[0]["LineageEx"][24]["ScientificName"], "Felinae")
-        self.assertEqual(record[0]["LineageEx"][24]["Rank"], "subfamily")
-        self.assertEqual(record[0]["LineageEx"][25]["TaxId"], "9682")
-        self.assertEqual(record[0]["LineageEx"][25]["ScientificName"], "Felis")
-        self.assertEqual(record[0]["LineageEx"][25]["Rank"], "genus")
-        self.assertEqual(record[0]["CreateDate"], "1995/02/27")
-        self.assertEqual(record[0]["UpdateDate"], "2007/09/04")
-        self.assertEqual(record[0]["PubDate"], "1993/07/26")
+        self.assertEqual(record[0]["LineageEx"][19]["Rank"], "clade")
+        self.assertEqual(record[0]["LineageEx"][20]["TaxId"], "1437010")
+        self.assertEqual(record[0]["LineageEx"][20]["ScientificName"], "Boreoeutheria")
+        self.assertEqual(record[0]["LineageEx"][20]["Rank"], "clade")
+        self.assertEqual(record[0]["LineageEx"][21]["TaxId"], "314145")
+        self.assertEqual(record[0]["LineageEx"][21]["ScientificName"], "Laurasiatheria")
+        self.assertEqual(record[0]["LineageEx"][21]["Rank"], "superorder")
+        self.assertEqual(record[0]["LineageEx"][22]["TaxId"], "33554")
+        self.assertEqual(record[0]["LineageEx"][22]["ScientificName"], "Carnivora")
+        self.assertEqual(record[0]["LineageEx"][22]["Rank"], "order")
+        self.assertEqual(record[0]["LineageEx"][23]["TaxId"], "379583")
+        self.assertEqual(record[0]["LineageEx"][23]["ScientificName"], "Feliformia")
+        self.assertEqual(record[0]["LineageEx"][23]["Rank"], "suborder")
+        self.assertEqual(record[0]["LineageEx"][24]["TaxId"], "9681")
+        self.assertEqual(record[0]["LineageEx"][24]["ScientificName"], "Felidae")
+        self.assertEqual(record[0]["LineageEx"][24]["Rank"], "family")
+        self.assertEqual(record[0]["LineageEx"][25]["TaxId"], "338152")
+        self.assertEqual(record[0]["LineageEx"][25]["ScientificName"], "Felinae")
+        self.assertEqual(record[0]["LineageEx"][25]["Rank"], "subfamily")
+        self.assertEqual(record[0]["LineageEx"][26]["TaxId"], "9682")
+        self.assertEqual(record[0]["LineageEx"][26]["ScientificName"], "Felis")
+        self.assertEqual(record[0]["LineageEx"][26]["Rank"], "genus")
+        self.assertEqual(record[0]["CreateDate"], "1995/02/27 09:24:00")
+        self.assertEqual(record[0]["UpdateDate"], "2024/03/03 11:27:08")
+        self.assertEqual(record[0]["PubDate"], "1993/07/26 01:00:00")
+        # fmt: on
 
     def test_nucleotide1(self):
         """Test parsing XML returned by EFetch, Nucleotide database (first test)."""
@@ -11286,13 +10472,14 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         # >>> Bio.Entrez.efetch(db='nucleotide', id=5, retmode='xml')
         with open("Entrez/nucleotide1.xml", "rb") as stream:
             record = Entrez.read(stream)
+        # fmt: off
         self.assertEqual(record[0]["GBSeq_locus"], "X60065")
         self.assertEqual(record[0]["GBSeq_length"], "1136")
         self.assertEqual(record[0]["GBSeq_strandedness"], "single")
         self.assertEqual(record[0]["GBSeq_moltype"], "mRNA")
         self.assertEqual(record[0]["GBSeq_topology"], "linear")
         self.assertEqual(record[0]["GBSeq_division"], "MAM")
-        self.assertEqual(record[0]["GBSeq_update-date"], "14-NOV-2006")
+        self.assertEqual(record[0]["GBSeq_update-date"], "26-JUL-2016")
         self.assertEqual(record[0]["GBSeq_create-date"], "05-MAY-1992")
         self.assertEqual(
             record[0]["GBSeq_definition"],
@@ -11303,11 +10490,11 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         self.assertEqual(record[0]["GBSeq_other-seqids"][0], "emb|X60065.1|")
         self.assertEqual(record[0]["GBSeq_other-seqids"][1], "gi|5")
         self.assertEqual(record[0]["GBSeq_keywords"][0], "beta-2 glycoprotein I")
-        self.assertEqual(record[0]["GBSeq_source"], "Bos taurus (cattle)")
+        self.assertEqual(record[0]["GBSeq_source"], "Bos taurus (domestic cattle)")
         self.assertEqual(record[0]["GBSeq_organism"], "Bos taurus")
         self.assertEqual(
             record[0]["GBSeq_taxonomy"],
-            "Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos",
+            "Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Artiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos",
         )
         self.assertEqual(record[0]["GBSeq_references"][0]["GBReference_reference"], "1")
         self.assertEqual(
@@ -11320,8 +10507,7 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record[0]["GBSeq_references"][0]["GBReference_authors"][2], "Magnusson,S."
         )
         self.assertEqual(
-            record[0]["GBSeq_references"][0]["GBReference_authors"][3],
-            "Sottrup-Jensen,L.",
+            record[0]["GBSeq_references"][0]["GBReference_authors"][3], "Sottrup-Jensen,L.",
         )
         self.assertEqual(
             record[0]["GBSeq_references"][0]["GBReference_authors"][4], "Kristensen,T."
@@ -11353,85 +10539,57 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         )
         self.assertEqual(len(record[0]["GBSeq_feature-table"]), 7)
         self.assertEqual(record[0]["GBSeq_feature-table"][0]["GBFeature_key"], "source")
+        self.assertEqual(record[0]["GBSeq_feature-table"][0]["GBFeature_location"], "1..1136")
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_location"], "1..1136"
-        )
-        self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_from"],
             "1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_to"],
             "1136",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_accession"],
             "X60065.1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0]["GBQualifier_name"],
             "organism",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0]["GBQualifier_value"],
             "Bos taurus",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1]["GBQualifier_name"],
             "mol_type",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1]["GBQualifier_value"],
             "mRNA",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2]["GBQualifier_value"],
             "taxon:9913",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3]["GBQualifier_name"],
             "clone",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3]["GBQualifier_value"],
             "pBB2I",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4]["GBQualifier_name"],
             "tissue_type",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4]["GBQualifier_value"],
             "liver",
         )
         self.assertEqual(record[0]["GBSeq_feature-table"][1]["GBFeature_key"], "gene")
@@ -11439,40 +10597,28 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record[0]["GBSeq_feature-table"][1]["GBFeature_location"], "<1..1136"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_from"],
             "1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_to"],
             "1136",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_accession"],
             "X60065.1",
         )
         self.assertEqual(record[0]["GBSeq_feature-table"][1]["GBFeature_partial5"], "")
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_partial5"].attributes[
-                "value"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_partial5"].attributes["value"],
             "true",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0]["GBQualifier_name"],
             "gene",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0]["GBQualifier_value"],
             "beta-2-gpI",
         )
         self.assertEqual(record[0]["GBSeq_feature-table"][2]["GBFeature_key"], "CDS")
@@ -11480,137 +10626,93 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record[0]["GBSeq_feature-table"][2]["GBFeature_location"], "<1..1029"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_from"],
             "1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_to"],
             "1029",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_accession"],
             "X60065.1",
         )
         self.assertEqual(record[0]["GBSeq_feature-table"][2]["GBFeature_partial5"], "")
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_partial5"].attributes[
-                "value"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_partial5"].attributes["value"],
             "true",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0]["GBQualifier_name"],
             "gene",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0]["GBQualifier_value"],
             "beta-2-gpI",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1]["GBQualifier_name"],
             "codon_start",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1]["GBQualifier_value"],
             "1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2]["GBQualifier_name"],
             "transl_table",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2]["GBQualifier_value"],
             "1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][3][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][3]["GBQualifier_name"],
             "product",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][3][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][3]["GBQualifier_value"],
             "beta-2-glycoprotein I",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][4][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][4]["GBQualifier_name"],
             "protein_id",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][4][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][4]["GBQualifier_value"],
             "CAA42669.1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][5][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][5]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][5][
-                "GBQualifier_value"
-            ],
-            "GI:6",
-        )
-        self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][6][
-                "GBQualifier_name"
-            ],
-            "db_xref",
-        )
-        self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][6][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][5]["GBQualifier_value"],
             "GOA:P17690",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][7][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][6]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][7][
-                "GBQualifier_value"
-            ],
-            "UniProtKB/Swiss-Prot:P17690",
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][6]["GBQualifier_value"],
+            "InterPro:IPR000436",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][8][
-                "GBQualifier_name"
-            ],
-            "translation",
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][7]["GBQualifier_name"],
+            "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][8][
-                "GBQualifier_value"
-            ],
-            "PALVLLLGFLCHVAIAGRTCPKPDELPFSTVVPLKRTYEPGEQIVFSCQPGYVSRGGIRRFTCPLTGLWPINTLKCMPRVCPFAGILENGTVRYTTFEYPNTISFSCHTGFYLKGASSAKCTEEGKWSPDLPVCAPITCPPPPIPKFASLSVYKPLAGNNSFYGSKAVFKCLPHHAMFGNDTVTCTEHGNWTQLPECREVRCPFPSRPDNGFVNHPANPVLYYKDTATFGCHETYSLDGPEEVECSKFGNWSAQPSCKASCKLSIKRATVIYEGERVAIQNKFKNGMLHGQKVSFFCKHKEKKCSYTEDAQCIDGTIEIPKCFKEHSSLAFWKTDASDVKPC",
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][7]["GBQualifier_value"],
+            "InterPro:IPR015104",
+        )
+        self.assertEqual(
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][8]["GBQualifier_name"],
+            "db_xref",
+        )
+        self.assertEqual(
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][8]["GBQualifier_value"],
+            "InterPro:IPR016060",
         )
         self.assertEqual(
             record[0]["GBSeq_feature-table"][3]["GBFeature_key"], "sig_peptide"
@@ -11619,40 +10721,28 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record[0]["GBSeq_feature-table"][3]["GBFeature_location"], "<1..48"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_from"],
             "1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_to"],
             "48",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_accession"],
             "X60065.1",
         )
         self.assertEqual(record[0]["GBSeq_feature-table"][3]["GBFeature_partial5"], "")
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_partial5"].attributes[
-                "value"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_partial5"].attributes["value"],
             "true",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0]["GBQualifier_name"],
             "gene",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0]["GBQualifier_value"],
             "beta-2-gpI",
         )
         self.assertEqual(
@@ -11662,81 +10752,73 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record[0]["GBSeq_feature-table"][4]["GBFeature_location"], "49..1026"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][4]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][4]["GBFeature_intervals"][0]["GBInterval_from"],
             "49",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][4]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][4]["GBFeature_intervals"][0]["GBInterval_to"],
             "1026",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][4]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][4]["GBFeature_intervals"][0]["GBInterval_accession"],
             "X60065.1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][0]["GBQualifier_name"],
             "gene",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][0]["GBQualifier_value"],
             "beta-2-gpI",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][1][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][1]["GBQualifier_name"],
             "product",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][1][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][1]["GBQualifier_value"],
             "beta-2-glycoprotein I",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][5]["GBFeature_key"], "polyA_signal"
+            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][2]["GBQualifier_name"],
+            "peptide",
+        )
+        self.assertEqual(
+            record[0]["GBSeq_feature-table"][4]["GBFeature_quals"][2]["GBQualifier_value"],
+            "GRTCPKPDELPFSTVVPLKRTYEPGEQIVFSCQPGYVSRGGIRRFTCPLTGLWPINTLKCMPRVCPFAGILENGTVRYTTFEYPNTISFSCHTGFYLKGASSAKCTEEGKWSPDLPVCAPITCPPPPIPKFASLSVYKPLAGNNSFYGSKAVFKCLPHHAMFGNDTVTCTEHGNWTQLPECREVRCPFPSRPDNGFVNHPANPVLYYKDTATFGCHETYSLDGPEEVECSKFGNWSAQPSCKASCKLSIKRATVIYEGERVAIQNKFKNGMLHGQKVSFFCKHKEKKCSYTEDAQCIDGTIEIPKCFKEHSSLAFWKTDASDVKPC",
+        )
+        self.assertEqual(
+            record[0]["GBSeq_feature-table"][5]["GBFeature_key"], "regulatory",
         )
         self.assertEqual(
             record[0]["GBSeq_feature-table"][5]["GBFeature_location"], "1101..1106"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][5]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][5]["GBFeature_intervals"][0]["GBInterval_from"],
             "1101",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][5]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][5]["GBFeature_intervals"][0]["GBInterval_to"],
             "1106",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][5]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][5]["GBFeature_intervals"][0]["GBInterval_accession"],
             "X60065.1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][5]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][5]["GBFeature_quals"][0]["GBQualifier_name"],
+            "regulatory_class",
+        )
+        self.assertEqual(
+            record[0]["GBSeq_feature-table"][5]["GBFeature_quals"][0]["GBQualifier_value"],
+            "polyA_signal_sequence",
+        )
+        self.assertEqual(
+            record[0]["GBSeq_feature-table"][5]["GBFeature_quals"][1]["GBQualifier_name"],
             "gene",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][5]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][5]["GBFeature_quals"][1]["GBQualifier_value"],
             "beta-2-gpI",
         )
         self.assertEqual(
@@ -11746,33 +10828,26 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record[0]["GBSeq_feature-table"][6]["GBFeature_location"], "1130"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][6]["GBFeature_intervals"][0][
-                "GBInterval_point"
-            ],
+            record[0]["GBSeq_feature-table"][6]["GBFeature_intervals"][0]["GBInterval_point"],
             "1130",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][6]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][6]["GBFeature_intervals"][0]["GBInterval_accession"],
             "X60065.1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][6]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][6]["GBFeature_quals"][0]["GBQualifier_name"],
             "gene",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][6]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][6]["GBFeature_quals"][0]["GBQualifier_value"],
             "beta-2-gpI",
         )
         self.assertEqual(
             record[0]["GBSeq_sequence"],
             "ccagcgctcgtcttgctgttggggtttctctgccacgttgctatcgcaggacgaacctgccccaagccagatgagctaccgttttccacggtggttccactgaaacggacctatgagcccggggagcagatagtcttctcctgccagccgggctacgtgtcccggggagggatccggcggtttacatgcccgctcacaggactctggcccatcaacacgctgaaatgcatgcccagagtatgtccttttgctgggatcttagaaaacggaacggtacgctatacaacgtttgagtatcccaacaccatcagcttttcttgccacacggggttttatctgaaaggagctagttctgcaaaatgcactgaggaagggaagtggagcccagaccttcctgtctgtgcccctataacctgccctccaccacccatacccaagtttgcaagtctcagcgtttacaagccgttggctgggaacaactccttctatggcagcaaggcagtctttaagtgcttgccacaccacgcgatgtttggaaatgacaccgttacctgcacggaacatgggaactggacgcagttgccagaatgcagggaagtaagatgcccattcccatcaagaccagacaatgggtttgtgaaccatcctgcaaatccagtgctctactataaggacaccgccacctttggctgccatgaaacgtattccttggatggaccggaagaagtagaatgcagcaaattcggaaactggtctgcacagccaagctgtaaagcatcttgtaagttatctattaaaagagctactgtgatatatgaaggagagagagtagctatccagaacaaatttaagaatggaatgctgcatggccaaaaggtttctttcttctgcaagcataaggaaaagaagtgcagctacacagaagatgctcagtgcatagacggcaccatcgagattcccaaatgcttcaaggagcacagttctttagctttctggaaaacggatgcatctgacgtaaaaccatgctaagctggttttcacactgaaaattaaatgtcatgcttatatgtgtctgtctgagaatctgatggaaacggaaaaataaagagactgaatttaccgtgtcaagaaaaaaa",
         )
+        # fmt: off
 
     def test_nucleotide2(self):
         """Test parsing XML returned by EFetch, Nucleotide database (second test)."""
@@ -11784,7 +10859,6 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record = Entrez.read(stream)
         self.assertEqual(record[0]["TSeq_seqtype"], "")
         self.assertEqual(record[0]["TSeq_seqtype"].attributes["value"], "nucleotide")
-        self.assertEqual(record[0]["TSeq_gi"], "5")
         self.assertEqual(record[0]["TSeq_accver"], "X60065.1")
         self.assertEqual(record[0]["TSeq_taxid"], "9913")
         self.assertEqual(record[0]["TSeq_orgname"], "Bos taurus")
@@ -11799,12 +10873,11 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         )
         self.assertEqual(record[1]["TSeq_seqtype"], "")
         self.assertEqual(record[1]["TSeq_seqtype"].attributes["value"], "protein")
-        self.assertEqual(record[1]["TSeq_gi"], "6")
         self.assertEqual(record[1]["TSeq_accver"], "CAA42669.1")
         self.assertEqual(record[1]["TSeq_taxid"], "9913")
         self.assertEqual(record[1]["TSeq_orgname"], "Bos taurus")
         self.assertEqual(
-            record[1]["TSeq_defline"], "beta-2-glycoprotein I [Bos taurus]"
+            record[1]["TSeq_defline"], "beta-2-glycoprotein I, partial [Bos taurus]"
         )
         self.assertEqual(record[1]["TSeq_length"], "342")
         self.assertEqual(
@@ -11819,6 +10892,7 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         # >>> Bio.Entrez.efetch(db='protein', id=8, rettype='gp', retmode='xml')
         with open("Entrez/protein.xml", "rb") as stream:
             record = Entrez.read(stream)
+        # fmt: off
         self.assertEqual(record[0]["GBSeq_locus"], "CAA35997")
         self.assertEqual(record[0]["GBSeq_length"], "100")
         self.assertEqual(record[0]["GBSeq_moltype"], "AA")
@@ -11833,11 +10907,11 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         self.assertEqual(record[0]["GBSeq_accession-version"], "CAA35997.1")
         self.assertEqual(record[0]["GBSeq_other-seqids"][0], "emb|CAA35997.1|")
         self.assertEqual(record[0]["GBSeq_other-seqids"][1], "gi|8")
-        self.assertEqual(record[0]["GBSeq_source"], "Bos taurus (cattle)")
+        self.assertEqual(record[0]["GBSeq_source"], "Bos taurus (domestic cattle)")
         self.assertEqual(record[0]["GBSeq_organism"], "Bos taurus")
         self.assertEqual(
             record[0]["GBSeq_taxonomy"],
-            "Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos",
+            "Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia; Eutheria; Laurasiatheria; Artiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos",
         )
         self.assertEqual(record[0]["GBSeq_references"][0]["GBReference_reference"], "1")
         self.assertEqual(
@@ -11874,7 +10948,7 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         )
         self.assertEqual(
             record[0]["GBSeq_comment"],
-            "See <X15699> for Human sequence.~Data kindly reviewed (08-MAY-1990) by Kiefer M.C.",
+            "See <X15699> for Human sequence.~~Data kindly reviewed (08-MAY-1990) by Kiefer M.C.",
         )
         self.assertEqual(record[0]["GBSeq_source-db"], "embl accession X51700.1")
         self.assertEqual(record[0]["GBSeq_feature-table"][0]["GBFeature_key"], "source")
@@ -11882,81 +10956,55 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record[0]["GBSeq_feature-table"][0]["GBFeature_location"], "1..100"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_from"],
             "1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_to"],
             "100",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_intervals"][0]["GBInterval_accession"],
             "CAA35997.1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0]["GBQualifier_name"],
             "organism",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][0]["GBQualifier_value"],
             "Bos taurus",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][1]["GBQualifier_value"],
             "taxon:9913",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2]["GBQualifier_name"],
             "clone",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][2]["GBQualifier_value"],
             "bBGP-3",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3]["GBQualifier_name"],
             "tissue_type",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][3]["GBQualifier_value"],
             "bone matrix",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4]["GBQualifier_name"],
             "clone_lib",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][0]["GBFeature_quals"][4]["GBQualifier_value"],
             "Zap-bb",
         )
         self.assertEqual(
@@ -11966,33 +11014,23 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record[0]["GBSeq_feature-table"][1]["GBFeature_location"], "1..100"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_from"],
             "1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_to"],
             "100",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_intervals"][0]["GBInterval_accession"],
             "CAA35997.1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0]["GBQualifier_name"],
             "name",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][1]["GBFeature_quals"][0]["GBQualifier_value"],
             "unnamed protein product",
         )
         self.assertEqual(record[0]["GBSeq_feature-table"][2]["GBFeature_key"], "Region")
@@ -12000,169 +11038,126 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
             record[0]["GBSeq_feature-table"][2]["GBFeature_location"], "33..97"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_from"],
             "33",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_to"],
             "97",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_intervals"][0]["GBInterval_accession"],
             "CAA35997.1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0]["GBQualifier_name"],
             "region_name",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
-            "Gla",
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][0]["GBQualifier_value"],
+            "GLA",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1]["GBQualifier_name"],
             "note",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1][
-                "GBQualifier_value"
-            ],
-            "Vitamin K-dependent carboxylation/gamma-carboxyglutamic (GLA) domain. This domain is responsible for the high-affinity binding of calcium ions. This domain contains post-translational modifications of many glutamate residues by Vitamin K-dependent...; cl02449",
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][1]["GBQualifier_value"],
+            "Domain containing Gla (gamma-carboxyglutamate) residues; smart00069",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2][
-                "GBQualifier_value"
-            ],
-            "CDD:92835",
+            record[0]["GBSeq_feature-table"][2]["GBFeature_quals"][2]["GBQualifier_value"],
+            "CDD:214503",
         )
         self.assertEqual(record[0]["GBSeq_feature-table"][3]["GBFeature_key"], "CDS")
         self.assertEqual(
             record[0]["GBSeq_feature-table"][3]["GBFeature_location"], "1..100"
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0][
-                "GBInterval_from"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_from"],
             "1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0][
-                "GBInterval_to"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_to"],
             "100",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0][
-                "GBInterval_accession"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_intervals"][0]["GBInterval_accession"],
             "CAA35997.1",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0]["GBQualifier_name"],
             "coded_by",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][0]["GBQualifier_value"],
             "X51700.1:28..330",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][1][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][1]["GBQualifier_name"],
             "note",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][1][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][1]["GBQualifier_value"],
             "bone Gla precursor (100 AA)",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][2][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][2]["GBQualifier_name"],
+            "transl_table",
+        )
+        self.assertEqual(
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][2]["GBQualifier_value"],
+            "1",
+        )
+        self.assertEqual(
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][3]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][2][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][3]["GBQualifier_value"],
             "GOA:P02820",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][3][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][4]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][3][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][4]["GBQualifier_value"],
             "InterPro:IPR000294",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][4][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][5]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][4][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][5]["GBQualifier_value"],
             "InterPro:IPR002384",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][5][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][6]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][5][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][6]["GBQualifier_value"],
             "PDB:1Q3M",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][6][
-                "GBQualifier_name"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][7]["GBQualifier_name"],
             "db_xref",
         )
         self.assertEqual(
-            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][6][
-                "GBQualifier_value"
-            ],
+            record[0]["GBSeq_feature-table"][3]["GBFeature_quals"][7]["GBQualifier_value"],
             "UniProtKB/Swiss-Prot:P02820",
         )
         self.assertEqual(
             record[0]["GBSeq_sequence"],
             "mrtpmllallalatlclagradakpgdaesgkgaafvskqegsevvkrlrryldhwlgapapypdplepkrevcelnpdcdeladhigfqeayrrfygpv",
         )
+        # fmt: on
 
     def test_efetch_schemas(self):
         """Test parsing XML using Schemas."""
