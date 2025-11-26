@@ -1,6 +1,189 @@
 <?xml version="1.0" ?>
 <!DOCTYPE TaxaSet PUBLIC "-//NLM//DTD Taxon, 14th January 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/taxon.dtd">
 <TaxaSet><Taxon>
+    <TaxId>9615</TaxId>
+    <ScientificName>Canis lupus familiaris</ScientificName>
+    <OtherNames>
+        <GenbankCommonName>dog</GenbankCommonName>
+        <Synonym>Canis borealis</Synonym>
+        <Synonym>Canis canis</Synonym>
+        <Synonym>Canis domesticus</Synonym>
+        <Synonym>Canis familiaris</Synonym>
+        <Synonym>Canis lupus borealis</Synonym>
+        <CommonName>dogs</CommonName>
+        <Includes>beagle dog</Includes>
+        <Includes>beagle dogs</Includes>
+        <Name>
+            <ClassCDE>authority</ClassCDE>
+            <DispName>Canis borealis Smith, 1839</DispName>
+        </Name>
+        <Name>
+            <ClassCDE>authority</ClassCDE>
+            <DispName>Canis familiaris Linnaeus, 1758</DispName>
+        </Name>
+        <Name>
+            <ClassCDE>authority</ClassCDE>
+            <DispName>Canis lupus borealis Smith, 1839</DispName>
+        </Name>
+        <Name>
+            <ClassCDE>authority</ClassCDE>
+            <DispName>Canis lupus familiaris Linnaeus, 1758</DispName>
+        </Name>
+    </OtherNames>
+    <ParentTaxId>9612</ParentTaxId>
+    <Rank>subspecies</Rank>
+    <Division>Mammals</Division>
+    <GeneticCode>
+        <GCId>1</GCId>
+        <GCName>Standard</GCName>
+    </GeneticCode>
+    <MitoGeneticCode>
+        <MGCId>2</MGCId>
+        <MGCName>Vertebrate Mitochondrial</MGCName>
+    </MitoGeneticCode>
+    <Lineage>cellular organisms; Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Boreoeutheria; Laurasiatheria; Carnivora; Caniformia; Canidae; Canis; Canis lupus</Lineage>
+    <LineageEx>
+        <Taxon>
+            <TaxId>131567</TaxId>
+            <ScientificName>cellular organisms</ScientificName>
+            <Rank>cellular root</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>2759</TaxId>
+            <ScientificName>Eukaryota</ScientificName>
+            <Rank>domain</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>33154</TaxId>
+            <ScientificName>Opisthokonta</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>33208</TaxId>
+            <ScientificName>Metazoa</ScientificName>
+            <Rank>kingdom</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>6072</TaxId>
+            <ScientificName>Eumetazoa</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>33213</TaxId>
+            <ScientificName>Bilateria</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>33511</TaxId>
+            <ScientificName>Deuterostomia</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>7711</TaxId>
+            <ScientificName>Chordata</ScientificName>
+            <Rank>phylum</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>89593</TaxId>
+            <ScientificName>Craniata</ScientificName>
+            <Rank>subphylum</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>7742</TaxId>
+            <ScientificName>Vertebrata</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>7776</TaxId>
+            <ScientificName>Gnathostomata</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>117570</TaxId>
+            <ScientificName>Teleostomi</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>117571</TaxId>
+            <ScientificName>Euteleostomi</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>8287</TaxId>
+            <ScientificName>Sarcopterygii</ScientificName>
+            <Rank>superclass</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>1338369</TaxId>
+            <ScientificName>Dipnotetrapodomorpha</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>32523</TaxId>
+            <ScientificName>Tetrapoda</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>32524</TaxId>
+            <ScientificName>Amniota</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>40674</TaxId>
+            <ScientificName>Mammalia</ScientificName>
+            <Rank>class</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>32525</TaxId>
+            <ScientificName>Theria</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>9347</TaxId>
+            <ScientificName>Eutheria</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>1437010</TaxId>
+            <ScientificName>Boreoeutheria</ScientificName>
+            <Rank>clade</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>314145</TaxId>
+            <ScientificName>Laurasiatheria</ScientificName>
+            <Rank>superorder</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>33554</TaxId>
+            <ScientificName>Carnivora</ScientificName>
+            <Rank>order</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>379584</TaxId>
+            <ScientificName>Caniformia</ScientificName>
+            <Rank>suborder</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>9608</TaxId>
+            <ScientificName>Canidae</ScientificName>
+            <Rank>family</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>9611</TaxId>
+            <ScientificName>Canis</ScientificName>
+            <Rank>genus</Rank>
+        </Taxon>
+        <Taxon>
+            <TaxId>9612</TaxId>
+            <ScientificName>Canis lupus</ScientificName>
+            <Rank>species</Rank>
+        </Taxon>
+    </LineageEx>
+    <CreateDate>1995/02/27 09:24:00</CreateDate>
+    <UpdateDate>2024/02/09 13:11:20</UpdateDate>
+    <PubDate>1993/04/27 01:00:00</PubDate>
+</Taxon>
+<Taxon>
     <TaxId>9685</TaxId>
     <ScientificName>Felis catus</ScientificName>
     <OtherNames>

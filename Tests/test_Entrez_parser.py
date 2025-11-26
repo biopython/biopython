@@ -19,49 +19,54 @@ class GeneralTests(unittest.TestCase):
 
     def test_closed_file(self):
         """Test parsing closed file fails gracefully."""
-        stream = open("Entrez/einfo1.xml", "rb")
+        stream = open("Entrez/taxonomy.xml", "rb")
         stream.close()
         self.assertRaises(ValueError, Entrez.read, stream)
 
     def test_read_bytes_stream(self):
         """Test reading a file opened in binary mode."""
-        with open("Entrez/pubmed1.xml", "rb") as stream:
-            record = Entrez.read(stream)
-        self.assertEqual(len(record), 2)
-        self.assertIn("MedlineCitation", record[0])
+        with open("Entrez/taxonomy.xml", "rb") as stream:
+            records = Entrez.read(stream)
+        self.assertEqual(len(records), 2)
+        for record in records:
+            self.assertIn("TaxId", record)
+            self.assertIn("ScientificName", record)
 
     def test_parse_bytes_stream(self):
         """Test parsing a file opened in binary mode."""
-        with open("Entrez/pubmed1.xml", "rb") as stream:
+        with open("Entrez/taxonomy.xml", "rb") as stream:
             records = Entrez.parse(stream)
             n = 0
             for record in records:
-                self.assertIn("MedlineCitation", record)
+                self.assertIn("TaxId", record)
+                self.assertIn("ScientificName", record)
                 n += 1
         self.assertEqual(n, 2)
 
     def test_read_text_file(self):
         """Test reading a file opened in text mode."""
         message = "^the XML file must be opened in binary mode.$"
-        with open("Entrez/pubmed1.xml") as stream:
+        with open("Entrez/taxonomy.xml") as stream:
             with self.assertRaisesRegex(StreamModeError, message):
                 Entrez.read(stream)
 
     def test_parse_text_file(self):
         """Test parsing a file opened in text mode."""
         message = "^the XML file must be opened in binary mode.$"
-        with open("Entrez/einfo1.xml") as stream:
+        with open("Entrez/taxonomy.xml") as stream:
             records = Entrez.parse(stream)
             with self.assertRaisesRegex(StreamModeError, message):
                 next(records)
 
     def test_BytesIO(self):
         """Test parsing a BytesIO stream (bytes not string)."""
-        with open("Entrez/einfo1.xml", "rb") as stream:
+        with open("Entrez/taxonomy.xml", "rb") as stream:
             data = stream.read()
         stream = BytesIO(data)
-        record = Entrez.read(stream)
-        self.assertIn("DbList", record)
+        records = Entrez.read(stream)
+        self.assertEqual(len(records), 2)
+        self.assertEqual(records[0]['ScientificName'], 'Canis lupus familiaris')
+        self.assertEqual(records[1]['ScientificName'], 'Felis catus')
         stream.close()
 
     def test_pickle(self):
@@ -107,41 +112,43 @@ class EInfoTest(unittest.TestCase):
             [
                 "pubmed",
                 "protein",
-                "nucleotide",
                 "nuccore",
-                "nucgss",
-                "nucest",
+                "ipg",
+                "nucleotide",
                 "structure",
                 "genome",
+                "annotinfo",
+                "assembly",
+                "bioproject",
+                "biosample",
+                "blastdbinfo",
                 "books",
-                "cancerchromosomes",
                 "cdd",
+                "clinvar",
                 "gap",
-                "domains",
+                "gapplus",
+                "grasp",
+                "dbvar",
                 "gene",
-                "genomeprj",
-                "gensat",
-                "geo",
                 "gds",
-                "homologene",
-                "journals",
+                "geoprofiles",
+                "medgen",
                 "mesh",
-                "ncbisearch",
                 "nlmcatalog",
-                "omia",
                 "omim",
+                "orgtrack",
                 "pmc",
-                "popset",
-                "probe",
                 "proteinclusters",
                 "pcassay",
+                "protfam",
                 "pccompound",
                 "pcsubstance",
+                "seqannot",
                 "snp",
+                "sra",
                 "taxonomy",
-                "toolkit",
-                "unigene",
-                "unists",
+                "biocollections",
+                "gtr",
             ],
         )
 
@@ -10050,7 +10057,7 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
     def test_pmc(self):
         """Test parsing XML returned by EFetch from PubMed Central."""
         # To create the XML file, use
-        # >>> Bio.Entrez.efetch(db='pmc', id="8435807")
+        # >>> Bio.Entrez.efetch(db='pmc', id="2682512,3468381")
         with open("Entrez/efetch_pmc.xml", "rb") as stream:
             records = Entrez.parse(stream)
             records = list(records)
@@ -10350,21 +10357,26 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
     def test_taxonomy(self):
         # Access the Taxonomy database using efetch.
         # To create the XML file, use
-        # >>> Bio.Entrez.efetch(db="taxonomy", id="9685", retmode="xml")
+        # >>> Bio.Entrez.efetch(db="taxonomy", id="9615,9685", retmode="xml")
         with open("Entrez/taxonomy.xml", "rb") as stream:
             record = Entrez.read(stream)
         # fmt: off
-        self.assertEqual(len(record), 1)
-        self.assertEqual(record[0]["TaxId"], "9685")
-        self.assertEqual(record[0]["ScientificName"], "Felis catus")
-        self.assertEqual(record[0]["OtherNames"]["GenbankCommonName"], "domestic cat")
-        self.assertEqual(record[0]["OtherNames"]["Synonym"][0], "Felis domesticus")
-        self.assertEqual(record[0]["OtherNames"]["Synonym"][1], "Felis silvestris catus")
-        self.assertEqual(record[0]["OtherNames"]["CommonName"][0], "cat")
-        self.assertEqual(record[0]["OtherNames"]["CommonName"][1], "cats")
-        self.assertEqual(record[0]["OtherNames"]["Includes"][0], "Korat cats")
-        self.assertEqual(record[0]["ParentTaxId"], "9682")
-        self.assertEqual(record[0]["Rank"], "species")
+        self.assertEqual(len(record), 2)
+        self.assertEqual(record[0]["TaxId"], "9615")
+        self.assertEqual(record[0]["ScientificName"], "Canis lupus familiaris")
+        self.assertEqual(record[0]["OtherNames"]["GenbankCommonName"], "dog")
+        self.assertEqual(len(record[0]["OtherNames"]["Synonym"]), 5)
+        self.assertEqual(record[0]["OtherNames"]["Synonym"][0], "Canis borealis")
+        self.assertEqual(record[0]["OtherNames"]["Synonym"][1], "Canis canis")
+        self.assertEqual(record[0]["OtherNames"]["Synonym"][2], "Canis domesticus")
+        self.assertEqual(record[0]["OtherNames"]["Synonym"][3], "Canis familiaris")
+        self.assertEqual(record[0]["OtherNames"]["Synonym"][4], "Canis lupus borealis")
+        self.assertEqual(len(record[0]["OtherNames"]["CommonName"]), 1)
+        self.assertEqual(record[0]["OtherNames"]["CommonName"][0], "dogs")
+        self.assertEqual(record[0]["OtherNames"]["Includes"][0], "beagle dog")
+        self.assertEqual(record[0]["OtherNames"]["Includes"][1], "beagle dogs")
+        self.assertEqual(record[0]["ParentTaxId"], "9612")
+        self.assertEqual(record[0]["Rank"], "subspecies")
         self.assertEqual(record[0]["Division"], "Mammals")
         self.assertEqual(record[0]["GeneticCode"]["GCId"], "1")
         self.assertEqual(record[0]["GeneticCode"]["GCName"], "Standard")
@@ -10374,7 +10386,7 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         )
         self.assertEqual(
             record[0]["Lineage"],
-            "cellular organisms; Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Boreoeutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis",
+            "cellular organisms; Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Boreoeutheria; Laurasiatheria; Carnivora; Caniformia; Canidae; Canis; Canis lupus",
         )
 
         self.assertEqual(record[0]["LineageEx"][0]["TaxId"], "131567")
@@ -10448,21 +10460,131 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         self.assertEqual(record[0]["LineageEx"][22]["TaxId"], "33554")
         self.assertEqual(record[0]["LineageEx"][22]["ScientificName"], "Carnivora")
         self.assertEqual(record[0]["LineageEx"][22]["Rank"], "order")
-        self.assertEqual(record[0]["LineageEx"][23]["TaxId"], "379583")
-        self.assertEqual(record[0]["LineageEx"][23]["ScientificName"], "Feliformia")
+        self.assertEqual(record[0]["LineageEx"][23]["TaxId"], "379584")
+        self.assertEqual(record[0]["LineageEx"][23]["ScientificName"], "Caniformia")
         self.assertEqual(record[0]["LineageEx"][23]["Rank"], "suborder")
-        self.assertEqual(record[0]["LineageEx"][24]["TaxId"], "9681")
-        self.assertEqual(record[0]["LineageEx"][24]["ScientificName"], "Felidae")
+        self.assertEqual(record[0]["LineageEx"][24]["TaxId"], "9608")
+        self.assertEqual(record[0]["LineageEx"][24]["ScientificName"], "Canidae")
         self.assertEqual(record[0]["LineageEx"][24]["Rank"], "family")
-        self.assertEqual(record[0]["LineageEx"][25]["TaxId"], "338152")
-        self.assertEqual(record[0]["LineageEx"][25]["ScientificName"], "Felinae")
-        self.assertEqual(record[0]["LineageEx"][25]["Rank"], "subfamily")
-        self.assertEqual(record[0]["LineageEx"][26]["TaxId"], "9682")
-        self.assertEqual(record[0]["LineageEx"][26]["ScientificName"], "Felis")
-        self.assertEqual(record[0]["LineageEx"][26]["Rank"], "genus")
+        self.assertEqual(record[0]["LineageEx"][25]["TaxId"], "9611")
+        self.assertEqual(record[0]["LineageEx"][25]["ScientificName"], "Canis")
+        self.assertEqual(record[0]["LineageEx"][25]["Rank"], "genus")
+        self.assertEqual(record[0]["LineageEx"][26]["TaxId"], "9612")
+        self.assertEqual(record[0]["LineageEx"][26]["ScientificName"], "Canis lupus")
+        self.assertEqual(record[0]["LineageEx"][26]["Rank"], "species")
         self.assertEqual(record[0]["CreateDate"], "1995/02/27 09:24:00")
-        self.assertEqual(record[0]["UpdateDate"], "2024/03/03 11:27:08")
-        self.assertEqual(record[0]["PubDate"], "1993/07/26 01:00:00")
+        self.assertEqual(record[0]["UpdateDate"], "2024/02/09 13:11:20")
+        self.assertEqual(record[0]["PubDate"], "1993/04/27 01:00:00")
+        self.assertEqual(record[1]["TaxId"], "9685")
+        self.assertEqual(record[1]["ScientificName"], "Felis catus")
+        self.assertEqual(record[1]["OtherNames"]["GenbankCommonName"], "domestic cat")
+        self.assertEqual(len(record[1]["OtherNames"]["Synonym"]), 2)
+        self.assertEqual(record[1]["OtherNames"]["Synonym"][0], "Felis domesticus")
+        self.assertEqual(record[1]["OtherNames"]["Synonym"][1], "Felis silvestris catus")
+        self.assertEqual(len(record[1]["OtherNames"]["CommonName"]), 2)
+        self.assertEqual(record[1]["OtherNames"]["CommonName"][0], "cat")
+        self.assertEqual(record[1]["OtherNames"]["CommonName"][1], "cats")
+        self.assertEqual(record[1]["OtherNames"]["Includes"][0], "Korat cats")
+        self.assertEqual(record[1]["ParentTaxId"], "9682")
+        self.assertEqual(record[1]["Rank"], "species")
+        self.assertEqual(record[1]["Division"], "Mammals")
+        self.assertEqual(record[1]["GeneticCode"]["GCId"], "1")
+        self.assertEqual(record[1]["GeneticCode"]["GCName"], "Standard")
+        self.assertEqual(record[1]["MitoGeneticCode"]["MGCId"], "2")
+        self.assertEqual(
+            record[1]["MitoGeneticCode"]["MGCName"], "Vertebrate Mitochondrial"
+        )
+        self.assertEqual(
+            record[1]["Lineage"],
+            "cellular organisms; Eukaryota; Opisthokonta; Metazoa; Eumetazoa; Bilateria; Deuterostomia; Chordata; Craniata; Vertebrata; Gnathostomata; Teleostomi; Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Mammalia; Theria; Eutheria; Boreoeutheria; Laurasiatheria; Carnivora; Feliformia; Felidae; Felinae; Felis",
+        )
+
+        self.assertEqual(record[1]["LineageEx"][0]["TaxId"], "131567")
+        self.assertEqual(
+            record[1]["LineageEx"][0]["ScientificName"], "cellular organisms"
+        )
+        self.assertEqual(record[1]["LineageEx"][0]["Rank"], "cellular root")
+        self.assertEqual(record[1]["LineageEx"][1]["TaxId"], "2759")
+        self.assertEqual(record[1]["LineageEx"][1]["ScientificName"], "Eukaryota")
+        self.assertEqual(record[1]["LineageEx"][1]["Rank"], "domain")
+        self.assertEqual(record[1]["LineageEx"][2]["TaxId"], "33154")
+        self.assertEqual(record[1]["LineageEx"][2]["ScientificName"], "Opisthokonta")
+        self.assertEqual(record[1]["LineageEx"][2]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][3]["TaxId"], "33208")
+        self.assertEqual(record[1]["LineageEx"][3]["ScientificName"], "Metazoa")
+        self.assertEqual(record[1]["LineageEx"][3]["Rank"], "kingdom")
+        self.assertEqual(record[1]["LineageEx"][4]["TaxId"], "6072")
+        self.assertEqual(record[1]["LineageEx"][4]["ScientificName"], "Eumetazoa")
+        self.assertEqual(record[1]["LineageEx"][4]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][5]["TaxId"], "33213")
+        self.assertEqual(record[1]["LineageEx"][5]["ScientificName"], "Bilateria")
+        self.assertEqual(record[1]["LineageEx"][5]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][6]["TaxId"], "33511")
+        self.assertEqual(record[1]["LineageEx"][6]["ScientificName"], "Deuterostomia")
+        self.assertEqual(record[1]["LineageEx"][6]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][7]["TaxId"], "7711")
+        self.assertEqual(record[1]["LineageEx"][7]["ScientificName"], "Chordata")
+        self.assertEqual(record[1]["LineageEx"][7]["Rank"], "phylum")
+        self.assertEqual(record[1]["LineageEx"][8]["TaxId"], "89593")
+        self.assertEqual(record[1]["LineageEx"][8]["ScientificName"], "Craniata")
+        self.assertEqual(record[1]["LineageEx"][8]["Rank"], "subphylum")
+        self.assertEqual(record[1]["LineageEx"][9]["TaxId"], "7742")
+        self.assertEqual(record[1]["LineageEx"][9]["ScientificName"], "Vertebrata")
+        self.assertEqual(record[1]["LineageEx"][9]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][10]["TaxId"], "7776")
+        self.assertEqual(record[1]["LineageEx"][10]["ScientificName"], "Gnathostomata")
+        self.assertEqual(record[1]["LineageEx"][10]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][11]["TaxId"], "117570")
+        self.assertEqual(record[1]["LineageEx"][11]["ScientificName"], "Teleostomi")
+        self.assertEqual(record[1]["LineageEx"][11]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][12]["TaxId"], "117571")
+        self.assertEqual(record[1]["LineageEx"][12]["ScientificName"], "Euteleostomi")
+        self.assertEqual(record[1]["LineageEx"][12]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][13]["TaxId"], "8287")
+        self.assertEqual(record[1]["LineageEx"][13]["ScientificName"], "Sarcopterygii")
+        self.assertEqual(record[1]["LineageEx"][13]["Rank"], "superclass")
+        self.assertEqual(record[1]["LineageEx"][14]["TaxId"], "1338369")
+        self.assertEqual(record[1]["LineageEx"][14]["ScientificName"], "Dipnotetrapodomorpha")
+        self.assertEqual(record[1]["LineageEx"][14]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][15]["TaxId"], "32523")
+        self.assertEqual(record[1]["LineageEx"][15]["ScientificName"], "Tetrapoda")
+        self.assertEqual(record[1]["LineageEx"][15]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][16]["TaxId"], "32524")
+        self.assertEqual(record[1]["LineageEx"][16]["ScientificName"], "Amniota")
+        self.assertEqual(record[1]["LineageEx"][16]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][17]["TaxId"], "40674")
+        self.assertEqual(record[1]["LineageEx"][17]["ScientificName"], "Mammalia")
+        self.assertEqual(record[1]["LineageEx"][17]["Rank"], "class")
+        self.assertEqual(record[1]["LineageEx"][18]["TaxId"], "32525")
+        self.assertEqual(record[1]["LineageEx"][18]["ScientificName"], "Theria")
+        self.assertEqual(record[1]["LineageEx"][18]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][19]["TaxId"], "9347")
+        self.assertEqual(record[1]["LineageEx"][19]["ScientificName"], "Eutheria")
+        self.assertEqual(record[1]["LineageEx"][19]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][20]["TaxId"], "1437010")
+        self.assertEqual(record[1]["LineageEx"][20]["ScientificName"], "Boreoeutheria")
+        self.assertEqual(record[1]["LineageEx"][20]["Rank"], "clade")
+        self.assertEqual(record[1]["LineageEx"][21]["TaxId"], "314145")
+        self.assertEqual(record[1]["LineageEx"][21]["ScientificName"], "Laurasiatheria")
+        self.assertEqual(record[1]["LineageEx"][21]["Rank"], "superorder")
+        self.assertEqual(record[1]["LineageEx"][22]["TaxId"], "33554")
+        self.assertEqual(record[1]["LineageEx"][22]["ScientificName"], "Carnivora")
+        self.assertEqual(record[1]["LineageEx"][22]["Rank"], "order")
+        self.assertEqual(record[1]["LineageEx"][23]["TaxId"], "379583")
+        self.assertEqual(record[1]["LineageEx"][23]["ScientificName"], "Feliformia")
+        self.assertEqual(record[1]["LineageEx"][23]["Rank"], "suborder")
+        self.assertEqual(record[1]["LineageEx"][24]["TaxId"], "9681")
+        self.assertEqual(record[1]["LineageEx"][24]["ScientificName"], "Felidae")
+        self.assertEqual(record[1]["LineageEx"][24]["Rank"], "family")
+        self.assertEqual(record[1]["LineageEx"][25]["TaxId"], "338152")
+        self.assertEqual(record[1]["LineageEx"][25]["ScientificName"], "Felinae")
+        self.assertEqual(record[1]["LineageEx"][25]["Rank"], "subfamily")
+        self.assertEqual(record[1]["LineageEx"][26]["TaxId"], "9682")
+        self.assertEqual(record[1]["LineageEx"][26]["ScientificName"], "Felis")
+        self.assertEqual(record[1]["LineageEx"][26]["Rank"], "genus")
+        self.assertEqual(record[1]["CreateDate"], "1995/02/27 09:24:00")
+        self.assertEqual(record[1]["UpdateDate"], "2024/03/03 11:27:08")
+        self.assertEqual(record[1]["PubDate"], "1993/07/26 01:00:00")
         # fmt: on
 
     def test_nucleotide1(self):
