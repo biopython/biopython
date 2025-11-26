@@ -1833,7 +1833,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[0]["LangList"], ["English"])
         self.assertEqual(record[0]["NlmUniqueID"], "0372433")
         self.assertEqual(record[0]["ISSN"], "0003-987X")
-        self.assertEqual(record[0]["ESSN"], "1538-3652")
+        self.assertEqual(record[0]["ESSN"], "")
         self.assertEqual(len(record[0]["PubTypeList"]), 1)
         self.assertEqual(record[0]["PubTypeList"][0], "Journal Article")
         self.assertEqual(record[0]["RecordStatus"], "PubMed - indexed for MEDLINE")
@@ -1841,9 +1841,10 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(len(record[0]["ArticleIds"]), 2)
         self.assertEqual(record[0]["ArticleIds"]["pubmed"], ["11850928"])
         self.assertEqual(record[0]["ArticleIds"]["medline"], [])
-        self.assertEqual(len(record[0]["History"]), 2)
+        self.assertEqual(len(record[0]["History"]), 3)
         self.assertEqual(record[0]["History"]["pubmed"], ["1965/08/01 00:00"])
         self.assertEqual(record[0]["History"]["medline"], ["2002/03/09 10:01"])
+        self.assertEqual(record[0]["History"]["entrez"], "1965/08/01 00:00")
         self.assertEqual(len(record[0]["References"]), 0)
         self.assertEqual(record[0]["HasAbstract"], 1)
         self.assertEqual(record[0]["PmcRefCount"], 0)
@@ -1880,9 +1881,10 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(len(record[1]["ArticleIds"]), 2)
         self.assertEqual(record[1]["ArticleIds"]["pubmed"], ["11482001"])
         self.assertEqual(record[1]["ArticleIds"]["medline"], [])
-        self.assertEqual(len(record[1]["History"]), 2)
+        self.assertEqual(len(record[1]["History"]), 3)
         self.assertEqual(record[1]["History"]["pubmed"], ["2001/08/03 10:00"])
         self.assertEqual(record[1]["History"]["medline"], ["2002/01/23 10:01"])
+        self.assertEqual(record[1]["History"]["entrez"], "2001/08/03 10:00")
         self.assertEqual(len(record[1]["References"]), 0)
         self.assertEqual(record[1]["HasAbstract"], 1)
         self.assertEqual(record[1]["PmcRefCount"], 0)
@@ -1893,97 +1895,6 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["ELocationID"], "")
         self.assertEqual(record[1]["SO"], "2001 Jun;20(2):89-103")
 
-    def test_journals(self):
-        """Test parsing XML returned by ESummary from the Journals database."""
-        # In Journals display records for journal IDs 27731,439,735,905
-        # To create the XML file, use
-        # >>> Bio.Entrez.esummary(db="journals", id="27731,439,735,905")
-        with open("Entrez/esummary2.xml", "rb") as stream:
-            record = Entrez.read(stream)
-        self.assertEqual(record[0]["Id"], "27731")
-        self.assertEqual(
-            record[0]["Title"],
-            "The American journal of obstetrics and diseases of women and children",
-        )
-        self.assertEqual(record[0]["MedAbbr"], "Am J Obstet Dis Women Child")
-        self.assertEqual(record[0]["IsoAbbr"], "")
-        self.assertEqual(record[0]["NlmId"], "14820330R")
-        self.assertEqual(record[0]["pISSN"], "0894-5543")
-        self.assertEqual(record[0]["eISSN"], "")
-        self.assertEqual(record[0]["PublicationStartYear"], "1868")
-        self.assertEqual(record[0]["PublicationEndYear"], "1919")
-        self.assertEqual(
-            record[0]["Publisher"], "W.A. Townsend & Adams, $c [1868-1919]"
-        )
-        self.assertEqual(record[0]["Language"], "eng")
-        self.assertEqual(record[0]["Country"], "United States")
-        self.assertEqual(len(record[0]["BroadHeading"]), 0)
-        self.assertEqual(record[0]["ContinuationNotes"], "")
-
-        self.assertEqual(record[1]["Id"], "439")
-        self.assertEqual(
-            record[1]["Title"], "American journal of obstetrics and gynecology"
-        )
-        self.assertEqual(record[1]["MedAbbr"], "Am J Obstet Gynecol")
-        self.assertEqual(record[1]["IsoAbbr"], "Am. J. Obstet. Gynecol.")
-        self.assertEqual(record[1]["NlmId"], "0370476")
-        self.assertEqual(record[1]["pISSN"], "0002-9378")
-        self.assertEqual(record[1]["eISSN"], "1097-6868")
-        self.assertEqual(record[1]["PublicationStartYear"], "1920")
-        self.assertEqual(record[1]["PublicationEndYear"], "")
-        self.assertEqual(record[1]["Publisher"], "Elsevier,")
-        self.assertEqual(record[1]["Language"], "eng")
-        self.assertEqual(record[1]["Country"], "United States")
-        self.assertEqual(len(record[1]["BroadHeading"]), 2)
-        self.assertEqual(record[1]["BroadHeading"][0], "Gynecology")
-        self.assertEqual(record[1]["BroadHeading"][1], "Obstetrics")
-        self.assertEqual(
-            record[1]["ContinuationNotes"],
-            "Continues: American journal of obstetrics and diseases of women and children. ",
-        )
-
-        self.assertEqual(record[2]["Id"], "735")
-        self.assertEqual(record[2]["Title"], "Archives of gynecology and obstetrics")
-        self.assertEqual(record[2]["MedAbbr"], "Arch Gynecol Obstet")
-        self.assertEqual(record[2]["IsoAbbr"], "Arch. Gynecol. Obstet.")
-        self.assertEqual(record[2]["NlmId"], "8710213")
-        self.assertEqual(record[2]["pISSN"], "0932-0067")
-        self.assertEqual(record[2]["eISSN"], "1432-0711")
-        self.assertEqual(record[2]["PublicationStartYear"], "1987")
-        self.assertEqual(record[2]["PublicationEndYear"], "")
-        self.assertEqual(record[2]["Publisher"], "Springer Verlag")
-        self.assertEqual(record[2]["Language"], "eng")
-        self.assertEqual(record[2]["Country"], "Germany")
-        self.assertEqual(len(record[2]["BroadHeading"]), 2)
-        self.assertEqual(record[2]["BroadHeading"][0], "Gynecology")
-        self.assertEqual(record[2]["BroadHeading"][1], "Obstetrics")
-        self.assertEqual(
-            record[2]["ContinuationNotes"], "Continues: Archives of gynecology. "
-        )
-
-        self.assertEqual(record[3]["Id"], "905")
-        self.assertEqual(
-            record[3]["Title"],
-            "Asia-Oceania journal of obstetrics and gynaecology / AOFOG",
-        )
-        self.assertEqual(record[3]["MedAbbr"], "Asia Oceania J Obstet Gynaecol")
-        self.assertEqual(record[3]["IsoAbbr"], "")
-        self.assertEqual(record[3]["NlmId"], "8102781")
-        self.assertEqual(record[3]["pISSN"], "0389-2328")
-        self.assertEqual(record[3]["eISSN"], "")
-        self.assertEqual(record[3]["PublicationStartYear"], "1980")
-        self.assertEqual(record[3]["PublicationEndYear"], "1994")
-        self.assertEqual(record[3]["Publisher"], "University Of Tokyo Press")
-        self.assertEqual(record[3]["Language"], "eng")
-        self.assertEqual(record[3]["Country"], "Japan")
-        self.assertEqual(len(record[3]["BroadHeading"]), 2)
-        self.assertEqual(record[3]["BroadHeading"][0], "Gynecology")
-        self.assertEqual(record[3]["BroadHeading"][1], "Obstetrics")
-        self.assertEqual(
-            record[3]["ContinuationNotes"],
-            "Continues: Journal of the Asian Federation of Obstetrics and Gynaecology. Continued by: Journal of obstetrics and gynaecology (Tokyo, Japan). ",
-        )
-
     def test_protein(self):
         """Test parsing XML returned by ESummary from the Protein database."""
         # In Protein display records for GIs 28800982 and 28628843 in xml retrieval mode
@@ -1993,11 +1904,11 @@ class ESummaryTest(unittest.TestCase):
             record = Entrez.read(stream)
         self.assertEqual(record[0]["Id"], "28800982")
         self.assertEqual(record[0]["Caption"], "AAO47091")
-        self.assertEqual(record[0]["Title"], "hemochromatosis [Homo sapiens]")
+        self.assertEqual(record[0]["Title"], "hemochromatosis, partial [Homo sapiens]")
         self.assertEqual(record[0]["Extra"], "gi|28800982|gb|AAO47091.1|[28800982]")
         self.assertEqual(record[0]["Gi"], 28800982)
         self.assertEqual(record[0]["CreateDate"], "2003/03/03")
-        self.assertEqual(record[0]["UpdateDate"], "2003/03/03")
+        self.assertEqual(record[0]["UpdateDate"], "2016/07/25")
         self.assertEqual(record[0]["Flags"], 0)
         self.assertEqual(record[0]["TaxId"], 9606)
         self.assertEqual(record[0]["Length"], 268)
@@ -2057,7 +1968,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["Extra"], "gi|28800981|gb|AY205604.1|[28800981]")
         self.assertEqual(record[1]["Gi"], 28800981)
         self.assertEqual(record[1]["CreateDate"], "2003/03/03")
-        self.assertEqual(record[1]["UpdateDate"], "2003/03/03")
+        self.assertEqual(record[1]["UpdateDate"], "2016/07/25")
         self.assertEqual(record[1]["Flags"], 0)
         self.assertEqual(record[1]["TaxId"], 9606)
         self.assertEqual(record[1]["Length"], 860)
@@ -2077,46 +1988,44 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[0]["Id"], "19923")
         self.assertEqual(record[0]["PdbAcc"], "1L5J")
         self.assertEqual(
-            record[0]["PdbDescr"], "Crystal Structure Of E. Coli Aconitase B"
+            record[0]["PdbDescr"], "CRYSTAL STRUCTURE OF E. COLI ACONITASE B"
         )
-        self.assertEqual(record[0]["EC"], "4.2.1.3")
+        self.assertEqual(record[0]["EC"], "")
         self.assertEqual(record[0]["Resolution"], "2.4")
-        self.assertEqual(record[0]["ExpMethod"], "X-Ray Diffraction")
-        self.assertEqual(record[0]["PdbClass"], "Lyase")
-        self.assertEqual(record[0]["PdbReleaseDate"], "2007/8/27")
-        self.assertEqual(record[0]["PdbDepositDate"], "2002/3/7")
-        self.assertEqual(record[0]["DepositDate"], "2007/10/25")
-        self.assertEqual(record[0]["ModifyDate"], "2007/10/25")
+        self.assertEqual(record[0]["ExpMethod"], "X-ray Diffraction")
+        self.assertEqual(record[0]["PdbClass"], "LYASE")
+        self.assertEqual(record[0]["PdbDepositDate"], "2002/03/07 00:00")
+        self.assertEqual(record[0]["MMDBEntryDate"], "2002/07/11 00:00")
+        self.assertEqual(record[0]["OrganismList"], ["Escherichia coli"])
         self.assertEqual(record[0]["LigCode"], "F3S|TRA")
         self.assertEqual(record[0]["LigCount"], "2")
         self.assertEqual(record[0]["ModProteinResCount"], "0")
         self.assertEqual(record[0]["ModDNAResCount"], "0")
         self.assertEqual(record[0]["ModRNAResCount"], "0")
-        self.assertEqual(record[0]["ProteinChainCount"], "2")
-        self.assertEqual(record[0]["DNAChainCount"], "0")
-        self.assertEqual(record[0]["RNAChainCount"], "0")
+        self.assertEqual(record[0]["ProteinChainCount"], "")
+        self.assertEqual(record[0]["DNAChainCount"], "")
+        self.assertEqual(record[0]["RNAChainCount"], "")
 
         self.assertEqual(record[1]["Id"], "12120")
         self.assertEqual(record[1]["PdbAcc"], "1B0K")
         self.assertEqual(
-            record[1]["PdbDescr"], "S642a:fluorocitrate Complex Of Aconitase"
+            record[1]["PdbDescr"], "S642A:FLUOROCITRATE COMPLEX OF ACONITASE"
         )
-        self.assertEqual(record[1]["EC"], "4.2.1.3")
+        self.assertEqual(record[1]["EC"], "")
         self.assertEqual(record[1]["Resolution"], "2.5")
-        self.assertEqual(record[1]["ExpMethod"], "X-Ray Diffraction")
-        self.assertEqual(record[1]["PdbClass"], "Lyase")
-        self.assertEqual(record[1]["PdbReleaseDate"], "2007/8/27")
-        self.assertEqual(record[1]["PdbDepositDate"], "1998/11/11")
-        self.assertEqual(record[1]["DepositDate"], "2007/10/07")
-        self.assertEqual(record[1]["ModifyDate"], "2007/10/07")
+        self.assertEqual(record[1]["ExpMethod"], "X-ray Diffraction")
+        self.assertEqual(record[1]["PdbClass"], "LYASE")
+        self.assertEqual(record[1]["PdbDepositDate"], "1998/11/11 00:00")
+        self.assertEqual(record[1]["MMDBEntryDate"], "2000/01/24 00:00")
+        self.assertEqual(record[1]["OrganismList"], ["Sus scrofa"])
         self.assertEqual(record[1]["LigCode"], "FLC|O|SF4")
         self.assertEqual(record[1]["LigCount"], "3")
         self.assertEqual(record[1]["ModProteinResCount"], "0")
         self.assertEqual(record[1]["ModDNAResCount"], "0")
         self.assertEqual(record[1]["ModRNAResCount"], "0")
-        self.assertEqual(record[1]["ProteinChainCount"], "1")
-        self.assertEqual(record[1]["DNAChainCount"], "0")
-        self.assertEqual(record[1]["RNAChainCount"], "0")
+        self.assertEqual(record[1]["ProteinChainCount"], "")
+        self.assertEqual(record[1]["DNAChainCount"], "")
+        self.assertEqual(record[1]["RNAChainCount"], "")
 
     def test_taxonomy(self):
         """Test parsing XML returned by ESummary from the Taxonomy database."""
@@ -2128,65 +2037,30 @@ class ESummaryTest(unittest.TestCase):
         with open("Entrez/esummary6.xml", "rb") as stream:
             record = Entrez.read(stream)
         self.assertEqual(record[0]["Id"], "9913")
+        self.assertEqual(record[0]["Status"], "active")
         self.assertEqual(record[0]["Rank"], "species")
-        self.assertEqual(record[0]["Division"], "even-toed ungulates")
+        self.assertEqual(record[0]["Division"], "even-toed ungulates & whales")
         self.assertEqual(record[0]["ScientificName"], "Bos taurus")
-        self.assertEqual(record[0]["CommonName"], "cattle")
+        self.assertEqual(record[0]["CommonName"], "domestic cattle")
         self.assertEqual(record[0]["TaxId"], 9913)
-        self.assertEqual(record[0]["NucNumber"], 2264214)
-        self.assertEqual(record[0]["ProtNumber"], 55850)
-        self.assertEqual(record[0]["StructNumber"], 1517)
-        self.assertEqual(record[0]["GenNumber"], 31)
-        self.assertEqual(record[0]["GeneNumber"], 29651)
+        self.assertEqual(record[0]["AkaTaxId"], 0)
         self.assertEqual(record[0]["Genus"], "")
         self.assertEqual(record[0]["Species"], "")
         self.assertEqual(record[0]["Subsp"], "")
+        self.assertEqual(record[0]["ModificationDate"], "2024/08/09 00:00")
 
         self.assertEqual(record[1]["Id"], "30521")
+        self.assertEqual(record[1]["Status"], "active")
         self.assertEqual(record[1]["Rank"], "species")
-        self.assertEqual(record[1]["Division"], "even-toed ungulates")
+        self.assertEqual(record[1]["Division"], "even-toed ungulates & whales")
         self.assertEqual(record[1]["ScientificName"], "Bos grunniens")
         self.assertEqual(record[1]["CommonName"], "domestic yak")
         self.assertEqual(record[1]["TaxId"], 30521)
-        self.assertEqual(record[1]["NucNumber"], 560)
-        self.assertEqual(record[1]["ProtNumber"], 254)
-        self.assertEqual(record[1]["StructNumber"], 0)
-        self.assertEqual(record[1]["GenNumber"], 1)
-        self.assertEqual(record[1]["GeneNumber"], 13)
+        self.assertEqual(record[1]["AkaTaxId"], 0)
         self.assertEqual(record[1]["Genus"], "")
         self.assertEqual(record[1]["Species"], "")
         self.assertEqual(record[1]["Subsp"], "")
-
-    def test_unists(self):
-        """Test parsing XML returned by ESummary from the UniSTS database."""
-        # In UniSTS display records for IDs 254085 and 254086 in xml
-        # retrieval mode
-        # To create the XML file, use
-        # >>> Bio.Entrez.esummary(db="unists", id=["254085","254086"],
-        #                         retmode="xml")
-        with open("Entrez/esummary7.xml", "rb") as stream:
-            record = Entrez.read(stream)
-        self.assertEqual(record[0]["Id"], "254085")
-        self.assertEqual(record[0]["Marker_Name"], "SE234324")
-        self.assertEqual(len(record[0]["Map_Gene_Summary_List"]), 1)
-        self.assertEqual(record[0]["Map_Gene_Summary_List"][0]["Org"], "Sus scrofa")
-        self.assertEqual(record[0]["Map_Gene_Summary_List"][0]["Chr"], " chromosome 7")
-        self.assertEqual(record[0]["Map_Gene_Summary_List"][0]["Locus"], "")
-        self.assertEqual(
-            record[0]["EPCR_Summary"], "Found by e-PCR in sequences from Sus scrofa."
-        )
-        self.assertEqual(record[0]["LocusId"], "")
-
-        self.assertEqual(record[1]["Id"], "254086")
-        self.assertEqual(record[1]["Marker_Name"], "SE259162")
-        self.assertEqual(len(record[1]["Map_Gene_Summary_List"]), 1)
-        self.assertEqual(record[1]["Map_Gene_Summary_List"][0]["Org"], "Sus scrofa")
-        self.assertEqual(record[1]["Map_Gene_Summary_List"][0]["Chr"], " chromosome 12")
-        self.assertEqual(record[1]["Map_Gene_Summary_List"][0]["Locus"], "")
-        self.assertEqual(
-            record[1]["EPCR_Summary"], "Found by e-PCR in sequences from Sus scrofa."
-        )
-        self.assertEqual(record[1]["LocusId"], "")
+        self.assertEqual(record[1]["ModificationDate"], "2020/04/29 00:00")
 
     def test_wrong(self):
         """Test parsing XML returned by ESummary with incorrect arguments."""
