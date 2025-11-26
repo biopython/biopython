@@ -19,6 +19,7 @@ possible, especially the following contributors:
 - Michiel de Hoon
 - Peter Cock
 - Timothy Dennis (first contribution)
+- Ziyan Rao (first contribution)
 
 28 October 2025: Biopython 1.86
 ===============================
