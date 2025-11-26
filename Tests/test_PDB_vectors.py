@@ -18,17 +18,15 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB import calc_angle
-from Bio.PDB import calc_dihedral
-from Bio.PDB import m2rotaxis
-from Bio.PDB import refmat
-from Bio.PDB import rotaxis
-from Bio.PDB import rotmat
-from Bio.PDB.vectors import coord_space
-from Bio.PDB.vectors import get_spherical_coordinates
-from Bio.PDB.vectors import homog_trans_mtx
-from Bio.PDB.vectors import multi_coord_space
-from Bio.PDB.vectors import Vector
+from Bio.PDB import calc_angle, calc_dihedral, m2rotaxis, refmat, rotaxis, rotmat
+from Bio.PDB.vectors import (
+    Vector,
+    coord_space,
+    get_spherical_coordinates,
+    homog_trans_mtx,
+    multi_coord_space,
+    vector_to_axis,
+)
 
 
 class VectorTests(unittest.TestCase):
@@ -277,6 +275,32 @@ class VectorTests(unittest.TestCase):
             for i in range(3):
                 rslt[i] = mtxs[1][m].dot(rslt[i])
             self.assertTrue(np.array_equal(rslt, test_set[m]))
+
+    def test_vector_to_axis(self):
+        """Test vector_to_axis function for correctness"""
+        # Case 1: the line direction is along +x. The point (1,1,0) lies 1 unit above the line
+        # the perpendicular vector from point to line is (0,1,0)
+        line = Vector([1, 0, 0])
+        point = Vector([1, 1, 0])
+        expected_result = Vector([0, 1, 0])
+        result = vector_to_axis(line, point)
+        self.assertTrue(np.array_equal(result.get_array(), expected_result.get_array()))
+
+        # Case 2: the line direction is along -x. The point (-2,2,0) lies 2 units above the line
+        # the perpendicular vector from point to line is (0,2,0)
+        line = Vector([-2, 0, 0])
+        point = Vector([-2, 2, 0])
+        expected_result = Vector([0, 2, 0])
+        result = vector_to_axis(line, point)
+        self.assertTrue(np.array_equal(result.get_array(), expected_result.get_array()))
+
+        # Case 3: the line direction is along -x. The point (3,2,0) lies 2 units above the line
+        # the perpendicular vector from point to line is (0,2,0)
+        line = Vector([-2, 0, 0])
+        point = Vector([3, 2, 0])
+        expected_result = Vector([0, 2, 0])
+        result = vector_to_axis(line, point)
+        self.assertTrue(np.array_equal(result.get_array(), expected_result.get_array()))
 
 
 if __name__ == "__main__":
