@@ -1153,6 +1153,7 @@ class XMLHandler:
         if systemId not in (
             "NCBI_BlastOutput.dtd",
             "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd",
+            "https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd",
         ):
             raise ValueError("output from legacy BLAST program")
         assert publicId == "-//NCBI//NCBI BlastOutput/EN"
