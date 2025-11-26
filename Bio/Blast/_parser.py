@@ -92,7 +92,7 @@ class SchemaHandler:
     """XML Schema parser used to parse NCBI_BlastOutput2.xsd.
 
     The XML Schema for Blast XML2 is available from
-    http://www.ncbi.nlm.nih.gov/data_specs/schema_alt/NCBI_BlastOutput2.xsd
+    https://www.ncbi.nlm.nih.gov/data_specs/schema_alt/NCBI_BlastOutput2.xsd
     """
 
     def __init__(self, parser):
@@ -110,7 +110,6 @@ class SchemaHandler:
          - attributes -- tag attributes
 
         """
-        namespace = "http://www.ncbi.nlm.nih.gov"
         if name == "http://www.w3.org/2001/XMLSchema include":
             filename = attributes["schemaLocation"]
             directory = Entrez.__path__[0]
@@ -123,6 +122,7 @@ class SchemaHandler:
             tag = attributes.get("name")
             if tag is None:
                 return
+            namespace = "http://www.ncbi.nlm.nih.gov"
             key = f"{namespace} {tag}"
             if tag == "BlastOutput2":
                 self.start_methods[key] = XMLHandler._start_blastoutput
