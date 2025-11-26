@@ -19,13 +19,13 @@
 .. image:: https://img.shields.io/codecov/c/github/biopython/biopython/master.svg?logo=codecov
    :alt: Test coverage on CodeCov
    :target: https://codecov.io/github/biopython/biopython/
-.. image:: http://depsy.org/api/package/pypi/biopython/badge.svg
+.. image:: https://depsy.org/api/package/pypi/biopython/badge.svg
    :alt: Research software impact on Depsy
-   :target: http://depsy.org/package/python/biopython
+   :target: https://depsy.org/package/python/biopython
 
 .. image:: https://github.com/biopython/biopython/raw/master/Doc/images/biopython_logo_m.png
    :alt: The Biopython Project
-   :target: http://biopython.org
+   :target: https://biopython.org
 
 Biopython README file
 =====================
@@ -35,7 +35,7 @@ available Python tools for computational molecular biology.
 
 This README file is intended primarily for people interested in working
 with the Biopython source code, either one of the releases from the
-http://biopython.org website, or from our repository on GitHub
+https://biopython.org website, or from our repository on GitHub
 https://github.com/biopython/biopython
 
 Our user-centric documentation, `The Biopython Tutorial and Cookbook, and API
@@ -84,46 +84,46 @@ install Biopython yourself. This is described below.
 Python Requirements
 ===================
 
-We currently recommend using Python 3.13 from http://www.python.org
+We currently recommend using Python 3.13 from https://www.python.org
 
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.10, 3.11, 3.12, 3.13 and 3.14 -- see http://www.python.org
+- Python 3.10, 3.11, 3.12, 3.13 and 3.14 -- see https://www.python.org
 
-- PyPy3.10 v7.3.17 -- or later, see http://www.pypy.org
+- PyPy3.10 v7.3.17 -- or later, see https://www.pypy.org
 
 
 Optional Dependencies
 =====================
 
-Biopython requires NumPy (see http://www.numpy.org) which will be installed
+Biopython requires NumPy (see https://www.numpy.org) which will be installed
 automatically if you install Biopython with pip (see below for compiling
 Biopython yourself).
 
 Depending on which parts of Biopython you plan to use, there are a number of
 other optional Python dependencies, which can be installed later if needed:
 
-- ReportLab, see http://www.reportlab.com/opensource/ (optional)
+- ReportLab, see https://www.reportlab.com/opensource/ (optional)
   This package is only used in ``Bio.Graphics``, so if you do not need this
   functionality, you will not need to install this package.
 
-- matplotlib, see http://matplotlib.org/ (optional)
+- matplotlib, see https://matplotlib.org/ (optional)
   ``Bio.Phylo`` uses this package to plot phylogenetic trees.
 
 - networkx, see https://networkx.github.io/ (optional) and
   pygraphviz or pydot, see https://pygraphviz.github.io/ and
-  http://code.google.com/p/pydot/ (optional)
+  https://code.google.com/p/pydot/ (optional)
   These packages are used for certain niche functions in ``Bio.Phylo``.
 
 - rdflib, see https://github.com/RDFLib/rdflib (optional)
   This package is used in the CDAO parser under ``Bio.Phylo``.
 
-- psycopg2, see http://initd.org/psycopg/ (optional) or
-  PyGreSQL (pgdb), see http://www.pygresql.org/ (optional)
+- psycopg2, see https://initd.org/psycopg/ (optional) or
+  PyGreSQL (pgdb), see https://www.pygresql.org/ (optional)
   These packages are used by ``BioSQL`` to access a PostgreSQL database.
 
-- MySQL Connector/Python, see http://dev.mysql.com/downloads/connector/python/
+- MySQL Connector/Python, see https://dev.mysql.com/downloads/connector/python/
   This package is used by ``BioSQL`` to access a MySQL database, and is
   supported on PyPy too.
 
@@ -268,8 +268,8 @@ administration, and whatever else comes up.
 
 If you wish to contribute, please first read `CONTRIBUTING.rst
 <https://github.com/biopython/biopython/blob/master/CONTRIBUTING.rst>`_ here,
-visit our web site http://biopython.org and join our mailing list:
-http://biopython.org/wiki/Mailing_lists
+visit our web site https://biopython.org and join our mailing list:
+https://biopython.org/wiki/Mailing_lists
 
 
 Distribution Structure
