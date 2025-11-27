@@ -1631,10 +1631,7 @@ class EPostTest(unittest.TestCase):
         with open("Entrez/epost1.xml", "rb") as stream:
             record = Entrez.read(stream)
         self.assertEqual(record["QueryKey"], "1")
-        self.assertEqual(
-            record["WebEnv"],
-            "0zYsuLk3zG_lRMkblPBEqnT8nIENUGw4HAy8xXChTnoVm7GEnWY71jv3nz@1FC077F3806DE010_0042SID",
-        )
+        self.assertEqual(record["WebEnv"], "MCID_692851c130aec64bed0a8c2a")
 
     def test_wrong(self):
         """Test parsing XML returned by EPost with incorrect arguments."""
@@ -1646,7 +1643,7 @@ class EPostTest(unittest.TestCase):
             record = Entrez.read(stream, ignore_errors=True)
         self.assertEqual(len(record), 1)
         self.assertEqual(len(record.attributes), 0)
-        self.assertEqual(record["ERROR"], "Wrong DB name")
+        self.assertEqual(record["ERROR"], "Invalid db name specified: nothing")
         self.assertEqual(record["ERROR"].tag, "ERROR")
 
     def test_invalid(self):
@@ -1654,13 +1651,15 @@ class EPostTest(unittest.TestCase):
         # To create the XML file, use
         # >>> Bio.Entrez.epost(db="pubmed", id=99999999999999999999999999999999)
         with open("Entrez/epost3.xml", "rb") as stream:
-            record = Entrez.read(stream)
-        self.assertEqual(record["InvalidIdList"], ["-1"])
-        self.assertEqual(record["QueryKey"], "1")
-        self.assertEqual(
-            record["WebEnv"],
-            "08AIUeBsfIk6BfdzKnd3GM2RtCudczC9jm5aeb4US0o7azCTQCeCsr-xg0@1EDE54E680D03C40_0011SID",
-        )
+            self.assertRaises(RuntimeError, Entrez.read, stream)
+        with open("Entrez/epost3.xml", "rb") as stream:
+            record = Entrez.read(stream, ignore_errors=True)
+        self.assertEqual(len(record), 1)
+        self.assertEqual(len(record.attributes), 0)
+        self.assertEqual(record["ERROR"], "Some IDs have invalid value and were omitted. Maximum ID value 18446744073709551615")
+        self.assertEqual(record["ERROR"].tag, "ERROR")
+        # Note that the first ERROR element is lost. Strictly speaking, the XML
+        # is not consistent with the DTD, which allows only one ERROR element.
 
 
 class ESummaryTest(unittest.TestCase):
