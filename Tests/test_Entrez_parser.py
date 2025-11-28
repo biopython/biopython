@@ -85,7 +85,7 @@ class GeneralTests(unittest.TestCase):
                 continue
             path = os.path.join(directory, filename)
             with open(path, "rb") as stream:
-                if filename in ("epost2.xml", "esummary8.xml", "esummary10.xml"):
+                if filename in ("epost2.xml", "epost3.xml", "esummary8.xml"):
                     # these include an ErrorElement
                     record = Entrez.read(stream, ignore_errors=True)
                 else:
