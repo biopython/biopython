@@ -12,7 +12,7 @@ from Bio.Data.IUPACData import atom_weights
 from Bio.PDB.PDBExceptions import PDBIOException, PDBIOWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
 
-_ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%s     %4s%2s%2s\n"
+_ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%s      %4s%2s%2s\n"
 
 _PQR_ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
