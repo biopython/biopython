@@ -38,6 +38,7 @@ except ImportError:
         "Try running: python -m ensurepip"
     )
 
+import numpy
 
 setuptools_version_tuple = tuple(int(x) for x in setuptools_version.split(".")[:2])
 if setuptools_version_tuple < (70, 1) and "bdist_wheel" in sys.argv:
@@ -200,6 +201,15 @@ EXTENSIONS = [
     Extension("Bio.cpairwise2", ["Bio/cpairwise2module.c"]),
     Extension("Bio.Nexus.cnexus", ["Bio/Nexus/cnexus.c"]),
     Extension("Bio.motifs._pwm", ["Bio/motifs/_pwm.c"]),
+    Extension(
+        "Bio.motifs._searchmodule",
+        [
+            "Bio/motifs/_searchmodule.c",
+            "Bio/motifs/search_algorithms.c",
+            "Bio/motifs/darray.c",
+        ],
+        include_dirs=[numpy.get_include()],
+    ),
     Extension(
         "Bio.Cluster._cluster",
         ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"],
