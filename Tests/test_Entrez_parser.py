@@ -1678,225 +1678,198 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(len(record), 1)
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(record[0]["IdList"], ["12242737"])
+        self.assertEqual(len(record[0]["LinkSetDb"]), 6)
         self.assertEqual(record[0]["LinkSetDb"][0]["DbTo"], "pubmed")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][0]["Id"], "23255877")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][1]["Id"], "22688104")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][2]["Id"], "22661362")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][3]["Id"], "22648258")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][4]["Id"], "22521021")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][5]["Id"], "22424988")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][6]["Id"], "22369817")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][7]["Id"], "22368911")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][8]["Id"], "22194507")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][9]["Id"], "22156652")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][10]["Id"], "22109321")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][11]["Id"], "21991829")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][12]["Id"], "21984464")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][13]["Id"], "21944608")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][14]["Id"], "21908142")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][15]["Id"], "21715237")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][16]["Id"], "21694530")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][17]["Id"], "21531047")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][18]["Id"], "21153952")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][19]["Id"], "21102533")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][20]["Id"], "20860230")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][21]["Id"], "20718377")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][22]["Id"], "20674629")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][23]["Id"], "20542260")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][24]["Id"], "20533237")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][25]["Id"], "20457774")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][26]["Id"], "20016426")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][27]["Id"], "19843737")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][28]["Id"], "19777916")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][29]["Id"], "19616724")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][30]["Id"], "19524781")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][31]["Id"], "19318006")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][32]["Id"], "19306944")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][33]["Id"], "19253206")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][34]["Id"], "19132488")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][35]["Id"], "18853843")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][36]["Id"], "18774058")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][37]["Id"], "18706783")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][38]["Id"], "18625354")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][39]["Id"], "18582671")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][40]["Id"], "18554854")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][41]["Id"], "18299362")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][42]["Id"], "18279648")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][43]["Id"], "18247070")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][44]["Id"], "18021675")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][45]["Id"], "17875143")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][46]["Id"], "17875142")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][47]["Id"], "17879696")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][48]["Id"], "17674062")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][49]["Id"], "17658095")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][50]["Id"], "17602359")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][51]["Id"], "17601500")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][52]["Id"], "17543650")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][53]["Id"], "17466477")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][54]["Id"], "17464254")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][55]["Id"], "17453494")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][56]["Id"], "17429670")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][57]["Id"], "17376366")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][58]["Id"], "17354190")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][59]["Id"], "17325998")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][60]["Id"], "17320773")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][61]["Id"], "17268692")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][62]["Id"], "17259035")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][63]["Id"], "17243036")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][64]["Id"], "17193860")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][65]["Id"], "17174054")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][66]["Id"], "17157468")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][67]["Id"], "17040637")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][68]["Id"], "16999328")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][69]["Id"], "16988291")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][70]["Id"], "16580806")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][71]["Id"], "16566645")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][72]["Id"], "16552382")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][73]["Id"], "16362812")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][74]["Id"], "16357381")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][75]["Id"], "16338316")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][76]["Id"], "16133609")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][77]["Id"], "16096604")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][78]["Id"], "15788584")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][79]["Id"], "15642291")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][80]["Id"], "15635471")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][81]["Id"], "15529836")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][82]["Id"], "15505294")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][83]["Id"], "15300544")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][84]["Id"], "15279747")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][85]["Id"], "15278705")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][86]["Id"], "15236131")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][87]["Id"], "15143223")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][88]["Id"], "15141648")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][89]["Id"], "15136027")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][90]["Id"], "15094630")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][91]["Id"], "15022983")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][92]["Id"], "15008163")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][93]["Id"], "14872380")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][94]["Id"], "14702442")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][95]["Id"], "14661668")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][96]["Id"], "14661666")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][97]["Id"], "14661663")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][98]["Id"], "14661661")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][99]["Id"], "14661306")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][100]["Id"], "14650118")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][101]["Id"], "14528718")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][102]["Id"], "12949462")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][103]["Id"], "12878072")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][104]["Id"], "12876813")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][105]["Id"], "12822521")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][106]["Id"], "12744499")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][107]["Id"], "12744498")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][108]["Id"], "12733684")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][109]["Id"], "12719915")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][110]["Id"], "12592155")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][111]["Id"], "12563154")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][112]["Id"], "12361530")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][113]["Id"], "12352163")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][114]["Id"], "12242737")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][115]["Id"], "12226761")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][116]["Id"], "12164574")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][117]["Id"], "11973504")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][118]["Id"], "11973040")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][119]["Id"], "11907356")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][120]["Id"], "11868066")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][121]["Id"], "11789473")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][122]["Id"], "11781922")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][123]["Id"], "11775722")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][124]["Id"], "11762248")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][125]["Id"], "11740602")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][126]["Id"], "11702119")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][127]["Id"], "11669077")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][128]["Id"], "11578071")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][129]["Id"], "11443295")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][130]["Id"], "11409026")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][131]["Id"], "11368937")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][132]["Id"], "11329662")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][133]["Id"], "11329658")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][134]["Id"], "11329656")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][135]["Id"], "11329655")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][136]["Id"], "11329162")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][137]["Id"], "11274884")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][138]["Id"], "11218011")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][139]["Id"], "11125632")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][140]["Id"], "11027076")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][141]["Id"], "11016058")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][142]["Id"], "10803203")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][143]["Id"], "10761553")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][144]["Id"], "10749221")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][145]["Id"], "10688065")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][146]["Id"], "10688063")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][147]["Id"], "10665303")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][148]["Id"], "10575758")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][149]["Id"], "10499712")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][150]["Id"], "10499697")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][151]["Id"], "10499696")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][152]["Id"], "10475937")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][153]["Id"], "10222521")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][154]["Id"], "10222515")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][155]["Id"], "10222514")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][156]["Id"], "10051883")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][157]["Id"], "10024396")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][158]["Id"], "9847909")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][159]["Id"], "9793138")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][160]["Id"], "9757294")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][161]["Id"], "9725288")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][162]["Id"], "9658901")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][163]["Id"], "9575723")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][164]["Id"], "9510579")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][165]["Id"], "9456947")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][166]["Id"], "9391495")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][167]["Id"], "9317094")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][168]["Id"], "9314960")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][169]["Id"], "9314959")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][170]["Id"], "9269670")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][171]["Id"], "9193407")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][172]["Id"], "9125660")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][173]["Id"], "9016217")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][174]["Id"], "8976943")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][175]["Id"], "8819381")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][176]["Id"], "8855688")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][177]["Id"], "8903064")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][178]["Id"], "8903059")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][179]["Id"], "8903058")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][180]["Id"], "8599783")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][181]["Id"], "8794574")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][182]["Id"], "7892443")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][183]["Id"], "8153333")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][184]["Id"], "8290724")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][185]["Id"], "8338105")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][186]["Id"], "1481295")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][187]["Id"], "1539132")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][188]["Id"], "2047316")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][189]["Id"], "1943587")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][190]["Id"], "2222794")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][191]["Id"], "2584497")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][192]["Id"], "3288780")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][193]["Id"], "3213296")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][194]["Id"], "4058411")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][195]["Id"], "3905087")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][196]["Id"], "6482054")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][197]["Id"], "6473764")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][198]["Id"], "6217136")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][199]["Id"], "7068417")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][200]["Id"], "7326186")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][201]["Id"], "6940010")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][202]["Id"], "7330196")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][203]["Id"], "7423836")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][204]["Id"], "7415301")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][205]["Id"], "7408592")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][206]["Id"], "531835")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][207]["Id"], "663071")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][208]["Id"], "616459")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][209]["Id"], "4818442")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][210]["Id"], "4848922")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][211]["Id"], "4808999")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][212]["Id"], "5046513")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][213]["Id"], "5512349")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][214]["Id"], "6072516")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][215]["Id"], "5594242")
-        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][216]["Id"], "5998281")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][0]["Id"], "38997184")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][1]["Id"], "37474462")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][2]["Id"], "36642882")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][3]["Id"], "33097552")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][4]["Id"], "32874413")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][5]["Id"], "32345945")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][6]["Id"], "31558954")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][7]["Id"], "31415410")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][8]["Id"], "31011388")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][9]["Id"], "30255446")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][10]["Id"], "30255443")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][11]["Id"], "30115443")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][12]["Id"], "29340557")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][13]["Id"], "29331013")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][14]["Id"], "29233545")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][15]["Id"], "29115651")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][16]["Id"], "29022115")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][17]["Id"], "27597304")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][18]["Id"], "27315096")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][19]["Id"], "27304929")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][20]["Id"], "27142382")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][21]["Id"], "26965844")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][22]["Id"], "26481976")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][23]["Id"], "26427946")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][24]["Id"], "26331169")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][25]["Id"], "25690945")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][26]["Id"], "25669229")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][27]["Id"], "25646204")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][28]["Id"], "25584961")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][29]["Id"], "25555004")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][30]["Id"], "25470877")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][31]["Id"], "25223134")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][32]["Id"], "25167349")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][33]["Id"], "24934824")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][34]["Id"], "24879722")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][35]["Id"], "24836494")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][36]["Id"], "24309417")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][37]["Id"], "23978699")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][38]["Id"], "23759294")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][39]["Id"], "23570763")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][40]["Id"], "23255877")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][41]["Id"], "22688104")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][42]["Id"], "22661362")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][43]["Id"], "22648258")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][44]["Id"], "22521021")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][45]["Id"], "22424988")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][46]["Id"], "22369817")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][47]["Id"], "22368911")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][48]["Id"], "22194507")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][49]["Id"], "22156652")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][50]["Id"], "22109321")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][51]["Id"], "21984464")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][52]["Id"], "21944608")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][53]["Id"], "21908142")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][54]["Id"], "21715237")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][55]["Id"], "21153952")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][56]["Id"], "20860230")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][57]["Id"], "20718377")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][58]["Id"], "20674629")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][59]["Id"], "20558858")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][60]["Id"], "20533237")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][61]["Id"], "20016426")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][62]["Id"], "19843737")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][63]["Id"], "19616724")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][64]["Id"], "19520357")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][65]["Id"], "18783095")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][66]["Id"], "18582671")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][67]["Id"], "18554854")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][68]["Id"], "18053822")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][69]["Id"], "18021675")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][70]["Id"], "17875143")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][71]["Id"], "17875142")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][72]["Id"], "17879696")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][73]["Id"], "17602359")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][74]["Id"], "17601500")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][75]["Id"], "17376366")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][76]["Id"], "17354190")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][77]["Id"], "17325998")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][78]["Id"], "17243036")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][79]["Id"], "17205643")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][80]["Id"], "17193860")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][81]["Id"], "17174054")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][82]["Id"], "17040637")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][83]["Id"], "16999328")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][84]["Id"], "16988291")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][85]["Id"], "16580806")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][86]["Id"], "16566645")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][87]["Id"], "16552382")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][88]["Id"], "16357381")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][89]["Id"], "16284132")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][90]["Id"], "16133609")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][91]["Id"], "16096604")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][92]["Id"], "16046437")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][93]["Id"], "15835031")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][94]["Id"], "15788585")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][95]["Id"], "15788584")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][96]["Id"], "15505294")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][97]["Id"], "15278705")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][98]["Id"], "15236131")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][99]["Id"], "15143223")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][100]["Id"], "15141648")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][101]["Id"], "15136027")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][102]["Id"], "15094630")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][103]["Id"], "15022983")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][104]["Id"], "14661668")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][105]["Id"], "14661661")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][106]["Id"], "14650118")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][107]["Id"], "12878072")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][108]["Id"], "12846253")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][109]["Id"], "12822521")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][110]["Id"], "12733684")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][111]["Id"], "12719915")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][112]["Id"], "12563154")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][113]["Id"], "12242737")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][114]["Id"], "12226761")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][115]["Id"], "12164574")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][116]["Id"], "12069469")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][117]["Id"], "11973040")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][118]["Id"], "11895298")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][119]["Id"], "11781922")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][120]["Id"], "11775722")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][121]["Id"], "11762248")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][122]["Id"], "11702119")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][123]["Id"], "11368937")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][124]["Id"], "11329656")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][125]["Id"], "11329655")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][126]["Id"], "11329162")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][127]["Id"], "11274884")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][128]["Id"], "11218011")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][129]["Id"], "11125632")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][130]["Id"], "11016058")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][131]["Id"], "10688063")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][132]["Id"], "10499696")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][133]["Id"], "10222515")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][134]["Id"], "10222514")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][135]["Id"], "10024396")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][136]["Id"], "9793138")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][137]["Id"], "9757294")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][138]["Id"], "9575723")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][139]["Id"], "9510579")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][140]["Id"], "9456947")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][141]["Id"], "9314960")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][142]["Id"], "9314959")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][143]["Id"], "9269670")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][144]["Id"], "9193407")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][145]["Id"], "8872409")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][146]["Id"], "8756148")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][147]["Id"], "8903064")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][148]["Id"], "8599783")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][149]["Id"], "8153333")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][150]["Id"], "1343378")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][151]["Id"], "1535863")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][152]["Id"], "4818442")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][153]["Id"], "4808999")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][154]["Id"], "13969511")
+        self.assertEqual(record[0]["LinkSetDb"][0]["Link"][155]["Id"], "13808134")
         self.assertEqual(record[0]["LinkSetDb"][0]["LinkName"], "pubmed_pubmed")
+        self.assertEqual(record[0]["LinkSetDb"][1]["DbTo"], "pubmed")
+        self.assertEqual(record[0]["LinkSetDb"][1]["Link"][0]["Id"], "40900773")
+        self.assertEqual(record[0]["LinkSetDb"][1]["Link"][1]["Id"], "28779191")
+        self.assertEqual(record[0]["LinkSetDb"][1]["Link"][2]["Id"], "21102533")
+        self.assertEqual(record[0]["LinkSetDb"][1]["Link"][3]["Id"], "19517148")
+        self.assertEqual(record[0]["LinkSetDb"][1]["Link"][4]["Id"], "19132488")
+        self.assertEqual(record[0]["LinkSetDb"][1]["Link"][5]["Id"], "15278705")
+        self.assertEqual(record[0]["LinkSetDb"][1]["LinkName"], "pubmed_pubmed_citedin")
+        self.assertEqual(record[0]["LinkSetDb"][2]["DbTo"], "pubmed")
+        self.assertEqual(record[0]["LinkSetDb"][2]["Link"][0]["Id"], "20718377")
+        self.assertEqual(record[0]["LinkSetDb"][2]["Link"][1]["Id"], "12242737")
+        self.assertEqual(record[0]["LinkSetDb"][2]["Link"][2]["Id"], "11329656")
+        self.assertEqual(record[0]["LinkSetDb"][2]["Link"][3]["Id"], "11218011")
+        self.assertEqual(record[0]["LinkSetDb"][2]["Link"][4]["Id"], "9757294")
+        self.assertEqual(record[0]["LinkSetDb"][2]["LinkName"], "pubmed_pubmed_combined")
+        self.assertEqual(record[0]["LinkSetDb"][3]["DbTo"], "pubmed")
+        self.assertEqual(record[0]["LinkSetDb"][3]["Link"][0]["Id"], "20718377")
+        self.assertEqual(record[0]["LinkSetDb"][3]["Link"][1]["Id"], "17193860")
+        self.assertEqual(record[0]["LinkSetDb"][3]["Link"][2]["Id"], "12242737")
+        self.assertEqual(record[0]["LinkSetDb"][3]["Link"][3]["Id"], "11218011")
+        self.assertEqual(record[0]["LinkSetDb"][3]["Link"][4]["Id"], "9757294")
+        self.assertEqual(record[0]["LinkSetDb"][3]["LinkName"], "pubmed_pubmed_five")
+        self.assertEqual(record[0]["LinkSetDb"][4]["DbTo"], "pubmed")
+        self.assertEqual(record[0]["LinkSetDb"][4]["Link"][0]["Id"], "12242737")
+        self.assertEqual(record[0]["LinkSetDb"][4]["LinkName"], "pubmed_pubmed_reviews")
+        self.assertEqual(record[0]["LinkSetDb"][5]["DbTo"], "pubmed")
+        self.assertEqual(record[0]["LinkSetDb"][5]["Link"][0]["Id"], "20718377")
+        self.assertEqual(record[0]["LinkSetDb"][5]["Link"][1]["Id"], "17193860")
+        self.assertEqual(record[0]["LinkSetDb"][5]["Link"][2]["Id"], "12242737")
+        self.assertEqual(record[0]["LinkSetDb"][5]["Link"][3]["Id"], "11218011")
+        self.assertEqual(record[0]["LinkSetDb"][5]["Link"][4]["Id"], "9757294")
+        self.assertEqual(record[0]["LinkSetDb"][5]["LinkName"], "pubmed_pubmed_reviews_five")
+
 
     def test_pubmed3(self):
         """Test parsing pubmed link returned by ELink (third test)."""
@@ -1921,45 +1894,41 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(len(record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"]), 1)
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Url"],
-            "http://brain.oxfordjournals.org/cgi/pmidlookup?view=long&pmid=10611131",
+            "https://academic.oup.com/brain/article-lookup/doi/10.1093/brain/123.1.171",
+        )
+        self.assertEqual(
+            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Url"].attributes,
+            {'LNG': 'EN'}
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["IconUrl"],
-            "//www.ncbi.nlm.nih.gov/corehtml/query/egifs/http:--highwire.stanford.edu-icons-externalservices-pubmed-custom-oxfordjournals_final_free.gif",
+            "/corehtml/query/egifs/https:--academic.oup.com-images-oup_pubmed.png",
+        )
+        self.assertEqual(
+            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["IconUrl"].attributes,
+            {'LNG': 'EN'}
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["SubjectType"],
-            ["publishers/providers"],
+            [],
         )
         self.assertEqual(
-            len(record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Attribute"]), 3
+            len(record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Attribute"]), 1
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Attribute"][0],
-            "free resource",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Attribute"][1],
-            "full-text online",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Attribute"][2],
-            "publisher of information in url",
+            "subscription/membership/fee required",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Provider"]["Name"],
-            "HighWire",
+            "Silverchair Information Systems",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Provider"]["NameAbbr"],
-            "HighWire",
+            "silverchair",
         )
         self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Provider"]["Id"], "3051"
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Provider"]["Url"],
-            "http://highwire.stanford.edu",
+            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Provider"]["Id"], "7898"
         )
 
     def test_pubmed4(self):
@@ -1973,13 +1942,13 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]["IdUrlList"]), 2)
         self.assertEqual(record[0]["IdUrlList"]["IdUrlSet"][0]["Id"], "12085856")
-        self.assertEqual(len(record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"]), 2)
+        self.assertEqual(len(record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"]), 1)
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Category"], ["Medical"]
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Url"],
-            "http://www.nlm.nih.gov/medlineplus/coronaryarterybypasssurgery.html",
+            "https://medlineplus.gov/coronaryarterybypasssurgery.html",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Attribute"],
@@ -1987,11 +1956,11 @@ class ELinkTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["SubjectType"],
-            ["consumer health"],
+            [],
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["IconUrl"],
-            "//www.ncbi.nlm.nih.gov/corehtml/query/egifs/http:--www.nlm.nih.gov-medlineplus-images-linkout_sm.gif",
+            "/corehtml/query/egifs/https:--medlineplus.gov-images-linkout_sm.gif",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Provider"]["Name"],
@@ -2005,61 +1974,22 @@ class ELinkTest(unittest.TestCase):
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Provider"]["Id"], "3162"
         )
         self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Provider"]["Url"],
-            "http://medlineplus.gov/",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Provider"]["IconUrl"],
-            "http://www.nlm.nih.gov/medlineplus/images/linkout_sm.gif",
-        )
-        self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["LinkName"],
             "Coronary Artery Bypass Surgery",
         )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][1]["Category"],
-            ["Education"],
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][1]["Attribute"],
-            ["free resource"],
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][1]["SubjectType"],
-            ["online tutorials/courses"],
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][1]["Url"],
-            "http://symptomresearch.nih.gov/chapter_1/index.htm",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][1]["Provider"]["Name"],
-            "New England Research Institutes Inc.",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][1]["Provider"]["NameAbbr"],
-            "NERI",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][1]["Provider"]["Id"], "3291"
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][1]["Provider"]["Url"],
-            "http://www.symptomresearch.com",
-        )
         self.assertEqual(len(record[0]["IdUrlList"]["IdUrlSet"][1]), 2)
         self.assertEqual(record[0]["IdUrlList"]["IdUrlSet"][1]["Id"], "12085853")
-        self.assertEqual(len(record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"]), 3)
+        self.assertEqual(len(record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"]), 2)
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["Category"], ["Medical"]
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["Url"],
-            "http://www.nlm.nih.gov/medlineplus/arrhythmia.html",
+            "https://medlineplus.gov/exerciseandphysicalfitness.html",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["IconUrl"],
-            "//www.ncbi.nlm.nih.gov/corehtml/query/egifs/http:--www.nlm.nih.gov-medlineplus-images-linkout_sm.gif",
+            "/corehtml/query/egifs/https:--medlineplus.gov-images-linkout_sm.gif",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["Attribute"],
@@ -2067,10 +1997,11 @@ class ELinkTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["SubjectType"],
-            ["consumer health"],
+            [],
         )
         self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["LinkName"], "Arrhythmia"
+            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["LinkName"],
+            "Exercise and Physical Fitness"
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["Provider"]["Name"],
@@ -2084,10 +2015,6 @@ class ELinkTest(unittest.TestCase):
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["Provider"]["Id"], "3162"
         )
         self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["Provider"]["Url"],
-            "http://medlineplus.gov/",
-        )
-        self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["Category"], ["Medical"]
         )
         self.assertEqual(
@@ -2096,11 +2023,11 @@ class ELinkTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["Url"],
-            "http://www.nlm.nih.gov/medlineplus/exerciseandphysicalfitness.html",
+            "https://medlineplus.gov/exerciseandphysicalfitness.html",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["IconUrl"],
-            "//www.ncbi.nlm.nih.gov/corehtml/query/egifs/http:--www.nlm.nih.gov-medlineplus-images-linkout_sm.gif",
+            "/corehtml/query/egifs/https:--medlineplus.gov-images-linkout_sm.gif",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["LinkName"],
@@ -2108,60 +2035,18 @@ class ELinkTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["SubjectType"],
-            ["consumer health"],
+            [],
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["Provider"]["Name"],
-            "MedlinePlus Health Information",
+            "MedlinePlus Consumer Health Information",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["Provider"]["NameAbbr"],
-            "MEDPLUS",
+            "medlineplus2",
         )
         self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["Provider"]["Id"], "3162"
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["Provider"]["Url"],
-            "http://medlineplus.gov/",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["Category"], ["Medical"]
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["Attribute"],
-            ["free resource"],
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["Url"],
-            "http://www.nlm.nih.gov/medlineplus/pacemakersandimplantabledefibrillators.html",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["IconUrl"],
-            "//www.ncbi.nlm.nih.gov/corehtml/query/egifs/http:--www.nlm.nih.gov-medlineplus-images-linkout_sm.gif",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["LinkName"],
-            "Pacemakers and Implantable Defibrillators",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["SubjectType"],
-            ["consumer health"],
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["Provider"]["Name"],
-            "MedlinePlus Health Information",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["Provider"]["NameAbbr"],
-            "MEDPLUS",
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["Provider"]["Id"], "3162"
-        )
-        self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][2]["Provider"]["Url"],
-            "http://medlineplus.gov/",
+            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["Provider"]["Id"], "10405"
         )
 
     def test_pubmed5(self):
@@ -2176,493 +2061,200 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]["IdCheckList"]), 2)
         self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][0]["Id"], "12169658")
-        self.assertEqual(len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"]), 19)
+        self.assertEqual(
+            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"]), 16
+        )
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][0]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][0]["DbTo"],
-            "biosystems",
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][0]["DbTo"], "books"
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][0]["LinkName"],
-            "pubmed_biosystems",
+            "pubmed_books_refs",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][0]["MenuTag"],
-            "BioSystem Links",
+            "Cited in Books",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][0]["HtmlTag"],
-            "BioSystems",
+            "Cited in Books",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][0]["Priority"], "128"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][0]["Priority"], "185"
         )
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][1]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][1]["DbTo"], "books"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][1]["DbTo"], "cdd"
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][1]["LinkName"],
-            "pubmed_books_refs",
+            "pubmed_cdd",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][1]["MenuTag"],
-            "Cited in Books",
+            "Conserved Domain Links",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][1]["HtmlTag"],
-            "Cited in Books",
+            "Conserved Domains",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][1]["Priority"], "185"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][1]["Priority"], "130"
         )
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][2]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][2]["DbTo"], "cdd"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][2]["DbTo"], "gene"
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][2]["LinkName"],
-            "pubmed_cdd",
+            "pubmed_gene",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][2]["MenuTag"],
-            "Domain Links",
+            "Gene Links",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][2]["HtmlTag"],
-            "Domains",
+            "Gene",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][2]["Priority"], "130"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][2]["Priority"], "128"
         )
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["DbTo"], "gene"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["DbTo"], "geoprofiles"
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["LinkName"],
-            "pubmed_gene",
+            "pubmed_geoprofiles",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["MenuTag"],
-            "Gene Links",
+            "GEO Profile Links",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["HtmlTag"], "Gene"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["HtmlTag"],
+            "GEO Profiles",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["Priority"], "128"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["Priority"], "170"
         )
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["DbTo"],
-            "geoprofiles",
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["DbTo"], "nuccore"
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["LinkName"],
-            "pubmed_geoprofiles",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["MenuTag"],
-            "GEO Profile Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["HtmlTag"],
-            "GEO Profiles",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["Priority"], "170"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][5]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][5]["DbTo"],
-            "homologene",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][5]["LinkName"],
-            "pubmed_homologene",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][5]["MenuTag"],
-            "HomoloGene Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][5]["HtmlTag"],
-            "HomoloGene",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][5]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][6]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][6]["DbTo"], "medgen"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][6]["LinkName"],
-            "pubmed_medgen",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][6]["MenuTag"], "MedGen"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][6]["HtmlTag"], "MedGen"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][6]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][7]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][7]["DbTo"], "nuccore"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][7]["LinkName"],
             "pubmed_nuccore",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][7]["MenuTag"],
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["MenuTag"],
             "Nucleotide Links",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][7]["HtmlTag"],
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["HtmlTag"],
             "Nucleotide",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][7]["Priority"], "128"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["Priority"], "128"
         )
         self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][8]), 5
+            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"]), 15
         )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][8]["DbTo"], "nuccore"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][8]["LinkName"],
-            "pubmed_nuccore_refseq",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][8]["MenuTag"],
-            "Nucleotide (RefSeq) Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][8]["HtmlTag"],
-            "Nucleotide (RefSeq)",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][8]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][9]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][9]["DbTo"], "nuccore"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][9]["LinkName"],
-            "pubmed_nuccore_weighted",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][9]["MenuTag"],
-            "Nucleotide (Weighted) Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][9]["HtmlTag"],
-            "Nucleotide (Weighted)",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][9]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][10]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][10]["DbTo"],
-            "pcsubstance",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][10]["LinkName"],
-            "pubmed_pcsubstance_mesh",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][10]["MenuTag"],
-            "Substance (MeSH Keyword)",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][10]["HtmlTag"],
-            "Substance (MeSH Keyword)",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][10]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][11]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][11]["DbTo"], "pmc"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][11]["LinkName"],
-            "pubmed_pmc_refs",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][11]["MenuTag"],
-            "Cited in PMC",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][11]["HtmlTag"],
-            "Cited in PMC",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][11]["Priority"], "180"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][12]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][12]["DbTo"], "protein"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][12]["LinkName"],
-            "pubmed_protein",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][12]["MenuTag"],
-            "Protein Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][12]["HtmlTag"],
-            "Protein",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][12]["Priority"], "140"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][13]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][13]["DbTo"], "protein"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][13]["LinkName"],
-            "pubmed_protein_refseq",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][13]["MenuTag"],
-            "Protein (RefSeq) Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][13]["HtmlTag"],
-            "Protein (RefSeq)",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][13]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][14]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][14]["DbTo"], "protein"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][14]["LinkName"],
-            "pubmed_protein_weighted",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][14]["MenuTag"],
-            "Protein (Weighted) Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][14]["HtmlTag"],
-            "Protein (Weighted)",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][14]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][15]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][15]["DbTo"], "pubmed"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][15]["LinkName"],
-            "pubmed_pubmed",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][15]["MenuTag"],
-            "Related Citations",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][15]["HtmlTag"],
-            "Related Citations",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][15]["Priority"], "1"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][16]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][16]["DbTo"], "taxonomy"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][16]["LinkName"],
-            "pubmed_taxonomy_entrez",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][16]["MenuTag"],
-            "Taxonomy via GenBank",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][16]["HtmlTag"],
-            "Taxonomy via GenBank",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][16]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][17]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][17]["DbTo"], "unigene"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][17]["LinkName"],
-            "pubmed_unigene",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][17]["MenuTag"],
-            "UniGene Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][17]["HtmlTag"],
-            "UniGene",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][17]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][18]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][18]["DbTo"], "LinkOut"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][18]["LinkName"],
-            "ExternalLink",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][18]["MenuTag"],
-            "LinkOut",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][18]["HtmlTag"],
-            "LinkOut",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][18]["Priority"], "255"
-        )
-        self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][1]["Id"], "11748140")
-        self.assertEqual(len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"]), 15)
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][0]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][0]["DbTo"],
-            "biosystems",
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][0]["DbTo"], "books"
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][0]["LinkName"],
-            "pubmed_biosystems",
+            "pubmed_books_refs",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][0]["MenuTag"],
-            "BioSystem Links",
+            "Cited in Books",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][0]["HtmlTag"],
-            "BioSystems",
+            "Cited in Books",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][0]["Priority"], "128"
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][0]["Priority"], "185"
         )
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][1]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][1]["DbTo"], "books"
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][1]["DbTo"], "gene"
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][1]["LinkName"],
-            "pubmed_books_refs",
+            "pubmed_gene",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][1]["MenuTag"],
-            "Cited in Books",
+            "Gene Links",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][1]["HtmlTag"],
-            "Cited in Books",
+            "Gene",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][1]["Priority"], "185"
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][1]["Priority"], "128"
         )
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["DbTo"], "gene"
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["DbTo"], "geoprofiles"
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["LinkName"],
-            "pubmed_gene",
+            "pubmed_geoprofiles",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["MenuTag"],
-            "Gene Links",
+            "GEO Profile Links",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["HtmlTag"], "Gene"
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["HtmlTag"],
+            "GEO Profiles",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["Priority"], "128"
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["Priority"], "170"
         )
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][3]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][3]["DbTo"],
-            "geoprofiles",
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][3]["DbTo"], "nuccore"
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][3]["LinkName"],
-            "pubmed_geoprofiles",
+            "pubmed_nuccore",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][3]["MenuTag"],
-            "GEO Profile Links",
+            "Nucleotide Links",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][3]["HtmlTag"],
-            "GEO Profiles",
+            "Nucleotide",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][3]["Priority"], "170"
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][3]["Priority"], "128"
         )
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][4]), 5
@@ -2672,228 +2264,18 @@ class ELinkTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][4]["LinkName"],
-            "pubmed_nuccore",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][4]["MenuTag"],
-            "Nucleotide Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][4]["HtmlTag"],
-            "Nucleotide",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][4]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][5]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][5]["DbTo"], "nuccore"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][5]["LinkName"],
             "pubmed_nuccore_refseq",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][5]["MenuTag"],
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][4]["MenuTag"],
             "Nucleotide (RefSeq) Links",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][5]["HtmlTag"],
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][4]["HtmlTag"],
             "Nucleotide (RefSeq)",
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][5]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][6]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][6]["DbTo"], "nuccore"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][6]["LinkName"],
-            "pubmed_nuccore_weighted",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][6]["MenuTag"],
-            "Nucleotide (Weighted) Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][6]["HtmlTag"],
-            "Nucleotide (Weighted)",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][6]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][7]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][7]["DbTo"], "pmc"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][7]["LinkName"],
-            "pubmed_pmc_refs",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][7]["MenuTag"],
-            "Cited in PMC",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][7]["HtmlTag"],
-            "Cited in PMC",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][7]["Priority"], "180"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][8]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][8]["DbTo"], "protein"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][8]["LinkName"],
-            "pubmed_protein",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][8]["MenuTag"],
-            "Protein Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][8]["HtmlTag"],
-            "Protein",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][8]["Priority"], "140"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][9]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][9]["DbTo"], "protein"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][9]["LinkName"],
-            "pubmed_protein_refseq",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][9]["MenuTag"],
-            "Protein (RefSeq) Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][9]["HtmlTag"],
-            "Protein (RefSeq)",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][9]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][10]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][10]["DbTo"], "protein"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][10]["LinkName"],
-            "pubmed_protein_weighted",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][10]["MenuTag"],
-            "Protein (Weighted) Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][10]["HtmlTag"],
-            "Protein (Weighted)",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][10]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][11]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][11]["DbTo"], "pubmed"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][11]["LinkName"],
-            "pubmed_pubmed",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][11]["MenuTag"],
-            "Related Citations",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][11]["HtmlTag"],
-            "Related Citations",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][11]["Priority"], "1"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][12]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][12]["DbTo"], "taxonomy"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][12]["LinkName"],
-            "pubmed_taxonomy_entrez",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][12]["MenuTag"],
-            "Taxonomy via GenBank",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][12]["HtmlTag"],
-            "Taxonomy via GenBank",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][12]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["DbTo"], "unigene"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["LinkName"],
-            "pubmed_unigene",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["MenuTag"],
-            "UniGene Links",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["HtmlTag"],
-            "UniGene",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][13]["Priority"], "128"
-        )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][14]), 5
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][14]["DbTo"], "LinkOut"
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][14]["LinkName"],
-            "ExternalLink",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][14]["MenuTag"],
-            "LinkOut",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][14]["HtmlTag"],
-            "LinkOut",
-        )
-        self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][14]["Priority"], "255"
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][4]["Priority"], "128"
         )
 
     def test_pubmed6(self):
@@ -2915,390 +2297,6 @@ class ELinkTest(unittest.TestCase):
             record[0]["IdCheckList"]["Id"][0].attributes["HasNeighbor"], "Y"
         )
         self.assertEqual(len(record[0]["IdCheckList"]["IdLinkSet"]), 0)
-
-
-class EGQueryTest(unittest.TestCase):
-    """Tests for parsing XML output returned by EGQuery."""
-
-    def test_egquery1(self):
-        """Test parsing XML output returned by EGQuery (first test)."""
-        # Display counts in XML for stem cells in each Entrez database
-        # To create the XML file, use
-        # >>> Bio.Entrez.egquery(term="stem cells")
-        with open("Entrez/egquery1.xml", "rb") as stream:
-            record = Entrez.read(stream)
-        self.assertEqual(record["Term"], "stem cells")
-        self.assertEqual(record["eGQueryResult"][0]["DbName"], "pubmed")
-        self.assertEqual(record["eGQueryResult"][0]["MenuName"], "PubMed")
-        self.assertEqual(record["eGQueryResult"][0]["Count"], "392")
-        self.assertEqual(record["eGQueryResult"][0]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][1]["DbName"], "pmc")
-        self.assertEqual(record["eGQueryResult"][1]["MenuName"], "PMC")
-        self.assertEqual(record["eGQueryResult"][1]["Count"], "173")
-        self.assertEqual(record["eGQueryResult"][1]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][2]["DbName"], "journals")
-        self.assertEqual(record["eGQueryResult"][2]["MenuName"], "Journals")
-        self.assertEqual(record["eGQueryResult"][2]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][2]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][3]["DbName"], "mesh")
-        self.assertEqual(record["eGQueryResult"][3]["MenuName"], "MeSH")
-        self.assertEqual(record["eGQueryResult"][3]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][3]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][4]["DbName"], "books")
-        self.assertEqual(record["eGQueryResult"][4]["MenuName"], "Books")
-        self.assertEqual(record["eGQueryResult"][4]["Count"], "10")
-        self.assertEqual(record["eGQueryResult"][4]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][5]["DbName"], "omim")
-        self.assertEqual(record["eGQueryResult"][5]["MenuName"], "OMIM")
-        self.assertEqual(record["eGQueryResult"][5]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][5]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][6]["DbName"], "omia")
-        self.assertEqual(record["eGQueryResult"][6]["MenuName"], "OMIA")
-        self.assertEqual(record["eGQueryResult"][6]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][6]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][7]["DbName"], "ncbisearch")
-        self.assertEqual(record["eGQueryResult"][7]["MenuName"], "NCBI Web Site")
-        self.assertEqual(record["eGQueryResult"][7]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][7]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][8]["DbName"], "nuccore")
-        self.assertEqual(record["eGQueryResult"][8]["MenuName"], "CoreNucleotide")
-        self.assertEqual(record["eGQueryResult"][8]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][8]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][9]["DbName"], "nucgss")
-        self.assertEqual(record["eGQueryResult"][9]["MenuName"], "GSS")
-        self.assertEqual(record["eGQueryResult"][9]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][9]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][10]["DbName"], "nucest")
-        self.assertEqual(record["eGQueryResult"][10]["MenuName"], "EST")
-        self.assertEqual(record["eGQueryResult"][10]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][10]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][11]["DbName"], "protein")
-        self.assertEqual(record["eGQueryResult"][11]["MenuName"], "Protein")
-        self.assertEqual(record["eGQueryResult"][11]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][11]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][12]["DbName"], "genome")
-        self.assertEqual(record["eGQueryResult"][12]["MenuName"], "Genome")
-        self.assertEqual(record["eGQueryResult"][12]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][12]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][13]["DbName"], "structure")
-        self.assertEqual(record["eGQueryResult"][13]["MenuName"], "Structure")
-        self.assertEqual(record["eGQueryResult"][13]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][13]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][14]["DbName"], "taxonomy")
-        self.assertEqual(record["eGQueryResult"][14]["MenuName"], "Taxonomy")
-        self.assertEqual(record["eGQueryResult"][14]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][14]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][15]["DbName"], "snp")
-        self.assertEqual(record["eGQueryResult"][15]["MenuName"], "SNP")
-        self.assertEqual(record["eGQueryResult"][15]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][15]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][16]["DbName"], "gene")
-        self.assertEqual(record["eGQueryResult"][16]["MenuName"], "Gene")
-        self.assertEqual(record["eGQueryResult"][16]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][16]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][17]["DbName"], "unigene")
-        self.assertEqual(record["eGQueryResult"][17]["MenuName"], "UniGene")
-        self.assertEqual(record["eGQueryResult"][17]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][17]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][18]["DbName"], "cdd")
-        self.assertEqual(record["eGQueryResult"][18]["MenuName"], "Conserved Domains")
-        self.assertEqual(record["eGQueryResult"][18]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][18]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][19]["DbName"], "domains")
-        self.assertEqual(record["eGQueryResult"][19]["MenuName"], "3D Domains")
-        self.assertEqual(record["eGQueryResult"][19]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][19]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][20]["DbName"], "unists")
-        self.assertEqual(record["eGQueryResult"][20]["MenuName"], "UniSTS")
-        self.assertEqual(record["eGQueryResult"][20]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][20]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][21]["DbName"], "popset")
-        self.assertEqual(record["eGQueryResult"][21]["MenuName"], "PopSet")
-        self.assertEqual(record["eGQueryResult"][21]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][21]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][22]["DbName"], "geo")
-        self.assertEqual(record["eGQueryResult"][22]["MenuName"], "GEO Profiles")
-        self.assertEqual(record["eGQueryResult"][22]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][22]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][23]["DbName"], "gds")
-        self.assertEqual(record["eGQueryResult"][23]["MenuName"], "GEO DataSets")
-        self.assertEqual(record["eGQueryResult"][23]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][23]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][24]["DbName"], "homologene")
-        self.assertEqual(record["eGQueryResult"][24]["MenuName"], "HomoloGene")
-        self.assertEqual(record["eGQueryResult"][24]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][24]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][25]["DbName"], "cancerchromosomes")
-        self.assertEqual(record["eGQueryResult"][25]["MenuName"], "CancerChromosomes")
-        self.assertEqual(record["eGQueryResult"][25]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][25]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][26]["DbName"], "pccompound")
-        self.assertEqual(record["eGQueryResult"][26]["MenuName"], "PubChem Compound")
-        self.assertEqual(record["eGQueryResult"][26]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][26]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][27]["DbName"], "pcsubstance")
-        self.assertEqual(record["eGQueryResult"][27]["MenuName"], "PubChem Substance")
-        self.assertEqual(record["eGQueryResult"][27]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][27]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][28]["DbName"], "pcassay")
-        self.assertEqual(record["eGQueryResult"][28]["MenuName"], "PubChem BioAssay")
-        self.assertEqual(record["eGQueryResult"][28]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][28]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][29]["DbName"], "nlmcatalog")
-        self.assertEqual(record["eGQueryResult"][29]["MenuName"], "NLM Catalog")
-        self.assertEqual(record["eGQueryResult"][29]["Count"], "2")
-        self.assertEqual(record["eGQueryResult"][29]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][30]["DbName"], "gensat")
-        self.assertEqual(record["eGQueryResult"][30]["MenuName"], "GENSAT")
-        self.assertEqual(record["eGQueryResult"][30]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][30]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][31]["DbName"], "probe")
-        self.assertEqual(record["eGQueryResult"][31]["MenuName"], "Probe")
-        self.assertEqual(record["eGQueryResult"][31]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][31]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][32]["DbName"], "genomeprj")
-        self.assertEqual(record["eGQueryResult"][32]["MenuName"], "Genome Project")
-        self.assertEqual(record["eGQueryResult"][32]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][32]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][33]["DbName"], "gap")
-        self.assertEqual(record["eGQueryResult"][33]["MenuName"], "dbGaP")
-        self.assertEqual(record["eGQueryResult"][33]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][33]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][34]["DbName"], "proteinclusters")
-        self.assertEqual(record["eGQueryResult"][34]["MenuName"], "Protein Clusters")
-        self.assertEqual(record["eGQueryResult"][34]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][34]["Status"], "Term or Database is not found"
-        )
-
-    def test_egquery2(self):
-        """Test parsing XML output returned by EGQuery (second test)."""
-        # Display counts in XML for brca1 or brca2 for each Entrez database
-        # To create the XML file, use
-        # >>> Bio.Entrez.egquery(term="brca1 OR brca2")
-        with open("Entrez/egquery2.xml", "rb") as stream:
-            record = Entrez.read(stream)
-        self.assertEqual(record["Term"], "brca1 OR brca2")
-        self.assertEqual(record["eGQueryResult"][0]["DbName"], "pubmed")
-        self.assertEqual(record["eGQueryResult"][0]["MenuName"], "PubMed")
-        self.assertEqual(record["eGQueryResult"][0]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][0]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][1]["DbName"], "pmc")
-        self.assertEqual(record["eGQueryResult"][1]["MenuName"], "PMC")
-        self.assertEqual(record["eGQueryResult"][1]["Count"], "2739")
-        self.assertEqual(record["eGQueryResult"][1]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][2]["DbName"], "journals")
-        self.assertEqual(record["eGQueryResult"][2]["MenuName"], "Journals")
-        self.assertEqual(record["eGQueryResult"][2]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][2]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][3]["DbName"], "mesh")
-        self.assertEqual(record["eGQueryResult"][3]["MenuName"], "MeSH")
-        self.assertEqual(record["eGQueryResult"][3]["Count"], "29")
-        self.assertEqual(record["eGQueryResult"][3]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][4]["DbName"], "books")
-        self.assertEqual(record["eGQueryResult"][4]["MenuName"], "Books")
-        self.assertEqual(record["eGQueryResult"][4]["Count"], "392")
-        self.assertEqual(record["eGQueryResult"][4]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][5]["DbName"], "omim")
-        self.assertEqual(record["eGQueryResult"][5]["MenuName"], "OMIM")
-        self.assertEqual(record["eGQueryResult"][5]["Count"], "149")
-        self.assertEqual(record["eGQueryResult"][5]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][6]["DbName"], "omia")
-        self.assertEqual(record["eGQueryResult"][6]["MenuName"], "OMIA")
-        self.assertEqual(record["eGQueryResult"][6]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][6]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][7]["DbName"], "ncbisearch")
-        self.assertEqual(record["eGQueryResult"][7]["MenuName"], "NCBI Web Site")
-        self.assertEqual(record["eGQueryResult"][7]["Count"], "13")
-        self.assertEqual(record["eGQueryResult"][7]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][8]["DbName"], "nuccore")
-        self.assertEqual(record["eGQueryResult"][8]["MenuName"], "CoreNucleotide")
-        self.assertEqual(record["eGQueryResult"][8]["Count"], "4917")
-        self.assertEqual(record["eGQueryResult"][8]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][9]["DbName"], "nucgss")
-        self.assertEqual(record["eGQueryResult"][9]["MenuName"], "GSS")
-        self.assertEqual(record["eGQueryResult"][9]["Count"], "184")
-        self.assertEqual(record["eGQueryResult"][9]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][10]["DbName"], "nucest")
-        self.assertEqual(record["eGQueryResult"][10]["MenuName"], "EST")
-        self.assertEqual(record["eGQueryResult"][10]["Count"], "600")
-        self.assertEqual(record["eGQueryResult"][10]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][11]["DbName"], "protein")
-        self.assertEqual(record["eGQueryResult"][11]["MenuName"], "Protein")
-        self.assertEqual(record["eGQueryResult"][11]["Count"], "6779")
-        self.assertEqual(record["eGQueryResult"][11]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][12]["DbName"], "genome")
-        self.assertEqual(record["eGQueryResult"][12]["MenuName"], "Genome")
-        self.assertEqual(record["eGQueryResult"][12]["Count"], "44")
-        self.assertEqual(record["eGQueryResult"][12]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][13]["DbName"], "structure")
-        self.assertEqual(record["eGQueryResult"][13]["MenuName"], "Structure")
-        self.assertEqual(record["eGQueryResult"][13]["Count"], "29")
-        self.assertEqual(record["eGQueryResult"][13]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][14]["DbName"], "taxonomy")
-        self.assertEqual(record["eGQueryResult"][14]["MenuName"], "Taxonomy")
-        self.assertEqual(record["eGQueryResult"][14]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][14]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][15]["DbName"], "snp")
-        self.assertEqual(record["eGQueryResult"][15]["MenuName"], "SNP")
-        self.assertEqual(record["eGQueryResult"][15]["Count"], "2013")
-        self.assertEqual(record["eGQueryResult"][15]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][16]["DbName"], "gene")
-        self.assertEqual(record["eGQueryResult"][16]["MenuName"], "Gene")
-        self.assertEqual(record["eGQueryResult"][16]["Count"], "1775")
-        self.assertEqual(record["eGQueryResult"][16]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][17]["DbName"], "unigene")
-        self.assertEqual(record["eGQueryResult"][17]["MenuName"], "UniGene")
-        self.assertEqual(record["eGQueryResult"][17]["Count"], "207")
-        self.assertEqual(record["eGQueryResult"][17]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][18]["DbName"], "cdd")
-        self.assertEqual(record["eGQueryResult"][18]["MenuName"], "Conserved Domains")
-        self.assertEqual(record["eGQueryResult"][18]["Count"], "17")
-        self.assertEqual(record["eGQueryResult"][18]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][19]["DbName"], "domains")
-        self.assertEqual(record["eGQueryResult"][19]["MenuName"], "3D Domains")
-        self.assertEqual(record["eGQueryResult"][19]["Count"], "131")
-        self.assertEqual(record["eGQueryResult"][19]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][20]["DbName"], "unists")
-        self.assertEqual(record["eGQueryResult"][20]["MenuName"], "UniSTS")
-        self.assertEqual(record["eGQueryResult"][20]["Count"], "198")
-        self.assertEqual(record["eGQueryResult"][20]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][21]["DbName"], "popset")
-        self.assertEqual(record["eGQueryResult"][21]["MenuName"], "PopSet")
-        self.assertEqual(record["eGQueryResult"][21]["Count"], "43")
-        self.assertEqual(record["eGQueryResult"][21]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][22]["DbName"], "geo")
-        self.assertEqual(record["eGQueryResult"][22]["MenuName"], "GEO Profiles")
-        self.assertEqual(record["eGQueryResult"][22]["Count"], "128692")
-        self.assertEqual(record["eGQueryResult"][22]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][23]["DbName"], "gds")
-        self.assertEqual(record["eGQueryResult"][23]["MenuName"], "GEO DataSets")
-        self.assertEqual(record["eGQueryResult"][23]["Count"], "21")
-        self.assertEqual(record["eGQueryResult"][23]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][24]["DbName"], "homologene")
-        self.assertEqual(record["eGQueryResult"][24]["MenuName"], "HomoloGene")
-        self.assertEqual(record["eGQueryResult"][24]["Count"], "50")
-        self.assertEqual(record["eGQueryResult"][24]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][25]["DbName"], "cancerchromosomes")
-        self.assertEqual(record["eGQueryResult"][25]["MenuName"], "CancerChromosomes")
-        self.assertEqual(record["eGQueryResult"][25]["Count"], "18")
-        self.assertEqual(record["eGQueryResult"][25]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][26]["DbName"], "pccompound")
-        self.assertEqual(record["eGQueryResult"][26]["MenuName"], "PubChem Compound")
-        self.assertEqual(record["eGQueryResult"][26]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][26]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][27]["DbName"], "pcsubstance")
-        self.assertEqual(record["eGQueryResult"][27]["MenuName"], "PubChem Substance")
-        self.assertEqual(record["eGQueryResult"][27]["Count"], "26")
-        self.assertEqual(record["eGQueryResult"][27]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][28]["DbName"], "pcassay")
-        self.assertEqual(record["eGQueryResult"][28]["MenuName"], "PubChem BioAssay")
-        self.assertEqual(record["eGQueryResult"][28]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][28]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][29]["DbName"], "nlmcatalog")
-        self.assertEqual(record["eGQueryResult"][29]["MenuName"], "NLM Catalog")
-        self.assertEqual(record["eGQueryResult"][29]["Count"], "31")
-        self.assertEqual(record["eGQueryResult"][29]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][30]["DbName"], "gensat")
-        self.assertEqual(record["eGQueryResult"][30]["MenuName"], "GENSAT")
-        self.assertEqual(record["eGQueryResult"][30]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][30]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][31]["DbName"], "probe")
-        self.assertEqual(record["eGQueryResult"][31]["MenuName"], "Probe")
-        self.assertEqual(record["eGQueryResult"][31]["Count"], "1410")
-        self.assertEqual(record["eGQueryResult"][31]["Status"], "Ok")
-        self.assertEqual(record["eGQueryResult"][32]["DbName"], "genomeprj")
-        self.assertEqual(record["eGQueryResult"][32]["MenuName"], "Genome Project")
-        self.assertEqual(record["eGQueryResult"][32]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][32]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][33]["DbName"], "gap")
-        self.assertEqual(record["eGQueryResult"][33]["MenuName"], "dbGaP")
-        self.assertEqual(record["eGQueryResult"][33]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][33]["Status"], "Term or Database is not found"
-        )
-        self.assertEqual(record["eGQueryResult"][34]["DbName"], "proteinclusters")
-        self.assertEqual(record["eGQueryResult"][34]["MenuName"], "Protein Clusters")
-        self.assertEqual(record["eGQueryResult"][34]["Count"], "0")
-        self.assertEqual(
-            record["eGQueryResult"][34]["Status"], "Term or Database is not found"
-        )
 
 
 class ESpellTest(unittest.TestCase):
@@ -10137,9 +9135,12 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
 
         from Bio.Entrez.Parser import CorruptedXMLError
 
-        truncated_xml = b"""<?xml version="1.0"?>
-        <!DOCTYPE GBSet PUBLIC "-//NCBI//NCBI GBSeq/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd">
-        <GBSet><GBSeq><GBSeq_locus>
+        truncated_xml = b"""<?xml version="1.0" encoding="UTF-8"  ?>
+<!DOCTYPE GBSet PUBLIC "-//NCBI//NCBI GBSeq/EN" "https://www.ncbi.nlm.nih.gov/dtd/NCBI_GBSeq.dtd">
+<GBSet>
+  <GBSeq>
+
+    <GBSeq_locus>
         """
         stream = BytesIO()
         stream.write(truncated_xml)
