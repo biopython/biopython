@@ -111,13 +111,13 @@ Functions:
       which can return multiple records - such as efetch, esummary
       and elink. Typical usage is:
 
-          >>> handle = Entrez.esummary(db="pubmed", id="19304878,14630660", retmode="xml")
+          >>> handle = Entrez.efetch(db="taxonomy", id="9615,9685", retmode="xml")
           >>> records = Entrez.parse(handle)
           >>> for record in records:
-          ...     # each record is a Python dictionary or list.
-          ...     print(record['Title'])
-          Biopython: freely available Python tools for computational molecular biology and bioinformatics.
-          PDB file parser and structure class implemented in Python.
+          ...     print(record['TaxId'], record["OtherNames"]['GenbankCommonName'])
+          ...
+          9615 dog
+          9685 domestic cat
           >>> handle.close()
 
       This function is appropriate only if the XML file contains
@@ -491,14 +491,14 @@ def read(source, validate=True, escape=False, ignore_errors=False):
         >>> stream = open(path, "rb")  # opened in binary mode
         >>> record = Entrez.read(stream)
         >>> print(record['QueryTranslation'])
-        biopython[All Fields]
+        "biopython"[All Fields]
         >>> stream.close()
 
     Alternatively, you can use the filename directly, as in
 
         >>> record = Entrez.read(path)
         >>> print(record['QueryTranslation'])
-        biopython[All Fields]
+        "biopython"[All Fields]
 
     which is safer, as the file stream will automatically be closed after the
     record has been read, or if an error occurs.
@@ -552,24 +552,24 @@ def parse(source, validate=True, escape=False, ignore_errors=False):
     data in binary mode. For files, use mode "rb" when opening the file, as in
 
         >>> from Bio import Entrez
-        >>> path = "Entrez/pubmed1.xml"
+        >>> path = "Entrez/taxonomy.xml"
         >>> stream = open(path, "rb")  # opened in binary mode
         >>> records = Entrez.parse(stream)
         >>> for record in records:
-        ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
+        ...     print(record['TaxId'], record["OtherNames"]['GenbankCommonName'])
         ...
-        Social justice (San Francisco, Calif.)
-        Biochimica et biophysica acta
+        9615 dog
+        9685 domestic cat
         >>> stream.close()
 
     Alternatively, you can use the filename directly, as in
 
         >>> records = Entrez.parse(path)
         >>> for record in records:
-        ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
+        ...     print(record['TaxId'], record["OtherNames"]['GenbankCommonName'])
         ...
-        Social justice (San Francisco, Calif.)
-        Biochimica et biophysica acta
+        9615 dog
+        9685 domestic cat
 
     which is safer, as the file stream will automatically be closed after all
     the records have been read, or if an error occurs.

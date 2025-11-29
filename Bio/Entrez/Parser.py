@@ -367,6 +367,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.dtd_urls = []
         self.element = None
         self.level = 0
+        self.secure = False
         self.data = []
         self.attributes = None
         self.allowed_tags = None
@@ -578,13 +579,10 @@ class DataHandler(metaclass=DataHandlerMeta):
         """Process the XML schema (before processing the element)."""
         key = "%s noNamespaceSchemaLocation" % self.schema_namespace
         schema = attrs[key]
+        self.verify_security(schema)
         handle = self.open_xsd_file(os.path.basename(schema))
         # if there is no local xsd file grab the url and parse the file
         if not handle:
-            if schema.startswith("http://"):
-                raise Exception
-            if not schema.startswith("https://"):
-                raise Exception
             handle = urlopen(schema)
             text = handle.read()
             self.save_xsd_file(os.path.basename(schema), text)
@@ -1034,7 +1032,6 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def open_dtd_file(self, filename):
         """Open specified DTD file."""
-        return None
         if DataHandler.local_dtd_dir is not None:
             path = os.path.join(DataHandler.local_dtd_dir, filename)
             try:
@@ -1054,7 +1051,6 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def open_xsd_file(self, filename):
         """Open specified XSD file."""
-        return None
         if DataHandler.local_xsd_dir is not None:
             path = os.path.join(DataHandler.local_xsd_dir, filename)
             try:
@@ -1074,7 +1070,6 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def save_dtd_file(self, filename, text):
         """Save DTD file to cache."""
-        return None
         if DataHandler.local_dtd_dir is None:
             return
         path = os.path.join(DataHandler.local_dtd_dir, filename)
@@ -1088,7 +1083,6 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def save_xsd_file(self, filename, text):
         """Save XSD file to cache."""
-        return None
         if DataHandler.local_xsd_dir is None:
             return
         path = os.path.join(DataHandler.local_xsd_dir, filename)
@@ -1099,6 +1093,19 @@ class DataHandler(metaclass=DataHandlerMeta):
         else:
             handle.write(text)
             handle.close()
+
+    def verify_security(self, url):
+        if not self.secure:
+            parts = urlparse(url)
+            scheme = parts.scheme
+            hostname = parts.hostname
+            hostnames = ("www.ncbi.nlm.nih.gov",
+                         "dtd.nlm.nih.gov",
+                         "eutils.ncbi.nlm.nih.gov")
+            if scheme != "https" or hostname not in hostnames:
+                raise ValueError(f"expected secure URL to NCBI, found {url}")
+            # Trust URLs linked from NCBI
+            self.secure = True
 
     def externalEntityRefHandler(self, context, base, systemId, publicId):
         """Handle external entity reference in order to cache DTD locally.
@@ -1129,16 +1136,13 @@ class DataHandler(metaclass=DataHandlerMeta):
         else:
             raise ValueError("Unexpected URL scheme %r" % urlinfo.scheme)
         self.dtd_urls.append(url)
+        self.verify_security(url)
         # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)
         handle = self.open_dtd_file(filename)
         if not handle:
             # DTD is not available as a local file. Try accessing it through
             # the internet instead.
-            if url.startswith("http://"):
-                raise Exception
-            if not url.startswith("https://"):
-                raise Exception
             try:
                 handle = urlopen(url)
             except OSError:
