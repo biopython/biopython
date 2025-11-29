@@ -1,9 +1,4 @@
-<?xml version="1.0"?>
-<!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
-<ePostResult>
-	<InvalidIdList>
-		<Id>-1</Id>
-	</InvalidIdList>
-	<QueryKey>1</QueryKey>
-	<WebEnv>08AIUeBsfIk6BfdzKnd3GM2RtCudczC9jm5aeb4US0o7azCTQCeCsr-xg0@1EDE54E680D03C40_0011SID</WebEnv>
-</ePostResult>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ePostResult PUBLIC "-//NLM//DTD epost 20090526//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20090526/epost.dtd"><ePostResult>
+	<ERROR>Empty ID list; Nothing to store</ERROR>
+	<ERROR>Some IDs have invalid value and were omitted. Maximum ID value 18446744073709551615</ERROR></ePostResult>

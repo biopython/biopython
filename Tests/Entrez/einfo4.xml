@@ -1,15 +1,39 @@
-<?xml version="1.0"?>
-<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD einfo 20190110//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20190110/einfo.dtd">
 <eInfoResult>
 <DbList>
+
 	<DbName>pubmed</DbName>
 	<DbName>protein</DbName>
-	<DbName>nucleotide</DbName>
 	<DbName>nuccore</DbName>
-	<DbName>nucgss</DbName>
-	<DbName>nucest</DbName>
+	<DbName>ipg</DbName>
+	<DbName>nucleotide</DbName>
 	<DbName>structure</DbName>
 	<DbName>genome</DbName>
+	<DbName>annotinfo</DbName>
+	<DbName>assembly</DbName>
+	<DbName>bioproject</DbName>
+	<DbName>biosample</DbName>
+	<DbName>blastdbinfo</DbName>
 	<DbName>books</DbName>
-	<DbName>cancerchromosomes</DbName>
 	<DbName>cdd</DbName>
+	<DbName>clinvar</DbName>
+	<DbName>gap</DbName>
+	<DbName>gapplus</DbName>
+	<DbName>grasp</DbName>
+	<DbName>dbvar</DbName>
+	<DbName>gene</DbName>
+	<DbName>gds</DbName>
+	<DbName>geoprofiles</DbName>
+	<DbName>medgen</DbName>
+	<DbName>mesh</DbName>
+	<DbName>nlmcatalog</DbName>
+	<DbName>omim</DbName>
+	<DbName>orgtrack</DbName>
+	<DbName>pmc</DbName>
+	<DbName>proteinclusters</DbName>
+	<DbName>pcassay</DbName>
+	<DbName>protfam</DbName>
+	<DbName>pccompound</DbName>
+	<DbName>pcsubstance</DbName>
+	<DbName>seqannot</DbName>

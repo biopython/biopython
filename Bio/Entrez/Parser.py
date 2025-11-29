@@ -367,6 +367,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.dtd_urls = []
         self.element = None
         self.level = 0
+        self.secure = False
         self.data = []
         self.attributes = None
         self.allowed_tags = None
@@ -578,6 +579,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         """Process the XML schema (before processing the element)."""
         key = "%s noNamespaceSchemaLocation" % self.schema_namespace
         schema = attrs[key]
+        self.verify_security(schema)
         handle = self.open_xsd_file(os.path.basename(schema))
         # if there is no local xsd file grab the url and parse the file
         if not handle:
@@ -1092,6 +1094,19 @@ class DataHandler(metaclass=DataHandlerMeta):
             handle.write(text)
             handle.close()
 
+    def verify_security(self, url):
+        if not self.secure:
+            parts = urlparse(url)
+            scheme = parts.scheme
+            hostname = parts.hostname
+            hostnames = ("www.ncbi.nlm.nih.gov",
+                         "dtd.nlm.nih.gov",
+                         "eutils.ncbi.nlm.nih.gov")
+            if scheme != "https" or hostname not in hostnames:
+                raise ValueError(f"expected secure URL to NCBI, found {url}")
+            # Trust URLs linked from NCBI
+            self.secure = True
+
     def externalEntityRefHandler(self, context, base, systemId, publicId):
         """Handle external entity reference in order to cache DTD locally.
 
@@ -1113,7 +1128,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             except IndexError:
                 # Assume the default URL for DTDs if the top parent
                 # does not contain an absolute path
-                source = "http://www.ncbi.nlm.nih.gov/dtd/"
+                source = "https://www.ncbi.nlm.nih.gov/dtd/"
             else:
                 source = os.path.dirname(source)
             # urls always have a forward slash, don't use os.path.join
@@ -1121,6 +1136,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         else:
             raise ValueError("Unexpected URL scheme %r" % urlinfo.scheme)
         self.dtd_urls.append(url)
+        self.verify_security(url)
         # First, try to load the local version of the DTD file
         location, filename = os.path.split(systemId)
         handle = self.open_dtd_file(filename)
