@@ -20,6 +20,11 @@ possible, especially the following contributors:
 - Peter Cock
 - Timothy Dennis (first contribution)
 - Ziyan Rao (first contribution)
+- Manuel Lera-Ramirez
+
+``Bio.SeqIO.SnapGeneIO._parse_features_packet`` now removes linebreaks from qualifier values.
+This is to prevent linebreaks from being preserved when writing to GenBank format,
+which would mess up the format.
 
 28 October 2025: Biopython 1.86
 ===============================
