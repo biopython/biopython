@@ -464,7 +464,7 @@ class WriteTest(unittest.TestCase):
         test_b_factor(_MAX_B_FACTOR + 10, _MAX_B_FACTOR, assert_warn=True)
 
     def test_pdbio_write_formatting(self):
-        structure = self.parser.get_structure("format_test", "PDB/bromomethane.pdb")
+        structure = self.parser.get_structure("format_test", "PDB/1A8O.pdb")
         self.io.set_structure(structure)
         filenumber, filename = tempfile.mkstemp()
         os.close(filenumber)
@@ -472,9 +472,9 @@ class WriteTest(unittest.TestCase):
             self.io.save(filename)
             with open(filename) as f:
                 output_lines = f.read().splitlines()
-            with open("PDB/bromomethane.pdb") as f:
+            with open("PDB/1A8O.pdb") as f:
                 expected_lines = f.read().splitlines()
-            self.assertEqual(output_lines[:5], expected_lines[:5])
+            self.assertEqual(output_lines[296:304], expected_lines[635:643])
         finally:
             os.remove(filename)
 
