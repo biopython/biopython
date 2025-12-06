@@ -272,8 +272,11 @@ class TestSnapGene(unittest.TestCase):
         self.assertEqual(count_primer_features, 1)
 
     def test_remove_linebreaks_from_qualifier_values(self):
-        """Test that linebreaks are removed from qualifier values. Otherwise, when writing
-        to GenBank, the linebreaks will be preserved, messing up the format."""
+        """Test that linebreaks are removed from qualifier values.
+
+        Otherwise, when writing
+        to GenBank, the linebreaks will be preserved, messing up the format.
+        """
         record = SeqIO.read("SnapGene/linebreak_in_qualifier_text.dna", "snapgene")
         for feature in record.features:
             for qualifier in feature.qualifiers:

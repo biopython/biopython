@@ -194,11 +194,7 @@ def _parse_features_packet(length, data, record):
                     qvalues.append(int(value.attributes["int"].value))
             # Remove linebreaks that may mess up formatting to GenBank
             qvalues = [
-                (
-                    v.strip().replace("\n", " ").replace("\r", " ")
-                    if isinstance(v, str)
-                    else v
-                )
+                sub(r"\r\n|\r|\n", " ", v).strip() if isinstance(v, str) else v
                 for v in qvalues
             ]
             quals[qname] = qvalues
