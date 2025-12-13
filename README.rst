@@ -150,7 +150,9 @@ at compile time:
   package named ``python-dev`` or ``python-devel`` as well as the ``python``
   package).
 
--Appropriate C compiler for your version of Python, for example GCC on Linux, or MSVC on Windows. For Windows, you must install the 'Visual Studio Build Tools' and select the 'Desktop development with C++' workload.,
+- Appropriate C compiler for your version of Python, for example GCC on Linux,
+  or MSVC on Windows. For Windows, you must install the 'Visual Studio Build Tools'
+  and select the 'Desktop development with C++' workload.,
   MSVC on Windows. For Mac OS X, or as it is now branded, macOS, use Apple's
   command line tools, which can be installed with the terminal command::
 
