@@ -7,6 +7,7 @@
 Initially this takes matched tests of GenBank and FASTA files from the NCBI
 and confirms they are consistent using our different parsers.
 """
+
 import datetime
 import locale
 import os

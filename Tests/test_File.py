@@ -58,16 +58,13 @@ class AsHandleTestCase(unittest.TestCase):
                 self.assertEqual(
                     fp,
                     handle,
-                    "as_handle should "
-                    "return argument when given a "
-                    "file-like object",
+                    "as_handle should return argument when given a file-like object",
                 )
                 self.assertFalse(handle.closed)
 
             self.assertFalse(
                 handle.closed,
-                "Exiting as_handle given a file-like object "
-                "should not close the file",
+                "Exiting as_handle given a file-like object should not close the file",
             )
 
     def test_string_path(self):

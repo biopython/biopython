@@ -8,7 +8,6 @@
 
 """Tests for SearchIO InfernalIO infernal-text indexing"""
 
-
 import os
 import unittest
 

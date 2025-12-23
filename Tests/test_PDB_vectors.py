@@ -168,8 +168,7 @@ class VectorTests(unittest.TestCase):
         self.assertAlmostEqual(angle, cangle, places=3)
         self.assertTrue(
             np.allclose(list(map(int, (axis - caxis).get_array())), [0, 0, 0]),
-            f"Want {axis.get_array()!r} and {caxis.get_array()!r}"
-            " to be almost equal",
+            f"Want {axis.get_array()!r} and {caxis.get_array()!r} to be almost equal",
         )
 
     def test_get_spherical_coordinates(self):

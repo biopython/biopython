@@ -1194,8 +1194,7 @@ class TestUniGene(unittest.TestCase):
 
         self.assertEqual(
             repr(record),
-            "<Record> Hs.2 NAT2 N-acetyltransferase 2 "
-            "(arylamine N-acetyltransferase)",
+            "<Record> Hs.2 NAT2 N-acetyltransferase 2 (arylamine N-acetyltransferase)",
         )
 
     def test_read_value_error(self):
