@@ -55,6 +55,18 @@ for any bug fix, we encourage including an additional test. See the testing
 chapter in the Biopython Tutorial for more information on our test framework:
 http://biopython.org/DIST/docs/tutorial/Tutorial.html
 
+.. note::
+
+   When developing Biopython using an editable install (``pip install -e .``),
+   you may see a warning indicating that Biopython is being imported from inside
+   the source tree. This is expected during development and helps catch accidental
+   source-tree imports that could affect end users.
+
+   The warning will not appear for standard installations (``pip install biopython``).
+   Contributors working in environments such as GitHub Codespaces may encounter
+   this warning more frequently due to workspace layout. It can safely be ignored
+   during development and should not be suppressed in code.
+
 
 Local Development
 -----------------
