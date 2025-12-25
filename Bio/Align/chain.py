@@ -172,11 +172,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
     fmt = "chain"
 
     def _read_header(self, stream):
-        self._line = ""
-        for line in stream:
-            if not line.startswith("#"):
-                self._line = line
-                break
+        self._line = stream.readline()
 
     def _read_next_alignment(self, stream):
         if not self._line:
