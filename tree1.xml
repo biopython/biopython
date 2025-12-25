@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<nex:nexml xmlns="http://www.nexml.org/2009" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:nex="http://www.nexml.org/2009" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:cdao="http://purl.obolibrary.org/obo/cdao.owl#" xmlns:obo="http://purl.obolibrary.org/obo/" version="0.9" xsi:schemaLocation="http://www.nexml.org/2009/nexml/xsd/nexml.xsd">
+  <otus id="tax" label="RootTaxaBlock">
+    <otu id="B"/>
+    <otu id="A"/>
+    <otu id="C"/>
+  </otus>
+  <trees id="Trees" label="TreesBlockFromXML" otus="tax">
+    <tree id="tree1">
+      <node id="node1" label="node1"/>
+      <node id="node2" label="node2"/>
+      <edge id="edge1" source="node1" target="node2" length="0.06" typeof="obo:CDAO_0000099"/>
+      <node id="node3" label="node3" otu="A"/>
+      <edge id="edge2" source="node2" target="node3" length="0.102" typeof="obo:CDAO_0000099"/>
+      <node id="node4" label="node4" otu="B"/>
+      <edge id="edge3" source="node2" target="node4" length="0.23" typeof="obo:CDAO_0000099"/>
+      <node id="node5" label="node5" otu="C"/>
+      <edge id="edge4" source="node1" target="node5" length="0.4" typeof="obo:CDAO_0000099"/>
+    </tree>
+  </trees>
+</nex:nexml>
