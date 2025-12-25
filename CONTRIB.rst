@@ -61,6 +61,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Benedict Carling <https://github.com/Benedict-Carling>
 - Benjamin Rowell <https://github.com/benjaminr>
 - Benjamin Vaisvil <https://github.com/bvaisvil>
+- Ben Oppenheimer <https://github.com/beneopp>
 - Bernhard C. Thiel <https://github.com/Bernhard10>
 - Bertrand Caron <https://github.com/bertrand-caron>
 - Bertrand Frottier <bertrand.frottier at domain free.fr>
