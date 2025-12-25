@@ -151,7 +151,8 @@ at compile time:
   package).
 
 - Appropriate C compiler for your version of Python, for example GCC on Linux,
-  MSVC on Windows. For Mac OS X, or as it is now branded, macOS, use Apple's
+  or MSVC on Windows. For Windows, you must install the 'Visual Studio Build Tools'
+  and select the 'Desktop development with C++' workload. For macOS, use Apple's
   command line tools, which can be installed with the terminal command::
 
       xcode-select --install
