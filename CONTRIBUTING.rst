@@ -72,6 +72,12 @@ this, run::
     $ cd biopython-repository
     $ pre-commit install
 
+.. note::
+
+   When developing Biopython using an editable install (``pip install -e .``),
+   you may see a warning indicating that Biopython is being imported from inside
+   the source tree. This is expected during development and can be safely ignored.
+
 
 Local Testing
 -------------
