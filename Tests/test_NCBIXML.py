@@ -8,6 +8,7 @@ import os
 import unittest
 
 from Bio.Blast import NCBIXML
+from Bio import BiopythonParserWarning
 
 
 class TestNCBIXML(unittest.TestCase):
@@ -4311,6 +4312,17 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(description.score, 325.0)
         self.assertEqual(description.e, 7.83523e-61)
         self.assertEqual(description.num_alignments, 12)
+
+    def test_unknown_tag_warning(self):
+        filename = "blast_parserwarning_test.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile) as handle:
+            with self.assertWarns(BiopythonParserWarning) as cm:
+                record = next(NCBIXML.parse(handle))
+                self.assertRaises(StopIteration, next, NCBIXML.parse(handle))
+                self.assertIn(
+                    "Ignored method: end_SomeMadeUpTagForTesting", str(cm.warning)
+                )
 
 
 if __name__ == "__main__":
