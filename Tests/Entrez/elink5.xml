@@ -1,25 +1,21 @@
-<?xml version="1.0"?>
-<!DOCTYPE eLinkResult PUBLIC "-//NLM//DTD eLinkResult, 23 November 2010//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eLink_101123.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE eLinkResult PUBLIC "-//NLM//DTD elink 20101123//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20101123/elink.dtd">
 <eLinkResult>
 
 <LinkSet><DbFrom>pubmed</DbFrom><IdUrlList><IdUrlSet>
 	<Id>10611131</Id>
 	<ObjUrl>
-		
-		<Url>http://brain.oxfordjournals.org/cgi/pmidlookup?view=long&amp;pmid=10611131</Url>
-		<IconUrl LNG="EN">//www.ncbi.nlm.nih.gov/corehtml/query/egifs/http:--highwire.stanford.edu-icons-externalservices-pubmed-custom-oxfordjournals_final_free.gif</IconUrl>
-		<SubjectType>publishers/providers</SubjectType>
+		<Url>https://academic.oup.com/brain/article-lookup/doi/10.1093/brain/123.1.171</Url>
+		<IconUrl>/corehtml/query/egifs/https:--academic.oup.com-images-oup_pubmed.png</IconUrl>
+
 		<Category>Full Text Sources</Category>
-		<Attribute>free resource</Attribute>
-		<Attribute>full-text online</Attribute>
-		<Attribute>publisher of information in url</Attribute>
+		<Attribute>subscription/membership/fee required</Attribute>
 		<Provider>
-			<Name>HighWire</Name>
-			<NameAbbr>HighWire</NameAbbr>
-			<Id>3051</Id>
-			<Url LNG="EN">http://highwire.stanford.edu</Url>
+			<Name>Silverchair Information Systems</Name>
+			<NameAbbr>silverchair</NameAbbr>
+			<Id>7898</Id>
 		</Provider>
 	</ObjUrl>
-</IdUrlSet></IdUrlList></LinkSet>
-
+</IdUrlSet>
+</IdUrlList></LinkSet>
 </eLinkResult>
