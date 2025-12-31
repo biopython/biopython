@@ -471,7 +471,7 @@ def ecitmatch(**keywds):
     return _open(request)
 
 
-def read(source, validate=True, escape=False, ignore_errors=False):
+def read(source, validate=True, escape=False, ignore_errors=False, local_dtds=True):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -517,6 +517,12 @@ def read(source, validate=True, escape=False, ignore_errors=False):
     will raise a RuntimeError. If ignore_errors is True, error messages will
     be stored as ErrorElement items, without raising an exception.
 
+    If local_dtds is True (default), the parser will first look for the DTDs
+    in a local cache. If local_dtds is False, the parser will ignore these and
+    go straight to looking for them over the internet. It is faster to first
+    try local DTDs, but if the local DTDs are outdated you may need to set this
+    option to False.
+
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
     derived from the base type. This allows us to store the attributes
@@ -525,12 +531,12 @@ def read(source, validate=True, escape=False, ignore_errors=False):
     """
     from .Parser import DataHandler
 
-    handler = DataHandler(validate, escape, ignore_errors)
+    handler = DataHandler(validate, escape, ignore_errors, local_dtds)
     record = handler.read(source)
     return record
 
 
-def parse(source, validate=True, escape=False, ignore_errors=False):
+def parse(source, validate=True, escape=False, ignore_errors=False, local_dtds=True):
     """Parse an XML file from the NCBI Entrez Utilities into python objects.
 
     This function parses an XML file created by NCBI's Entrez Utilities,
@@ -588,6 +594,12 @@ def parse(source, validate=True, escape=False, ignore_errors=False):
     will raise a RuntimeError. If ignore_errors is True, error messages will
     be stored as ErrorElement items, without raising an exception.
 
+    If local_dtds is True (default), the parser will first look for the DTDs
+    in a local cache. If local_dtds is False, the parser will ignore these and
+    go straight to looking for them over the internet. It is faster to first
+    try local DTDs, but if the local DTDs are outdated you may need to set this
+    option to False.
+
     Whereas the data structure seems to consist of generic Python lists,
     dictionaries, strings, and so on, each of these is actually a class
     derived from the base type. This allows us to store the attributes
@@ -596,7 +608,7 @@ def parse(source, validate=True, escape=False, ignore_errors=False):
     """
     from .Parser import DataHandler
 
-    handler = DataHandler(validate, escape, ignore_errors)
+    handler = DataHandler(validate, escape, ignore_errors, local_dtds)
     records = handler.parse(source)
     return records
 
