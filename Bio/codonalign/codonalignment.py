@@ -211,8 +211,7 @@ class CodonAlignment(MultipleSeqAlignment):
             ds_tree = ds_constructor.nj(ds_dm)
         else:
             raise RuntimeError(
-                f"Unknown tree method ({tree_method})."
-                " Only NJ and UPGMA are accepted."
+                f"Unknown tree method ({tree_method}). Only NJ and UPGMA are accepted."
             )
         return dn_tree, ds_tree
 
