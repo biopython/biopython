@@ -15,7 +15,7 @@ repos:
     -   id: mixed-line-ending
         exclude: \.bb$
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.13.3
+    rev: v0.14.10
     hooks:
     # Run the Ruff linter.
     -   id: ruff-check
@@ -30,7 +30,7 @@ repos:
             '--config=lint.isort.order-by-type=false',
         ]
 -   repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.10.0
+    rev: 25.12.0
     hooks:
     -   id: black
         args: [--check,--target-version,py310]
@@ -42,7 +42,7 @@ repos:
             'flake8-rst-docstrings>=0.2.3',
         ]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.16.1
+    rev: v1.19.1
     hooks:
     -   id: mypy
         # equivalent to "files" in .mypy.ini
