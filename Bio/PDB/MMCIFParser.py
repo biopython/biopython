@@ -347,8 +347,7 @@ class MMCIFParser:
         """Handle exception (PRIVATE).
 
         This method catches an exception that occurs in the StructureBuilder
-        object (if PERMISSIVE), or raises it again, this time adding the
-        PDB line number to the error message.
+        object (if PERMISSIVE), or raises it again.
         """
         message = "%s" % (message)
         if self.PERMISSIVE:
@@ -361,7 +360,7 @@ class MMCIFParser:
                 PDBConstructionWarning,
             )
         else:
-            # exceptions are fatal - raise again with new message (including line nr)
+            # exceptions are fatal - raise again with new message
             raise PDBConstructionException(message) from None
 
 
