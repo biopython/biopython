@@ -50,6 +50,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Artemi Bendandi <https://github.com/artbendandi>
 - Arup Ghosh <https://github.com/arupgsh>
 - Austin Varela <https://github.com/austinv11>
+- Augustin Žídek <https://github.com/augustin-zidek>
 - Aziz Khan <https://github.com/asntech>
 - Barbara Mühlemann <https://github.com/bamueh>
 - Bart de Koning <bratdaking gmail>
