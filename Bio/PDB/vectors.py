@@ -431,20 +431,22 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> np.ndarray:
 
 def set_Z_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing Z rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = np.cos(angle_rads).item()
+    sinang = np.sin(angle_rads).item()
 
-    mtx[0][0] = mtx[1][1] = cosang
+    mtx[0][0] = cosang
+    mtx[1][1] = cosang
     mtx[1][0] = sinang
     mtx[0][1] = -sinang
 
 
 def set_Y_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing Y rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = np.cos(angle_rads).item()
+    sinang = np.sin(angle_rads).item()
 
-    mtx[0][0] = mtx[2][2] = cosang
+    mtx[0][0] = cosang
+    mtx[2][2] = cosang
     mtx[0][2] = sinang
     mtx[2][0] = -sinang
 
@@ -556,7 +558,7 @@ def coord_space(
 
     # tx acs[1] to origin
     # tm = homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0])
-    set_homog_trans_mtx(-a1[0], -a1[1], -a1[2], tm)
+    set_homog_trans_mtx(-a1[0].item(), -a1[1].item(), -a1[2].item(), tm)
 
     # directly translate a2 using a1
     p = a2 - a1
@@ -622,7 +624,7 @@ def coord_space(
     set_Z_homog_rot_mtx(sc[1], mrz)
     # translation matrix origin to a1
     # tm = homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0])
-    set_homog_trans_mtx(a1[0], a1[1], a1[2], tm)
+    set_homog_trans_mtx(a1[0].item(), a1[1].item(), a1[2].item(), tm)
 
     # mr = tm @ mrz @ mry @ mrz2
     mr = gtm.dot(gmrz.dot(gmry.dot(gmrz2)))
