@@ -11,6 +11,7 @@
 
 import os
 import unittest
+import warnings
 
 from Bio import Align
 from Bio import AlignIO
@@ -19,6 +20,7 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Data import PDBData
 from Bio.PDB import PDBParser
 from Bio.PDB import StructureAlignment
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.Selection import unfold_entities
 from Bio.PDB.Polypeptide import is_aa
 from Bio.Seq import Seq
@@ -42,8 +44,10 @@ class StructureAlignTests(unittest.TestCase):
         with open(al_file) as handle:
             alignment = Align.read(handle, "fasta")
 
-        s1 = p.get_structure("1", "PDB/2XHE.pdb")
-        s2 = p.get_structure("2", "PDB/1A8O.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            s1 = p.get_structure("1", "PDB/2XHE.pdb")
+            s2 = p.get_structure("2", "PDB/1A8O.pdb")
         m1 = s1[0]
         m2 = s2[0]
 
@@ -70,8 +74,10 @@ class StructureAlignTests(unittest.TestCase):
         """
         p = PDBParser(QUIET=1)
 
-        s1 = p.get_structure("1", "PDB/2XHE.pdb")
-        s2 = p.get_structure("2", "PDB/1A8O.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            s1 = p.get_structure("1", "PDB/2XHE.pdb")
+            s2 = p.get_structure("2", "PDB/1A8O.pdb")
         m1 = s1[0]
         m2 = s2[0]
 
@@ -122,8 +128,10 @@ class StructureAlignTests(unittest.TestCase):
 
         p = PDBParser(QUIET=1)
 
-        s1 = p.get_structure("1", "PDB/2XHE.pdb")
-        s2 = p.get_structure("2", "PDB/1A8O.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            s1 = p.get_structure("1", "PDB/2XHE.pdb")
+            s2 = p.get_structure("2", "PDB/1A8O.pdb")
         m1 = s1[0]
         m2 = s2[0]
 
@@ -192,8 +200,10 @@ class StructureAlignTests(unittest.TestCase):
         """
         p = PDBParser(QUIET=1)
 
-        s1 = p.get_structure("1", "PDB/2XHE.pdb")
-        s2 = p.get_structure("2", "PDB/1A8O.pdb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            s1 = p.get_structure("1", "PDB/2XHE.pdb")
+            s2 = p.get_structure("2", "PDB/1A8O.pdb")
         m1 = s1[0]
         m2 = s2[0]
 
