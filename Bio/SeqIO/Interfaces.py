@@ -27,7 +27,7 @@ from Bio.SeqRecord import SeqRecord
 
 # https://docs.python.org/3/glossary.html#term-path-like-object
 _PathLikeTypes = (PathLike, str, bytes)
-_IOSource = Union[IO[AnyStr], PathLike, str, bytes]
+_IOSource = IO[AnyStr] | PathLike | str | bytes
 _TextIOSource = _IOSource[str]
 _BytesIOSource = _IOSource[bytes]
 
