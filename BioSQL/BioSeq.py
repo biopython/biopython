@@ -18,8 +18,6 @@ Note: Currently we do not support recording per-letter-annotations
 (like quality scores) in BioSQL.
 """
 
-from typing import Optional
-
 from Bio import SeqFeature
 from Bio.Seq import Seq
 from Bio.Seq import SequenceDataAbstractBaseClass
@@ -583,7 +581,7 @@ class DBSeqRecord(SeqRecord):
         return self._annotations
 
     @annotations.setter
-    def annotations(self, value: Optional[SeqRecord._AnnotationsDict]) -> None:
+    def annotations(self, value: SeqRecord._AnnotationsDict | None) -> None:
         if value:
             self._annotations = value
         else:

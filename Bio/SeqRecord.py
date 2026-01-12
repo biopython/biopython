@@ -170,7 +170,7 @@ class SeqRecord:
 
     """
 
-    _AnnotationsDictValue = Union[str, int]
+    _AnnotationsDictValue = str | int
     _AnnotationsDict = dict[str, _AnnotationsDictValue]
 
     annotations: _AnnotationsDict
@@ -1072,7 +1072,7 @@ class SeqRecord:
         # Note can't transfer any per-letter-annotations
         offset = len(other)
         return type(self)(
-            cast(Union[Seq, MutableSeq], other + self.seq),
+            cast(Seq | MutableSeq, other + self.seq),
             id=self.id,
             name=self.name,
             description=self.description,

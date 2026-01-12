@@ -301,7 +301,7 @@ if TYPE_CHECKING:
 
 HKT = tuple["AtomKey", "AtomKey", "AtomKey"]  # Hedron key tuple
 DKT = tuple["AtomKey", "AtomKey", "AtomKey", "AtomKey"]  # Dihedron Key Tuple
-EKT = Union[HKT, DKT]  # Edron Key Tuple
+EKT = HKT | DKT  # Edron Key Tuple
 BKT = tuple["AtomKey", "AtomKey"]  # Bond Key Tuple
 
 # HACS = Tuple[np.array, np.array, np.array]  # Hedron Atom Coord Set
