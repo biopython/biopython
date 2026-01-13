@@ -16,6 +16,7 @@ The latest news is at the top of this file.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Benjamin Leff
 - Michiel de Hoon
 - Peter Cock
 - Timothy Dennis (first contribution)
