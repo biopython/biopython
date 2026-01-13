@@ -53,7 +53,6 @@ def run_psea(fname, verbose=False):
             raise RuntimeError(f"Error running p-sea: {p.stderr}")
 
 
-
 def psea(pname):
     """Parse PSEA output file."""
     fname = run_psea(pname)
