@@ -4394,7 +4394,8 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(records), 1)
             # Check that the CREATE_VIEW warning was raised
             create_view_warnings = [
-                w for w in caught
+                w
+                for w in caught
                 if issubclass(w.category, BiopythonParserWarning)
                 and "CREATE_VIEW" in str(w.message)
             ]

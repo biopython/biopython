@@ -522,7 +522,7 @@ class _XMLparser(ContentHandler):
         if method in self._method_map:
             self._method_map[method]()
             if self._debug > 4:
-                sys.stderr.write("NCBIXML: Parsed:  " + method + "\n")
+                sys.stderr.write("NCBIXML: Parsed: " + method + "\n")
         elif self._debug > 3:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
@@ -563,7 +563,7 @@ class _XMLparser(ContentHandler):
         if method in self._method_map:
             self._method_map[method]()
             if self._debug > 2:
-                sys.stderr.write(f"NCBIXML: Parsed:  {method} {self._value}\n")
+                sys.stderr.write(f"NCBIXML: Parsed: {method} {self._value}\n")
         elif self._debug > 1:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
