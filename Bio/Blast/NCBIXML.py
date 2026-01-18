@@ -29,8 +29,12 @@ Parameters         Holds information from the parameters.
 """
 # XXX finish printable BLAST output
 
+import sys
+import warnings
 import xml.sax
 from xml.sax.handler import ContentHandler
+
+from Bio import BiopythonParserWarning
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
@@ -518,11 +522,11 @@ class _XMLparser(ContentHandler):
         if method in self._method_map:
             self._method_map[method]()
             if self._debug > 4:
-                print("NCBIXML: Parsed:  " + method)
+                sys.stderr.write("NCBIXML: Parsed: " + method + "\n")
         elif self._debug > 3:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                print("NCBIXML: Ignored: " + method)
+                sys.stderr.write("NCBIXML: Ignored: " + method + "\n")
                 self._debug_ignore_list.append(method)
 
         # We don't care about white space in parent tags like Hsp,
@@ -559,11 +563,11 @@ class _XMLparser(ContentHandler):
         if method in self._method_map:
             self._method_map[method]()
             if self._debug > 2:
-                print(f"NCBIXML: Parsed:  {method} {self._value}")
+                sys.stderr.write(f"NCBIXML: Parsed: {method} {self._value}\n")
         elif self._debug > 1:
             # Doesn't exist (yet) and may want to warn about it
             if method not in self._debug_ignore_list:
-                print(f"NCBIXML: Ignored: {method} {self._value}")
+                sys.stderr.write(f"NCBIXML: Ignored: {method} {self._value}\n")
                 self._debug_ignore_list.append(method)
 
         # Reset character buffer
@@ -804,7 +808,7 @@ class BlastParser(_XMLparser):
         self._blast = None
 
         if self._debug:
-            print("NCBIXML: Added Blast record to results")
+            sys.stderr.write("NCBIXML: Added Blast record to results\n")
 
     # Header
     def _set_header_application(self):
@@ -970,7 +974,10 @@ class BlastParser(_XMLparser):
         # exist between <Hit> tags, as a result of very large remote
         # BLAST searches.
         if self._value.strip() == "CREATE_VIEW":
-            print(f"NCBIXML: Ignored: {self._value!r}")
+            warnings.warn(
+                f"NCBIXML: Ignored: {self._value!r}",
+                BiopythonParserWarning,
+            )
             self._value = ""
 
     def _end_hit(self):
