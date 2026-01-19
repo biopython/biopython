@@ -95,6 +95,16 @@ class TestPDBPSEA(unittest.TestCase):
             ],
         )
 
+    def test_run_psea_tempdir(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            psae_run = run_psea("PDB/1A8O.pdb", outdir=tmpdir)
+            output_file = os.path.join(tmpdir, psae_run)
+
+            self.assertTrue(os.path.exists(output_file))
+            self.assertTrue(psae_run.endwith(".sea"))
+
 
 class TestPSEA(unittest.TestCase):
     def tearDown(self):
