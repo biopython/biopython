@@ -224,12 +224,8 @@ class TestFastaWithComments(unittest.TestCase):
         self.assertRaises(
             ValueError, SeqIO.read, "Fasta/aster_pearson.pro", "fasta-blast"
         )
-        self.assertRaises(
-            ValueError, SeqIO.read, "Fasta/aster_pearson.pro", "fasta"
-        )
-        self.assertRaises(
-            ValueError, SeqIO.read, "Fasta/aster_blast.pro", "fasta"
-        )
+        self.assertRaises(ValueError, SeqIO.read, "Fasta/aster_pearson.pro", "fasta")
+        self.assertRaises(ValueError, SeqIO.read, "Fasta/aster_blast.pro", "fasta")
 
 
 if __name__ == "__main__":

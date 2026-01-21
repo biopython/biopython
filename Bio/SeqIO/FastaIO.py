@@ -199,7 +199,8 @@ class FastaIterator(SequenceIterator):
             line = None
         else:
             if not line.startswith(">"):
-                raise ValueError("""\
+                raise ValueError(
+                    """\
 This FASTA file contains comments at the beginning of the file, which are not
 allowed by the 'fasta' parser.
 
@@ -217,7 +218,8 @@ as comment lines and are ignored.
 (3) Use the 'fasta-blast' format. This format regards any lines "starting with
 '!', '#', or ';' as comment lines. The 'fasta-blast' format may be safer than
 the 'fasta-pearson' format, as it explicitly indicates which lines are comments.
-""")
+"""
+                )
         self._line = line
 
     def __next__(self):
