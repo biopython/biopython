@@ -65,8 +65,8 @@ class GeneralTests(unittest.TestCase):
         stream = BytesIO(data)
         records = Entrez.read(stream)
         self.assertEqual(len(records), 2)
-        self.assertEqual(records[0]['ScientificName'], 'Canis lupus familiaris')
-        self.assertEqual(records[1]['ScientificName'], 'Felis catus')
+        self.assertEqual(records[0]["ScientificName"], "Canis lupus familiaris")
+        self.assertEqual(records[1]["ScientificName"], "Felis catus")
         stream.close()
 
     def test_pickle(self):
@@ -157,44 +157,48 @@ class EInfoTest(unittest.TestCase):
         # >>> Bio.Entrez.einfo(db="pubmed")
         with open("Entrez/einfo2.xml", "rb") as stream:
             record = Entrez.read(stream)
-        self.assertEqual(len(record["DbInfo"]), 1)
-        self.assertEqual(record["DbInfo"][0]["DbName"], "pubmed")
-        self.assertEqual(record["DbInfo"][0]["MenuName"], "PubMed")
-        self.assertEqual(record["DbInfo"][0]["Description"], "PubMed bibliographic record")
-        self.assertEqual(record["DbInfo"][0]["Count"], "39730388")
-        self.assertEqual(record["DbInfo"][0]["LastUpdate"], "2025/11/27 06:33")
+        self.assertEqual(len(record["DbInfo"]), 8)
+        self.assertEqual(record["DbInfo"]["DbName"], "pubmed")
+        self.assertEqual(record["DbInfo"]["MenuName"], "PubMed")
+        self.assertEqual(record["DbInfo"]["Description"], "PubMed bibliographic record")
+        self.assertEqual(record["DbInfo"]["Count"], "39730388")
+        self.assertEqual(record["DbInfo"]["LastUpdate"], "2025/11/27 06:33")
 
-        self.assertEqual(len(record["DbInfo"][0]["FieldList"]), 50)
+        self.assertEqual(len(record["DbInfo"]["FieldList"]), 50)
 
-        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["Name"], "ALL")
-        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["FullName"], "All Fields")
+        self.assertEqual(record["DbInfo"]["FieldList"][0]["Name"], "ALL")
+        self.assertEqual(record["DbInfo"]["FieldList"][0]["FullName"], "All Fields")
         self.assertEqual(
-            record["DbInfo"][0]["FieldList"][0]["Description"],
+            record["DbInfo"]["FieldList"][0]["Description"],
             "All terms from all searchable fields",
         )
 
-        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["IsNumerical"], "N")
-        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["SingleToken"], "N")
-        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["Hierarchy"], "N")
-        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["IsHidden"], "N")
+        self.assertEqual(record["DbInfo"]["FieldList"][0]["IsNumerical"], "N")
+        self.assertEqual(record["DbInfo"]["FieldList"][0]["SingleToken"], "N")
+        self.assertEqual(record["DbInfo"]["FieldList"][0]["Hierarchy"], "N")
+        self.assertEqual(record["DbInfo"]["FieldList"][0]["IsHidden"], "N")
 
-        self.assertEqual(len(record["DbInfo"][0]["LinkList"]), 57)
+        self.assertEqual(len(record["DbInfo"]["LinkList"]), 57)
 
-        self.assertEqual(record["DbInfo"][0]["LinkList"][0]["Name"], "pubmed_assembly")
-        self.assertEqual(record["DbInfo"][0]["LinkList"][0]["Menu"], "Assembly")
+        self.assertEqual(record["DbInfo"]["LinkList"][0]["Name"], "pubmed_assembly")
+        self.assertEqual(record["DbInfo"]["LinkList"][0]["Menu"], "Assembly")
         self.assertEqual(
-            record["DbInfo"][0]["LinkList"][0]["Description"],
+            record["DbInfo"]["LinkList"][0]["Description"],
             "Assembly",
         )
-        self.assertEqual(record["DbInfo"][0]["LinkList"][0]["DbTo"], "assembly")
+        self.assertEqual(record["DbInfo"]["LinkList"][0]["DbTo"], "assembly")
 
-        self.assertEqual(record["DbInfo"][0]["LinkList"][56]["Name"], "pubmed_taxonomy_entrez")
-        self.assertEqual(record["DbInfo"][0]["LinkList"][56]["Menu"], "Taxonomy via GenBank")
         self.assertEqual(
-            record["DbInfo"][0]["LinkList"][56]["Description"],
+            record["DbInfo"]["LinkList"][56]["Name"], "pubmed_taxonomy_entrez"
+        )
+        self.assertEqual(
+            record["DbInfo"]["LinkList"][56]["Menu"], "Taxonomy via GenBank"
+        )
+        self.assertEqual(
+            record["DbInfo"]["LinkList"][56]["Description"],
             "Related Taxonomy entry computed using other Entrez links",
         )
-        self.assertEqual(record["DbInfo"][0]["LinkList"][56]["DbTo"], "taxonomy")
+        self.assertEqual(record["DbInfo"]["LinkList"][56]["DbTo"], "taxonomy")
 
     def test_corrupted(self):
         """Test if corrupted XML is handled correctly."""
@@ -396,7 +400,8 @@ class ESearchTest(unittest.TestCase):
             '"Proc Natl Acad Sci U S A"[Journal:__jid7505876]',
         )
         self.assertEqual(
-            record["QueryTranslation"], '"proc natl acad sci u s a"[Journal] AND "97"[Volume]'
+            record["QueryTranslation"],
+            '"proc natl acad sci u s a"[Journal] AND "97"[Volume]',
         )
 
     def test_pmc(self):
@@ -434,7 +439,15 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(record["TranslationStack"][1]["Count"], "1528859")
         self.assertEqual(record["TranslationStack"][1]["Explode"], "N")
         self.assertEqual(record["TranslationStack"][1].tag, "TermSet")
-        self.assertEqual(record["TranslationStack"][2], {'Term': '"cells"[All Fields]', 'Field': 'All Fields', 'Count': '5033502', 'Explode': 'N'})
+        self.assertEqual(
+            record["TranslationStack"][2],
+            {
+                "Term": '"cells"[All Fields]',
+                "Field": "All Fields",
+                "Count": "5033502",
+                "Explode": "N",
+            },
+        )
         self.assertEqual(record["TranslationStack"][2].tag, "TermSet")
         self.assertEqual(record["TranslationStack"][3], "AND")
         self.assertEqual(record["TranslationStack"][3].tag, "OP")
@@ -442,13 +455,23 @@ class ESearchTest(unittest.TestCase):
         self.assertEqual(record["TranslationStack"][4].tag, "OP")
         self.assertEqual(record["TranslationStack"][5], "OR")
         self.assertEqual(record["TranslationStack"][5].tag, "OP")
-        self.assertEqual(record["TranslationStack"][6], {'Term': '"stem cells"[All Fields]', 'Field': 'All Fields', 'Count': '715386', 'Explode': 'N'})
+        self.assertEqual(
+            record["TranslationStack"][6],
+            {
+                "Term": '"stem cells"[All Fields]',
+                "Field": "All Fields",
+                "Count": "715386",
+                "Explode": "N",
+            },
+        )
         self.assertEqual(record["TranslationStack"][6].tag, "TermSet")
         self.assertEqual(record["TranslationStack"][7], "OR")
         self.assertEqual(record["TranslationStack"][7].tag, "OP")
         self.assertEqual(record["TranslationStack"][8], "GROUP")
         self.assertEqual(record["TranslationStack"][8].tag, "OP")
-        self.assertEqual(record["TranslationStack"][9]["Term"], "hasabstract[All Fields]")
+        self.assertEqual(
+            record["TranslationStack"][9]["Term"], "hasabstract[All Fields]"
+        )
         self.assertEqual(record["TranslationStack"][9]["Field"], "All Fields")
         self.assertEqual(record["TranslationStack"][9]["Count"], "83")
         self.assertEqual(record["TranslationStack"][9]["Explode"], "N")
@@ -603,7 +626,10 @@ class EPostTest(unittest.TestCase):
             record = Entrez.read(stream, ignore_errors=True)
         self.assertEqual(len(record), 1)
         self.assertEqual(len(record.attributes), 0)
-        self.assertEqual(record["ERROR"], "Some IDs have invalid value and were omitted. Maximum ID value 18446744073709551615")
+        self.assertEqual(
+            record["ERROR"],
+            "Some IDs have invalid value and were omitted. Maximum ID value 18446744073709551615",
+        )
         self.assertEqual(record["ERROR"].tag, "ERROR")
         # Note that the first ERROR element is lost. Strictly speaking, the XML
         # is not consistent with the DTD, which allows only one ERROR element.
@@ -1536,7 +1562,9 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["LinkSetDb"][2]["Link"][2]["Id"], "11329656")
         self.assertEqual(record[0]["LinkSetDb"][2]["Link"][3]["Id"], "11218011")
         self.assertEqual(record[0]["LinkSetDb"][2]["Link"][4]["Id"], "9757294")
-        self.assertEqual(record[0]["LinkSetDb"][2]["LinkName"], "pubmed_pubmed_combined")
+        self.assertEqual(
+            record[0]["LinkSetDb"][2]["LinkName"], "pubmed_pubmed_combined"
+        )
         self.assertEqual(record[0]["LinkSetDb"][3]["DbTo"], "pubmed")
         self.assertEqual(record[0]["LinkSetDb"][3]["Link"][0]["Id"], "20718377")
         self.assertEqual(record[0]["LinkSetDb"][3]["Link"][1]["Id"], "17193860")
@@ -1553,8 +1581,9 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["LinkSetDb"][5]["Link"][2]["Id"], "12242737")
         self.assertEqual(record[0]["LinkSetDb"][5]["Link"][3]["Id"], "11218011")
         self.assertEqual(record[0]["LinkSetDb"][5]["Link"][4]["Id"], "9757294")
-        self.assertEqual(record[0]["LinkSetDb"][5]["LinkName"], "pubmed_pubmed_reviews_five")
-
+        self.assertEqual(
+            record[0]["LinkSetDb"][5]["LinkName"], "pubmed_pubmed_reviews_five"
+        )
 
     def test_pubmed3(self):
         """Test parsing pubmed link returned by ELink (third test)."""
@@ -1583,7 +1612,7 @@ class ELinkTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["Url"].attributes,
-            {'LNG': 'EN'}
+            {"LNG": "EN"},
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["IconUrl"],
@@ -1591,7 +1620,7 @@ class ELinkTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["IconUrl"].attributes,
-            {'LNG': 'EN'}
+            {"LNG": "EN"},
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][0]["ObjUrl"][0]["SubjectType"],
@@ -1686,7 +1715,7 @@ class ELinkTest(unittest.TestCase):
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["LinkName"],
-            "Exercise and Physical Fitness"
+            "Exercise and Physical Fitness",
         )
         self.assertEqual(
             record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][0]["Provider"]["Name"],
@@ -1731,7 +1760,8 @@ class ELinkTest(unittest.TestCase):
             "medlineplus2",
         )
         self.assertEqual(
-            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["Provider"]["Id"], "10405"
+            record[0]["IdUrlList"]["IdUrlSet"][1]["ObjUrl"][1]["Provider"]["Id"],
+            "10405",
         )
 
     def test_pubmed5(self):
@@ -1746,9 +1776,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(record[0]["DbFrom"], "pubmed")
         self.assertEqual(len(record[0]["IdCheckList"]), 2)
         self.assertEqual(record[0]["IdCheckList"]["IdLinkSet"][0]["Id"], "12169658")
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"]), 16
-        )
+        self.assertEqual(len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"]), 16)
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][0]), 5
         )
@@ -1816,7 +1844,8 @@ class ELinkTest(unittest.TestCase):
             len(record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["DbTo"], "geoprofiles"
+            record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["DbTo"],
+            "geoprofiles",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][3]["LinkName"],
@@ -1854,9 +1883,7 @@ class ELinkTest(unittest.TestCase):
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][0]["LinkInfo"][4]["Priority"], "128"
         )
-        self.assertEqual(
-            len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"]), 15
-        )
+        self.assertEqual(len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"]), 15)
         self.assertEqual(
             len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][0]), 5
         )
@@ -1903,7 +1930,8 @@ class ELinkTest(unittest.TestCase):
             len(record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]), 5
         )
         self.assertEqual(
-            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["DbTo"], "geoprofiles"
+            record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["DbTo"],
+            "geoprofiles",
         )
         self.assertEqual(
             record[0]["IdCheckList"]["IdLinkSet"][1]["LinkInfo"][2]["LinkName"],
@@ -1997,9 +2025,11 @@ class ESpellTest(unittest.TestCase):
         self.assertEqual(record["Database"], "pubmed")
         self.assertEqual(record["Query"], "biopythooon")
         self.assertEqual(record["CorrectedQuery"], "biopython")
-        self.assertEqual(len(record["SpelledQuery"]), 1)
-        self.assertEqual(record["SpelledQuery"][0], "biopython")
-        self.assertEqual(record["SpelledQuery"][0].tag, "Replaced")
+        self.assertEqual(len(record["SpelledQuery"]), 2)
+        self.assertEqual(record["SpelledQuery"][0], "")
+        self.assertEqual(record["SpelledQuery"][0].tag, "Original")
+        self.assertEqual(record["SpelledQuery"][1], "biopython")
+        self.assertEqual(record["SpelledQuery"][1].tag, "Replaced")
 
 
 class EFetchTest(unittest.TestCase):

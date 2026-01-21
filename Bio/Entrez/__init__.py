@@ -12,7 +12,7 @@
 """Provides code to access NCBI over the WWW.
 
 The main Entrez web page is available at:
-https://www.ncbi.nlm.nih.gov/Entrez/
+https://www.ncbi.nlm.nih.gov/search/
 
 Entrez Programming Utilities web page is available at:
 https://www.ncbi.nlm.nih.gov/books/NBK25501/
