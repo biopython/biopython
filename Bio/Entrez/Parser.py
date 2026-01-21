@@ -1095,13 +1095,16 @@ class DataHandler(metaclass=DataHandlerMeta):
             handle.close()
 
     def verify_security(self, url):
+        """Check if the url is from a trustable sournce."""
         if not self.secure:
             parts = urlparse(url)
             scheme = parts.scheme
             hostname = parts.hostname
-            hostnames = ("www.ncbi.nlm.nih.gov",
-                         "dtd.nlm.nih.gov",
-                         "eutils.ncbi.nlm.nih.gov")
+            hostnames = (
+                "www.ncbi.nlm.nih.gov",
+                "dtd.nlm.nih.gov",
+                "eutils.ncbi.nlm.nih.gov",
+            )
             if scheme != "https" or hostname not in hostnames:
                 raise ValueError(f"expected secure URL to NCBI, found {url}")
             # Trust URLs linked from NCBI
