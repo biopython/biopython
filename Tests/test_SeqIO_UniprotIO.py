@@ -24,7 +24,7 @@ class ParserTests(SeqRecordTestBaseClass):
 
         datafile = os.path.join("SwissProt", filename)
 
-        with open(datafile, mode) as handle:
+        with open(datafile, "rb") as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
 
         self.assertIsInstance(seq_record, SeqRecord)

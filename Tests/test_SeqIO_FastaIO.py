@@ -228,7 +228,7 @@ class TestFastaWithComments(unittest.TestCase):
             ValueError, SeqIO.read, "Fasta/aster_pearson.pro", "fasta"
         )
         self.assertRaises(
-            ValueError, SeqIO.read("Fasta/aster_blast.pro", "fasta"
+            ValueError, SeqIO.read, "Fasta/aster_blast.pro", "fasta"
         )
 
 
