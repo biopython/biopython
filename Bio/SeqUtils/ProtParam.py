@@ -53,7 +53,6 @@ import functools
 import sys
 import warnings
 
-from Bio import BiopythonDeprecationWarning
 from Bio.Data import IUPACData
 from Bio.Seq import Seq
 from Bio.SeqUtils import IsoelectricPoint  # Local
@@ -101,26 +100,13 @@ class ProteinAnalysis:
 
         return self.amino_acids_content
 
-    def get_amino_acids_percent(self):
-        """Included for backwards compatibility (DEPRECATED)."""
-        warnings.warn(
-            "The get_amino_acids_percent method has been deprecated "
-            "and will likely be removed from Biopython in the near "
-            "future. Please use the amino_acids_percent attribute instead.",
-            BiopythonDeprecationWarning,
-        )
-
-        return {aa: percent / 100 for aa, percent in self.amino_acids_percent.items()}
-
     @functools.cached_property
     def amino_acids_percent(self):
         """Get the amino acid content in percentages.
 
-        The same as count_amino_acids only returns the Number in percentage of
-        entire sequence. Returns a dictionary of {AminoAcid:percentage}.
-
-        Unlike the deprecated get_amino_acids_percent method, this attribute
-        returns percentages in the range 0-100.
+        The same as count_amino_acids, but returns the number as a percentage
+        of the sequence length. Returns a dictionary of {AminoAcid:percentage},
+        where the percentage is in the range 0-100.
         """
         aa_counts = self.count_amino_acids()
         percentages = {

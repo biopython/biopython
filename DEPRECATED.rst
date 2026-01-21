@@ -94,17 +94,18 @@ Please use ``format(record, "tab")`` instead.
 
 Bio.SeqIO.UniprotIO
 -------------------
-Parsing a UniProt XML file opened in text mode (if the file was opened using
-``open("myuniprotfile.xml")``) was deprecated in Release 1.85, as this may lead
-to garbled characters.  Please open the file in binary mode (as in
-``open("myuniprotfile.xml", "rb")``), or let ``Bio.SeqIO.parse`` take care of
-opening and closing files by passing the file name instead of a file handle.
+The ability to parse a UniProt XML file opened in text mode (if the file was
+opened using ``open("myuniprotfile.xml")``) was deprecated in Release 1.85 and
+removed in Release 1.87,  as this may lead to garbled characters.  Please open
+the file in binary mode (as in ``open("myuniprotfile.xml", "rb")``), or let
+``Bio.SeqIO.parse`` take care of opening and closing files by passing the file
+name instead of a file handle.
 
 Bio.Entrez
 ----------
 The ``egquery`` function wrapping the NCBI EGQuery (Entrez Global Query)
-API was deprecated in Release 1.84. The API has stopped working and the
-NCBI said this API was no longer being maintained.
+API was deprecated in Release 1.84, and removed in Release 1.87. The API has
+stopped working and the NCBI said this API was no longer being maintained.
 
 Bio.SCOP
 --------
@@ -251,9 +252,9 @@ The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
 deprecated in release 1.82, and removed in release 1.86. Instead of
 ``mymotif.instances``, please use ``mymotif.alignment.sequences``.
 
-The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.85.
-This class is a subclass from ``Seq``, but does not provide any additional
-capabilities. Please use a ``Seq`` object instead.
+The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.85,
+and removed in release 1.87.  This class is a subclass from ``Seq``, but does
+not provide any additional capabilities. Please use a ``Seq`` object instead.
 
 Bio.Restriction.RanaConfig
 --------------------------
@@ -590,7 +591,8 @@ Function 'GC' in Bio.SeqUtils was deprecated in Release 1.80, and removed in
 Release 1.82. Instead use function 'gc_fraction'.
 
 Function get_amino_acids_percent in Bio.SeqUtils.ProteinAnalysis was deprecated
-in Release 1.85. Use the amino_acids_percent property instead.
+in Release 1.85, and removed in Release 1.87. Use the amino_acids_percent
+property instead.
 
 Bio.PopGen.Async
 ----------------

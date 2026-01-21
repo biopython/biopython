@@ -12,8 +12,6 @@ from Bio import SeqIO
 from Bio.SeqIO.FastaIO import FastaTwoLineParser
 from Bio.SeqIO.FastaIO import SimpleFastaParser
 
-from Bio import BiopythonDeprecationWarning
-
 
 def title_to_ids(title):
     """Convert a FASTA title line into the id, name, and description.
@@ -226,10 +224,12 @@ class TestFastaWithComments(unittest.TestCase):
         self.assertRaises(
             ValueError, SeqIO.read, "Fasta/aster_pearson.pro", "fasta-blast"
         )
-        with self.assertWarns(BiopythonDeprecationWarning):
-            record = SeqIO.read("Fasta/aster_pearson.pro", "fasta")
-        with self.assertWarns(BiopythonDeprecationWarning):
-            record = SeqIO.read("Fasta/aster_blast.pro", "fasta")
+        self.assertRaises(
+            ValueError, SeqIO.read, "Fasta/aster_pearson.pro", "fasta"
+        )
+        self.assertRaises(
+            ValueError, SeqIO.read("Fasta/aster_blast.pro", "fasta"
+        )
 
 
 if __name__ == "__main__":
