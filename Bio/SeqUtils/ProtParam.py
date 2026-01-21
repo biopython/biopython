@@ -51,7 +51,6 @@ Other public methods are:
 
 import functools
 import sys
-import warnings
 
 from Bio.Data import IUPACData
 from Bio.Seq import Seq

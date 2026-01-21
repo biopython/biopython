@@ -67,7 +67,7 @@ Parsing a FASTA file using Bio.SeqIO.parse with ``format='fasta'`` interprets
 lines before the first line starting with '>' as comments and skips them. To be
 consistent with the most common interpretation of the FASTA file format, the
 use of such comment lines at the beginning of the FASTA file was deprecated in
-Biopython Release 1.85.
+Biopython Release 1.85, and removed in Biopython release 1.87.
 As an alternative, you can use ``format='fasta-pearson'`` to specify the FASTA
 file format as defined by William Pearson's FASTA aligner program, allowing for
 comment lines at the top of the FASTA file (lines anywhere in the file starting
@@ -96,7 +96,7 @@ Bio.SeqIO.UniprotIO
 -------------------
 The ability to parse a UniProt XML file opened in text mode (if the file was
 opened using ``open("myuniprotfile.xml")``) was deprecated in Release 1.85 and
-removed in Release 1.87,  as this may lead to garbled characters.  Please open
+removed in Release 1.87, as this may lead to garbled characters.  Please open
 the file in binary mode (as in ``open("myuniprotfile.xml", "rb")``), or let
 ``Bio.SeqIO.parse`` take care of opening and closing files by passing the file
 name instead of a file handle.
