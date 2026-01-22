@@ -362,7 +362,7 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     del Entrez
 
-    def __init__(self, validate, escape, ignore_errors):
+    def __init__(self, validate, escape, ignore_errors, local_dtds=True):
         """Create a DataHandler object."""
         self.dtd_urls = []
         self.element = None
@@ -382,6 +382,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.schema_namespace = None
         self.namespace_level = Counter()
         self.namespace_prefix = {}
+        self.local_dtds = local_dtds
         if escape:
             self.characterDataHandler = self.characterDataHandlerEscape
         else:
@@ -1071,6 +1072,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         if DataHandler.local_dtd_dir is None:
             return
         path = os.path.join(DataHandler.local_dtd_dir, filename)
+        print(path)
         try:
             handle = open(path, "wb")
         except OSError:
@@ -1099,7 +1101,9 @@ class DataHandler(metaclass=DataHandlerMeta):
         of downloading it from the URL specified in the XML. Using the local
         DTD results in much faster parsing. If the DTD is not found locally,
         we try to download it. If new DTDs become available from NCBI,
-        putting them in Bio/Entrez/DTDs will allow the parser to see them.
+        putting them in Bio/Entrez/DTDs will allow the parser to see them. If
+        self.local_dtds is False, we skip trying the local cache and try
+        downloading the DTD first.
         """
         urlinfo = urlparse(systemId)
         if urlinfo.scheme in ["http", "https", "ftp"]:
@@ -1121,12 +1125,14 @@ class DataHandler(metaclass=DataHandlerMeta):
         else:
             raise ValueError("Unexpected URL scheme %r" % urlinfo.scheme)
         self.dtd_urls.append(url)
-        # First, try to load the local version of the DTD file
+
         location, filename = os.path.split(systemId)
-        handle = self.open_dtd_file(filename)
-        if not handle:
-            # DTD is not available as a local file. Try accessing it through
-            # the internet instead.
+        if self.local_dtds:
+            # First, try to load the local version of the DTD file
+            handle = self.open_dtd_file(filename)
+        if not self.local_dtds or not handle:
+            # User wants to ignore the local DTDs or the DTD is not available
+            # as a local file. Try accessing it through the internet instead.
             try:
                 handle = urlopen(url)
             except OSError:
