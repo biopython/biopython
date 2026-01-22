@@ -13,12 +13,15 @@ and position-specific scoring matrices.
 
 import math
 import numbers
+from collections.abc import Iterator
+from typing import Union
 
 import numpy as np
 
 from Bio.Seq import Seq
 
 from . import _pwm  # type: ignore
+from . import _searchmodule  # type: ignore
 
 
 class GenericPositionMatrix(dict):
@@ -411,31 +414,12 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
         """
         # TODO - Code itself tolerates ambiguous bases (as NaN).
-        if sorted(self.alphabet) != ["A", "C", "G", "T"]:
-            raise ValueError(
-                "PSSM has wrong alphabet: %s - Use only with DNA motifs" % self.alphabet
-            )
+        self._validate_alphabet()
 
         # NOTE: The C code handles mixed case input as this could be large
         # (e.g. contig or chromosome), so requiring it be all upper or lower
         # case would impose an overhead to allocate the extra memory.
-        try:
-            sequence = bytes(sequence)
-        except TypeError:  # str
-            try:
-                sequence = bytes(sequence, "ASCII")
-            except TypeError:
-                raise ValueError(
-                    "sequence should be a Seq, MutableSeq, string, or bytes-like object"
-                ) from None
-            except UnicodeEncodeError:
-                raise ValueError(
-                    "sequence should contain ASCII characters only"
-                ) from None
-        except Exception:
-            raise ValueError(
-                "sequence should be a Seq, MutableSeq, string, or bytes-like object"
-            ) from None
+        sequence = self._validate_sequence(sequence)
 
         n = len(sequence)
         m = self.length
@@ -484,6 +468,76 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             chunk_positions = chunk_positions[order]
             chunk_scores = chunk_scores[order]
             yield from zip(chunk_positions, chunk_scores)
+
+    def fast_search(
+        self,
+        sequence: Seq,
+        threshold: float = 0.0,
+        algorithm: str = "lookahead",
+        both: bool = True,
+        chunksize: int = 10**6,
+        q: int = 2,
+    ) -> Iterator[tuple[np.int64, np.float32]]:
+        """
+        Find hits with PWM score above given threshold.
+
+        This function performs efficient motif search using either the 'lookahead',
+        'permuted_lookahead', or 'superalphabet' algorithms. It supports dynamic
+        thresholding and optimizations to discard unlikely matches early.
+
+        Parameters
+        ----------
+        sequence : Seq
+            DNA sequence to scan.
+        threshold : float, optional
+            Minimum score required for a match.
+        algorithm : str, optional
+            Search method: 'lookahead', 'permuted' or 'superalphabet'.
+        both : boolean, optional
+            Set True to scan the reverse complement.
+        chunksize : int, optional
+            Number of base pairs to process at once. Useful for memory management.
+        q : int, optional
+            Size of q-tuples for 'superalphabet' method.
+        """
+        self._validate_alphabet()
+        seq_len = len(sequence)
+        motif_l = self.length
+        logodds = np.array(
+            [[self[letter][i] for letter in "ACGT"] for i in range(motif_l)], float
+        )
+        chunk_starts = np.arange(0, seq_len, chunksize)
+        if both:
+            rc = self.reverse_complement()
+            rc_logodds = np.array(
+                [[rc[letter][i] for letter in "ACGT"] for i in range(len(rc["A"]))],
+                dtype=float,
+            )
+        for chunk_start in chunk_starts:
+            subseq = self._validate_sequence(
+                sequence[chunk_start : chunk_start + chunksize + motif_l - 1]
+            )
+            pos_hits = _searchmodule.search(
+                bytes(subseq), logodds, threshold, algorithm.encode(), q
+            )
+            pos_hits[:, 0] += chunk_start
+            if both:
+                rc_hits = _searchmodule.search(
+                    bytes(subseq), rc_logodds, threshold, algorithm.encode(), q
+                )
+                rc_hits[:, 0] += chunk_start
+                rc_hits[:, 0] -= seq_len
+            else:
+                rc_hits = np.empty((0, 2), dtype=np.float64)
+            all_hits = np.vstack((pos_hits, rc_hits))
+            # positive positions: sort by position (distance to 0)
+            # negative positions: sort by (position + seq_len) (distance to -seq_len)
+            sort_key = np.where(
+                all_hits[:, 0] >= 0, all_hits[:, 0], all_hits[:, 0] + seq_len
+            )
+            order = np.argsort(sort_key)
+            all_hits = all_hits[order]
+            yield from zip(all_hits[:, 0].astype(np.int64), all_hits[:, 1])
 
     @property
     def max(self):
@@ -621,3 +675,24 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         for letter in self.alphabet:
             background[letter] /= total
         return ScoreDistribution(precision=precision, pssm=self, background=background)
+
+    def _validate_sequence(self, sequence: Union[str, Seq, bytes]) -> bytes:
+        """Validate and convert sequence to bytes."""
+        if isinstance(sequence, bytes):
+            return sequence
+        try:
+            if isinstance(sequence, str):
+                return sequence.encode("ASCII")
+            return bytes(str(sequence).encode("ASCII"))
+        except UnicodeEncodeError:
+            raise ValueError("sequence should contain ASCII characters only") from None
+        except Exception:
+            raise ValueError(
+                "sequence should be a Seq, MutableSeq, string, or bytes-like object"
+            ) from None
+
+    def _validate_alphabet(self) -> None:
+        if sorted(self.alphabet) != ["A", "C", "G", "T"]:
+            raise ValueError(
+                f"PSSM has wrong alphabet: {self.alphabet} - Use only with DNA motifs"
+            )
