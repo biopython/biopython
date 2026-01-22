@@ -27,7 +27,9 @@ class ParserTests(SeqRecordTestBaseClass):
         with open(datafile) as handle:
             with self.assertRaises(ValueError) as cm:
                 SeqIO.read(handle, "uniprot-xml")
-            self.assertEqual(str(cm.exception), "UniProt XML files must be opened in binary mode.")
+            self.assertEqual(
+                str(cm.exception), "UniProt XML files must be opened in binary mode."
+            )
 
         with open(datafile, "rb") as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
@@ -148,7 +150,9 @@ class ParserTests(SeqRecordTestBaseClass):
         with open(datafile) as handle:
             with self.assertRaises(ValueError) as cm:
                 SeqIO.read(handle, "uniprot-xml")
-            self.assertEqual(str(cm.exception), "UniProt XML files must be opened in binary mode.")
+            self.assertEqual(
+                str(cm.exception), "UniProt XML files must be opened in binary mode."
+            )
 
         with open(datafile, "rb") as handle:
             seq_record = SeqIO.read(handle, "uniprot-xml")
