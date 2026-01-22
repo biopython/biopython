@@ -226,7 +226,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kurt Graff <https://github.com/graph1994>
 - Kyle Ellrott <https://github.com/kellrott>
 - Leighton Pritchard <https://github.com/widdowquinn>
-- Lenna Peterson <ark first-name at gmail dot com>
+- Lenna Peterson <https://github.com/lennax>
 - Leonhard Heizinger <https://github.com/he-leon>
 - Leszek Pryszcz <https://github.com/lpryszcz>
 - Lewis A. Marshall <https://github.com/lewisamarshall>
