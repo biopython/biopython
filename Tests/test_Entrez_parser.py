@@ -12,6 +12,7 @@ from io import BytesIO
 
 from Bio import Entrez
 from Bio import StreamModeError
+from Bio.Entrez.Parser import NoneElement
 
 
 class GeneralTests(unittest.TestCase):
@@ -94,7 +95,7 @@ class GeneralTests(unittest.TestCase):
                 pickle.dump(record, stream)
                 stream.seek(0)
                 pickled_record = pickle.load(stream)
-            self.assertEqual(record, pickled_record)
+            self.assertEqual(record, pickled_record, filename)
 
 
 class EInfoTest(unittest.TestCase):
@@ -157,48 +158,48 @@ class EInfoTest(unittest.TestCase):
         # >>> Bio.Entrez.einfo(db="pubmed")
         with open("Entrez/einfo2.xml", "rb") as stream:
             record = Entrez.read(stream)
-        self.assertEqual(len(record["DbInfo"]), 8)
-        self.assertEqual(record["DbInfo"]["DbName"], "pubmed")
-        self.assertEqual(record["DbInfo"]["MenuName"], "PubMed")
-        self.assertEqual(record["DbInfo"]["Description"], "PubMed bibliographic record")
-        self.assertEqual(record["DbInfo"]["Count"], "39730388")
-        self.assertEqual(record["DbInfo"]["LastUpdate"], "2025/11/27 06:33")
+        self.assertEqual(len(record["DbInfo"]), 1)
+        self.assertEqual(record["DbInfo"][0]["DbName"], "pubmed")
+        self.assertEqual(record["DbInfo"][0]["MenuName"], "PubMed")
+        self.assertEqual(record["DbInfo"][0]["Description"], "PubMed bibliographic record")
+        self.assertEqual(record["DbInfo"][0]["Count"], "39730388")
+        self.assertEqual(record["DbInfo"][0]["LastUpdate"], "2025/11/27 06:33")
 
-        self.assertEqual(len(record["DbInfo"]["FieldList"]), 50)
+        self.assertEqual(len(record["DbInfo"][0]["FieldList"]), 50)
 
-        self.assertEqual(record["DbInfo"]["FieldList"][0]["Name"], "ALL")
-        self.assertEqual(record["DbInfo"]["FieldList"][0]["FullName"], "All Fields")
+        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["Name"], "ALL")
+        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["FullName"], "All Fields")
         self.assertEqual(
-            record["DbInfo"]["FieldList"][0]["Description"],
+            record["DbInfo"][0]["FieldList"][0]["Description"],
             "All terms from all searchable fields",
         )
 
-        self.assertEqual(record["DbInfo"]["FieldList"][0]["IsNumerical"], "N")
-        self.assertEqual(record["DbInfo"]["FieldList"][0]["SingleToken"], "N")
-        self.assertEqual(record["DbInfo"]["FieldList"][0]["Hierarchy"], "N")
-        self.assertEqual(record["DbInfo"]["FieldList"][0]["IsHidden"], "N")
+        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["IsNumerical"], "N")
+        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["SingleToken"], "N")
+        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["Hierarchy"], "N")
+        self.assertEqual(record["DbInfo"][0]["FieldList"][0]["IsHidden"], "N")
 
-        self.assertEqual(len(record["DbInfo"]["LinkList"]), 57)
+        self.assertEqual(len(record["DbInfo"][0]["LinkList"]), 57)
 
-        self.assertEqual(record["DbInfo"]["LinkList"][0]["Name"], "pubmed_assembly")
-        self.assertEqual(record["DbInfo"]["LinkList"][0]["Menu"], "Assembly")
+        self.assertEqual(record["DbInfo"][0]["LinkList"][0]["Name"], "pubmed_assembly")
+        self.assertEqual(record["DbInfo"][0]["LinkList"][0]["Menu"], "Assembly")
         self.assertEqual(
-            record["DbInfo"]["LinkList"][0]["Description"],
+            record["DbInfo"][0]["LinkList"][0]["Description"],
             "Assembly",
         )
-        self.assertEqual(record["DbInfo"]["LinkList"][0]["DbTo"], "assembly")
+        self.assertEqual(record["DbInfo"][0]["LinkList"][0]["DbTo"], "assembly")
 
         self.assertEqual(
-            record["DbInfo"]["LinkList"][56]["Name"], "pubmed_taxonomy_entrez"
+            record["DbInfo"][0]["LinkList"][56]["Name"], "pubmed_taxonomy_entrez"
         )
         self.assertEqual(
-            record["DbInfo"]["LinkList"][56]["Menu"], "Taxonomy via GenBank"
+            record["DbInfo"][0]["LinkList"][56]["Menu"], "Taxonomy via GenBank"
         )
         self.assertEqual(
-            record["DbInfo"]["LinkList"][56]["Description"],
+            record["DbInfo"][0]["LinkList"][56]["Description"],
             "Related Taxonomy entry computed using other Entrez links",
         )
-        self.assertEqual(record["DbInfo"]["LinkList"][56]["DbTo"], "taxonomy")
+        self.assertEqual(record["DbInfo"][0]["LinkList"][56]["DbTo"], "taxonomy")
 
     def test_corrupted(self):
         """Test if corrupted XML is handled correctly."""
@@ -745,7 +746,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[0]["Gi"], 28800982)
         self.assertEqual(record[0]["CreateDate"], "2003/03/03")
         self.assertEqual(record[0]["UpdateDate"], "2016/07/25")
-        self.assertEqual(record[0]["Flags"], 0)
+        self.assertEqual(record[0]["Flags"], NoneElement(None, None, None))
         self.assertEqual(record[0]["TaxId"], 9606)
         self.assertEqual(record[0]["Length"], 268)
         self.assertEqual(record[0]["Status"], "live")
@@ -763,7 +764,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["Gi"], 28628843)
         self.assertEqual(record[1]["CreateDate"], "2003/03/02")
         self.assertEqual(record[1]["UpdateDate"], "2003/03/02")
-        self.assertEqual(record[1]["Flags"], 0)
+        self.assertEqual(record[1]["Flags"], NoneElement(None, None, None))
         self.assertEqual(record[1]["TaxId"], 9606)
         self.assertEqual(record[1]["Length"], 102)
         self.assertEqual(record[1]["Status"], "live")
@@ -789,7 +790,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[0]["Gi"], 28864546)
         self.assertEqual(record[0]["CreateDate"], "2003/03/05")
         self.assertEqual(record[0]["UpdateDate"], "2003/03/05")
-        self.assertEqual(record[0]["Flags"], 0)
+        self.assertEqual(record[0]["Flags"], NoneElement(None, None, None))
         self.assertEqual(record[0]["TaxId"], 9606)
         self.assertEqual(record[0]["Length"], 491)
         self.assertEqual(record[0]["Status"], "live")
@@ -805,7 +806,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record[1]["Gi"], 28800981)
         self.assertEqual(record[1]["CreateDate"], "2003/03/03")
         self.assertEqual(record[1]["UpdateDate"], "2016/07/25")
-        self.assertEqual(record[1]["Flags"], 0)
+        self.assertEqual(record[1]["Flags"], NoneElement(None, None, None))
         self.assertEqual(record[1]["TaxId"], 9606)
         self.assertEqual(record[1]["Length"], 860)
         self.assertEqual(record[1]["Status"], "live")
@@ -1048,7 +1049,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record["BondChiralUndefCount"], 0)
         self.assertEqual(record["IsotopeAtomCount"], 0)
         self.assertEqual(record["CovalentUnitCount"], 1)
-        self.assertEqual(record["TautomerCount"], None)  # noqa: A502
+        self.assertEqual(record["TautomerCount"], NoneElement(None, None, None))
         self.assertEqual(record["SubstanceIDList"], [])
         self.assertEqual(record["TPSA"], "34.1")
         self.assertEqual(record["AssaySourceNameList"], [])
@@ -1057,7 +1058,7 @@ class ESummaryTest(unittest.TestCase):
         self.assertEqual(record["MinTC"], "")
         self.assertEqual(record["MaxTC"], "")
         self.assertEqual(record["ActiveAidCount"], 1)
-        self.assertEqual(record["InactiveAidCount"], None)
+        self.assertEqual(record["InactiveAidCount"], NoneElement(None, None, None))
         self.assertEqual(record["TotalAidCount"], 243)
         self.assertEqual(record["InChIKey"], "LXEJRKJRKIFVNY-UHFFFAOYSA-N")
         self.assertEqual(

@@ -63,24 +63,6 @@ class NoneElement:
         self.key = key
         self.attributes = attributes
 
-    def __eq__(self, other):
-        """Define equality with other None objects."""
-        if other is None:
-            return True
-        elif other.__eq__(None):
-            return True
-        else:
-            return False
-
-    def __ne__(self, other):
-        """Define non-equality."""
-        if other is None:
-            return False
-        elif other.__eq__(None):
-            return False
-        else:
-            return True
-
     def __repr__(self):
         """Return a string representation of the object."""
         try:
@@ -88,6 +70,11 @@ class NoneElement:
         except AttributeError:
             return "NoneElement"
         return "NoneElement(attributes=%r)" % attributes
+
+    def __eq__(self, other):
+        if isinstance(other, NoneElement):
+            return True
+        return False
 
 
 class IntegerElement(int):
