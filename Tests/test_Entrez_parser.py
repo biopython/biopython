@@ -161,7 +161,9 @@ class EInfoTest(unittest.TestCase):
         self.assertEqual(len(record["DbInfo"]), 1)
         self.assertEqual(record["DbInfo"][0]["DbName"], "pubmed")
         self.assertEqual(record["DbInfo"][0]["MenuName"], "PubMed")
-        self.assertEqual(record["DbInfo"][0]["Description"], "PubMed bibliographic record")
+        self.assertEqual(
+            record["DbInfo"][0]["Description"], "PubMed bibliographic record"
+        )
         self.assertEqual(record["DbInfo"][0]["Count"], "39730388")
         self.assertEqual(record["DbInfo"][0]["LastUpdate"], "2025/11/27 06:33")
 
