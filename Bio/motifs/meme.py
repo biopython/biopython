@@ -13,10 +13,6 @@ from Bio import motifs
 from Bio.Seq import Seq
 
 
-import warnings
-from Bio import BiopythonDeprecationWarning
-
-
 def read(handle):
     """Parse the text output of the MEME program into a meme.Record object.
 
@@ -75,28 +71,6 @@ class Motif(motifs.Motif):
         self.name = None
         self.id = None
         self.alt_id = None
-
-
-class Instance(Seq):
-    """A class describing the instances of a MEME motif, and the data thereof."""
-
-    def __init__(self, *args, **kwds):
-        """Initialize the class."""
-        warnings.warn(
-            "The class Bio.motifs.meme.Instance is deprecated, as it does not "
-            "provide any real advantages compared to the Seq class from which "
-            "it is derived. Please use the Seq class directly instead of the "
-            "Instance class.",
-            BiopythonDeprecationWarning,
-        )
-        Seq.__init__(self, *args, **kwds)
-        self.sequence_name = ""
-        self.sequence_id = ""
-        self.start = 0
-        self.pvalue = 1.0
-        self.strand = 0
-        self.length = 0
-        self.motif_name = ""
 
 
 class Record(list):
