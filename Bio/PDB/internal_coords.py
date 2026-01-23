@@ -301,7 +301,7 @@ if TYPE_CHECKING:
 
 HKT = tuple["AtomKey", "AtomKey", "AtomKey"]  # Hedron key tuple
 DKT = tuple["AtomKey", "AtomKey", "AtomKey", "AtomKey"]  # Dihedron Key Tuple
-EKT = Union[HKT, DKT]  # Edron Key Tuple
+EKT = HKT | DKT  # Edron Key Tuple
 BKT = tuple["AtomKey", "AtomKey"]  # Bond Key Tuple
 
 # HACS = Tuple[np.array, np.array, np.array]  # Hedron Atom Coord Set
@@ -1733,8 +1733,7 @@ class IC_Chain:
             f"[ {d.angle:9.5f}, {hedraNdx[d.h1key]}, {hedraNdx[d.h2key]}, {1 if d.reverse else 0}, "
         )
         fp.write(
-            f"{0 if d.h1key in hedraSet else 1}, "
-            f"{0 if d.h2key in hedraSet else 1}, "
+            f"{0 if d.h1key in hedraSet else 1}, {0 if d.h2key in hedraSet else 1}, "
         )
         fp.write(
             "    // {} [ {} -- {} ] {}\n".format(
@@ -4162,8 +4161,7 @@ class Hedron(Edron):
     def __repr__(self) -> str:
         """Print string for Hedron object."""
         return (
-            f"3-{self.id} {self.re_class} {self.len12!s} "
-            f"{self.angle!s} {self.len23!s}"
+            f"3-{self.id} {self.re_class} {self.len12!s} {self.angle!s} {self.len23!s}"
         )
 
     @property

@@ -25,12 +25,12 @@ class StructureAlignment:
 
     def __init__(
         self,
-        fasta_align: Optional[MultipleSeqAlignment | Alignment] = None,
+        fasta_align: MultipleSeqAlignment | Alignment | None = None,
         m1: Model | None = None,
         m2: Model | None = None,
         si: int = 0,
         sj: int = 1,
-        aligner: Optional[PairwiseAligner] = None,
+        aligner: PairwiseAligner | None = None,
     ) -> None:
         """Initialize.
 

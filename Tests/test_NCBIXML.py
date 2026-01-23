@@ -4,9 +4,12 @@
 # as part of this package.
 """Test the NCBI XML parser."""
 
+import io
 import os
 import unittest
+import warnings
 
+from Bio import BiopythonParserWarning
 from Bio.Blast import NCBIXML
 
 
@@ -4311,6 +4314,93 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(description.score, 325.0)
         self.assertEqual(description.e, 7.83523e-61)
         self.assertEqual(description.num_alignments, 12)
+
+    def test_create_view_warning(self):
+        """Test that CREATE_VIEW between Hit tags raises a BiopythonParserWarning."""
+        # Minimal BLAST XML with CREATE_VIEW text between Hit tags
+        xml_data = b"""\
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>blastp</BlastOutput_program>
+  <BlastOutput_version>BLASTP 2.2.12 [Aug-07-2005]</BlastOutput_version>
+  <BlastOutput_reference>Altschul et al.</BlastOutput_reference>
+  <BlastOutput_db>nr</BlastOutput_db>
+  <BlastOutput_query-ID>test_query</BlastOutput_query-ID>
+  <BlastOutput_query-def>test query</BlastOutput_query-def>
+  <BlastOutput_query-len>100</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+      <Parameters_expect>10</Parameters_expect>
+      <Parameters_gap-open>11</Parameters_gap-open>
+      <Parameters_gap-extend>1</Parameters_gap-extend>
+      <Parameters_filter>L;</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+  <BlastOutput_iterations>
+    <Iteration>
+      <Iteration_iter-num>1</Iteration_iter-num>
+      <Iteration_hits>
+        CREATE_VIEW
+        <Hit>
+          <Hit_num>1</Hit_num>
+          <Hit_id>test_hit</Hit_id>
+          <Hit_def>test hit definition</Hit_def>
+          <Hit_accession>TEST123</Hit_accession>
+          <Hit_len>100</Hit_len>
+          <Hit_hsps>
+            <Hsp>
+              <Hsp_num>1</Hsp_num>
+              <Hsp_bit-score>50.0</Hsp_bit-score>
+              <Hsp_score>100</Hsp_score>
+              <Hsp_evalue>1e-10</Hsp_evalue>
+              <Hsp_query-from>1</Hsp_query-from>
+              <Hsp_query-to>100</Hsp_query-to>
+              <Hsp_hit-from>1</Hsp_hit-from>
+              <Hsp_hit-to>100</Hsp_hit-to>
+              <Hsp_query-frame>0</Hsp_query-frame>
+              <Hsp_hit-frame>0</Hsp_hit-frame>
+              <Hsp_identity>100</Hsp_identity>
+              <Hsp_positive>100</Hsp_positive>
+              <Hsp_gaps>0</Hsp_gaps>
+              <Hsp_align-len>100</Hsp_align-len>
+              <Hsp_qseq>TESTSEQUENCE</Hsp_qseq>
+              <Hsp_hseq>TESTSEQUENCE</Hsp_hseq>
+              <Hsp_midline>TESTSEQUENCE</Hsp_midline>
+            </Hsp>
+          </Hit_hsps>
+        </Hit>
+      </Iteration_hits>
+      <Iteration_stat>
+        <Statistics>
+          <Statistics_db-num>1000</Statistics_db-num>
+          <Statistics_db-len>100000</Statistics_db-len>
+          <Statistics_hsp-len>10</Statistics_hsp-len>
+          <Statistics_eff-space>1000000</Statistics_eff-space>
+          <Statistics_kappa>0.041</Statistics_kappa>
+          <Statistics_lambda>0.267</Statistics_lambda>
+          <Statistics_entropy>0.14</Statistics_entropy>
+        </Statistics>
+      </Iteration_stat>
+    </Iteration>
+  </BlastOutput_iterations>
+</BlastOutput>
+"""
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", BiopythonParserWarning)
+            handle = io.BytesIO(xml_data)
+            records = list(NCBIXML.parse(handle))
+            self.assertEqual(len(records), 1)
+            # Check that the CREATE_VIEW warning was raised
+            create_view_warnings = [
+                w
+                for w in caught
+                if issubclass(w.category, BiopythonParserWarning)
+                and "CREATE_VIEW" in str(w.message)
+            ]
+            self.assertEqual(len(create_view_warnings), 1)
+            self.assertIn("NCBIXML: Ignored:", str(create_view_warnings[0].message))
 
 
 if __name__ == "__main__":

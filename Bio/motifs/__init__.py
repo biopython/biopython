@@ -15,7 +15,6 @@ It also includes functionality for parsing output from the AlignACE, MEME,
 and MAST programs, as well as files in the TRANSFAC format.
 """
 
-import warnings
 from urllib.parse import urlencode
 from urllib.request import Request
 from urllib.request import urlopen

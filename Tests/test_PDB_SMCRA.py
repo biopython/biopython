@@ -61,7 +61,13 @@ class Atom_Element(unittest.TestCase):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             a = Atom.Atom(
-                "XE1", None, None, None, None, " XE1", None  # serial 5170 - 4CP4
+                "XE1",
+                None,
+                None,
+                None,
+                None,
+                " XE1",
+                None,  # serial 5170 - 4CP4
             )
         self.assertEqual(a.element, "X")
 

@@ -563,8 +563,7 @@ class PDBList:
         # Otherwise,retrieve the file(s)
         if self._verbose:
             print(
-                f"Downloading assembly ({assembly_num}) for PDB entry "
-                f"'{pdb_code}'..."
+                f"Downloading assembly ({assembly_num}) for PDB entry '{pdb_code}'..."
             )
         try:
             urlcleanup()

@@ -192,6 +192,11 @@ def _parse_features_packet(length, data, record):
                     qvalues.append(_decode(value.attributes["predef"].value))
                 elif value.hasAttribute("int"):
                     qvalues.append(int(value.attributes["int"].value))
+            # Remove linebreaks that may mess up formatting to GenBank
+            qvalues = [
+                sub(r"\r\n|\r|\n", " ", v).strip() if isinstance(v, str) else v
+                for v in qvalues
+            ]
             quals[qname] = qvalues
 
         name = _get_attribute_value(feature, "name")

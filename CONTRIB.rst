@@ -57,6 +57,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Bartosz Telenczuk <bartosz.telenczuk at domain gmail.com>
 - Ben Fulton <https://github.com/benfulton>
 - Ben Morris <https://github.com/bendmorris>
+- Ben Oppenheimer <https://github.com/beneopp>
 - Ben Woodcroft <https://github.com/wwood>
 - Benedict Carling <https://github.com/Benedict-Carling>
 - Benjamin Rowell <https://github.com/benjaminr>
@@ -377,3 +378,4 @@ please open an issue on GitHub or mention it on the mailing list.
 - Zachary Sailer <https://github.com/Zsailer>
 - Zaid Ur-Rehman <https://github.com/zaidurrehman>
 - Zheng Ruan <https://github.com/zruan>
+- Ziyan Rao <https://github.com/starrzy>
