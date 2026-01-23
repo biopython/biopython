@@ -1,18 +1,3 @@
-<?xml version="1.0"?>
-<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
-<eSearchResult>
-	<Count>0</Count>
-	<RetMax>0</RetMax>
-	<RetStart>0</RetStart>
-	<IdList>
-	</IdList>
-	<TranslationSet>
-	</TranslationSet>
-	<QueryTranslation></QueryTranslation>
-	<ErrorList>
-		<PhraseNotFound>abcXYZ</PhraseNotFound>
-	</ErrorList>
-	<WarningList>
-		<OutputMessage>No items found.</OutputMessage>
-	</WarningList>
-</eSearchResult>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD esearch 20060628//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20060628/esearch.dtd">
+<eSearchResult><Count>0</Count><RetMax>0</RetMax><RetStart>0</RetStart><IdList/><TranslationSet/><QueryTranslation>(abcXYZ[All Fields])</QueryTranslation><ErrorList><PhraseNotFound>abcXYZ</PhraseNotFound></ErrorList><WarningList><OutputMessage>No items found.</OutputMessage></WarningList></eSearchResult>

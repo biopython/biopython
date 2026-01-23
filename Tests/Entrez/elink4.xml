@@ -1,5 +1,5 @@
-<?xml version="1.0"?>
-<!DOCTYPE eLinkResult PUBLIC "-//NLM//DTD eLinkResult, 23 November 2010//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eLink_101123.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE eLinkResult PUBLIC "-//NLM//DTD elink 20101123//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20101123/elink.dtd">
 <eLinkResult>
 <LinkSet>
 	<DbFrom>pubmed</DbFrom>
@@ -9,6 +9,126 @@
 	<LinkSetDb>
 		<DbTo>pubmed</DbTo>
 		<LinkName>pubmed_pubmed</LinkName>
+		<Link>
+			<Id>38997184</Id>
+		</Link>
+		<Link>
+			<Id>37474462</Id>
+		</Link>
+		<Link>
+			<Id>36642882</Id>
+		</Link>
+		<Link>
+			<Id>33097552</Id>
+		</Link>
+		<Link>
+			<Id>32874413</Id>
+		</Link>
+		<Link>
+			<Id>32345945</Id>
+		</Link>
+		<Link>
+			<Id>31558954</Id>
+		</Link>
+		<Link>
+			<Id>31415410</Id>
+		</Link>
+		<Link>
+			<Id>31011388</Id>
+		</Link>
+		<Link>
+			<Id>30255446</Id>
+		</Link>
+		<Link>
+			<Id>30255443</Id>
+		</Link>
+		<Link>
+			<Id>30115443</Id>
+		</Link>
+		<Link>
+			<Id>29340557</Id>
+		</Link>
+		<Link>
+			<Id>29331013</Id>
+		</Link>
+		<Link>
+			<Id>29233545</Id>
+		</Link>
+		<Link>
+			<Id>29115651</Id>
+		</Link>
+		<Link>
+			<Id>29022115</Id>
+		</Link>
+		<Link>
+			<Id>27597304</Id>
+		</Link>
+		<Link>
+			<Id>27315096</Id>
+		</Link>
+		<Link>
+			<Id>27304929</Id>
+		</Link>
+		<Link>
+			<Id>27142382</Id>
+		</Link>
+		<Link>
+			<Id>26965844</Id>
+		</Link>
+		<Link>
+			<Id>26481976</Id>
+		</Link>
+		<Link>
+			<Id>26427946</Id>
+		</Link>
+		<Link>
+			<Id>26331169</Id>
+		</Link>
+		<Link>
+			<Id>25690945</Id>
+		</Link>
+		<Link>
+			<Id>25669229</Id>
+		</Link>
+		<Link>
+			<Id>25646204</Id>
+		</Link>
+		<Link>
+			<Id>25584961</Id>
+		</Link>
+		<Link>
+			<Id>25555004</Id>
+		</Link>
+		<Link>
+			<Id>25470877</Id>
+		</Link>
+		<Link>
+			<Id>25223134</Id>
+		</Link>
+		<Link>
+			<Id>25167349</Id>
+		</Link>
+		<Link>
+			<Id>24934824</Id>
+		</Link>
+		<Link>
+			<Id>24879722</Id>
+		</Link>
+		<Link>
+			<Id>24836494</Id>
+		</Link>
+		<Link>
+			<Id>24309417</Id>
+		</Link>
+		<Link>
+			<Id>23978699</Id>
+		</Link>
+		<Link>
+			<Id>23759294</Id>
+		</Link>
+		<Link>
+			<Id>23570763</Id>
+		</Link>
 		<Link>
 			<Id>23255877</Id>
 		</Link>
@@ -43,9 +163,6 @@
 			<Id>22109321</Id>
 		</Link>
 		<Link>
-			<Id>21991829</Id>
-		</Link>
-		<Link>
 			<Id>21984464</Id>
 		</Link>
 		<Link>
@@ -58,16 +175,7 @@
 			<Id>21715237</Id>
 		</Link>
 		<Link>
-			<Id>21694530</Id>
-		</Link>
-		<Link>
-			<Id>21531047</Id>
-		</Link>
-		<Link>
 			<Id>21153952</Id>
-		</Link>
-		<Link>
-			<Id>21102533</Id>
 		</Link>
 		<Link>
 			<Id>20860230</Id>
@@ -79,13 +187,10 @@
 			<Id>20674629</Id>
 		</Link>
 		<Link>
-			<Id>20542260</Id>
+			<Id>20558858</Id>
 		</Link>
 		<Link>
 			<Id>20533237</Id>
-		</Link>
-		<Link>
-			<Id>20457774</Id>
 		</Link>
 		<Link>
 			<Id>20016426</Id>
@@ -94,37 +199,13 @@
 			<Id>19843737</Id>
 		</Link>
 		<Link>
-			<Id>19777916</Id>
-		</Link>
-		<Link>
 			<Id>19616724</Id>
 		</Link>
 		<Link>
-			<Id>19524781</Id>
+			<Id>19520357</Id>
 		</Link>
 		<Link>
-			<Id>19318006</Id>
-		</Link>
-		<Link>
-			<Id>19306944</Id>
-		</Link>
-		<Link>
-			<Id>19253206</Id>
-		</Link>
-		<Link>
-			<Id>19132488</Id>
-		</Link>
-		<Link>
-			<Id>18853843</Id>
-		</Link>
-		<Link>
-			<Id>18774058</Id>
-		</Link>
-		<Link>
-			<Id>18706783</Id>
-		</Link>
-		<Link>
-			<Id>18625354</Id>
+			<Id>18783095</Id>
 		</Link>
 		<Link>
 			<Id>18582671</Id>
@@ -133,13 +214,7 @@
 			<Id>18554854</Id>
 		</Link>
 		<Link>
-			<Id>18299362</Id>
-		</Link>
-		<Link>
-			<Id>18279648</Id>
-		</Link>
-		<Link>
-			<Id>18247070</Id>
+			<Id>18053822</Id>
 		</Link>
 		<Link>
 			<Id>18021675</Id>
@@ -154,31 +229,10 @@
 			<Id>17879696</Id>
 		</Link>
 		<Link>
-			<Id>17674062</Id>
-		</Link>
-		<Link>
-			<Id>17658095</Id>
-		</Link>
-		<Link>
 			<Id>17602359</Id>
 		</Link>
 		<Link>
 			<Id>17601500</Id>
-		</Link>
-		<Link>
-			<Id>17543650</Id>
-		</Link>
-		<Link>
-			<Id>17466477</Id>
-		</Link>
-		<Link>
-			<Id>17464254</Id>
-		</Link>
-		<Link>
-			<Id>17453494</Id>
-		</Link>
-		<Link>
-			<Id>17429670</Id>
 		</Link>
 		<Link>
 			<Id>17376366</Id>
@@ -190,25 +244,16 @@
 			<Id>17325998</Id>
 		</Link>
 		<Link>
-			<Id>17320773</Id>
-		</Link>
-		<Link>
-			<Id>17268692</Id>
-		</Link>
-		<Link>
-			<Id>17259035</Id>
-		</Link>
-		<Link>
 			<Id>17243036</Id>
+		</Link>
+		<Link>
+			<Id>17205643</Id>
 		</Link>
 		<Link>
 			<Id>17193860</Id>
 		</Link>
 		<Link>
 			<Id>17174054</Id>
-		</Link>
-		<Link>
-			<Id>17157468</Id>
 		</Link>
 		<Link>
 			<Id>17040637</Id>
@@ -229,13 +274,10 @@
 			<Id>16552382</Id>
 		</Link>
 		<Link>
-			<Id>16362812</Id>
-		</Link>
-		<Link>
 			<Id>16357381</Id>
 		</Link>
 		<Link>
-			<Id>16338316</Id>
+			<Id>16284132</Id>
 		</Link>
 		<Link>
 			<Id>16133609</Id>
@@ -244,25 +286,19 @@
 			<Id>16096604</Id>
 		</Link>
 		<Link>
+			<Id>16046437</Id>
+		</Link>
+		<Link>
+			<Id>15835031</Id>
+		</Link>
+		<Link>
+			<Id>15788585</Id>
+		</Link>
+		<Link>
 			<Id>15788584</Id>
 		</Link>
 		<Link>
-			<Id>15642291</Id>
-		</Link>
-		<Link>
-			<Id>15635471</Id>
-		</Link>
-		<Link>
-			<Id>15529836</Id>
-		</Link>
-		<Link>
 			<Id>15505294</Id>
-		</Link>
-		<Link>
-			<Id>15300544</Id>
-		</Link>
-		<Link>
-			<Id>15279747</Id>
 		</Link>
 		<Link>
 			<Id>15278705</Id>
@@ -286,52 +322,22 @@
 			<Id>15022983</Id>
 		</Link>
 		<Link>
-			<Id>15008163</Id>
-		</Link>
-		<Link>
-			<Id>14872380</Id>
-		</Link>
-		<Link>
-			<Id>14702442</Id>
-		</Link>
-		<Link>
 			<Id>14661668</Id>
-		</Link>
-		<Link>
-			<Id>14661666</Id>
-		</Link>
-		<Link>
-			<Id>14661663</Id>
 		</Link>
 		<Link>
 			<Id>14661661</Id>
 		</Link>
 		<Link>
-			<Id>14661306</Id>
-		</Link>
-		<Link>
 			<Id>14650118</Id>
-		</Link>
-		<Link>
-			<Id>14528718</Id>
-		</Link>
-		<Link>
-			<Id>12949462</Id>
 		</Link>
 		<Link>
 			<Id>12878072</Id>
 		</Link>
 		<Link>
-			<Id>12876813</Id>
+			<Id>12846253</Id>
 		</Link>
 		<Link>
 			<Id>12822521</Id>
-		</Link>
-		<Link>
-			<Id>12744499</Id>
-		</Link>
-		<Link>
-			<Id>12744498</Id>
 		</Link>
 		<Link>
 			<Id>12733684</Id>
@@ -340,16 +346,7 @@
 			<Id>12719915</Id>
 		</Link>
 		<Link>
-			<Id>12592155</Id>
-		</Link>
-		<Link>
 			<Id>12563154</Id>
-		</Link>
-		<Link>
-			<Id>12361530</Id>
-		</Link>
-		<Link>
-			<Id>12352163</Id>
 		</Link>
 		<Link>
 			<Id>12242737</Id>
@@ -361,19 +358,13 @@
 			<Id>12164574</Id>
 		</Link>
 		<Link>
-			<Id>11973504</Id>
+			<Id>12069469</Id>
 		</Link>
 		<Link>
 			<Id>11973040</Id>
 		</Link>
 		<Link>
-			<Id>11907356</Id>
-		</Link>
-		<Link>
-			<Id>11868066</Id>
-		</Link>
-		<Link>
-			<Id>11789473</Id>
+			<Id>11895298</Id>
 		</Link>
 		<Link>
 			<Id>11781922</Id>
@@ -385,31 +376,10 @@
 			<Id>11762248</Id>
 		</Link>
 		<Link>
-			<Id>11740602</Id>
-		</Link>
-		<Link>
 			<Id>11702119</Id>
 		</Link>
 		<Link>
-			<Id>11669077</Id>
-		</Link>
-		<Link>
-			<Id>11578071</Id>
-		</Link>
-		<Link>
-			<Id>11443295</Id>
-		</Link>
-		<Link>
-			<Id>11409026</Id>
-		</Link>
-		<Link>
 			<Id>11368937</Id>
-		</Link>
-		<Link>
-			<Id>11329662</Id>
-		</Link>
-		<Link>
-			<Id>11329658</Id>
 		</Link>
 		<Link>
 			<Id>11329656</Id>
@@ -430,46 +400,13 @@
 			<Id>11125632</Id>
 		</Link>
 		<Link>
-			<Id>11027076</Id>
-		</Link>
-		<Link>
 			<Id>11016058</Id>
-		</Link>
-		<Link>
-			<Id>10803203</Id>
-		</Link>
-		<Link>
-			<Id>10761553</Id>
-		</Link>
-		<Link>
-			<Id>10749221</Id>
-		</Link>
-		<Link>
-			<Id>10688065</Id>
 		</Link>
 		<Link>
 			<Id>10688063</Id>
 		</Link>
 		<Link>
-			<Id>10665303</Id>
-		</Link>
-		<Link>
-			<Id>10575758</Id>
-		</Link>
-		<Link>
-			<Id>10499712</Id>
-		</Link>
-		<Link>
-			<Id>10499697</Id>
-		</Link>
-		<Link>
 			<Id>10499696</Id>
-		</Link>
-		<Link>
-			<Id>10475937</Id>
-		</Link>
-		<Link>
-			<Id>10222521</Id>
 		</Link>
 		<Link>
 			<Id>10222515</Id>
@@ -478,25 +415,13 @@
 			<Id>10222514</Id>
 		</Link>
 		<Link>
-			<Id>10051883</Id>
-		</Link>
-		<Link>
 			<Id>10024396</Id>
-		</Link>
-		<Link>
-			<Id>9847909</Id>
 		</Link>
 		<Link>
 			<Id>9793138</Id>
 		</Link>
 		<Link>
 			<Id>9757294</Id>
-		</Link>
-		<Link>
-			<Id>9725288</Id>
-		</Link>
-		<Link>
-			<Id>9658901</Id>
 		</Link>
 		<Link>
 			<Id>9575723</Id>
@@ -506,12 +431,6 @@
 		</Link>
 		<Link>
 			<Id>9456947</Id>
-		</Link>
-		<Link>
-			<Id>9391495</Id>
-		</Link>
-		<Link>
-			<Id>9317094</Id>
 		</Link>
 		<Link>
 			<Id>9314960</Id>
@@ -526,139 +445,123 @@
 			<Id>9193407</Id>
 		</Link>
 		<Link>
-			<Id>9125660</Id>
+			<Id>8872409</Id>
 		</Link>
 		<Link>
-			<Id>9016217</Id>
-		</Link>
-		<Link>
-			<Id>8976943</Id>
-		</Link>
-		<Link>
-			<Id>8819381</Id>
-		</Link>
-		<Link>
-			<Id>8855688</Id>
+			<Id>8756148</Id>
 		</Link>
 		<Link>
 			<Id>8903064</Id>
 		</Link>
 		<Link>
-			<Id>8903059</Id>
-		</Link>
-		<Link>
-			<Id>8903058</Id>
-		</Link>
-		<Link>
 			<Id>8599783</Id>
-		</Link>
-		<Link>
-			<Id>8794574</Id>
-		</Link>
-		<Link>
-			<Id>7892443</Id>
 		</Link>
 		<Link>
 			<Id>8153333</Id>
 		</Link>
 		<Link>
-			<Id>8290724</Id>
+			<Id>1343378</Id>
 		</Link>
 		<Link>
-			<Id>8338105</Id>
-		</Link>
-		<Link>
-			<Id>1481295</Id>
-		</Link>
-		<Link>
-			<Id>1539132</Id>
-		</Link>
-		<Link>
-			<Id>2047316</Id>
-		</Link>
-		<Link>
-			<Id>1943587</Id>
-		</Link>
-		<Link>
-			<Id>2222794</Id>
-		</Link>
-		<Link>
-			<Id>2584497</Id>
-		</Link>
-		<Link>
-			<Id>3288780</Id>
-		</Link>
-		<Link>
-			<Id>3213296</Id>
-		</Link>
-		<Link>
-			<Id>4058411</Id>
-		</Link>
-		<Link>
-			<Id>3905087</Id>
-		</Link>
-		<Link>
-			<Id>6482054</Id>
-		</Link>
-		<Link>
-			<Id>6473764</Id>
-		</Link>
-		<Link>
-			<Id>6217136</Id>
-		</Link>
-		<Link>
-			<Id>7068417</Id>
-		</Link>
-		<Link>
-			<Id>7326186</Id>
-		</Link>
-		<Link>
-			<Id>6940010</Id>
-		</Link>
-		<Link>
-			<Id>7330196</Id>
-		</Link>
-		<Link>
-			<Id>7423836</Id>
-		</Link>
-		<Link>
-			<Id>7415301</Id>
-		</Link>
-		<Link>
-			<Id>7408592</Id>
-		</Link>
-		<Link>
-			<Id>531835</Id>
-		</Link>
-		<Link>
-			<Id>663071</Id>
-		</Link>
-		<Link>
-			<Id>616459</Id>
+			<Id>1535863</Id>
 		</Link>
 		<Link>
 			<Id>4818442</Id>
 		</Link>
 		<Link>
-			<Id>4848922</Id>
-		</Link>
-		<Link>
 			<Id>4808999</Id>
 		</Link>
 		<Link>
-			<Id>5046513</Id>
+			<Id>13969511</Id>
 		</Link>
 		<Link>
-			<Id>5512349</Id>
+			<Id>13808134</Id>
+		</Link>
+	</LinkSetDb>
+	<LinkSetDb>
+		<DbTo>pubmed</DbTo>
+		<LinkName>pubmed_pubmed_citedin</LinkName>
+		<Link>
+			<Id>40900773</Id>
 		</Link>
 		<Link>
-			<Id>6072516</Id>
+			<Id>28779191</Id>
 		</Link>
 		<Link>
-			<Id>5594242</Id>
+			<Id>21102533</Id>
 		</Link>
 		<Link>
-			<Id>5998281</Id>
+			<Id>19517148</Id>
+		</Link>
+		<Link>
+			<Id>19132488</Id>
+		</Link>
+		<Link>
+			<Id>15278705</Id>
+		</Link>
+	</LinkSetDb>
+	<LinkSetDb>
+		<DbTo>pubmed</DbTo>
+		<LinkName>pubmed_pubmed_combined</LinkName>
+		<Link>
+			<Id>20718377</Id>
+		</Link>
+		<Link>
+			<Id>12242737</Id>
+		</Link>
+		<Link>
+			<Id>11329656</Id>
+		</Link>
+		<Link>
+			<Id>11218011</Id>
+		</Link>
+		<Link>
+			<Id>9757294</Id>
+		</Link>
+	</LinkSetDb>
+	<LinkSetDb>
+		<DbTo>pubmed</DbTo>
+		<LinkName>pubmed_pubmed_five</LinkName>
+		<Link>
+			<Id>20718377</Id>
+		</Link>
+		<Link>
+			<Id>17193860</Id>
+		</Link>
+		<Link>
+			<Id>12242737</Id>
+		</Link>
+		<Link>
+			<Id>11218011</Id>
+		</Link>
+		<Link>
+			<Id>9757294</Id>
+		</Link>
+	</LinkSetDb>
+	<LinkSetDb>
+		<DbTo>pubmed</DbTo>
+		<LinkName>pubmed_pubmed_reviews</LinkName>
+		<Link>
+			<Id>12242737</Id>
+		</Link>
+	</LinkSetDb>
+	<LinkSetDb>
+		<DbTo>pubmed</DbTo>
+		<LinkName>pubmed_pubmed_reviews_five</LinkName>
+		<Link>
+			<Id>20718377</Id>
+		</Link>
+		<Link>
+			<Id>17193860</Id>
+		</Link>
+		<Link>
+			<Id>12242737</Id>
+		</Link>
+		<Link>
+			<Id>11218011</Id>
+		</Link>
+		<Link>
+			<Id>9757294</Id>
 		</Link>
 	</LinkSetDb>
 </LinkSet>

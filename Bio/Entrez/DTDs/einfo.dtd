@@ -1,8 +1,16 @@
 <!--    
                 This is the Current DTD for Entrez eInfo
-$Id: eInfo_020511.dtd 393292 2013-03-22 21:30:47Z fialkov $
+$Id: einfo.dtd 577924 2019-01-09 22:59:07Z fialkov $
+need xml2json.xsl
 -->
 <!-- ================================================================= -->
+
+<!--~~ !dtd
+~~json 
+    <json type='einfo' version='0.3'>
+      <config lcnames='true'/>
+    </json>
+~~-->
 
 <!ELEMENT	DbName		(#PCDATA)>	<!-- \S+ -->
 <!ELEMENT	Name		(#PCDATA)>	<!-- .+ -->
@@ -48,7 +56,6 @@ $Id: eInfo_020511.dtd 393292 2013-03-22 21:30:47Z fialkov $
 <!ELEMENT	LinkList	(Link*)>
 <!ELEMENT	FieldList	(Field*)>
 
-
 <!ELEMENT	DbInfo		(DbName,
 				MenuName,
 				Description,
@@ -58,5 +65,11 @@ $Id: eInfo_020511.dtd 393292 2013-03-22 21:30:47Z fialkov $
 				LastUpdate?,
 				FieldList?,
 				LinkList?)>
-				
-<!ELEMENT	eInfoResult	(DbList|DbInfo|ERROR)>
+<!--~~ <eInfoResult>
+~~ json
+  <object>
+      <member select='DbList'/>
+      <array key='dbinfo' select='DbInfo|ERROR'/>
+  </object>
+~~-->				
+<!ELEMENT  eInfoResult     (DbList|(DbInfo|ERROR)+)>

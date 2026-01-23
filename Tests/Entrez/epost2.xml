@@ -1,5 +1,5 @@
-<?xml version="1.0"?>
-<!DOCTYPE ePostResult PUBLIC "-//NLM//DTD ePostResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/ePost_020511.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ePostResult PUBLIC "-//NLM//DTD epost 20090526//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20090526/epost.dtd">
 <ePostResult>
-	<ERROR>Wrong DB name</ERROR>
+	<ERROR>Invalid db name specified: nothing</ERROR>
 </ePostResult>
