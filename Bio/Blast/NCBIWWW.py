@@ -93,6 +93,7 @@ def qblast(
     template_length=None,
     username="blast",
     password=None,
+    timeout=None,  # <--- New line added
 ):
     """BLAST search using NCBI's QBLAST server.
 
@@ -218,7 +219,9 @@ def qblast(
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    handle = urlopen(request)
+    # handle = urlopen(request)
+    # Adding a timeout
+    handle = urlopen(request, timeout=timeout)
 
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
@@ -278,7 +281,9 @@ def qblast(
             )
 
         request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
-        handle = urlopen(request)
+        # Adding a timeout
+        handle = urlopen(request, timeout=timeout)
+        # handle = urlopen(request)
         results = handle.read().decode()
 
         # Can see an "\n\n" page while results are in progress,
