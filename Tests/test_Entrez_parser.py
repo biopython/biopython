@@ -8894,9 +8894,18 @@ class UrlSecurityCheckTest(unittest.TestCase):
         self.assertEqual(
             handler.verify_security.call_args_list,
             [
-                call("https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd"),
-                call("https://www.ncbi.nlm.nih.gov/dtd/NCBI_Entity.mod.dtd"),
-                call("https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd"),
+                call(
+                    "https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd",
+                    verify_hostname=True,
+                ),
+                call(
+                    "https://www.ncbi.nlm.nih.gov/dtd/NCBI_Entity.mod.dtd",
+                    verify_hostname=False,
+                ),
+                call(
+                    "https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd",
+                    verify_hostname=False,
+                ),
                 call("https://host.invalid/404.dtd"),
             ],
         )
