@@ -220,7 +220,12 @@ class Chain(Entity["Model", "Residue"]):
             )
         else:
             structure = None if self.parent is None else self.parent.parent
+            # New block
             raise Exception(
-                "Structure %s Chain %s does not have internal coordinates set"
-                % (structure, self)
+                f"Structure {structure} Chain {self} does not have internal coordinates set"
             )
+            # old block
+            # raise Exception(
+            #     "Structure %s Chain %s does not have internal coordinates set"
+            #     % (structure, self)
+            # )
