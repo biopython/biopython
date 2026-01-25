@@ -314,6 +314,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Sean Johnson <https://github.com/seanrjohnson>
 - Sean Workman <https://github.com/sean-workman>
 - Sebastian Bassi <https://about.me/bassi>
+- Sebastian Pipping <https://blog.hartwork.org/>
 - Sergei Lebedev <https://github.com/superbobry>
 - Sergio Valqui <https://github.com/svalqui>
 - Seth Sims <https://github.com/xzy3>
