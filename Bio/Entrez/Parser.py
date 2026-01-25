@@ -1091,6 +1091,7 @@ class DataHandler(metaclass=DataHandlerMeta):
                 "www.ncbi.nlm.nih.gov",
                 "dtd.nlm.nih.gov",
                 "eutils.ncbi.nlm.nih.gov",
+                "jats.nlm.nih.gov",
             )
             if scheme != "https" or hostname not in hostnames:
                 raise ValueError(f"Expected secure URL to NCBI, found {url!r}")
