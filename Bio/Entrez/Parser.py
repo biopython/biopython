@@ -1082,7 +1082,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             handle.close()
 
     def verify_security(self, url):
-        """Check if the url is from a trustable sournce."""
+        """Check if the given URL is from a trustable source."""
         if not self.bypass_url_security:
             parts = urlparse(url)
             scheme = parts.scheme
