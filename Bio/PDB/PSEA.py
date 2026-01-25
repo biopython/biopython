@@ -17,7 +17,7 @@ ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 """
 
 import tempfile  # <-- Add this at the very top of the file!
-import shutil    # <-- Add this at the very top too!
+import shutil  # <-- Add this at the very top too!
 import os
 import subprocess
 
@@ -26,18 +26,19 @@ from Bio.PDB.Polypeptide import is_aa
 
 from pathlib import Path
 
+
 def run_psea(fname, verbose=False):
     """Run PSEA and return the output."""
-    
+
     # We create a secure temporary directory
     with tempfile.TemporaryDirectory() as tmp_dir:
         tmp_path = Path(tmp_dir)
-        
+
         # Determine the expected output name
         # If input is "protein.pdb", PSEA will name output "protein.sea"
         input_file = Path(fname)
         output_name = input_file.stem + ".sea"
-        
+
         # Run PSEA, but set the 'cwd' (current working directory) to our temp folder
         p = subprocess.run(["psea", fname], capture_output=True, text=True, cwd=tmp_dir)
 
@@ -47,10 +48,10 @@ def run_psea(fname, verbose=False):
         temp_output = tmp_path / output_name
 
         if p.returncode == 0 and temp_output.exists():
-            # IMPORTANT: Since the temp folder will be deleted, 
-            # we should probably read the data or move the file 
+            # IMPORTANT: Since the temp folder will be deleted,
+            # we should probably read the data or move the file
             # to a permanent location before the 'with' block ends.
-            return temp_output.read_text() 
+            return temp_output.read_text()
         else:
             raise RuntimeError(f"Error running p-sea: {p.stderr}")
 
