@@ -373,7 +373,8 @@ def _diff_codon(codon1, codon2, fold_dict):
             elif fold_num[n] == "4":
                 P4 += 1
             else:
-                raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
+                raise RuntimeError(f"Unexpected fold_num {fold_num[n]}")
+                # raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
         elif nucleotide1 in pyrimidine and nucleotide2 in pyrimidine:
             if fold_num[n] == "0":
                 P0 += 1
@@ -382,7 +383,8 @@ def _diff_codon(codon1, codon2, fold_dict):
             elif fold_num[n] == "4":
                 P4 += 1
             else:
-                raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
+                raise RuntimeError(f"Unexpected fold_num {fold_num[n]}")
+                # raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
         else:
             # nucleotide1 in purine and nucleotide2 in pyrimidine, or
             # nucleotide1 in pyrimidine and nucleotide2 in purine
@@ -393,7 +395,8 @@ def _diff_codon(codon1, codon2, fold_dict):
             elif fold_num[n] == "4":
                 Q4 += 1
             else:
-                raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
+                raise RuntimeError(f"Unexpected fold_num {fold_num[n]}")
+                # raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
     return (P0, P2, P4, Q0, Q2, Q4)
 
 
