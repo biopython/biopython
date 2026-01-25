@@ -354,7 +354,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.dtd_urls = []
         self.element = None
         self.level = 0
-        self.secure = False
+        self.bypass_url_security = False
         self.data = []
         self.attributes = None
         self.allowed_tags = None
@@ -1083,7 +1083,7 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     def verify_security(self, url):
         """Check if the url is from a trustable sournce."""
-        if not self.secure:
+        if not self.bypass_url_security:
             parts = urlparse(url)
             scheme = parts.scheme
             hostname = parts.hostname
