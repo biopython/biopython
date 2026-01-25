@@ -23,6 +23,7 @@ possible, especially the following contributors:
 - Timothy Dennis (first contribution)
 - Ziyan Rao (first contribution)
 - Manuel Lera-Ramirez
+- Sebastian Pipping
 
 28 October 2025: Biopython 1.86
 ===============================
