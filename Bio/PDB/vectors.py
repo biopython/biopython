@@ -470,11 +470,18 @@ def homog_trans_mtx(x: float, y: float, z: float) -> np.ndarray:
     )
 
 
+# def set_homog_trans_mtx(x: float, y: float, z: float, mtx: np.ndarray):
+#     """Update existing translation matrix to new values."""
+#     mtx[0][3] = x
+#     mtx[1][3] = y
+#     mtx[2][3] = z
+
+
 def set_homog_trans_mtx(x: float, y: float, z: float, mtx: np.ndarray):
     """Update existing translation matrix to new values."""
-    mtx[0][3] = x
-    mtx[1][3] = y
-    mtx[2][3] = z
+    mtx[0][3] = float(x)
+    mtx[1][3] = float(y)
+    mtx[2][3] = float(z)
 
 
 def homog_scale_mtx(scale: float) -> np.ndarray:
