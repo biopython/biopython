@@ -1093,7 +1093,7 @@ class DataHandler(metaclass=DataHandlerMeta):
                 "eutils.ncbi.nlm.nih.gov",
             )
             if scheme != "https" or hostname not in hostnames:
-                raise ValueError(f"expected secure URL to NCBI, found {url}")
+                raise ValueError(f"Expected secure URL to NCBI, found {url!r}")
 
     def externalEntityRefHandler(self, context, base, systemId, publicId):
         """Handle external entity reference in order to cache DTD locally.
