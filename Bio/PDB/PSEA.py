@@ -16,37 +16,44 @@ Comput Appl Biosci 1997 , 13:291-295
 ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 """
 
+import tempfile  # <-- Add this at the very top of the file!
+import shutil  # <-- Add this at the very top too!
 import os
 import subprocess
 
 from Bio.PDB.Polypeptide import is_aa
 
 
+from pathlib import Path
+
+
 def run_psea(fname, verbose=False):
-    """Run PSEA and return output filename.
+    """Run PSEA and return the output."""
 
-    Note that this assumes the P-SEA binary is called "psea" and that it is
-    on the path.
+    # We create a secure temporary directory
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_path = Path(tmp_dir)
 
-    Note that P-SEA will write an output file in the current directory using
-    the input filename with extension ".sea".
+        # Determine the expected output name
+        # If input is "protein.pdb", PSEA will name output "protein.sea"
+        input_file = Path(fname)
+        output_name = input_file.stem + ".sea"
 
-    Note that P-SEA will not write output to the terminal while run unless
-     verbose is set to True.
-    """
-    last = fname.split("/")[-1]
-    base = last.split(".")[0]
-    cmd = ["psea", fname]
+        # Run PSEA, but set the 'cwd' (current working directory) to our temp folder
+        p = subprocess.run(["psea", fname], capture_output=True, text=True, cwd=tmp_dir)
 
-    p = subprocess.run(cmd, capture_output=True, text=True)
+        if verbose:
+            print(p.stdout)
 
-    if verbose:
-        print(p.stdout)
+        temp_output = tmp_path / output_name
 
-    if not p.stderr.strip() and os.path.exists(base + ".sea"):
-        return base + ".sea"
-    else:
-        raise RuntimeError(f"Error running p-sea: {p.stderr}")
+        if p.returncode == 0 and temp_output.exists():
+            # IMPORTANT: Since the temp folder will be deleted,
+            # we should probably read the data or move the file
+            # to a permanent location before the 'with' block ends.
+            return temp_output.read_text()
+        else:
+            raise RuntimeError(f"Error running p-sea: {p.stderr}")
 
 
 def psea(pname):
