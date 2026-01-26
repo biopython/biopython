@@ -93,6 +93,7 @@ def qblast(
     template_length=None,
     username="blast",
     password=None,
+    timeout=None,
 ):
     """BLAST search using NCBI's QBLAST server.
 
@@ -278,7 +279,7 @@ def qblast(
             )
 
         request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
-        handle = urlopen(request)
+        handle = urlopen(request, timeout=timeout)
         results = handle.read().decode()
 
         # Can see an "\n\n" page while results are in progress,
