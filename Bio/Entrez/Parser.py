@@ -1087,13 +1087,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             parts = urlparse(url)
             scheme = parts.scheme
             hostname = parts.hostname
-            hostnames = (
-                "www.ncbi.nlm.nih.gov",
-                "dtd.nlm.nih.gov",
-                "eutils.ncbi.nlm.nih.gov",
-                "jats.nlm.nih.gov",
-            )
-            if scheme != "https" or hostname not in hostnames:
+            if scheme != "https" or not hostname.endswith(".nlm.nih.gov"):
                 raise ValueError(f"Expected secure URL to NCBI, found {url!r}")
 
     def externalEntityRefHandler(self, context, base, systemId, publicId):
