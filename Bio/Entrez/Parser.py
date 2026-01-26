@@ -354,7 +354,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.dtd_urls = []
         self.element = None
         self.level = 0
-        self.secure = False
+        self.bypass_url_security = False
         self.data = []
         self.attributes = None
         self.allowed_tags = None
@@ -1082,20 +1082,13 @@ class DataHandler(metaclass=DataHandlerMeta):
             handle.close()
 
     def verify_security(self, url):
-        """Check if the url is from a trustable sournce."""
-        if not self.secure:
+        """Check if the given URL is from a trustable source."""
+        if not self.bypass_url_security:
             parts = urlparse(url)
             scheme = parts.scheme
             hostname = parts.hostname
-            hostnames = (
-                "www.ncbi.nlm.nih.gov",
-                "dtd.nlm.nih.gov",
-                "eutils.ncbi.nlm.nih.gov",
-            )
-            if scheme != "https" or hostname not in hostnames:
-                raise ValueError(f"expected secure URL to NCBI, found {url}")
-            # Trust URLs linked from NCBI
-            self.secure = True
+            if scheme != "https" or not hostname.endswith(".nlm.nih.gov"):
+                raise ValueError(f"Expected secure URL to NCBI, found {url!r}")
 
     def externalEntityRefHandler(self, context, base, systemId, publicId):
         """Handle external entity reference in order to cache DTD locally.

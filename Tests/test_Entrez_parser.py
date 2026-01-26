@@ -9,6 +9,8 @@ import os
 import pickle
 import unittest
 from io import BytesIO
+from textwrap import dedent
+from unittest.mock import call, Mock
 
 from Bio import Entrez
 from Bio import StreamModeError
@@ -8865,6 +8867,39 @@ We designed and generated pulmonary imaging biomarker pipelines to facilitate hi
         stream.seek(0)
         records = Entrez.parse(stream)
         self.assertRaises(CorruptedXMLError, next, records)
+
+
+class UrlSecurityCheckTest(unittest.TestCase):
+    """Test for DTD and XSL URL validation."""
+
+    def test_continued_url_security_checking(self):
+        content = dedent(
+            """\
+                <?xml version="1.0" encoding="UTF-8"?>
+                <!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+                <IPGReportSet xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://host.invalid/404.dtd" />
+                <!--                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+            """
+        ).encode("utf-8")
+
+        handler = Entrez.Parser.DataHandler(
+            validate=True, escape=False, ignore_errors=False
+        )
+        handler.verify_security = Mock(side_effect=handler.verify_security)
+
+        with self.assertRaises(ValueError) as caught:
+            handler.read(BytesIO(content))
+
+        self.assertIn("Expected secure URL to NCBI", caught.exception.args[0])
+        self.assertEqual(
+            handler.verify_security.call_args_list,
+            [
+                call("https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd"),
+                call("https://www.ncbi.nlm.nih.gov/dtd/NCBI_Entity.mod.dtd"),
+                call("https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.mod.dtd"),
+                call("https://host.invalid/404.dtd"),
+            ],
+        )
 
 
 if __name__ == "__main__":
