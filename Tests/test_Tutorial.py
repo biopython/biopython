@@ -263,7 +263,6 @@ class TutorialTestCase(unittest.TestCase):
                     name = test.name
                     assert name.startswith("TutorialDocTestHolder.doctest_")
                     failures.append(name[30:])
-                    # raise ValueError("Tutorial doctest %s failed" % test.name[30:])
         if failures:
             raise ValueError(
                 "%i Tutorial doctests failed: %s" % (len(failures), ", ".join(failures))
@@ -271,12 +270,19 @@ class TutorialTestCase(unittest.TestCase):
 
     def tearDown(self):
         os.chdir(original_path)
-        # files currently don't get created during test with python3.5 and pypy
-        # remove files created from chapter_phylo.tex
-        delete_phylo_tutorial = ["examples/tree1.nwk", "examples/other_trees.xml"]
+
+        tutorial_phylo_base = os.path.abspath("..")
+
+        delete_phylo_tutorial = [
+            "tree1.nwk",
+            "tree1.xml",
+            "other_trees.xml",
+            "other_trees.nex",
+        ]
+
         for file in delete_phylo_tutorial:
-            if os.path.exists(os.path.join(tutorial_base, file)):
-                os.remove(os.path.join(tutorial_base, file))
+            if os.path.exists(os.path.join(tutorial_phylo_base, file)):
+                os.remove(os.path.join(tutorial_phylo_base, file))
         # remove files created from chapter_cluster.tex
         tutorial_cluster_base = os.path.abspath("../Tests/")
         delete_cluster_tutorial = [
