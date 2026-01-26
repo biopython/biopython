@@ -1060,6 +1060,7 @@ def qblast(
     template_length=None,
     username="blast",
     password=None,
+    timeout=None,
 ):
     """BLAST search using NCBI's QBLAST server.
 
@@ -1190,7 +1191,7 @@ def qblast(
     # Note the NCBI do not currently impose a rate limit here, other
     # than the request not to make say 50 queries at once using multiple
     # threads.
-    stream = urlopen(request)
+    stream = urlopen(request, timeout=timeout)
 
     # Format the "Get" command, which gets the formatted results from qblast
     # Parameters taken from http://www.ncbi.nlm.nih.gov/BLAST/Doc/node6.html on 9 July 2007
@@ -1248,7 +1249,7 @@ def qblast(
                 BiopythonWarning,
             )
         request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
-        stream = urlopen(request)
+        stream = urlopen(request, timeout=timeout)
         data = stream.peek()
         if format_type == "HTML" and b"<title>NCBI Blast:</title>" in data:
             continue
@@ -1306,20 +1307,20 @@ def _parse_qblast_ref_page(handle):
             msg = s[i + len('<div class="error msInf">') :].strip()
             msg = msg.split("</div>", 1)[0].split("\n", 1)[0].strip()
             if msg:
-                raise ValueError(f"Error message from NCBI: {msg}")
+                raise ValueError("Error message from NCBI: %s" % msg)
         # In spring 2010 the markup was like this:
         i = s.find('<p class="error">')
         if i != -1:
             msg = s[i + len('<p class="error">') :].strip()
             msg = msg.split("</p>", 1)[0].split("\n", 1)[0].strip()
             if msg:
-                raise ValueError(f"Error message from NCBI: {msg}")
+                raise ValueError("Error message from NCBI: %s" % msg)
         # Generic search based on the way the error messages start:
         i = s.find("Message ID#")
         if i != -1:
             # Break the message at the first HTML tag
             msg = s[i:].split("<", 1)[0].split("\n", 1)[0].strip()
-            raise ValueError(f"Error message from NCBI: {msg}")
+            raise ValueError("Error message from NCBI: %s" % msg)
         # We didn't recognise the error layout :(
         # print(s)
         raise ValueError(
@@ -1330,12 +1331,12 @@ def _parse_qblast_ref_page(handle):
     elif not rid:
         # Can this happen?
         raise ValueError(
-            f"No RID found in the 'please wait' page. (although RTOE = {rtoe!r})"
+            "No RID found in the 'please wait' page. (although RTOE = %r)" % rtoe
         )
     elif not rtoe:
         # Can this happen?
         raise ValueError(
-            f"No RTOE found in the 'please wait' page. (although RID = {rid!r})"
+            "No RTOE found in the 'please wait' page. (although RID = %r)" % rid
         )
 
     try:
