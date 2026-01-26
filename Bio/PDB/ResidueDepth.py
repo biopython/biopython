@@ -530,9 +530,17 @@ def get_surface(model, MSMS="msms"):
     # Make surface
     surface_tmp = tempfile.NamedTemporaryFile(delete=False).name
     msms_tmp = tempfile.NamedTemporaryFile(delete=False).name
-    MSMS = MSMS + " -probe_radius 1.5 -if %s -of %s > " + msms_tmp
-    make_surface = MSMS % (xyz_tmp, surface_tmp)
-    subprocess.call(make_surface, shell=True)
+
+    # OLD WAY: String concatenation + shell=True
+    # MSMS = MSMS + " -probe_radius 1.5 -if %s -of %s > " + msms_tmp
+    # make_surface = MSMS % (xyz_tmp, surface_tmp)
+    # subprocess.call(make_surface, shell=True)
+
+    # NEW WAY: Explicit list + shell=False + stdout capture
+    cmd = [MSMS, "-probe_radius", "1.5", "-if", xyz_tmp, "-of", surface_tmp]
+    with open(msms_tmp, "w") as out_log:
+        subprocess.run(cmd, stdout=out_log, stderr=subprocess.STDOUT, check=True)
+
     face_file = surface_tmp + ".face"
     surface_file = surface_tmp + ".vert"
     if not os.path.isfile(surface_file):
