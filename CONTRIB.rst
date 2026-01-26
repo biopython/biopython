@@ -60,6 +60,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Ben Oppenheimer <https://github.com/beneopp>
 - Ben Woodcroft <https://github.com/wwood>
 - Benedict Carling <https://github.com/Benedict-Carling>
+- Benjamin Leff <https://github.com/BwL1289>
 - Benjamin Rowell <https://github.com/benjaminr>
 - Benjamin Vaisvil <https://github.com/bvaisvil>
 - Bernhard C. Thiel <https://github.com/Bernhard10>
