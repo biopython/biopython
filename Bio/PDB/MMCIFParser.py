@@ -20,7 +20,12 @@ class MMCIFParser:
     """Parse a mmCIF file and return a Structure object."""
 
     def __init__(
-        self, structure_builder=None, auth_chains=True, auth_residues=True, QUIET=False
+        self,
+        structure_builder=None,
+        auth_chains=True,
+        auth_residues=True,
+        QUIET=False,
+        PERMISSIVE=False,
     ):
         """Create a PDBParser object.
 
@@ -38,6 +43,10 @@ class MMCIFParser:
            codes, and strictly increments residue numbers.
            NOTE: Non-polymers such as water don't have a "label" residue number,
            and will be skipped.
+         - PERMISSIVE - Evaluated as a Boolean. If false (DEFAULT), exceptions in
+           constructing the SMCRA data structure are fatal. If true,
+           the exceptions are caught, but some residues or atoms will be missing.
+           THESE EXCEPTIONS ARE DUE TO PROBLEMS IN THE PDB FILE!.
 
          - QUIET - Evaluated as a Boolean. If true, warnings issued in constructing
            the SMCRA data will be suppressed. If false (DEFAULT), they will be shown.
@@ -55,6 +64,7 @@ class MMCIFParser:
         self.auth_chains = bool(auth_chains)
         self.auth_residues = bool(auth_residues)
         self.QUIET = bool(QUIET)
+        self.PERMISSIVE = bool(PERMISSIVE)
 
     # Public methods
 
@@ -290,16 +300,20 @@ class MMCIFParser:
 
             coord = np.array((x, y, z), "f")
             element = element_list[i].upper() if element_list else None
-            structure_builder.init_atom(
-                name,
-                coord,
-                tempfactor,
-                occupancy,
-                altloc,
-                name,
-                serial_number=serial,
-                element=element,
-            )
+            try:
+                structure_builder.init_atom(
+                    name,
+                    coord,
+                    tempfactor,
+                    occupancy,
+                    altloc,
+                    name,
+                    serial_number=serial,
+                    element=element,
+                )
+            except PDBConstructionException as message:
+                self._handle_PDB_exception(message)
+
             if aniso_flag == 1 and i < len(aniso_u11):
                 u = (
                     aniso_u11[i],
@@ -328,6 +342,26 @@ class MMCIFParser:
             structure_builder.set_symmetry(spacegroup, cell)
         except Exception:
             pass  # no cell found, so just ignore
+
+    def _handle_PDB_exception(self, message):
+        """Handle exception (PRIVATE).
+
+        This method catches an exception that occurs in the StructureBuilder
+        object (if PERMISSIVE), or raises it again.
+        """
+        message = "%s" % (message)
+        if self.PERMISSIVE:
+            # just print a warning - some residues/atoms may be missing
+            warnings.warn(
+                "PDBConstructionException: %s\n"
+                "Exception ignored.\n"
+                "Some atoms or residues may be missing in the data structure."
+                % message,
+                PDBConstructionWarning,
+            )
+        else:
+            # exceptions are fatal - raise again with new message
+            raise PDBConstructionException(message) from None
 
 
 class FastMMCIFParser:
