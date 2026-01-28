@@ -30,7 +30,8 @@ directory using the following:
 
 .. code:: console
 
-   $ python setup.py test
+   $ cd Tests
+   $ python run_tests.py
 
 This is actually equivalent to going to the ``Tests`` subdirectory and
 running:

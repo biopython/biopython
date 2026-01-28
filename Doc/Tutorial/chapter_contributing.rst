@@ -88,11 +88,8 @@ RPMs
 
    .. code:: console
 
-      $ python setup.py bdist_rpm
-
-   This will create an RPM for your specific platform and a source RPM
-   in the directory ``dist``. This RPM should be good and ready to go,
-   so this is all you need to do! Nice and easy.
+      $ python -m build
+      $ # Use the generated .tar.gz to create RPM with rpmbuild and a SPEC file
 
 Macintosh
    – Since Apple moved to Mac OS X, things have become much easier on
