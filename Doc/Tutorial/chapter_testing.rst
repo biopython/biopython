@@ -30,13 +30,7 @@ directory using the following:
 
 .. code:: console
 
-   $ python setup.py test
-
-This is actually equivalent to going to the ``Tests`` subdirectory and
-running:
-
-.. code:: console
-
+   $ cd Tests
    $ python run_tests.py
 
 You’ll often want to run just some of the tests, and this is done like

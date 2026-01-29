@@ -163,9 +163,9 @@ at compile time:
 Then either download and decompress our source code, or fetch it using git.
 Now change directory to the Biopython source code folder and run::
 
-    pip install -e .
-    python setup.py test
-    sudo python setup.py install
+    pip install -e . --group dev
+    cd Tests
+    python run_tests.py
 
 Substitute ``python`` with your specific version if required, for example
 ``python3``, or ``pypy3``.
@@ -173,11 +173,8 @@ Substitute ``python`` with your specific version if required, for example
 To exclude tests that require an internet connection (and which may take a
 long time), use the ``--offline`` option::
 
-    python setup.py test --offline
-
-If you need to do additional configuration, e.g. changing the install
-directory prefix, please type ``python setup.py``.
-
+    cd Tests
+    python run_tests.py --offline
 
 Testing
 =======
@@ -186,13 +183,15 @@ Biopython includes a suite of regression tests to check if everything is
 running correctly. To run the tests, go to the biopython source code
 directory and type::
 
-    pip install -e .
-    python setup.py test
+    pip install -e . --group dev
+    cd Tests
+    python run_tests.py
 
 If you want to skip the online tests (which is recommended when doing repeated
 testing), use::
 
-    python setup.py test --offline
+    cd Tests
+    python run_tests.py --offline
 
 Do not panic if you see messages warning of skipped tests::
 
@@ -286,7 +285,7 @@ Distribution Structure
   were removed or no longer recommended for use, and how to update code that
   uses those modules.
 - ``MANIFEST.in`` -- Configures which files to include in releases.
-- ``setup.py``    -- Installation file.
+- ``pyproject.toml`` -- Project metadata and build configuration.
 - ``Bio/``        -- The main code base code.
 - ``BioSQL/``     -- Code for using Biopython with BioSQL databases.
 - ``Doc/``        -- Documentation.

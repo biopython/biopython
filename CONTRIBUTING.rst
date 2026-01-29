@@ -79,8 +79,9 @@ Local Testing
 Please always run the full test suite locally before submitting a pull
 request, e.g.::
 
-    $ pip install -e .
-    $ python setup.py test
+    $ pip install -e . --group dev
+    $ cd Tests
+    $ python run_tests.py
     $ git commit ...
 
 Have a look at the `related chapter <http://biopython.org/DIST/docs/tutorial/Tutorial.html#chapter%3Atesting>`_ in the documentation for more details.

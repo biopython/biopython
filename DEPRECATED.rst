@@ -1,7 +1,8 @@
 This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
-Python releases go first, then code (modules, methods, functions).
+Python releases go first, then build & packaging information,
+followed by code (modules, methods, functions).
 
 Python
 ======
@@ -57,6 +58,23 @@ Jython
 No longer supported as of Release 1.77 with the end of Python 2 support.
 Biopython was mostly working under Jython 2.7.0, but support for Jython
 was deprecated as of Release 1.70.
+
+
+Build and packaging
+===================
+
+setup.py
+--------
+
+The use of a top-level ``setup.py`` script for project metadata, build configuration and running tests
+is deprecated in Biopython Release 1.87 in favor of a ``pyproject.toml``-based configuration
+(PEP 517 / PEP 518 and PEP 621).
+
+From now on one should use the following commands:
+
+- ``pip install .`` instead of ``python setup.py install``
+- ``cd Tests && python run_tests.py`` instead of `python setup.py test`
+- ``python -m build`` instead of ``python setup.py sdist`` or ``python setup.py bdist_wheel``
 
 Biopython modules, methods, functions
 =====================================
