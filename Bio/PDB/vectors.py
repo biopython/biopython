@@ -7,6 +7,7 @@
 
 """Vector class, including rotation-related functions."""
 
+import math
 from typing import Optional
 
 import numpy as np  # type: ignore
@@ -431,30 +432,33 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> np.ndarray:
 
 def set_Z_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing Z rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
-    mtx[0][0] = mtx[1][1] = cosang
+    mtx[0][0] = cosang
+    mtx[1][1] = cosang
     mtx[1][0] = sinang
     mtx[0][1] = -sinang
 
 
 def set_Y_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing Y rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
-    mtx[0][0] = mtx[2][2] = cosang
+    mtx[0][0] = cosang
+    mtx[2][2] = cosang
     mtx[0][2] = sinang
     mtx[2][0] = -sinang
 
 
 def set_X_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing X rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
-    mtx[1][1] = mtx[2][2] = cosang
+    mtx[1][1] = cosang
+    mtx[2][2] = cosang
     mtx[2][1] = sinang
     mtx[1][2] = -sinang
 
@@ -556,7 +560,7 @@ def coord_space(
 
     # tx acs[1] to origin
     # tm = homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0])
-    set_homog_trans_mtx(-a1[0], -a1[1], -a1[2], tm)
+    set_homog_trans_mtx(-a1[0, 0], -a1[1, 0], -a1[2, 0], tm)
 
     # directly translate a2 using a1
     p = a2 - a1
@@ -569,7 +573,7 @@ def coord_space(
     # rotate translated a2 -azimuth about Z
     set_Z_homog_rot_mtx(-sc[1], mrz)
     # rotate translated a2 -polar_angle about Y
-    set_Y_homog_rot_mtx(-sc[2], mry)
+    set_Y_homog_rot_mtx(-sc[2][0], mry)
 
     # mt completes a1-a2 on Z-axis, still need to align a0 with XZ plane
     # mt = mry @ mrz @ tm  # python 3.5 and later
@@ -616,13 +620,13 @@ def coord_space(
     set_Z_homog_rot_mtx(azimuth2, mrz2)
     # rotate a2 phi about Y
     # mry = homog_rot_mtx(sc[2], "y")
-    set_Y_homog_rot_mtx(sc[2], mry)
+    set_Y_homog_rot_mtx(sc[2][0], mry)
     # rotate a2 theta about Z
     # mrz = homog_rot_mtx(sc[1], "z")
     set_Z_homog_rot_mtx(sc[1], mrz)
     # translation matrix origin to a1
     # tm = homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0])
-    set_homog_trans_mtx(a1[0], a1[1], a1[2], tm)
+    set_homog_trans_mtx(a1[0, 0], a1[1, 0], a1[2, 0], tm)
 
     # mr = tm @ mrz @ mry @ mrz2
     mr = gtm.dot(gmrz.dot(gmry.dot(gmrz2)))
