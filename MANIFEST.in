@@ -40,7 +40,7 @@ include Doc/examples/ec_5.4.2.2.txt
 exclude Doc/_build/
 
 # Include Bio.Cluster, Bio.Affy, Bio.phenotype
-# Note setup.py will only install these if Numpy is installed.
+# Note: these packages require `numpy` at runtime
 recursive-include Bio/Cluster *.py
 recursive-include Bio/Affy *.py
 recursive-include Bio/Align *.py
