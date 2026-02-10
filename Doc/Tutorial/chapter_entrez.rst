@@ -250,8 +250,8 @@ Now ``record`` is a dictionary with three keys:
 
 .. code:: pycon
 
-   >>> record.keys()
-   dict_keys(['DbInfo', 'ERROR', 'DbList'])
+   >>> sorted(record.keys())
+   ['DbInfo', 'DbList', 'ERROR']
 
 The values stored in the ``'DbList`` key is the list of database
 names shown in the XML above:
