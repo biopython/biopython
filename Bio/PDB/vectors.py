@@ -7,247 +7,9 @@
 
 """Vector class, including rotation-related functions."""
 
-from typing import Optional
+import math
 
 import numpy as np  # type: ignore
-
-
-def m2rotaxis(m):
-    """Return angles, axis pair that corresponds to rotation matrix m.
-
-    The case where ``m`` is the identity matrix corresponds to a singularity
-    where any rotation axis is valid. In that case, ``Vector([1, 0, 0])``,
-    is returned.
-    """
-    eps = 1e-5
-
-    # Check for singularities a la
-    # http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/  # noqa
-    if (
-        abs(m[0, 1] - m[1, 0]) < eps
-        and abs(m[0, 2] - m[2, 0]) < eps
-        and abs(m[1, 2] - m[2, 1]) < eps
-    ):
-        # Singularity encountered. Check if its 0 or 180 deg
-        if (
-            abs(m[0, 1] + m[1, 0]) < eps
-            and abs(m[0, 2] + m[2, 0]) < eps
-            and abs(m[1, 2] + m[2, 1]) < eps
-            and abs(m[0, 0] + m[1, 1] + m[2, 2] - 3) < eps
-        ):
-            angle = 0
-        else:
-            angle = np.pi
-    else:
-        # Angle always between 0 and pi
-        # Sense of rotation is defined by axis orientation
-        t = 0.5 * (np.trace(m) - 1)
-        t = max(-1, t)
-        t = min(1, t)
-        angle = np.arccos(t)
-
-    if angle < 1e-15:
-        # Angle is 0
-        return 0.0, Vector(1, 0, 0)
-    elif angle < np.pi:
-        # Angle is smaller than pi
-        x = m[2, 1] - m[1, 2]
-        y = m[0, 2] - m[2, 0]
-        z = m[1, 0] - m[0, 1]
-        axis = Vector(x, y, z)
-        axis.normalize()
-        return angle, axis
-    else:
-        # Angle is pi - special case!
-        m00 = m[0, 0]
-        m11 = m[1, 1]
-        m22 = m[2, 2]
-        if m00 > m11 and m00 > m22:
-            x = np.sqrt(m00 - m11 - m22 + 0.5)
-            y = m[0, 1] / (2 * x)
-            z = m[0, 2] / (2 * x)
-        elif m11 > m00 and m11 > m22:
-            y = np.sqrt(m11 - m00 - m22 + 0.5)
-            x = m[0, 1] / (2 * y)
-            z = m[1, 2] / (2 * y)
-        else:
-            z = np.sqrt(m22 - m00 - m11 + 0.5)
-            x = m[0, 2] / (2 * z)
-            y = m[1, 2] / (2 * z)
-        axis = Vector(x, y, z)
-        axis.normalize()
-        return np.pi, axis
-
-
-def vector_to_axis(line, point):
-    """Vector to axis method.
-
-    Return the vector between a point and
-    the closest point on a line (ie. the perpendicular
-    projection of the point on the line).
-
-    :type line: L{Vector}
-    :param line: vector defining a line
-
-    :type point: L{Vector}
-    :param point: vector defining the point
-    """
-    line = line.normalized()
-    norm_point = point.norm()
-    angle = line.angle(point)
-    return point - line ** (norm_point * np.cos(angle))
-
-
-def rotaxis2m(theta, vector):
-    """Calculate left multiplying rotation matrix.
-
-    Calculate a left multiplying rotation matrix that rotates
-    theta rad around vector.
-
-    :type theta: float
-    :param theta: the rotation angle
-
-    :type vector: L{Vector}
-    :param vector: the rotation axis
-
-    :return: The rotation matrix, a 3x3 NumPy array.
-
-    Examples
-    --------
-    >>> from numpy import pi
-    >>> from Bio.PDB.vectors import rotaxis2m
-    >>> from Bio.PDB.vectors import Vector
-    >>> m = rotaxis2m(pi, Vector(1, 0, 0))
-    >>> Vector(1, 2, 3).left_multiply(m)
-    <Vector 1.00, -2.00, -3.00>
-
-    """
-    vector = vector.normalized()
-    c = np.cos(theta)
-    s = np.sin(theta)
-    t = 1 - c
-    x, y, z = vector.get_array()
-    rot = np.zeros((3, 3))
-    # 1st row
-    rot[0, 0] = t * x * x + c
-    rot[0, 1] = t * x * y - s * z
-    rot[0, 2] = t * x * z + s * y
-    # 2nd row
-    rot[1, 0] = t * x * y + s * z
-    rot[1, 1] = t * y * y + c
-    rot[1, 2] = t * y * z - s * x
-    # 3rd row
-    rot[2, 0] = t * x * z - s * y
-    rot[2, 1] = t * y * z + s * x
-    rot[2, 2] = t * z * z + c
-    return rot
-
-
-rotaxis = rotaxis2m
-
-
-def refmat(p, q):
-    """Return a (left multiplying) matrix that mirrors p onto q.
-
-    :type p,q: L{Vector}
-    :return: The mirror operation, a 3x3 NumPy array.
-
-    Examples
-    --------
-    >>> from Bio.PDB.vectors import refmat
-    >>> p, q = Vector(1, 2, 3), Vector(2, 3, 5)
-    >>> mirror = refmat(p, q)
-    >>> qq = p.left_multiply(mirror)
-    >>> print(q)
-    <Vector 2.00, 3.00, 5.00>
-    >>> print(qq)
-    <Vector 1.21, 1.82, 3.03>
-
-    """
-    p = p.normalized()
-    q = q.normalized()
-    if (p - q).norm() < 1e-5:
-        return np.identity(3)
-    pq = p - q
-    pq.normalize()
-    b = pq.get_array()
-    b.shape = (3, 1)
-    i = np.identity(3)
-    ref = i - 2 * np.dot(b, np.transpose(b))
-    return ref
-
-
-def rotmat(p, q):
-    """Return a (left multiplying) matrix that rotates p onto q.
-
-    :param p: moving vector
-    :type p: L{Vector}
-
-    :param q: fixed vector
-    :type q: L{Vector}
-
-    :return: rotation matrix that rotates p onto q
-    :rtype: 3x3 NumPy array
-
-    Examples
-    --------
-    >>> from Bio.PDB.vectors import rotmat
-    >>> p, q = Vector(1, 2, 3), Vector(2, 3, 5)
-    >>> r = rotmat(p, q)
-    >>> print(q)
-    <Vector 2.00, 3.00, 5.00>
-    >>> print(p)
-    <Vector 1.00, 2.00, 3.00>
-    >>> p.left_multiply(r)
-    <Vector 1.21, 1.82, 3.03>
-
-    """
-    rot = np.dot(refmat(q, -p), refmat(p, -p))
-    return rot
-
-
-def calc_angle(v1, v2, v3):
-    """Calculate angle method.
-
-    Calculate the angle between 3 vectors
-    representing 3 connected points.
-
-    :param v1, v2, v3: the tree points that define the angle
-    :type v1, v2, v3: L{Vector}
-
-    :return: angle
-    :rtype: float
-    """
-    v1 = v1 - v2
-    v3 = v3 - v2
-    return v1.angle(v3)
-
-
-def calc_dihedral(v1, v2, v3, v4):
-    """Calculate dihedral angle method.
-
-    Calculate the dihedral angle between 4 vectors
-    representing 4 connected points. The angle is in
-    ]-pi, pi].
-
-    :param v1, v2, v3, v4: the four points that define the dihedral angle
-    :type v1, v2, v3, v4: L{Vector}
-    """
-    ab = v1 - v2
-    cb = v3 - v2
-    db = v4 - v3
-    u = ab**cb
-    v = db**cb
-    w = u**v
-    angle = u.angle(v)
-    # Determine sign of angle
-    try:
-        if cb.angle(w) > 0.001:
-            angle = -angle
-    except ZeroDivisionError:
-        # dihedral=pi
-        pass
-    return angle
 
 
 class Vector:
@@ -380,6 +142,244 @@ class Vector:
         return Vector(self._ar)
 
 
+def m2rotaxis(m: np.ndarray) -> tuple[float, np.ndarray]:
+    """Return angles, axis pair that corresponds to rotation matrix m.
+
+    The case where ``m`` is the identity matrix corresponds to a singularity
+    where any rotation axis is valid. In that case, ``Vector([1, 0, 0])``,
+    is returned.
+    """
+    eps = 1e-5
+
+    # Check for singularities a la
+    # http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToAngle/  # noqa
+    if (
+        abs(m[0, 1] - m[1, 0]) < eps
+        and abs(m[0, 2] - m[2, 0]) < eps
+        and abs(m[1, 2] - m[2, 1]) < eps
+    ):
+        # Singularity encountered. Check if its 0 or 180 deg
+        if (
+            abs(m[0, 1] + m[1, 0]) < eps
+            and abs(m[0, 2] + m[2, 0]) < eps
+            and abs(m[1, 2] + m[2, 1]) < eps
+            and abs(m[0, 0] + m[1, 1] + m[2, 2] - 3) < eps
+        ):
+            angle = 0
+        else:
+            angle = np.pi
+    else:
+        # Angle always between 0 and pi
+        # Sense of rotation is defined by axis orientation
+        t = 0.5 * (np.trace(m) - 1)
+        t = max(-1, t)
+        t = min(1, t)
+        angle = np.arccos(t)
+
+    if angle < 1e-15:
+        # Angle is 0
+        return 0.0, Vector(1, 0, 0)
+    elif angle < np.pi:
+        # Angle is smaller than pi
+        x = m[2, 1] - m[1, 2]
+        y = m[0, 2] - m[2, 0]
+        z = m[1, 0] - m[0, 1]
+        axis = Vector(x, y, z)
+        axis.normalize()
+        return angle, axis
+    else:
+        # Angle is pi - special case!
+        m00 = m[0, 0]
+        m11 = m[1, 1]
+        m22 = m[2, 2]
+        if m00 > m11 and m00 > m22:
+            x = np.sqrt(m00 - m11 - m22 + 0.5)
+            y = m[0, 1] / (2 * x)
+            z = m[0, 2] / (2 * x)
+        elif m11 > m00 and m11 > m22:
+            y = np.sqrt(m11 - m00 - m22 + 0.5)
+            x = m[0, 1] / (2 * y)
+            z = m[1, 2] / (2 * y)
+        else:
+            z = np.sqrt(m22 - m00 - m11 + 0.5)
+            x = m[0, 2] / (2 * z)
+            y = m[1, 2] / (2 * z)
+        axis = Vector(x, y, z)
+        axis.normalize()
+        return np.pi, axis
+
+
+def vector_to_axis(line: Vector, point: Vector) -> Vector:
+    """Vector to axis method.
+
+    Return the vector between a point and
+    the closest point on a line (ie. the perpendicular
+    projection of the point on the line).
+
+    :type line: L{Vector}
+    :param line: vector defining a line
+
+    :type point: L{Vector}
+    :param point: vector defining the point
+    """
+    line = line.normalized()
+    norm_point = point.norm()
+    angle = line.angle(point)
+    return point - line ** (norm_point * math.cos(angle))
+
+
+def rotaxis2m(theta: float, vector: Vector) -> np.ndarray:
+    """Calculate left multiplying rotation matrix.
+
+    Calculate a left multiplying rotation matrix that rotates
+    theta rad around vector.
+
+    :type theta: float
+    :param theta: the rotation angle
+
+    :type vector: L{Vector}
+    :param vector: the rotation axis
+
+    :return: The rotation matrix, a 3x3 NumPy array.
+
+    Examples
+    --------
+    >>> from numpy import pi
+    >>> from Bio.PDB.vectors import rotaxis2m
+    >>> from Bio.PDB.vectors import Vector
+    >>> m = rotaxis2m(pi, Vector(1, 0, 0))
+    >>> Vector(1, 2, 3).left_multiply(m)
+    <Vector 1.00, -2.00, -3.00>
+
+    """
+    vector = vector.normalized()
+    c = math.cos(theta)
+    s = math.sin(theta)
+    t = 1 - c
+    x, y, z = vector.get_array()
+    rot = np.zeros((3, 3))
+    # 1st row
+    rot[0, 0] = t * x * x + c
+    rot[0, 1] = t * x * y - s * z
+    rot[0, 2] = t * x * z + s * y
+    # 2nd row
+    rot[1, 0] = t * x * y + s * z
+    rot[1, 1] = t * y * y + c
+    rot[1, 2] = t * y * z - s * x
+    # 3rd row
+    rot[2, 0] = t * x * z - s * y
+    rot[2, 1] = t * y * z + s * x
+    rot[2, 2] = t * z * z + c
+    return rot
+
+
+rotaxis = rotaxis2m
+
+
+def refmat(p: Vector, q: Vector) -> np.ndarray:
+    """Return a (left multiplying) matrix that mirrors p onto q.
+
+    :type p,q: L{Vector}
+    :return: The mirror operation, a 3x3 NumPy array.
+
+    Examples
+    --------
+    >>> from Bio.PDB.vectors import refmat
+    >>> p, q = Vector(1, 2, 3), Vector(2, 3, 5)
+    >>> mirror = refmat(p, q)
+    >>> qq = p.left_multiply(mirror)
+    >>> print(q)
+    <Vector 2.00, 3.00, 5.00>
+    >>> print(qq)
+    <Vector 1.21, 1.82, 3.03>
+
+    """
+    p = p.normalized()
+    q = q.normalized()
+    if (p - q).norm() < 1e-5:
+        return np.identity(3)
+    pq = p - q
+    pq.normalize()
+    b = pq.get_array()
+    b.shape = (3, 1)
+    i = np.identity(3)
+    ref = i - 2 * np.dot(b, np.transpose(b))
+    return ref
+
+
+def rotmat(p: Vector, q: Vector) -> np.ndarray:
+    """Return a (left multiplying) matrix that rotates p onto q.
+
+    :param p: moving vector
+    :type p: L{Vector}
+
+    :param q: fixed vector
+    :type q: L{Vector}
+
+    :return: rotation matrix that rotates p onto q
+    :rtype: 3x3 NumPy array
+
+    Examples
+    --------
+    >>> from Bio.PDB.vectors import rotmat
+    >>> p, q = Vector(1, 2, 3), Vector(2, 3, 5)
+    >>> r = rotmat(p, q)
+    >>> print(q)
+    <Vector 2.00, 3.00, 5.00>
+    >>> print(p)
+    <Vector 1.00, 2.00, 3.00>
+    >>> p.left_multiply(r)
+    <Vector 1.21, 1.82, 3.03>
+
+    """
+    rot = np.dot(refmat(q, -p), refmat(p, -p))
+    return rot
+
+
+def calc_angle(v1: Vector, v2: Vector, v3: Vector) -> float:
+    """Calculate angle method.
+
+    Calculate the angle between 3 vectors
+    representing 3 connected points.
+
+    :param v1, v2, v3: the tree points that define the angle
+    :type v1, v2, v3: L{Vector}
+
+    :return: angle
+    :rtype: float
+    """
+    v1 = v1 - v2
+    v3 = v3 - v2
+    return v1.angle(v3)
+
+
+def calc_dihedral(v1: Vector, v2: Vector, v3: Vector, v4: Vector) -> float:
+    """Calculate dihedral angle method.
+
+    Calculate the dihedral angle between 4 vectors
+    representing 4 connected points. The angle is in
+    ]-pi, pi].
+
+    :param v1, v2, v3, v4: the four points that define the dihedral angle
+    :type v1, v2, v3, v4: L{Vector}
+    """
+    ab = v1 - v2
+    cb = v3 - v2
+    db = v4 - v3
+    u = ab**cb
+    v = db**cb
+    w = u**v
+    angle = u.angle(v)
+    # Determine sign of angle
+    try:
+        if cb.angle(w) > 0.001:
+            angle = -angle
+    except ZeroDivisionError:
+        # dihedral=pi
+        pass
+    return angle
+
+
 """Homogeneous matrix geometry routines.
 
 Rotation, translation, scale, and coordinate transformations.
@@ -394,8 +394,8 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> np.ndarray:
     :param float angle_rads: the desired rotation angle in radians
     :param char axis: character specifying the rotation axis
     """
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
     if "z" == axis:
         return np.array(
@@ -429,30 +429,30 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> np.ndarray:
         )
 
 
-def set_Z_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
+def set_Z_homog_rot_mtx(angle_rads: float, mtx: np.ndarray) -> None:
     """Update existing Z rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
     mtx[0, 0] = mtx[1, 1] = cosang
     mtx[1, 0] = sinang
     mtx[0, 1] = -sinang
 
 
-def set_Y_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
+def set_Y_homog_rot_mtx(angle_rads: float, mtx: np.ndarray) -> None:
     """Update existing Y rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
     mtx[0, 0] = mtx[2, 2] = cosang
     mtx[0, 2] = sinang
     mtx[2, 0] = -sinang
 
 
-def set_X_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
+def set_X_homog_rot_mtx(angle_rads: float, mtx: np.ndarray) -> None:
     """Update existing X rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
     mtx[1, 1] = mtx[2, 2] = cosang
     mtx[2, 1] = sinang
