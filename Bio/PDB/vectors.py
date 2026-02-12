@@ -555,7 +555,6 @@ def coord_space(
     mrz2 = gmrz2
 
     # tx acs[1] to origin
-    # tm = homog_trans_mtx(-a1[0, 0], -a1[1, 0], -a1[2, 0])
     set_homog_trans_mtx(-a1[0], -a1[1], -a1[2], tm)
 
     # directly translate a2 using a1
@@ -612,16 +611,12 @@ def coord_space(
     # rev=True, so generate the reverse transformation
 
     # rotate a0 theta about Z, reversing alignment with X
-    # mrz2 = homog_rot_mtx(azimuth2, "z")
     set_Z_homog_rot_mtx(azimuth2, mrz2)
     # rotate a2 phi about Y
-    # mry = homog_rot_mtx(sc[2], "y")
     set_Y_homog_rot_mtx(sc[2], mry)
     # rotate a2 theta about Z
-    # mrz = homog_rot_mtx(sc[1], "z")
     set_Z_homog_rot_mtx(sc[1], mrz)
     # translation matrix origin to a1
-    # tm = homog_trans_mtx(a1[0, 0], a1[1, 0], a1[2, 0])
     set_homog_trans_mtx(a1[0], a1[1], a1[2], tm)
 
     # mr = tm @ mrz @ mry @ mrz2
