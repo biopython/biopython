@@ -63,11 +63,6 @@ Tests/Cluster/cyano_result*
 # Created by Tests/test_BWA_tool.py:
 Tests/out.bam
 
-#TODO - The Tutorial doctests should leave example files after
-#running Tests/test_Tutorial.py
-Doc/examples/other_trees.nwk
-Doc/examples/tree1.nwk
-
 #Ignore LaTeX temp files, and compiled output
 Doc/*.aux
 Doc/*.gz
