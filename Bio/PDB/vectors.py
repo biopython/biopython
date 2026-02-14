@@ -556,7 +556,7 @@ def coord_space(
 
     # tx acs[1] to origin
     # tm = homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0])
-    set_homog_trans_mtx(-a1[0], -a1[1], -a1[2], tm)
+    set_homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0], tm)
 
     # directly translate a2 using a1
     p = a2 - a1
@@ -569,7 +569,7 @@ def coord_space(
     # rotate translated a2 -azimuth about Z
     set_Z_homog_rot_mtx(-sc[1], mrz)
     # rotate translated a2 -polar_angle about Y
-    set_Y_homog_rot_mtx(-sc[2], mry)
+    set_Y_homog_rot_mtx(-sc[2][0], mry)
 
     # mt completes a1-a2 on Z-axis, still need to align a0 with XZ plane
     # mt = mry @ mrz @ tm  # python 3.5 and later
@@ -616,13 +616,13 @@ def coord_space(
     set_Z_homog_rot_mtx(azimuth2, mrz2)
     # rotate a2 phi about Y
     # mry = homog_rot_mtx(sc[2], "y")
-    set_Y_homog_rot_mtx(sc[2], mry)
+    set_Y_homog_rot_mtx(sc[2][0], mry)
     # rotate a2 theta about Z
     # mrz = homog_rot_mtx(sc[1], "z")
     set_Z_homog_rot_mtx(sc[1], mrz)
     # translation matrix origin to a1
     # tm = homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0])
-    set_homog_trans_mtx(a1[0], a1[1], a1[2], tm)
+    set_homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0], tm)
 
     # mr = tm @ mrz @ mry @ mrz2
     mr = gtm.dot(gmrz.dot(gmry.dot(gmrz2)))
@@ -688,7 +688,7 @@ def multi_coord_space(a3: np.ndarray, dLen: int, rev: bool = False) -> np.ndarra
     # get spherical coords of translated a2 (p)
     r = np.linalg.norm(p, axis=1)
     azimuth = np.arctan2(p[:, 1], p[:, 0])
-    polar_angle = np.arccos(np.divide(p[:, 2], r, where=r != 0))
+    polar_angle = np.arccos(np.divide(p[:, 2], r, out=np.ones_like(r), where=r != 0))
 
     # build rz rotation matrix: translated a2 -azimuth around Z
     # (enables next step rotating around Y to align with Z)
