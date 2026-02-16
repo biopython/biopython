@@ -193,8 +193,21 @@ class GenericPositionMatrix(dict):
             "CGU": "B",
             "ACGT": "N",
             "ACGU": "N",
+            "B" : "B",
+            "D" : "D",
+            "H" : "H",
+            "K" : "K",
+            "M" : "M",
+            "N" : "N",
+            "R" : "R",
+            "S" : "S",
+            "V" : "V",
+            "W" : "W",
+            "Y" : "Y",
+            "-" : "-",
         }
         sequence = ""
+        ambig_list = ["B", "D", "H", "K", "M", "N", "R", "S", "V", "W", "Y", "-"]
         for i in range(self.length):
 
             def get(nucleotide):
@@ -206,9 +219,13 @@ class GenericPositionMatrix(dict):
             if counts[0] > sum(counts[1:]) and counts[0] > 2 * counts[1]:
                 key = nucleotides[0]
             elif 4 * sum(counts[:2]) > 3 * sum(counts):
-                key = "".join(sorted(nucleotides[:2]))
+                key = "".join(sorted([nuc for nuc in nucleotides[:2] if nuc not in ambig_list]))
+                if len(key) == 0:       # multiple ambiguous nucleotides at that position
+                    key = nucleotides[0]
             elif counts[3] == 0:
-                key = "".join(sorted(nucleotides[:3]))
+                key = "".join(sorted([nuc for nuc in nucleotides[:3] if nuc not in ambig_list]))
+                if len(key) == 0:       # multiple ambiguous nucleotides at that position
+                    key = nucleotides[0]
             else:
                 key = "ACGT"
             nucleotide = degenerate_nucleotide.get(key, key)
