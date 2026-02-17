@@ -19,10 +19,12 @@ temperature of oligonucleotides:
    additives are available.
 
 General parameters for most Tm methods:
- - seq -- A Biopython sequence object or a string.
+ - seq -- A Biopython sequence object, SeqRecord or a string.
  - check -- Checks if the sequence is valid for the given method (default=
-   True). In general, whitespaces and non-base characters are removed and
-   characters are converted to uppercase. RNA will be backtranscribed.
+   True). Whitespaces and non-alphabetic characters are removed and
+   characters are converted to uppercase. RNA will be backtranscribed. When true,
+   if the sequence contains letters that are not valid for the method, it raises
+   a ValueError.
  - strict -- Do not allow base characters or neighbor duplex keys (e.g.
    'AT/NA') that could not or not unambiguously be evaluated for the respective
    method (default=True). Note that W (= A or T) and S (= C or G) are not
@@ -157,6 +159,8 @@ import warnings
 from Bio import BiopythonWarning
 from Bio import Seq
 from Bio import SeqUtils
+from Bio.SeqRecord import SeqRecord
+import re
 
 # Thermodynamic lookup tables (dictionaries):
 # Enthalpy (dH) and entropy (dS) values for nearest neighbors and initiation
@@ -431,7 +435,9 @@ def _check(seq, method):
     Most methods make use of the length of the sequence (directly or
     indirectly), which can only be expressed as len(seq) if the sequence does
     not contain whitespaces and other non-base characters. RNA sequences are
-    backtranscribed to DNA. This method is PRIVATE.
+    backtranscribed to DNA. This method is PRIVATE. It raises a ValueError if
+    the sequence is not valid for the given method (Tm_NN only allows
+    bases A,C,G,T,I; while Tm_GC and TM_Wallace allow A,B,C,D,G,H,I,K,M,N,R,S,T,V,W,X,Y).
 
     Arguments:
      - seq: The sequence as given by the user (passed as string).
@@ -442,11 +448,10 @@ def _check(seq, method):
     'ACGTTGCAAGTCCATGGTAC'
 
     """
-    seq = "".join(seq.split()).upper()
+    # Remove all non-alphabetic characters
+    seq = re.sub(r"[^A-Z]", "", seq.upper())
     seq = str(Seq.Seq(seq).back_transcribe())
-    if method == "Tm_Wallace":
-        return seq
-    if method == "Tm_GC":
+    if method == "Tm_GC" or method == "Tm_Wallace":
         baseset = (
             "A",
             "B",
@@ -468,7 +473,9 @@ def _check(seq, method):
         )
     if method == "Tm_NN":
         baseset = ("A", "C", "G", "T", "I")
-    seq = "".join([base for base in seq if base in baseset])
+
+    if not all(base in baseset for base in seq):
+        raise ValueError("The input sequence is not valid for " + method)
     return seq
 
 
@@ -654,7 +661,8 @@ def Tm_Wallace(seq, check=True, strict=True):
     practical approach, 33-50) is often used as rule of thumb for approximate
     Tm calculations for primers of 14 to 20 nt length.
 
-    Non-DNA characters (e.g., E, F, J, !, 1, etc) are ignored by this method.
+    Non-alphabetic characters (numbers, spacers, symbols, etc) are ignored.
+    Non-DNA alphabetic characters (e.g., E, F, J, etc) will raise an error if check=True.
 
     Examples:
         >>> from Bio.SeqUtils import MeltingTemp as mt
@@ -666,7 +674,13 @@ def Tm_Wallace(seq, check=True, strict=True):
         48.0
 
     """
-    seq = str(seq)
+    if isinstance(seq, SeqRecord):
+        seq = str(seq.seq)
+    elif isinstance(seq, Seq._SeqAbstractBaseClass):
+        seq = str(seq)
+    elif not isinstance(seq, str):
+        raise ValueError("Invalid input, must be str, Seq or SeqRecord")
+
     if check:
         seq = _check(seq, "Tm_Wallace")
 
@@ -759,7 +773,13 @@ def Tm_GC(
     """
     if saltcorr == 5:
         raise ValueError("salt-correction method 5 not applicable to Tm_GC")
-    seq = str(seq)
+    if isinstance(seq, SeqRecord):
+        seq = str(seq.seq)
+    elif isinstance(seq, Seq._SeqAbstractBaseClass):
+        seq = str(seq)
+    elif not isinstance(seq, str):
+        raise ValueError("Invalid input, must be str, Seq or SeqRecord")
+
     if check:
         seq = _check(seq, "Tm_GC")
 
@@ -924,7 +944,13 @@ def Tm_NN(
     if not de_table:
         de_table = DNA_DE1
 
-    seq = str(seq)
+    if isinstance(seq, SeqRecord):
+        seq = str(seq.seq)
+    elif isinstance(seq, Seq._SeqAbstractBaseClass):
+        seq = str(seq)
+    elif not isinstance(seq, str):
+        raise ValueError("Invalid input, must be str, Seq or SeqRecord")
+
     if not c_seq:
         # c_seq must be provided by user if dangling ends or mismatches should
         # be taken into account. Otherwise take perfect complement.
