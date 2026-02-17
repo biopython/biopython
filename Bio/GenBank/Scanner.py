@@ -1413,6 +1413,7 @@ class GenBankScanner(InsdcScanner):
                 line[47:54].strip() == ""
                 or "DNA" in line[47:54].strip().upper()
                 or "RNA" in line[47:54].strip().upper()
+                or line[47:54].strip().upper() == "NA"
             ):
                 raise ValueError(
                     "LOCUS line does not contain valid "
