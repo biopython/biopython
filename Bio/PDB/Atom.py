@@ -498,6 +498,15 @@ class Atom:
         shallow.xtra = self.xtra.copy()
         return shallow
 
+    @property
+    def is_backbone(self):
+        """
+        Checks whether a given residue is backbone or not
+        :param atom: Bio.PDB Atom object
+        :returns: Boolean whether the atom is backbone or not
+        """
+        return self.get_id() in {"C", "N", "CA", "O"}
+
 
 class DisorderedAtom(DisorderedEntityWrapper):
     """Contains all Atom objects that represent the same disordered atom.
