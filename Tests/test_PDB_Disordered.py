@@ -41,11 +41,28 @@ class TestDisordered(unittest.TestCase):
         self.assertNotEqual(id(resi27), id(resi27_copy))  # did we really copy
 
         resi27_atoms = resi27.get_unpacked_list()
-        resi27_copy_atoms = resi27.get_unpacked_list()
+        resi27_copy_atoms = resi27_copy.get_unpacked_list()
         self.assertEqual(len(resi27_atoms), len(resi27_copy_atoms))
 
         for ai, aj in zip(resi27_atoms, resi27_copy_atoms):
             self.assertEqual(ai.name, aj.name)
+
+    def test_copy_selected_child(self):
+        """Checks if the DisorderedAtom.selected_child reference is it's own child."""
+        resi27 = self.structure[0]["A"][27]
+        disordered_nh1 = resi27.child_dict["NH1"]
+        self.assertTrue(
+            disordered_nh1.is_disordered()
+        )  # Check if actually DisorderedAtom
+
+        disordered_copy_nh1 = disordered_nh1.copy()
+
+        atom_possibilities = disordered_copy_nh1.disordered_get_list()
+        # Re-calculate the proper selected child from the Atom children
+        best_atom_of_copy = max(
+            atom_possibilities, key=lambda pos_atom: pos_atom.occupancy
+        )
+        self.assertEqual(best_atom_of_copy, disordered_copy_nh1.selected_child)
 
     def test_copy_entire_chain(self):
         """Copy propagates throughout SMCRA object."""
