@@ -284,6 +284,21 @@ class TestSnapGene(unittest.TestCase):
                     self.assertFalse("\n" in value)
                     self.assertFalse("\r" in value)
 
+    def test_looped_feature(self):
+        """Read a file that has a circular sequence with a feature that spans the entire sequence"""
+
+        # If the feature spans the sequence from start to end
+        record = SeqIO.read("SnapGene/looped_feature_origin.dna", "snapgene")
+        self.assertEqual(record.annotations["topology"], "circular")
+        self.assertEqual(len(record.features), 1)
+        self.assertEqual(str(record.features[0].location), "[0:10](+)")
+
+        # If the feature spans the entire sequence, but starts somewhere in the middle
+        record = SeqIO.read("SnapGene/looped_feature.dna", "snapgene")
+        self.assertEqual(record.annotations["topology"], "circular")
+        self.assertEqual(len(record.features), 1)
+        self.assertEqual(str(record.features[0].location), "join{[2:10](+), [0:2](+)}")
+
 
 class TestCorruptedSnapGene(unittest.TestCase):
     def setUp(self):
