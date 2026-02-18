@@ -119,7 +119,7 @@ def _parse_location(rangespec, strand, record, is_primer=False):
         # for some reasons
         start += 1
         end += 1
-    if start > end:
+    if start >= end:
         # Range wrapping the end of the sequence
         l1 = SimpleLocation(start, len(record), strand=strand)
         l2 = SimpleLocation(0, end, strand=strand)
@@ -158,7 +158,7 @@ def _parse_features_packet(length, data, record):
             rng = _get_attribute_value(segment, "range")
             n_parts += 1
             next_location = _parse_location(rng, strand, record)
-            if not location:
+            if location is None:
                 location = next_location
             elif strand == -1:
                 # Reverse segments order for reverse-strand features
