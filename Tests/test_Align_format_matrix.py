@@ -22,6 +22,7 @@ These tests ensure that the new feature of showing ':' for positive
 substitution scores is consistently applied across different input
 styles and substitution matrices.
 """
+
 import unittest
 import numpy as np
 from Bio.Align import PairwiseAligner

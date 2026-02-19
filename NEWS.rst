@@ -13,7 +13,7 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.87
 ===============================================
 
-Biopython test suite now passes with Numpy 2.4.
+Migrated from ``setup.py`` to ``pyproject.toml`` for packaging configuration.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:

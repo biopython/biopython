@@ -18,35 +18,39 @@ ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 
 import os
 import subprocess
+import tempfile
+
 
 from Bio.PDB.Polypeptide import is_aa
 
 
 def run_psea(fname, verbose=False):
-    """Run PSEA and return output filename.
-
-    Note that this assumes the P-SEA binary is called "psea" and that it is
-    on the path.
-
-    Note that P-SEA will write an output file in the current directory using
-    the input filename with extension ".sea".
-
-    Note that P-SEA will not write output to the terminal while run unless
-     verbose is set to True.
-    """
-    last = fname.split("/")[-1]
-    base = last.split(".")[0]
+    """Run PSEA and return output filename."""
+    last = os.path.basename(fname)
+    base = os.path.splitext(last)[0]
     cmd = ["psea", fname]
 
-    p = subprocess.run(cmd, capture_output=True, text=True)
+    curdir = os.getcwd()
 
-    if verbose:
-        print(p.stdout)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        os.chdir(tmpdir)
 
-    if not p.stderr.strip() and os.path.exists(base + ".sea"):
-        return base + ".sea"
-    else:
-        raise RuntimeError(f"Error running p-sea: {p.stderr}")
+        p = subprocess.run(cmd, capture_output=True, text=True)
+
+        if verbose:
+            print(p.stdout)
+
+        output = base + ".sea"
+
+        if not p.stderr.strip() and os.path.exists(output):
+            # move output back to original directory
+            final_path = os.path.join(curdir, output)
+            os.rename(output, final_path)
+            os.chdir(curdir)
+            return final_path
+        else:
+            os.chdir(curdir)
+            raise RuntimeError(f"Error running p-sea: {p.stderr}")
 
 
 def psea(pname):

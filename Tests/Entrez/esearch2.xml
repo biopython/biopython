@@ -1,163 +1,104 @@
-<?xml version="1.0"?>
-<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
-<eSearchResult>
-	<Count>10238</Count>
-	<RetMax>100</RetMax>
-	<RetStart>0</RetStart>
-	<QueryKey>12</QueryKey>
-	<WebEnv>0rYFb69LfbTFXfG7-0HPo2BU-ZFWF1s_51WtYR5e0fAzThQCR0WIW12inPQRRIj1xUzSfGgG9ovT9-@263F6CC86FF8F760_0173SID</WebEnv>
-	<IdList>
-		<Id>18411453</Id>
-		<Id>18411431</Id>
-		<Id>18411430</Id>
-		<Id>18411429</Id>
-		<Id>18411428</Id>
-		<Id>18411402</Id>
-		<Id>18411381</Id>
-		<Id>18411373</Id>
-		<Id>18411372</Id>
-		<Id>18411371</Id>
-		<Id>18411370</Id>
-		<Id>18411367</Id>
-		<Id>18411306</Id>
-		<Id>18411292</Id>
-		<Id>18411277</Id>
-		<Id>18411260</Id>
-		<Id>18411234</Id>
-		<Id>18411200</Id>
-		<Id>18411199</Id>
-		<Id>18411198</Id>
-		<Id>18411197</Id>
-		<Id>18411195</Id>
-		<Id>18411194</Id>
-		<Id>18411193</Id>
-		<Id>18411192</Id>
-		<Id>18411191</Id>
-		<Id>18411052</Id>
-		<Id>18411048</Id>
-		<Id>18411046</Id>
-		<Id>18411019</Id>
-		<Id>18411018</Id>
-		<Id>18411017</Id>
-		<Id>18411015</Id>
-		<Id>18411014</Id>
-		<Id>18411011</Id>
-		<Id>18411010</Id>
-		<Id>18411005</Id>
-		<Id>18411003</Id>
-		<Id>18411001</Id>
-		<Id>18411000</Id>
-		<Id>18410999</Id>
-		<Id>18410998</Id>
-		<Id>18410997</Id>
-		<Id>18410995</Id>
-		<Id>18410977</Id>
-		<Id>18410975</Id>
-		<Id>18410966</Id>
-		<Id>18410954</Id>
-		<Id>18410953</Id>
-		<Id>18410934</Id>
-		<Id>18410925</Id>
-		<Id>18410903</Id>
-		<Id>18410826</Id>
-		<Id>18410739</Id>
-		<Id>18410720</Id>
-		<Id>18410716</Id>
-		<Id>18410709</Id>
-		<Id>18410705</Id>
-		<Id>18410692</Id>
-		<Id>18410690</Id>
-		<Id>18410634</Id>
-		<Id>18410618</Id>
-		<Id>18410610</Id>
-		<Id>18410593</Id>
-		<Id>18410587</Id>
-		<Id>18410567</Id>
-		<Id>18410539</Id>
-		<Id>18410530</Id>
-		<Id>18410528</Id>
-		<Id>18410461</Id>
-		<Id>18410455</Id>
-		<Id>18410444</Id>
-		<Id>18410443</Id>
-		<Id>18410442</Id>
-		<Id>18410441</Id>
-		<Id>18410440</Id>
-		<Id>18410439</Id>
-		<Id>18410437</Id>
-		<Id>18410436</Id>
-		<Id>18410435</Id>
-		<Id>18410431</Id>
-		<Id>18410430</Id>
-		<Id>18410428</Id>
-		<Id>18410427</Id>
-		<Id>18410405</Id>
-		<Id>18410404</Id>
-		<Id>18410355</Id>
-		<Id>18410327</Id>
-		<Id>18410312</Id>
-		<Id>18410311</Id>
-		<Id>18410307</Id>
-		<Id>18410259</Id>
-		<Id>18410249</Id>
-		<Id>18410245</Id>
-		<Id>18410243</Id>
-		<Id>18410242</Id>
-		<Id>18410060</Id>
-		<Id>18410013</Id>
-		<Id>18409992</Id>
-		<Id>18409991</Id>
-	</IdList>
-	<TranslationSet>
-		<Translation>
-			<From>cancer</From>
-			<To>((&quot;neoplasms&quot;[TIAB] NOT Medline[SB]) OR &quot;neoplasms&quot;[MeSH Terms] OR cancer[Text Word])</To>
-		</Translation>
-	</TranslationSet>
-	<TranslationStack>
-		<TermSet>
-			<Term>&quot;neoplasms&quot;[TIAB]</Term>
-			<Field>TIAB</Field>
-			<Count>52104</Count>
-			<Explode>Y</Explode>
-		</TermSet>
-		<TermSet>
-			<Term>Medline[SB]</Term>
-			<Field>SB</Field>
-			<Count>16509514</Count>
-			<Explode>Y</Explode>
-		</TermSet>
-		<OP>NOT</OP>
-		<OP>GROUP</OP>
-		<TermSet>
-			<Term>&quot;neoplasms&quot;[MeSH Terms]</Term>
-			<Field>MeSH Terms</Field>
-			<Count>1918010</Count>
-			<Explode>Y</Explode>
-		</TermSet>
-		<OP>OR</OP>
-		<TermSet>
-			<Term>cancer[Text Word]</Term>
-			<Field>Text Word</Field>
-			<Count>638849</Count>
-			<Explode>Y</Explode>
-		</TermSet>
-		<OP>OR</OP>
-		<OP>GROUP</OP>
-		<TermSet>
-			<Term>2008/02/16[EDAT]</Term>
-			<Field>EDAT</Field>
-			<Count>-1</Count>
-			<Explode>Y</Explode>
-		</TermSet>
-		<TermSet>
-			<Term>2008/04/16[EDAT]</Term>
-			<Field>EDAT</Field>
-			<Count>-1</Count>
-			<Explode>Y</Explode>
-		</TermSet>
-		<OP>RANGE</OP>
-		<OP>AND</OP>
-	</TranslationStack>
-	<QueryTranslation>((&quot;neoplasms&quot;[TIAB] NOT Medline[SB]) OR &quot;neoplasms&quot;[MeSH Terms] OR cancer[Text Word]) AND 2008/02/16[EDAT] : 2008/04/16[EDAT]</QueryTranslation>
-</eSearchResult>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD esearch 20060628//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20060628/esearch.dtd">
+<eSearchResult><Count>42249</Count><RetMax>100</RetMax><RetStart>0</RetStart><QueryKey>1</QueryKey><WebEnv>MCID_6927d6e7fee3e90f880ec190</WebEnv><IdList>
+<Id>41297076</Id>
+<Id>41297074</Id>
+<Id>41297068</Id>
+<Id>41297055</Id>
+<Id>41297046</Id>
+<Id>41297043</Id>
+<Id>41297032</Id>
+<Id>41297028</Id>
+<Id>41297023</Id>
+<Id>41297015</Id>
+<Id>41297014</Id>
+<Id>41296995</Id>
+<Id>41296994</Id>
+<Id>41296991</Id>
+<Id>41296990</Id>
+<Id>41296985</Id>
+<Id>41296927</Id>
+<Id>41296920</Id>
+<Id>41296918</Id>
+<Id>41296886</Id>
+<Id>41296881</Id>
+<Id>41296866</Id>
+<Id>41296862</Id>
+<Id>41296854</Id>
+<Id>41296842</Id>
+<Id>41296829</Id>
+<Id>41296826</Id>
+<Id>41296824</Id>
+<Id>41296822</Id>
+<Id>41296821</Id>
+<Id>41296811</Id>
+<Id>41296783</Id>
+<Id>41296773</Id>
+<Id>41296763</Id>
+<Id>41296753</Id>
+<Id>41296747</Id>
+<Id>41296732</Id>
+<Id>41296731</Id>
+<Id>41296714</Id>
+<Id>41296711</Id>
+<Id>41296710</Id>
+<Id>41296689</Id>
+<Id>41296685</Id>
+<Id>41296683</Id>
+<Id>41296675</Id>
+<Id>41296667</Id>
+<Id>41296665</Id>
+<Id>41296663</Id>
+<Id>41296658</Id>
+<Id>41296656</Id>
+<Id>41296616</Id>
+<Id>41296609</Id>
+<Id>41296608</Id>
+<Id>41296606</Id>
+<Id>41296594</Id>
+<Id>41296590</Id>
+<Id>41296586</Id>
+<Id>41296583</Id>
+<Id>41296580</Id>
+<Id>41296569</Id>
+<Id>41296567</Id>
+<Id>41296563</Id>
+<Id>41296561</Id>
+<Id>41296555</Id>
+<Id>41296544</Id>
+<Id>41296517</Id>
+<Id>41296514</Id>
+<Id>41296508</Id>
+<Id>41296505</Id>
+<Id>41296501</Id>
+<Id>41296494</Id>
+<Id>41296485</Id>
+<Id>41296462</Id>
+<Id>41296458</Id>
+<Id>41296454</Id>
+<Id>41296452</Id>
+<Id>41296443</Id>
+<Id>41296441</Id>
+<Id>41296440</Id>
+<Id>41296437</Id>
+<Id>41296436</Id>
+<Id>41296434</Id>
+<Id>41296433</Id>
+<Id>41296432</Id>
+<Id>41296430</Id>
+<Id>41296429</Id>
+<Id>41296425</Id>
+<Id>41296417</Id>
+<Id>41296413</Id>
+<Id>41296412</Id>
+<Id>41296408</Id>
+<Id>41296406</Id>
+<Id>41296402</Id>
+<Id>41296396</Id>
+<Id>41296387</Id>
+<Id>41296385</Id>
+<Id>41296382</Id>
+<Id>41296379</Id>
+<Id>41296369</Id>
+<Id>41296368</Id>
+</IdList><TranslationSet><Translation>     <From>cancer</From>     <To>"cancer's"[All Fields] OR "cancerated"[All Fields] OR "canceration"[All Fields] OR "cancerization"[All Fields] OR "cancerized"[All Fields] OR "cancerous"[All Fields] OR "neoplasms"[MeSH Terms] OR "neoplasms"[All Fields] OR "cancer"[All Fields] OR "cancers"[All Fields]</To>    </Translation></TranslationSet><QueryTranslation>("cancer s"[All Fields] OR "cancerated"[All Fields] OR "canceration"[All Fields] OR "cancerization"[All Fields] OR "cancerized"[All Fields] OR "cancerous"[All Fields] OR "neoplasms"[MeSH Terms] OR "neoplasms"[All Fields] OR "cancer"[All Fields] OR "cancers"[All Fields]) AND 2025/09/27:2025/11/26[Date - Entry]</QueryTranslation></eSearchResult>

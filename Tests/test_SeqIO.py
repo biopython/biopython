@@ -15,7 +15,6 @@ from contextlib import ExitStack
 
 from Bio import AlignIO
 from Bio import BiopythonParserWarning
-from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio import SeqIO
 from Bio import StreamModeError
@@ -69,8 +68,6 @@ class SeqIOTestBaseClass(unittest.TestCase):
                 try:
                     SeqIO.read(stream, fmt)
                 except StreamModeError:
-                    continue
-                except BiopythonDeprecationWarning:  # uniprot-xml
                     continue
                 except ValueError as exception:
                     # If the mode is correct, then SeqIO.read will complain

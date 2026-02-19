@@ -96,7 +96,7 @@ def vector_to_axis(line, point):
     line = line.normalized()
     norm_point = point.norm()
     angle = line.angle(point)
-    return point - line ** (norm_point * np.cos(angle))
+    return point - line ** (norm_point * math.cos(angle))
 
 
 def rotaxis2m(theta, vector):
@@ -395,8 +395,8 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> np.ndarray:
     :param float angle_rads: the desired rotation angle in radians
     :param char axis: character specifying the rotation axis
     """
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
     if "z" == axis:
         return np.array(
@@ -435,10 +435,9 @@ def set_Z_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     cosang = math.cos(angle_rads)
     sinang = math.sin(angle_rads)
 
-    mtx[0][0] = cosang
-    mtx[1][1] = cosang
-    mtx[1][0] = sinang
-    mtx[0][1] = -sinang
+    mtx[0, 0] = mtx[1, 1] = cosang
+    mtx[1, 0] = sinang
+    mtx[0, 1] = -sinang
 
 
 def set_Y_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
@@ -446,10 +445,9 @@ def set_Y_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     cosang = math.cos(angle_rads)
     sinang = math.sin(angle_rads)
 
-    mtx[0][0] = cosang
-    mtx[2][2] = cosang
-    mtx[0][2] = sinang
-    mtx[2][0] = -sinang
+    mtx[0, 0] = mtx[2, 2] = cosang
+    mtx[0, 2] = sinang
+    mtx[2, 0] = -sinang
 
 
 def set_X_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
@@ -457,10 +455,9 @@ def set_X_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     cosang = math.cos(angle_rads)
     sinang = math.sin(angle_rads)
 
-    mtx[1][1] = cosang
-    mtx[2][2] = cosang
-    mtx[2][1] = sinang
-    mtx[1][2] = -sinang
+    mtx[1, 1] = mtx[2, 2] = cosang
+    mtx[2, 1] = sinang
+    mtx[1, 2] = -sinang
 
 
 def homog_trans_mtx(x: float, y: float, z: float) -> np.ndarray:
@@ -476,9 +473,9 @@ def homog_trans_mtx(x: float, y: float, z: float) -> np.ndarray:
 
 def set_homog_trans_mtx(x: float, y: float, z: float, mtx: np.ndarray):
     """Update existing translation matrix to new values."""
-    mtx[0][3] = x
-    mtx[1][3] = y
-    mtx[2][3] = z
+    mtx[0, 3] = x
+    mtx[1, 3] = y
+    mtx[2, 3] = z
 
 
 def homog_scale_mtx(scale: float) -> np.ndarray:
@@ -559,7 +556,6 @@ def coord_space(
     mrz2 = gmrz2
 
     # tx acs[1] to origin
-    # tm = homog_trans_mtx(-a1[0][0], -a1[1][0], -a1[2][0])
     set_homog_trans_mtx(-a1[0, 0], -a1[1, 0], -a1[2, 0], tm)
 
     # directly translate a2 using a1
@@ -616,16 +612,12 @@ def coord_space(
     # rev=True, so generate the reverse transformation
 
     # rotate a0 theta about Z, reversing alignment with X
-    # mrz2 = homog_rot_mtx(azimuth2, "z")
     set_Z_homog_rot_mtx(azimuth2, mrz2)
     # rotate a2 phi about Y
-    # mry = homog_rot_mtx(sc[2], "y")
     set_Y_homog_rot_mtx(sc[2][0], mry)
     # rotate a2 theta about Z
-    # mrz = homog_rot_mtx(sc[1], "z")
     set_Z_homog_rot_mtx(sc[1], mrz)
     # translation matrix origin to a1
-    # tm = homog_trans_mtx(a1[0][0], a1[1][0], a1[2][0])
     set_homog_trans_mtx(a1[0, 0], a1[1, 0], a1[2, 0], tm)
 
     # mr = tm @ mrz @ mry @ mrz2
@@ -706,7 +698,7 @@ def multi_coord_space(a3: np.ndarray, dLen: int, rev: bool = False) -> np.ndarra
 
     # transform a0 to mt space
     p = np.matmul(mt, a3[:, 0].reshape(-1, 4, 1)).reshape(-1, 4)
-    # print(f"mt[0]:\n{mt[0]}\na3[0][0] (a0):\n{a3[0][0]}\np[0]:\n{p[0]}")
+    # print(f"mt[0]:\n{mt[0]}\na3[0, 0] (a0):\n{a3[0, 0]}\np[0]:\n{p[0]}")
 
     # get azimuth of translated a0
     azimuth2 = np.arctan2(p[:, 1], p[:, 0])

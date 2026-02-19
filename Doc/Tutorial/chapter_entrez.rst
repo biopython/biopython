@@ -244,17 +244,17 @@ instead, we can directly parse this XML file into a Python object:
    >>> stream = Entrez.einfo()
    >>> record = Entrez.read(stream)
 
-Now ``record`` is a dictionary with exactly one key:
+Now ``record`` is a dictionary with three keys:
 
 .. cont-doctest
 
 .. code:: pycon
 
-   >>> record.keys()
-   dict_keys(['DbList'])
+   >>> sorted(record.keys())
+   ['DbInfo', 'DbList', 'ERROR']
 
-The values stored in this key is the list of database names shown in the
-XML above:
+The values stored in the ``'DbList`` key is the list of database
+names shown in the XML above:
 
 .. code:: pycon
 
@@ -277,14 +277,14 @@ information:
    >>> Entrez.email = "A.N.Other@example.com"  # Always tell NCBI who you are
    >>> stream = Entrez.einfo(db="pubmed")
    >>> record = Entrez.read(stream)
-   >>> record["DbInfo"]["Description"]
+   >>> record["DbInfo"][0]["Description"]
    'PubMed bibliographic record'
 
 .. code:: pycon
 
-   >>> record["DbInfo"]["Count"]
+   >>> record["DbInfo"][0]["Count"]
    '17989604'
-   >>> record["DbInfo"]["LastUpdate"]
+   >>> record["DbInfo"][0]["LastUpdate"]
    '2008/05/24 06:45'
 
 Try ``record["DbInfo"].keys()`` for other information stored in this
@@ -1019,69 +1019,22 @@ error was detected.
 The file contains items that are missing from the associated DTD
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is an example of an XML file containing tags that do not have a
-description in the corresponding DTD file:
-
-.. code:: text
-
-   <?xml version="1.0"?>
-   <!DOCTYPE eInfoResult PUBLIC "-//NLM//DTD eInfoResult, 11 May 2002//EN" "https://www.ncbi.nlm.nih.gov/entrez/query/DTD/eInfo_020511.dtd">
-   <eInfoResult>
-           <DbInfo>
-           <DbName>pubmed</DbName>
-           <MenuName>PubMed</MenuName>
-           <Description>PubMed bibliographic record</Description>
-           <Count>20161961</Count>
-           <LastUpdate>2010/09/10 04:52</LastUpdate>
-           <FieldList>
-                   <Field>
-   ...
-                   </Field>
-           </FieldList>
-           <DocsumList>
-                   <Docsum>
-                           <DsName>PubDate</DsName>
-                           <DsType>4</DsType>
-                           <DsTypeName>string</DsTypeName>
-                   </Docsum>
-                   <Docsum>
-                           <DsName>EPubDate</DsName>
-   ...
-           </DbInfo>
-   </eInfoResult>
-
-In this file, for some reason the tag ``<DocsumList>`` (and several
-others) are not listed in the DTD file ``eInfo_020511.dtd``, which is
-specified on the second line as the DTD for this XML file. By default,
-the parser will stop and raise a ValidationError if it cannot find some
-tag in the DTD:
-
-.. doctest ../Tests/Entrez/
+In some extraordinary cases, the XML file is not fully consistent with the
+associated DTD file, and contains some tags that are not defined in the
+DTD file. By default, the parser will stop and raise a ``ValidationError``
+if it cannot find some tag in the DTD. You can instruct the parser to skip
+such tags instead of raising a ``ValidationError`` by calling ``Entrez.read``
+or ``Entrez.parse`` with the argument ``validate`` equal to False:
 
 .. code:: pycon
 
    >>> from Bio import Entrez
-   >>> stream = open("einfo3.xml", "rb")
-   >>> record = Entrez.read(stream)
-   Traceback (most recent call last):
-     ...
-   Bio.Entrez.Parser.ValidationError: Failed to find tag 'DocsumList' in the DTD. To skip all tags that are not represented in the DTD, please call Bio.Entrez.read or Bio.Entrez.parse with validate=False.
-
-Optionally, you can instruct the parser to skip such tags instead of
-raising a ValidationError. This is done by calling ``Entrez.read`` or
-``Entrez.parse`` with the argument ``validate`` equal to False:
-
-.. doctest ../Tests/Entrez/
-
-.. code:: pycon
-
-   >>> from Bio import Entrez
-   >>> stream = open("einfo3.xml", "rb")
+   >>> stream = open("myxmlfile.xml", "rb")
    >>> record = Entrez.read(stream, validate=False)
    >>> stream.close()
 
 Of course, the information contained in the XML tags that are not in the
-DTD are not present in the record returned by ``Entrez.read``.
+DTD will not be present in the record returned by ``Entrez.read``.
 
 The file contains an error message
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

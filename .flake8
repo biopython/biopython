@@ -65,6 +65,8 @@ ignore =
     # by default... It is therefore recommended to use a stacklevel of
     # 2 or greater to provide more information to the user
     B902,
+    # We don't yet use the zip(..., strict=True) arg:
+    B905,
     # =========================================
     # Optional ignores for local installations:
     # =========================================

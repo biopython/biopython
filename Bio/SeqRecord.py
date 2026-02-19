@@ -170,7 +170,7 @@ class SeqRecord:
 
     """
 
-    _AnnotationsDictValue = Union[str, int]
+    _AnnotationsDictValue = str | int
     _AnnotationsDict = dict[str, _AnnotationsDictValue]
 
     annotations: _AnnotationsDict
@@ -1030,7 +1030,11 @@ class SeqRecord:
             for k, v in self.letter_annotations.items():  # type: ignore
                 if k in other.letter_annotations:
                     # avoid length checks, but otherwise equivalent to answer.letter_annotations[k] = v + other.letter_annotations[k]
-                    dict.__setitem__(answer.letter_annotations, k, v + other.letter_annotations[k])  # type: ignore
+                    dict.__setitem__(
+                        answer.letter_annotations,
+                        k,
+                        v + other.letter_annotations[k],  # type: ignore
+                    )
         except TypeError:
             print("Failed while try to concatenate letter annotations")
             raise
@@ -1068,7 +1072,7 @@ class SeqRecord:
         # Note can't transfer any per-letter-annotations
         offset = len(other)
         return type(self)(
-            cast(Union[Seq, MutableSeq], other + self.seq),
+            cast(Seq | MutableSeq, other + self.seq),
             id=self.id,
             name=self.name,
             description=self.description,

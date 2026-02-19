@@ -114,7 +114,7 @@ class BiopythonExperimentalWarning(BiopythonWarning):
 
 
 _parent_dir = os.path.dirname(os.path.dirname(__file__))
-if os.path.exists(os.path.join(_parent_dir, "setup.py")):
+if os.path.exists(os.path.join(_parent_dir, "pyproject.toml")):
     # Looks like we are running from our source directory,
     # a bad idea except if installed in development mode.
     #
@@ -142,6 +142,6 @@ if os.path.exists(os.path.join(_parent_dir, "setup.py")):
             " missing compiled C extensions. We recommend that you"
             " try running your code from outside the source tree."
             " If you are outside the source tree then you have a"
-            " setup.py file in an unexpected directory: " + _parent_dir,
+            " pyproject.toml file in an unexpected directory: " + _parent_dir,
             BiopythonWarning,
         )

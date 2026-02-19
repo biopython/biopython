@@ -20,7 +20,7 @@ import warnings
 from xml.etree import ElementTree
 from xml.parsers.expat import errors
 
-from Bio import BiopythonDeprecationWarning, SeqFeature
+from Bio import SeqFeature
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -33,7 +33,7 @@ REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
 class UniprotIterator(SequenceIterator):
     """Parser for UniProt XML files, returning SeqRecord objects."""
 
-    modes = "bt"
+    modes = "b"
 
     def __init__(
         self,
@@ -57,16 +57,6 @@ class UniprotIterator(SequenceIterator):
         if alphabet is not None:
             raise ValueError("The alphabet argument is no longer supported")
         super().__init__(source, fmt="UniProt XML")
-        if self.mode == "t":
-            warnings.warn(
-                "Opening a UniProt XML file in text mode is "
-                "deprecated, as it may lead to garbled characters. "
-                "We recommend opening the file in binary mode; "
-                "parsing UniProt XML files opened in text mode will "
-                "no longer be supported in a future release of "
-                "Biopython.",
-                BiopythonDeprecationWarning,
-            )
         self.return_raw_comments = return_raw_comments
         self._data = ElementTree.iterparse(
             self.stream, events=("start", "start-ns", "end")

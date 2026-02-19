@@ -474,8 +474,7 @@ class _InsdcWriter(SequenceWriter):
         f_type = feature.type.replace(" ", "_")
         if not _allowed_table_component_name_chars.issuperset(f_type):
             warnings.warn(
-                f"Feature key '{f_type}' contains characters not allowed by"
-                " standard.",
+                f"Feature key '{f_type}' contains characters not allowed by standard.",
                 BiopythonWarning,
             )
         if len(f_type) > 15:
@@ -1033,7 +1032,7 @@ class GenBankWriter(_InsdcWriter):
             for words in range(
                 line_number, min(line_number + self.LETTERS_PER_LINE, seq_len), 10
             ):
-                self.handle.write(f" {data[words:words + 10]}")
+                self.handle.write(f" {data[words : words + 10]}")
             self.handle.write("\n")
 
     def write_record(self, record):
@@ -1231,7 +1230,7 @@ class EmblWriter(_InsdcWriter):
                 index = (
                     self.LETTERS_PER_LINE * line_number + self.LETTERS_PER_BLOCK * block
                 )
-                handle.write(f" {data[index:index + self.LETTERS_PER_BLOCK]}")
+                handle.write(f" {data[index : index + self.LETTERS_PER_BLOCK]}")
             handle.write(
                 str((line_number + 1) * self.LETTERS_PER_LINE).rjust(
                     self.POSITION_PADDING
@@ -1246,7 +1245,9 @@ class EmblWriter(_InsdcWriter):
                 index = (
                     self.LETTERS_PER_LINE * line_number + self.LETTERS_PER_BLOCK * block
                 )
-                handle.write(f" {data[index:index + self.LETTERS_PER_BLOCK]}".ljust(11))
+                handle.write(
+                    f" {data[index : index + self.LETTERS_PER_BLOCK]}".ljust(11)
+                )
             handle.write(str(seq_len).rjust(self.POSITION_PADDING))
             handle.write("\n")
 

@@ -1,7 +1,8 @@
 This file provides documentation for modules in Biopython that have been moved
 or deprecated in favor of other modules. This provides some quick and easy
 to find documentation about how to update your code to work again.
-Python releases go first, then code (modules, methods, functions).
+Python releases go first, then build & packaging information,
+followed by code (modules, methods, functions).
 
 Python
 ======
@@ -58,6 +59,23 @@ No longer supported as of Release 1.77 with the end of Python 2 support.
 Biopython was mostly working under Jython 2.7.0, but support for Jython
 was deprecated as of Release 1.70.
 
+
+Build and packaging
+===================
+
+setup.py
+--------
+
+The use of a top-level ``setup.py`` script for project metadata, build configuration and running tests
+is deprecated in Biopython Release 1.87 in favor of a ``pyproject.toml``-based configuration
+(PEP 517 / PEP 518 and PEP 621).
+
+From now on one should use the following commands:
+
+- ``pip install .`` instead of ``python setup.py install``
+- ``cd Tests && python run_tests.py`` instead of `python setup.py test`
+- ``python -m build`` instead of ``python setup.py sdist`` or ``python setup.py bdist_wheel``
+
 Biopython modules, methods, functions
 =====================================
 
@@ -67,7 +85,7 @@ Parsing a FASTA file using Bio.SeqIO.parse with ``format='fasta'`` interprets
 lines before the first line starting with '>' as comments and skips them. To be
 consistent with the most common interpretation of the FASTA file format, the
 use of such comment lines at the beginning of the FASTA file was deprecated in
-Biopython Release 1.85.
+Biopython Release 1.85, and removed in Biopython release 1.87.
 As an alternative, you can use ``format='fasta-pearson'`` to specify the FASTA
 file format as defined by William Pearson's FASTA aligner program, allowing for
 comment lines at the top of the FASTA file (lines anywhere in the file starting
@@ -94,17 +112,18 @@ Please use ``format(record, "tab")`` instead.
 
 Bio.SeqIO.UniprotIO
 -------------------
-Parsing a UniProt XML file opened in text mode (if the file was opened using
-``open("myuniprotfile.xml")``) was deprecated in Release 1.85, as this may lead
-to garbled characters.  Please open the file in binary mode (as in
-``open("myuniprotfile.xml", "rb")``), or let ``Bio.SeqIO.parse`` take care of
-opening and closing files by passing the file name instead of a file handle.
+The ability to parse a UniProt XML file opened in text mode (if the file was
+opened using ``open("myuniprotfile.xml")``) was deprecated in Release 1.85 and
+removed in Release 1.87, as this may lead to garbled characters.  Please open
+the file in binary mode (as in ``open("myuniprotfile.xml", "rb")``), or let
+``Bio.SeqIO.parse`` take care of opening and closing files by passing the file
+name instead of a file handle.
 
 Bio.Entrez
 ----------
 The ``egquery`` function wrapping the NCBI EGQuery (Entrez Global Query)
-API was deprecated in Release 1.84. The API has stopped working and the
-NCBI said this API was no longer being maintained.
+API was deprecated in Release 1.84, and removed in Release 1.87. The API has
+stopped working and the NCBI said this API was no longer being maintained.
 
 Bio.SCOP
 --------
@@ -251,9 +270,9 @@ The ``instances`` attribute of the ``Motif`` class  in ``Bio.motifs`` was
 deprecated in release 1.82, and removed in release 1.86. Instead of
 ``mymotif.instances``, please use ``mymotif.alignment.sequences``.
 
-The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.85.
-This class is a subclass from ``Seq``, but does not provide any additional
-capabilities. Please use a ``Seq`` object instead.
+The ``Instance`` class in ``Bio.motifs.meme`` was deprecated in release 1.85,
+and removed in release 1.87.  This class is a subclass from ``Seq``, but does
+not provide any additional capabilities. Please use a ``Seq`` object instead.
 
 Bio.Restriction.RanaConfig
 --------------------------
@@ -590,7 +609,8 @@ Function 'GC' in Bio.SeqUtils was deprecated in Release 1.80, and removed in
 Release 1.82. Instead use function 'gc_fraction'.
 
 Function get_amino_acids_percent in Bio.SeqUtils.ProteinAnalysis was deprecated
-in Release 1.85. Use the amino_acids_percent property instead.
+in Release 1.85, and removed in Release 1.87. Use the amino_acids_percent
+property instead.
 
 Bio.PopGen.Async
 ----------------

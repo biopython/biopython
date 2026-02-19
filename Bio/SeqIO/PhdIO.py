@@ -129,8 +129,7 @@ class PhdWriter(SequenceWriter):
         if peak_locations:
             if len(record.seq) != len(peak_locations):
                 raise ValueError(
-                    "Number of peak location scores does not "
-                    "match length of sequence"
+                    "Number of peak location scores does not match length of sequence"
                 )
         if None in phred_qualities:
             raise ValueError("A quality value of None was found")

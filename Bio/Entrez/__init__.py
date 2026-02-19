@@ -12,10 +12,10 @@
 """Provides code to access NCBI over the WWW.
 
 The main Entrez web page is available at:
-http://www.ncbi.nlm.nih.gov/Entrez/
+https://www.ncbi.nlm.nih.gov/search/
 
 Entrez Programming Utilities web page is available at:
-http://www.ncbi.nlm.nih.gov/books/NBK25501/
+https://www.ncbi.nlm.nih.gov/books/NBK25501/
 
 This module provides a number of functions like ``efetch`` (short for
 Entrez Fetch) which will return the data as a handle object. This is
@@ -111,13 +111,13 @@ Functions:
       which can return multiple records - such as efetch, esummary
       and elink. Typical usage is:
 
-          >>> handle = Entrez.esummary(db="pubmed", id="19304878,14630660", retmode="xml")
+          >>> handle = Entrez.efetch(db="taxonomy", id="9615,9685", retmode="xml")
           >>> records = Entrez.parse(handle)
           >>> for record in records:
-          ...     # each record is a Python dictionary or list.
-          ...     print(record['Title'])
-          Biopython: freely available Python tools for computational molecular biology and bioinformatics.
-          PDB file parser and structure class implemented in Python.
+          ...     print(record['TaxId'], record["OtherNames"]['GenbankCommonName'])
+          ...
+          9615 dog
+          9685 domestic cat
           >>> handle.close()
 
       This function is appropriate only if the XML file contains
@@ -136,7 +136,6 @@ from urllib.parse import urlencode
 from urllib.request import Request
 from urllib.request import urlopen
 
-from Bio import BiopythonDeprecationWarning
 from Bio._utils import function_with_previous
 
 email = None
@@ -155,7 +154,7 @@ def epost(db, **keywds):
     environment to use with subsequent search strategies.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EPost
+    https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EPost
 
     :returns: Handle to the results.
     :raises urllib.error.URLError: If there's a network error.
@@ -174,7 +173,7 @@ def efetch(db, **keywords):
     more UIs or from user's environment.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch
+    https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EFetch
 
     Short example:
 
@@ -209,7 +208,7 @@ def esearch(db, term, **keywds):
     for future use in the user's environment.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch
+    https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch
 
     Short example:
 
@@ -249,7 +248,7 @@ def elink(**keywds):
     database, or lists LinkOut URLs and attributes for multiple IDs.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink
+    https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ELink
 
     Note that ELink treats the "id" parameter differently than the other
     tools when multiple values are given. You should generally pass multiple
@@ -292,7 +291,7 @@ def einfo(**keywds):
     available links for each Entrez database.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EInfo
+    https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EInfo
 
     Short example:
 
@@ -319,7 +318,7 @@ def esummary(**keywds):
     from the user's environment.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary
+    https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESummary
 
     This example discovers more about entry 19923 in the structure
     database:
@@ -345,53 +344,13 @@ def esummary(**keywds):
     return _open(request)
 
 
-def egquery(**keywds):
-    """Provide Entrez database counts for a global search (DEPRECATED).
-
-    EGQuery provided Entrez database counts in XML for a single search
-    using Global Query. However, the NCBI are no longer maintaining this
-    function and suggest using esearch on each database of interest.
-
-    See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.EGQuery
-
-    This quick example based on a longer version from the Biopython
-    Tutorial just checks there are over 60 matches for 'Biopython'
-    in PubMedCentral:
-
-    >>> from Bio import Entrez
-    >>> Entrez.email = "Your.Name.Here@example.org"
-    >>> handle = Entrez.egquery(term="biopython")  # doctest: +SKIP
-    >>> record = Entrez.read(handle)  # doctest: +SKIP
-    >>> handle.close()  # doctest: +SKIP
-    >>> for row in record["eGQueryResult"]:  # doctest: +SKIP
-    ...     if "pmc" in row["DbName"]:  # doctest: +SKIP
-    ...         print(int(row["Count"]) > 60)  # doctest: +SKIP
-    True
-
-    :returns: Handle to the results, by default in XML format.
-    :raises urllib.error.URLError: If there's a network error.
-    """
-    warnings.warn(
-        "The Bio.Entrez.egquery function is deprecated and will be removed "
-        "in a future release of Biopython because the underlying NCBI EGQuery "
-        "API is no longer maintained.",
-        BiopythonDeprecationWarning,
-    )
-    cgi = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/egquery.fcgi"
-    variables = {}
-    variables.update(keywds)
-    request = _build_request(cgi, variables)
-    return _open(request)
-
-
 def espell(**keywds):
     """Retrieve spelling suggestions as a results handle.
 
     ESpell retrieves spelling suggestions, if available.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESpell
+    https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESpell
 
     Short example:
 
@@ -448,7 +407,7 @@ def ecitmatch(**keywds):
     citation strings.
 
     See the online documentation for an explanation of the parameters:
-    http://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ECitMatch
+    https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ECitMatch
 
     Short example:
 
@@ -491,14 +450,14 @@ def read(source, validate=True, escape=False, ignore_errors=False):
         >>> stream = open(path, "rb")  # opened in binary mode
         >>> record = Entrez.read(stream)
         >>> print(record['QueryTranslation'])
-        biopython[All Fields]
+        "biopython"[All Fields]
         >>> stream.close()
 
     Alternatively, you can use the filename directly, as in
 
         >>> record = Entrez.read(path)
         >>> print(record['QueryTranslation'])
-        biopython[All Fields]
+        "biopython"[All Fields]
 
     which is safer, as the file stream will automatically be closed after the
     record has been read, or if an error occurs.
@@ -552,24 +511,24 @@ def parse(source, validate=True, escape=False, ignore_errors=False):
     data in binary mode. For files, use mode "rb" when opening the file, as in
 
         >>> from Bio import Entrez
-        >>> path = "Entrez/pubmed1.xml"
+        >>> path = "Entrez/taxonomy.xml"
         >>> stream = open(path, "rb")  # opened in binary mode
         >>> records = Entrez.parse(stream)
         >>> for record in records:
-        ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
+        ...     print(record['TaxId'], record["OtherNames"]['GenbankCommonName'])
         ...
-        Social justice (San Francisco, Calif.)
-        Biochimica et biophysica acta
+        9615 dog
+        9685 domestic cat
         >>> stream.close()
 
     Alternatively, you can use the filename directly, as in
 
         >>> records = Entrez.parse(path)
         >>> for record in records:
-        ...     print(record['MedlineCitation']['Article']['Journal']['Title'])
+        ...     print(record['TaxId'], record["OtherNames"]['GenbankCommonName'])
         ...
-        Social justice (San Francisco, Calif.)
-        Biochimica et biophysica acta
+        9615 dog
+        9685 domestic cat
 
     which is safer, as the file stream will automatically be closed after all
     the records have been read, or if an error occurs.

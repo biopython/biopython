@@ -906,8 +906,7 @@ if __name__ == "__main__":
         unittest.main(testRunner=runner, exit=False)
     else:
         print(
-            "Import of C functions failed. Only testing pure Python "
-            "fallback functions."
+            "Import of C functions failed. Only testing pure Python fallback functions."
         )
 
     # Now, we switch explicitly to the fallback Python functions:
