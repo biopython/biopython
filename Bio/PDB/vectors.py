@@ -7,6 +7,7 @@
 
 """Vector class, including rotation-related functions."""
 
+import math
 from typing import Optional
 
 import numpy as np  # type: ignore
@@ -95,7 +96,7 @@ def vector_to_axis(line, point):
     line = line.normalized()
     norm_point = point.norm()
     angle = line.angle(point)
-    return point - line ** (norm_point * np.cos(angle))
+    return point - line ** (norm_point * math.cos(angle))
 
 
 def rotaxis2m(theta, vector):
@@ -394,8 +395,8 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> np.ndarray:
     :param float angle_rads: the desired rotation angle in radians
     :param char axis: character specifying the rotation axis
     """
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
     if "z" == axis:
         return np.array(
@@ -431,8 +432,8 @@ def homog_rot_mtx(angle_rads: float, axis: str) -> np.ndarray:
 
 def set_Z_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing Z rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
     mtx[0, 0] = mtx[1, 1] = cosang
     mtx[1, 0] = sinang
@@ -441,8 +442,8 @@ def set_Z_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
 
 def set_Y_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing Y rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
     mtx[0, 0] = mtx[2, 2] = cosang
     mtx[0, 2] = sinang
@@ -451,8 +452,8 @@ def set_Y_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
 
 def set_X_homog_rot_mtx(angle_rads: float, mtx: np.ndarray):
     """Update existing X rotation matrix to new angle."""
-    cosang = np.cos(angle_rads)
-    sinang = np.sin(angle_rads)
+    cosang = math.cos(angle_rads)
+    sinang = math.sin(angle_rads)
 
     mtx[1, 1] = mtx[2, 2] = cosang
     mtx[2, 1] = sinang
