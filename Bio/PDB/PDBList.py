@@ -688,118 +688,156 @@ class PDBList:
 
 
 if __name__ == "__main__":
-    doc = """PDBList.py
-    (c) Kristian Rother 2003, Wiktoria Karwicka & Jacek Smietanski 2016
-    Contributed to Biopython
+    import argparse
 
-    Usage::
+    parser = argparse.ArgumentParser(
+    description="Download and manage PDB files.",
+    epilog=(
+        "PDBList.py\n"
+        "(c) Kristian Rother 2003, Wiktoria Karwicka & Jacek Smietanski 2016\n"
+        "Contributed to Biopython\n\n"
+        "Usage:\n"
+        "  PDBList.py update <pdb_path> [options]\n"
+        "  PDBList.py all <pdb_path> [options]\n"
+        "  PDBList.py obsol <pdb_path> [options]\n"
+        "  PDBList.py assemb <pdb_path> [options]\n"
+        "  PDBList.py <PDB-ID> <pdb_path> [options]\n"
+        "  PDBList.py (<PDB-ID1>,<PDB-ID2>,...) <pdb_path> [options]\n"
+    ),
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+)
 
-        PDBList.py update <pdb_path> [options]   - write weekly PDB updates to
-                                                   local pdb tree.
-        PDBList.py all    <pdb_path> [options]   - write all PDB entries to
-                                                   local pdb tree.
-        PDBList.py obsol  <pdb_path> [options]   - write all obsolete PDB
-                                                   entries to local pdb tree.
-        PDBList.py assemb <pdb_path> [options]   - write all assemblies for each
-                                                   PDB entry to local pdb tree.
-        PDBList.py <PDB-ID> <pdb_path> [options] - retrieve single structure
-        PDBList.py (<PDB-ID1>,<PDB-ID2>,...) <pdb_path> [options] - retrieve a set
-                                                   of structures
+    parser.add_argument(
+        "action",
+        help="update | all | obsol | assemb | PDB ID | (PDB1,PDB2,...)"
+    )
 
-    Options:
-     -d       A single directory will be used as <pdb_path>, not a tree.
-     -o       Overwrite existing structure files.
-     -pdb     Downloads structures in PDB format
-     -xml     Downloads structures in PDBML (XML) format
-     -mmtf    Downloads structures in mmtf format
-     -with-assemblies    Downloads assemblies along with regular entries.
+    parser.add_argument(
+        "pdb_path",
+        nargs="?",
+        default=os.getcwd(),
+        help="Path to local PDB directory"
+    )
 
-    Maximum one format can be specified simultaneously (if more selected, only
-    the last will be considered). By default (no format specified) structures are
-    downloaded as PDBx/mmCif files.
-    """
-    print(doc)
+    parser.add_argument(
+        "-d",
+        action="store_true",
+        help="Use single directory instead of tree"
+    )
 
-    file_format = "mmCif"
-    overwrite = False
-    with_assemblies = False
+    parser.add_argument(
+        "-o",
+        action="store_true",
+        help="Overwrite existing structure files"
+    )
 
-    if len(sys.argv) > 2:
-        pdb_path = sys.argv[2]
-        pl = PDBList(pdb=pdb_path)
-        if len(sys.argv) > 3:
-            for option in sys.argv[3:]:
-                if option == "-d":
-                    pl.flat_tree = True
-                elif option == "-o":
-                    overwrite = True
-                elif option in ("-pdb", "-xml", "-mmtf"):
-                    file_format = option[1:]
-                # Allow for download of assemblies alongside ASU
-                elif option == "-with-assemblies":
-                    with_assemblies = True
+    parser.add_argument(
+        "--format",
+        choices=["mmCif", "pdb", "xml", "mmtf"],
+        default="mmCif",
+        help="File format to download"
+    )
 
-    else:
-        pdb_path = os.getcwd()
-        pl = PDBList()
+    parser.add_argument(
+        "--with-assemblies",
+        action="store_true",
+        help="Download assemblies along with entries"
+    )
+
+    # Legacy format flags (backward compatibility)
+    parser.add_argument(
+        "-pdb",
+        action="store_true",
+        help="Download structures in PDB format (legacy flag)",
+    )
+    parser.add_argument(
+        "-xml",
+        action="store_true",
+        help="Download structures in XML format (legacy flag)",
+    )
+    parser.add_argument(
+        "-mmtf",
+        action="store_true",
+        help="Download structures in MMTF format (legacy flag)",
+    )
+    
+    args = parser.parse_args()
+    # Backward compatibility for legacy format flags
+    if args.pdb:
+        args.format = "pdb"
+    elif args.xml:
+        args.format = "xml"
+    elif args.mmtf:
+        args.format = "mmtf"
+
+    pl = PDBList(pdb=args.pdb_path)
+
+    if args.d:
         pl.flat_tree = True
 
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "update":
-            # update PDB
-            print("updating local PDB at " + pdb_path)
-            pl.update_pdb(file_format=file_format, with_assemblies=with_assemblies)
+    if args.action == "update":
+        print("Updating local PDB at " + args.pdb_path)
+        pl.update_pdb(
+            file_format=args.format,
+            with_assemblies=args.with_assemblies,
+        )
 
-        elif sys.argv[1] == "all":
-            # get the entire PDB
-            pl.download_entire_pdb(file_format=file_format)
-            if with_assemblies:
-                # get all assembly structures
-                pl.download_all_assemblies(file_format=file_format)
+    elif args.action == "all":
+        pl.download_entire_pdb(file_format=args.format)
+        if args.with_assemblies:
+            pl.download_all_assemblies(file_format=args.format)
 
-        elif sys.argv[1] == "obsol":
-            # get all obsolete entries
-            pl.download_obsolete_entries(pdb_path, file_format=file_format)
+    elif args.action == "obsol":
+        pl.download_obsolete_entries(
+            args.pdb_path,
+            file_format=args.format,
+        )
 
-        elif sys.argv[1] == "assemb":
-            # get all assembly structures
-            pl.download_all_assemblies(file_format=file_format)
+    elif args.action == "assemb":
+        pl.download_all_assemblies(file_format=args.format)
 
-        elif len(sys.argv[1]) == 4 and sys.argv[1][0].isdigit():
-            pdb_code = sys.argv[1]
-            # get single PDB entry
+    elif len(args.action) == 4 and args.action[0].isalnum():
+        # Single PDB ID
+        pdb_code = args.action
+        pl.retrieve_pdb_file(
+            pdb_code,
+            pdir=args.pdb_path,
+            file_format=args.format,
+            overwrite=args.o,
+        )
+
+        if args.with_assemblies:
+            assemblies = pl.get_all_assemblies()
+            for a_pdb_code, assembly_num in assemblies:
+                if a_pdb_code == pdb_code:
+                    pl.retrieve_assembly_file(
+                        pdb_code,
+                        assembly_num,
+                        pdir=args.pdb_path,
+                        file_format=args.format,
+                        overwrite=args.o,
+                    )
+    elif args.action.startswith("("):
+        # Multiple PDB IDs like (1ABC,2XYZ)
+        pdb_ids = re.findall("[0-9A-Za-z]{4}", args.action)
+        for pdb_id in pdb_ids:
             pl.retrieve_pdb_file(
-                pdb_code, pdir=pdb_path, file_format=file_format, overwrite=overwrite
+                pdb_id,
+                pdir=args.pdb_path,
+                file_format=args.format,
+                overwrite=args.o,
             )
-            if with_assemblies:
-                # PDB Code might have more than one assembly.
+            if args.with_assemblies:
                 assemblies = pl.get_all_assemblies()
                 for a_pdb_code, assembly_num in assemblies:
-                    if a_pdb_code == pdb_code:
+                    if a_pdb_code == pdb_id:
                         pl.retrieve_assembly_file(
-                            pdb_code,
+                            pdb_id,
                             assembly_num,
-                            pdir=pdb_path,
-                            file_format=file_format,
-                            overwrite=overwrite,
+                            pdir=args.pdb_path,
+                            file_format=args.format,
+                            overwrite=args.o,
                         )
 
-        elif sys.argv[1][0] == "(":
-            # get a set of PDB entries
-            pdb_ids = re.findall("[0-9A-Za-z]{4}", sys.argv[1])
-            for pdb_id in pdb_ids:
-                pl.retrieve_pdb_file(
-                    pdb_id, pdir=pdb_path, file_format=file_format, overwrite=overwrite
-                )
-                if with_assemblies:
-                    # PDB Code might have more than one assembly.
-                    assemblies = pl.get_all_assemblies()
-                    for a_pdb_code, assembly_num in assemblies:
-                        if a_pdb_code == pdb_id:
-                            pl.retrieve_assembly_file(
-                                pdb_id,
-                                assembly_num,
-                                pdir=pdb_path,
-                                file_format=file_format,
-                                overwrite=overwrite,
-                            )
+    else:
+        parser.error("Invalid action or PDB ID")
