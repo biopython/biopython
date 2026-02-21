@@ -691,8 +691,21 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Download and manage PDB files."
-    )
+    description="Download and manage PDB files.",
+    epilog=(
+        "PDBList.py\n"
+        "(c) Kristian Rother 2003, Wiktoria Karwicka & Jacek Smietanski 2016\n"
+        "Contributed to Biopython\n\n"
+        "Usage:\n"
+        "  PDBList.py update <pdb_path> [options]\n"
+        "  PDBList.py all <pdb_path> [options]\n"
+        "  PDBList.py obsol <pdb_path> [options]\n"
+        "  PDBList.py assemb <pdb_path> [options]\n"
+        "  PDBList.py <PDB-ID> <pdb_path> [options]\n"
+        "  PDBList.py (<PDB-ID1>,<PDB-ID2>,...) <pdb_path> [options]\n"
+    ),
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+)
 
     parser.add_argument(
         "action",
@@ -732,9 +745,21 @@ if __name__ == "__main__":
     )
 
     # Legacy format flags (backward compatibility)
-    parser.add_argument("-pdb", action="store_true")
-    parser.add_argument("-xml", action="store_true")
-    parser.add_argument("-mmtf", action="store_true")
+    parser.add_argument(
+        "-pdb",
+        action="store_true",
+        help="Download structures in PDB format (legacy flag)",
+    )
+    parser.add_argument(
+        "-xml",
+        action="store_true",
+        help="Download structures in XML format (legacy flag)",
+    )
+    parser.add_argument(
+        "-mmtf",
+        action="store_true",
+        help="Download structures in MMTF format (legacy flag)",
+    )
     
     args = parser.parse_args()
     # Backward compatibility for legacy format flags
