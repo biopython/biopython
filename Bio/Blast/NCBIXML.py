@@ -59,10 +59,12 @@ class Header:
 
     query               Name of query sequence.
     query_letters       Number of letters in the query sequence.  (int)
+                        DEPRECATED: Use query_length instead.
 
     database            Name of the database.
     database_sequences  Number of sequences in the database.  (int)
     database_letters    Number of letters in the database.  (int)
+                        DEPRECATED: Use database_length instead.
 
     """
 
@@ -74,11 +76,43 @@ class Header:
         self.reference = ""
 
         self.query = ""
-        self.query_letters = None
+        self._query_letters = None
 
         self.database = ""
         self.database_sequences = None
-        self.database_letters = None
+        self._database_letters = None
+
+    @property
+    def query_letters(self):
+        """DEPRECATED: Use query_length instead."""
+        warnings.warn(
+            "The query_letters attribute is deprecated. "
+            "Please use query_length instead.",
+            BiopythonParserWarning,
+            stacklevel=2,
+        )
+        return self._query_letters
+
+    @query_letters.setter
+    def query_letters(self, value):
+        """Set query_letters (deprecated)."""
+        self._query_letters = value
+
+    @property
+    def database_letters(self):
+        """DEPRECATED: Use database_length instead."""
+        warnings.warn(
+            "The database_letters attribute is deprecated. "
+            "Please use database_length instead.",
+            BiopythonParserWarning,
+            stacklevel=2,
+        )
+        return self._database_letters
+
+    @database_letters.setter
+    def database_letters(self, value):
+        """Set database_letters (deprecated)."""
+        self._database_letters = value
 
 
 class Description:
