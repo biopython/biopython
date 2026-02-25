@@ -199,6 +199,195 @@ class MultipleSeqAlignment:
         # Handle this via the property set function which will validate it
         self.column_annotations = column_annotations
 
+    def _get_row_index(self, index):
+        """Return the row number for the given index.
+        """
+        if isinstance(index, int):
+            # Assume it's a row number
+            if index < 0:
+                index += len(self._records)
+            if index < 0 or index >= len(self._records):
+                raise IndexError("Row index out of range")
+            return index
+        elif isinstance(index, str):
+            # Assume it's a record id
+            for i, record in enumerate(self._records):
+                if record.id == index:
+                    return i
+            else:
+                raise KeyError("No record with id %r" % index)
+        else:
+            raise TypeError("Invalid index type %r" % type(index))
+        
+
+    def _map_from_seq(self, index, pos, include_letter=False):
+        """Map a position in a sequence to the alignment column.
+
+        Indexing by row number (int), or the sequence id (string) is supported.
+
+        Returns an integer column number (0 based).
+
+        TODO: 
+        support indexing starting from 1 when given as `pos`?
+
+        - if index is a slice, return a list of integers (i.e. 
+        each is a position for that specific sequence)
+        """
+        if isinstance(index, int):
+            # Assume it's a row number
+            if index < 0:
+                index += len(self._records)
+            if index < 0 or index >= len(self._records):
+                raise IndexError("Row index out of range")
+            record = self._records[index]
+        elif isinstance(index, str):
+            # Assume it's a record id
+            for record in self._records:
+                if record.id == index:
+                    break
+            else:
+                raise KeyError(f"No such record id {index}")
+        else:
+            raise TypeError(f"Invalid index type: {type(index)}")
+        
+        if pos < 0:
+            raise ValueError("Negative indexing not supported")
+        if pos >= len(self._records[0].seq):
+            raise IndexError("Sequence index out of range") 
+            
+            # TODO: check that pos is in range for FROM sequence (after removing gaps)
+        
+        seq = str(record.seq)
+        for i, c in enumerate(seq):
+            if c != "-":
+                pos -= 1
+            if pos < 0:
+                return i 
+        raise IndexError("Sequence index out of range")
+
+    def _map_to_seq(self, index, pos):
+        """Map a position in the alignment to a sequence.
+
+        The sequence is indexed by row number (int), or the sequence id (string). 
+
+        Returns an integer position in the sequence (0 based).
+
+        If the sequence has a gap at the specified alignment position, the previous 
+        non-gap position is returned. # TODO: should this just be -1 instead?
+        """
+        if isinstance(pos, str):
+            raise TypeError("Invalid pos type: %r" % type(pos))
+        if isinstance(index, int):
+            # Assume it's a row number
+            if index < 0:
+                index += len(self._records)
+            if index < 0 or index >= len(self._records):
+                raise IndexError("Row index out of range")
+            record = self._records[index]
+        elif isinstance(index, str):
+            # Assume it's a record id
+            for record in self._records:
+                if record.id == index:
+                    break
+            else:
+                raise KeyError(f"No such record id {index}")
+        else:
+            raise TypeError(f"Invalid index type: {type(index)}")
+        
+        # TODO: if pos is slice
+        if pos < 0:
+            raise ValueError("Negative indexing not supported") 
+            # TODO: use the alignment slicing method to get positions in reverse order; 
+            # or support multiple positions supplied as an array  
+        if pos >= len(self._records[0].seq):
+            raise IndexError("Sequence index out of range")
+        
+        seq = str(record.seq)[0:pos+1]
+        return len(seq.replace("-", "")) - 1
+       
+    def map_position(self, pos, from_=None, to_=None):
+        """Map a position in one sequence to another sequence in the alignment.
+
+        This is useful for identifying a particular residue in a sequence that 
+        aligned to another. 
+
+        Arguments:
+         - from_ - The sequence to map from (integer index, or sequence id). 
+         - to_ - The sequence to map to (integer index, or sequence id).
+         - pos - The position in the from_ sequence to map. 
+
+        Returns an integer position in the to_ sequence.
+
+        If from_ is None, then the position is assumed to be the alignment column. 
+        If to_ is None, then the returned position is the alignment column. 
+
+        >>> from Bio import AlignIO
+        >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
+        >>> print(align)
+        Alignment with 3 rows and 9 columns
+        KTLK-E-ME Alpha
+        KTLK---ME Beta
+        KT-----LE Gamma
+        >>> align.map_position(3, "Gamma") # if no second sequence provided, returns the alignment column
+        8 
+        >>> align.map_position(pos=4, from_="Alpha", to_="Beta") # 'E' in Alpha is aligned to '-' in Beta; returns the previous position
+        3
+        >>> align.map_letter(2, "Gamma", "Alpha") # returns tuple of letter and position in Alpha; 'L' -> 'M'
+        ('M', 6)
+        """
+        if from_ is None and to_ is None:
+            raise ValueError(
+                "from_ and to_ cannot both be None")
+        
+        if from_ is None: return self._map_to_seq(to_, pos)
+        if to_ is None: return self._map_from_seq(from_, pos)
+
+        from_pos = self._map_from_seq(from_, pos)   # position in the alignment 
+        to_pos = self._map_to_seq(to_, from_pos)    # position in the other sequence
+        return to_pos
+    
+    def map_letter(self, pos, from_=None, to_=None):
+        """Map a position in one sequence to another sequence in the alignment.
+
+        This is useful for identifying a particular residue in a sequence that 
+        aligned to another. 
+
+        Arguments:
+         - from_ - The sequence to map from (integer index, or sequence id). 
+         - to_ - The sequence to map to (integer index, or sequence id).
+         - pos - The position in the from_ sequence to map. 
+
+        Returns a tuple of the letter and the position (1-based) in the to_ sequence.
+
+        If from_ is None, then the position is assumed to be the alignment column. 
+        If to_ is None, then the returned position is the alignment column. 
+
+        >>> from Bio import AlignIO
+        >>> align = AlignIO.read("Clustalw/opuntia.aln", "clustal")
+        >>> print(align)
+        Alignment with 3 rows and 9 columns
+        KTLK-E-ME Alpha
+        KTLK---ME Beta
+        KT-----LE Gamma
+        >>> align.map_letter(2, "Gamma", "Alpha") # returns tuple of letter and position in Alpha
+        ('M', 6)
+        
+        """
+        # TODO: can retrieve letter from alignment column (i.e. might return '-' character)
+        # TODO: use func for all methods that converts index (string, whatever) to a slice
+        if from_ is None and to_ is None:
+            raise ValueError(
+                "from_ and to_ cannot both be None")
+        
+        if from_ is None: index = self._map_to_seq(to_, pos)
+        if to_ is None: index = self._map_from_seq(from_, pos)
+
+        index = self._map_to_seq(to_, self._map_from_seq(from_, pos))
+        row_idx = self._get_row_index(to_)
+        seq = str(self._records[row_idx].seq).replace("-", "") # remove gaps
+        
+        return (seq[index], index+1) # letter at the position in the other sequence
+
     def _set_per_column_annotations(self, value):
         if not isinstance(value, dict):
             raise TypeError(
@@ -664,7 +853,7 @@ class MultipleSeqAlignment:
         align[r,c] gives a single character as a string
         align[r] gives a row as a SeqRecord
         align[r,:] gives a row as a SeqRecord
-        align[:,c] gives a column as a Seq
+        align[:,c] gives a column as a string
 
         align[:] and align[:,:] give a copy of the alignment
 
@@ -831,7 +1020,7 @@ class MultipleSeqAlignment:
         ...              SeqRecord(Seq("CGCT"), id="Chicken"),
         ...          ])
 
-        If you simple try and add these without sorting, you get this:
+        If you simply try and add these without sorting, you get this:
 
         >>> print(align1 + align2)
         Alignment with 3 rows and 8 columns
@@ -920,13 +1109,13 @@ class MultipleSeqAlignment:
 
         Any weights associated with the sequences are taken into account when
         calculating the substitution matrix.  For example, given the following
-        multiple sequence alignment::
+        multiple sequence alignment:
 
             GTATC  0.5
             AT--C  0.8
             CTGTC  1.0
 
-        For the first column we have::
+        For the first column we have:
 
             ('A', 'G') : 0.5 * 0.8 = 0.4
             ('C', 'G') : 0.5 * 1.0 = 0.5
