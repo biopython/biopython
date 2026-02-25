@@ -2358,7 +2358,7 @@ class TestNCBIXML(unittest.TestCase):
                 record.query,
                 "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence",
             )
-            self.assertEqual(record.query_letters, 1002)
+            self.assertEqual(record.query_length, 1002)
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2380,7 +2380,7 @@ class TestNCBIXML(unittest.TestCase):
                 record.query,
                 "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
             )
-            self.assertEqual(record.query_letters, 2050)
+            self.assertEqual(record.query_length, 2050)
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2405,7 +2405,7 @@ class TestNCBIXML(unittest.TestCase):
                 record.query,
                 "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence",
             )
-            self.assertEqual(record.query_letters, 550)
+            self.assertEqual(record.query_length, 550)
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2426,7 +2426,7 @@ class TestNCBIXML(unittest.TestCase):
                 record.query,
                 "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
             )
-            self.assertEqual(record.query_letters, 655)
+            self.assertEqual(record.query_length, 655)
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2449,7 +2449,7 @@ class TestNCBIXML(unittest.TestCase):
                 record.query,
                 "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
             )
-            self.assertEqual(record.query_letters, 623)
+            self.assertEqual(record.query_length, 623)
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2472,7 +2472,7 @@ class TestNCBIXML(unittest.TestCase):
                 record.query,
                 "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
             )
-            self.assertEqual(record.query_letters, 309)
+            self.assertEqual(record.query_length, 309)
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2495,7 +2495,7 @@ class TestNCBIXML(unittest.TestCase):
                 record.query,
                 "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
             )
-            self.assertEqual(record.query_letters, 2551)
+            self.assertEqual(record.query_length, 2551)
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2527,7 +2527,7 @@ class TestNCBIXML(unittest.TestCase):
             )
             self.assertEqual(record.database, "nr")
             self.assertEqual(record.query, "gi|3298468|dbj|BAA31520.1| SAMIPF")
-            self.assertEqual(record.query_letters, 107)
+            self.assertEqual(record.query_length, 107)
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2549,7 +2549,7 @@ class TestNCBIXML(unittest.TestCase):
                 record.query,
                 "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
             )
-            self.assertEqual(record.query_letters, 304)
+            self.assertEqual(record.query_length, 304)
 
             record = next(records)
             self.assertEqual(record.application, "BLASTP")
@@ -2564,7 +2564,7 @@ class TestNCBIXML(unittest.TestCase):
                 record.query,
                 "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
             )
-            self.assertEqual(record.query_letters, 600)
+            self.assertEqual(record.query_length, 600)
 
             record = next(records)
             self.assertEqual(record.application, "BLASTP")
@@ -2578,7 +2578,7 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(
                 record.query, "gi|671626|emb|CAA85685.1| rubisco large subunit"
             )
-            self.assertEqual(record.query_letters, 473)
+            self.assertEqual(record.query_length, 473)
 
             self.assertRaises(StopIteration, next, records)
 
@@ -2605,7 +2605,7 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(record.version, "2.2.18")
             self.assertEqual(record.date, "Mar-02-2008")
             self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
-            self.assertEqual(record.query_letters, 131)
+            self.assertEqual(record.query_length, 131)
             self.assertEqual(record.num_sequences_in_database, 2563094)
             self.assertEqual(record.database_sequences, 2563094)
             self.assertEqual(record.database_length, 864488805)
@@ -2668,7 +2668,7 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(record.version, "2.2.18")
             self.assertEqual(record.date, "Mar-02-2008")
             self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
-            self.assertEqual(record.query_letters, 131)
+            self.assertEqual(record.query_length, 131)
             self.assertEqual(record.num_sequences_in_database, 2563094)
             self.assertEqual(record.database_sequences, 2563094)
             self.assertEqual(record.database_length, 864488805)
@@ -2708,7 +2708,7 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(record.version, "2.2.18")
             self.assertEqual(record.date, "Mar-02-2008")
             self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
-            self.assertEqual(record.query_letters, 131)
+            self.assertEqual(record.query_length, 131)
             self.assertEqual(record.num_sequences_in_database, 2563094)
             self.assertEqual(record.database_sequences, 2563094)
             self.assertEqual(record.database_length, 864488805)
@@ -2849,7 +2849,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(
             record.query, "twin argininte translocase protein A [Escherichia coli K12]"
         )
-        self.assertEqual(record.query_letters, 103)
+        self.assertEqual(record.query_length, 103)
         self.assertEqual(record.num_sequences_in_database, 194611632)
         self.assertEqual(record.database_sequences, 194611632)
         self.assertEqual(record.database_length, 2104817704)
@@ -3207,7 +3207,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "human STS STS_D11570, sequence tagged site")
-        self.assertEqual(record.query_letters, 285)
+        self.assertEqual(record.query_length, 285)
         self.assertEqual(record.num_sequences_in_database, 107382)
         self.assertEqual(record.database_sequences, 107382)
         self.assertEqual(record.database_length, 3164670549)
@@ -3593,7 +3593,7 @@ class TestNCBIXML(unittest.TestCase):
             record.query,
             "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
         )
-        self.assertEqual(record.query_letters, 365)
+        self.assertEqual(record.query_length, 365)
 
         alignment = record.alignments[0]
         self.assertEqual(alignment.hit_id, "gi|1530504495|emb|VDM03167.1|")
@@ -4022,7 +4022,7 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.database, "nr")
         self.assertEqual(record.date, "")
         self.assertEqual(record.query, "tim [Helicobacter acinonychis str. Sheeba]")
-        self.assertEqual(record.query_letters, 234)
+        self.assertEqual(record.query_length, 234)
 
         alignment = record.alignments[4]
         self.assertEqual(alignment.hit_id, "gi|1143706535|gb|CP018823.1|")
@@ -4092,7 +4092,7 @@ class TestNCBIXML(unittest.TestCase):
             record.query,
             "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
         )
-        self.assertEqual(record.query_letters, 365)
+        self.assertEqual(record.query_length, 365)
 
         alignment = record.alignments[4]
         self.assertEqual(alignment.hit_id, "gi|1590279025|ref|XM_028307351.1|")
@@ -4401,6 +4401,34 @@ class TestNCBIXML(unittest.TestCase):
             ]
             self.assertEqual(len(create_view_warnings), 1)
             self.assertIn("NCBIXML: Ignored:", str(create_view_warnings[0].message))
+
+
+    def test_deprecated_query_letters(self):
+        """Accessing query_letters should trigger a deprecation warning."""
+        filename = "xml_2226_blastp_004.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", BiopythonParserWarning)
+            value = record.query_letters
+        self.assertEqual(value, record.query_length)
+        self.assertEqual(len(caught), 1)
+        self.assertIn("query_letters", str(caught[0].message))
+        self.assertIn("query_length", str(caught[0].message))
+
+    def test_deprecated_database_letters(self):
+        """Accessing database_letters should trigger a deprecation warning."""
+        filename = "xml_2226_blastp_004.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", BiopythonParserWarning)
+            value = record.database_letters
+        self.assertEqual(len(caught), 1)
+        self.assertIn("database_letters", str(caught[0].message))
+        self.assertIn("database_length", str(caught[0].message))
 
 
 if __name__ == "__main__":
