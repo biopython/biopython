@@ -269,22 +269,22 @@ class FastaTwoLineIterator(SequenceIterator):
         by the relaxed FASTA parser is offered.
         """
         super().__init__(source, fmt="FASTA")
-        self._data = FastaTwoLineParser(self.stream)
+        self.records = self._generate_records()
+
+    def _generate_records(self):
+        for title, sequence in FastaTwoLineParser(self.stream):
+            try:
+                first_word = title.split(None, 1)[0]
+            except IndexError:
+                assert not title, repr(title)
+                first_word = ""
+            yield SeqRecord(Seq(sequence), id=first_word, name=first_word, description=title)
+
+    def __iter__(self):
+        return self.records
 
     def __next__(self):
-        try:
-            title, sequence = next(self._data)
-        except StopIteration:
-            raise StopIteration from None
-        try:
-            first_word = title.split(None, 1)[0]
-        except IndexError:
-            assert not title, repr(title)
-            # Should we use SeqRecord default for no ID?
-            first_word = ""
-        return SeqRecord(
-            Seq(sequence), id=first_word, name=first_word, description=title
-        )
+        return next(self.records)
 
 
 class FastaBlastIterator(SequenceIterator):
