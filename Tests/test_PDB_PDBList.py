@@ -11,6 +11,7 @@ import os
 import shutil
 import tempfile
 import unittest
+from pathlib import Path
 
 import requires_internet
 
@@ -252,6 +253,58 @@ class TestPDBListGetAssembly(unittest.TestCase):
             "mmCif",
             pdir="b",
         )
+
+
+class TestPDBListUpdateObsolete(unittest.TestCase):
+    """Test obsolete file handling in PDBList.update_pdb."""
+
+    @contextlib.contextmanager
+    def make_temp_directory(self, directory):
+        temp_dir = tempfile.mkdtemp(dir=directory)
+        try:
+            yield temp_dir
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_update_pdb_moves_obsolete_mmcif_and_assemblies(self):
+        """Move mmCIF structures and assembly files for obsolete entries."""
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, verbose=False)
+            pdblist.get_recent_changes = lambda: ([], [], ["127d"])
+
+            entry_dir = Path(tmp) / "27"
+            entry_dir.mkdir(parents=True, exist_ok=True)
+            old_files = [
+                entry_dir / "127d.cif",
+                entry_dir / "127d.pdb1",
+                entry_dir / "127d-assembly1.cif",
+            ]
+            for old_file in old_files:
+                old_file.write_text("test")
+
+            pdblist.update_pdb(file_format="mmCif")
+
+            obsolete_dir = Path(tmp) / "obsolete" / "27"
+            for old_file in old_files:
+                self.assertFalse(old_file.exists())
+                self.assertTrue((obsolete_dir / old_file.name).is_file())
+
+    def test_update_pdb_moves_obsolete_mmtf(self):
+        """Move mmtf structures for obsolete entries."""
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, verbose=False)
+            pdblist.get_recent_changes = lambda: ([], [], ["127d"])
+
+            entry_dir = Path(tmp) / "27"
+            entry_dir.mkdir(parents=True, exist_ok=True)
+            old_file = entry_dir / "127d.mmtf"
+            old_file.write_text("test")
+
+            pdblist.update_pdb(file_format="mmtf")
+
+            new_file = Path(tmp) / "obsolete" / "27" / "127d.mmtf"
+            self.assertFalse(old_file.exists())
+            self.assertTrue(new_file.is_file())
 
 
 if __name__ == "__main__":
