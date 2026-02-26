@@ -473,9 +473,10 @@ def homog_trans_mtx(x: float, y: float, z: float) -> np.ndarray:
 
 def set_homog_trans_mtx(x: float, y: float, z: float, mtx: np.ndarray):
     """Update existing translation matrix to new values."""
-    mtx[0, 3] = x
-    mtx[1, 3] = y
-    mtx[2, 3] = z
+    # Accept NumPy scalar-like inputs (e.g. shape (1,) / (1,1)) from column-vector math.
+    mtx[0, 3] = np.asarray(x).item()
+    mtx[1, 3] = np.asarray(y).item()
+    mtx[2, 3] = np.asarray(z).item()
 
 
 def homog_scale_mtx(scale: float) -> np.ndarray:
