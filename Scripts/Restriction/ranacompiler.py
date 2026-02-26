@@ -105,6 +105,8 @@ def read_enzyme_record(handle):
     for line in handle:
         key, value = line[:2], line[5:].rstrip()
         if key == "ID":
+            # Sync the replacement of "- and ." by "_" or enzyme will not be found in the bairoch list
+            value = value.replace("-", "_").replace(".", "_")
             record = {"ID": value}
         elif key == "AC":
             record["AC"] = value
@@ -463,7 +465,10 @@ class DictionaryBuilder:
             try:
                 enzyme_id = enzyme_id_dict[name]
             except KeyError:
-                print(f"Could not find REBASE enzyme ID for {name}: omitting")
+                # be more specific, this is a warning it just omits the REBASE URL
+                print(
+                    f"WARNING : Could not find REBASE enzyme ID for {name}: omitting url"
+                )
                 enzyme_id = None
             cls = newenzyme(name, enzyme_id)
             #
@@ -521,13 +526,16 @@ class DictionaryBuilder:
         #
         print("\nThe new database contains %i enzymes.\n" % len(classdict))
         #
-        #   the dictionaries are done. Build the file
+        #   the dictionaries are done. Build the Python dict code file
         #
         # update = config.updatefolder
 
         update = os.getcwd()
         with open(os.path.join(update, "Restriction_Dictionary.py"), "w") as results:
-            print("Writing the dictionary containing the new Restriction classes...")
+            print(
+                "Writing the dictionary containing the new Restriction classes ... ",
+                end="",
+            )
             results.write(start)
             results.write("rest_dict = {}\n")
             results.write("\n")
@@ -539,8 +547,8 @@ class DictionaryBuilder:
                         % (double_quote_repr(key), double_quote_repr(value))
                     )
                 results.write("}\n\n")
-            print("OK.\n")
-            print("Writing the dictionary containing the suppliers data...")
+            print("OK.")
+            print("Writing the dictionary containing the suppliers data ... ", end="")
             results.write("\n")
             results.write("# Turn black code style off\n# fmt: off\n")
             results.write("\n")
@@ -551,8 +559,10 @@ class DictionaryBuilder:
                 for value in suppliersdict[name]:
                     results.write("    %s,\n" % double_quote_repr(value))
                 results.write(")\n\n")
-            print("OK.\n")
-            print("Writing the dictionary containing the Restriction types...")
+            print("OK.")
+            print(
+                "Writing the dictionary containing the Restriction types ... ", end=""
+            )
             results.write("\n")
             results.write("typedict = {}\n")
             results.write("\n")
@@ -562,11 +572,10 @@ class DictionaryBuilder:
                     results.write("    %s,\n" % double_quote_repr(value))
                 results.write(")\n\n")
             results.write("# Turn black code style on\n# fmt: on\n")
-            print("OK.\n")
+            print("OK.")
 
     def install_dict(self):
         """Install the newly created dictionary in the site-packages folder.
-
         May need super user privilege on some architectures.
         """
         print("\n " + "*" * 78 + " \n")
@@ -632,8 +641,8 @@ class DictionaryBuilder:
         shutil.copyfile(old, os.path.join(update, "Restriction_Dictionary.old"))
         places = update, os.path.split(Bio.Restriction.Restriction.__file__)[0]
         print(
-            "\t\tCompilation of the new dictionary : OK."
-            "\n\t\tInstallation : No.\n"
+            " Compilation of the new dictionary : OK."
+            "\n Installation : No.\n"
             "\n You will find the newly created 'Restriction_Dictionary.py' file"
             "\n in the folder : \n"
             "\n\t%s\n"
@@ -665,9 +674,9 @@ class DictionaryBuilder:
             #
             #   nothing to be done
             #
-            print("\n Using the bairoch file : %s" % bairoch_now)
+            print("\nUsing the bairoch file : %s" % bairoch_now)
             enzyme_id_dict = load_enzyme_ids(bairoch_now)
-            print("\n Using the emboss files : %s" % ", ".join(emboss_now))
+            print("Using the emboss files : %s" % ", ".join(emboss_now))
             return tuple(open(os.path.join(base, n)) for n in emboss_now) + (
                 enzyme_id_dict,
             )
@@ -682,8 +691,8 @@ class DictionaryBuilder:
             r = input(" update [n] >>> ")
             if r in ["y", "yes", "Y", "Yes"]:
                 get_files()
-                print("\n Update complete. Creating the dictionaries.\n")
-                print("\n Using the files : %s" % ", ".join(emboss_now))
+                print("\nUpdate complete. Creating the dictionaries.")
+                print("Using the files : %s" % ", ".join(emboss_now))
                 return tuple(open(os.path.join(base, n)) for n in emboss_now)
             else:
                 #
@@ -790,10 +799,10 @@ class DictionaryBuilder:
             #
             print(
                 "\nWARNING : %s cut twice with different overhang length each time."
-                "\n\tUnable to deal with this behaviour. "
-                "\n\tThis enzyme will not be included in the database. Sorry." % name
+                "\n\t  Unable to deal with this behaviour. "
+                "\n\t  This enzyme will not be included in the database. Sorry." % name
             )
-            print("\tChecking...")
+            print("\t  Checking...")
             raise OverhangError
         if 0 <= fst5 <= size and 0 <= fst3 <= size:
             #
@@ -997,17 +1006,28 @@ class DictionaryBuilder:
                         line.append(bl[2])
                         i2 += 1
                     else:
-                        raise TypeError
+                        # this error happens when line is an older format or without suppliers, append the two missing fields ..
+                        line.append("")
+                        line.append("")
+                        # raise TypeError
                 oldblock = block
                 i2 += 1
                 try:
+                    # check for ? in the enzyme line and omit entry as not defined
+                    if "?" in line:
+                        print(
+                            "ERROR   : Not defined cleavage for Enzyme: ",
+                            line[0],
+                            " omitting entry",
+                        )
+                        continue
                     line = self.parseline(line)
                 except OverhangError:  # overhang error
                     n = name  # do not include the enzyme
                     if not bl[2]:
-                        print(f"Anyway, {n} is not commercially available.\n")
+                        print(f"\t  Anyway, {n} is not commercially available.\n")
                     else:
-                        print(f"Unfortunately, {n} is commercially available.\n")
+                        print(f"\t  Unfortunately, {n} is commercially available.\n")
 
                     continue
                 # Hyphens and dots can't be used as a Python name, nor as a

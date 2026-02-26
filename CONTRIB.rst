@@ -302,6 +302,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Robert Ernst <https://github.com/rernst>
 - Robert Sawicki <https://github.com/Battlesheepu>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
+- Rolando Rodriguez <https://github.com/Rolando-at-Arzeda>
 - Rona Costello <https://github.com/RonaCostello>
 - Rudolf Koopmann <https://github.com/koopmann>
 - Ryan Stecher <https://github.com/rystecher>
