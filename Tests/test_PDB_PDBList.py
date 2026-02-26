@@ -27,7 +27,17 @@ class TestPBDListGetList(unittest.TestCase):
         """Tests the Bio.PDB.PDBList.get_recent_changes method."""
         # obsolete_pdb declared to prevent from creating the "obsolete" directory
         pdblist = PDBList(obsolete_pdb="unimportant")
-        url = pdblist.pdb_server + "/pub/pdb/data/status/latest/added.pdb"
+        url = pdblist.pdb_server + "/data/status/latest/added.pdb"
+        entries = pdblist.get_status_list(url)
+        self.assertIsNotNone(entries)
+
+    def test_get_recent_changes_from_ebi_mirror(self):
+        """Tests status list retrieval from the EBI mirror URL pattern."""
+        pdblist = PDBList(
+            server="https://ftp.ebi.ac.uk/pub/databases/pdb/",
+            obsolete_pdb="unimportant",
+        )
+        url = pdblist.pdb_server + "/data/status/latest/added.pdb"
         entries = pdblist.get_status_list(url)
         self.assertIsNotNone(entries)
 
