@@ -198,9 +198,9 @@ class VectorTests(unittest.TestCase):
         """Confirm can generate coordinate space transform for 3 points."""
         # start with 3 points already aligned to axes
         point_set = (
-            np.array([[2.0], [0.0], [2.0], [1.0]]),
-            np.array([[0.0], [0.0], [0.0], [1.0]]),
-            np.array([[0.0], [0.0], [2.0], [1.0]]),
+            np.array([2.0, 0.0, 2.0, 1.0]),
+            np.array([0.0, 0.0, 0.0, 1.0]),
+            np.array([0.0, 0.0, 2.0, 1.0]),
         )
         # confirm get id matrix to transform to/from coord space
         homog_id = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
