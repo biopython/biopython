@@ -513,7 +513,7 @@ def get_spherical_coordinates(xyz: np.ndarray) -> tuple[float, float, float]:
     if 0 == r:
         return (0, 0, 0)
     azimuth = _get_azimuth(xyz[0], xyz[1])
-    polar_angle: float = np.arccos(xyz[2] / r)
+    polar_angle: float = np.arccos(xyz[2] / r).item()
 
     return (r, azimuth, polar_angle)
 
@@ -556,7 +556,7 @@ def coord_space(
     mrz2 = gmrz2
 
     # tx acs[1] to origin
-    set_homog_trans_mtx(-a1[0], -a1[1], -a1[2], tm)
+    set_homog_trans_mtx(-a1[0, 0], -a1[1, 0], -a1[2, 0], tm)
 
     # directly translate a2 using a1
     p = a2 - a1
@@ -618,7 +618,7 @@ def coord_space(
     # rotate a2 theta about Z
     set_Z_homog_rot_mtx(sc[1], mrz)
     # translation matrix origin to a1
-    set_homog_trans_mtx(a1[0], a1[1], a1[2], tm)
+    set_homog_trans_mtx(a1[0, 0], a1[1, 0], a1[2, 0], tm)
 
     # mr = tm @ mrz @ mry @ mrz2
     mr = gtm.dot(gmrz.dot(gmry.dot(gmrz2)))
