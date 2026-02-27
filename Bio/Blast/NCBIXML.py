@@ -811,13 +811,9 @@ class BlastParser(_XMLparser):
         if not self._blast._query_letters:
             self._blast._query_letters = self._header._query_letters
 
-        # Hack to record the query length as both the query_letters and
-        # query_length properties (as in the plain text parser, see
-        # Bug 2176 comment 12):
+        # Record the query length (query_letters is now deprecated in
+        # favour of query_length, see Bug 2176 comment 12):
         self._blast.query_length = self._blast._query_letters
-        # Perhaps in the long term we should deprecate one, but I would
-        # prefer to drop query_letters - so we need a transition period
-        # with both.
 
         # Hack to record the claimed database size as database_length
         # (as well as in num_letters_in_database, see Bug 2176 comment 13):
