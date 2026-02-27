@@ -4402,7 +4402,6 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(create_view_warnings), 1)
             self.assertIn("NCBIXML: Ignored:", str(create_view_warnings[0].message))
 
-
     def test_deprecated_query_letters(self):
         """Accessing query_letters should trigger a deprecation warning."""
         filename = "xml_2226_blastp_004.xml"
