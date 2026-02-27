@@ -24,6 +24,9 @@ We have a git introduction online at http://biopython.org/wiki/GitUsage
 If you are planning to make a pull request, start by creating a new branch
 with a short but descriptive name (rather than using your master branch).
 
+Failing to follow our pull result template places additional burden on the
+maintainers in reviewing your changes and if they can be accepted. We may
+simply close it without further discussion.
 
 Coding Conventions
 ------------------
