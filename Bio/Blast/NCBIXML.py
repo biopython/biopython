@@ -818,7 +818,6 @@ class BlastParser(_XMLparser):
         # Hack to record the claimed database size as database_length
         # (as well as in num_letters_in_database, see Bug 2176 comment 13):
         self._blast.database_length = self._blast.num_letters_in_database
-        # TODO? Deprecate database_letters next?
 
         # Hack to record the claimed database sequence count as database_sequences
         self._blast.database_sequences = self._blast.num_sequences_in_database
