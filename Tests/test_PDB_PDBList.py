@@ -306,6 +306,21 @@ class TestPDBListUpdateObsolete(unittest.TestCase):
             self.assertFalse(old_file.exists())
             self.assertTrue(new_file.is_file())
 
+    def test_update_pdb_moves_obsolete_flat_tree_pdb(self):
+        """Move PDB structures for obsolete entries when using flat tree layout."""
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp, verbose=False, flat_tree=True)
+            pdblist.get_recent_changes = lambda: ([], [], ["127d"])
+
+            old_file = Path(tmp) / "pdb127d.ent"
+            old_file.write_text("test")
+
+            pdblist.update_pdb(file_format="pdb")
+
+            new_file = Path(tmp) / "obsolete" / "pdb127d.ent"
+            self.assertFalse(old_file.exists())
+            self.assertTrue(new_file.is_file())
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
