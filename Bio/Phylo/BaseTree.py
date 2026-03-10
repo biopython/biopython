@@ -715,6 +715,51 @@ class TreeMixin:
             clade = clade_cls(name=base_name + str(i), branch_length=branch_length)
             self.root.clades.append(clade)
 
+    def resolve_polytomies(self, shuffle=False, recursive=True):
+        """Resolve polytomies/multifurcations into zero-length bifurcations.
+
+        Polytomies are nodes with more than two child nodes. Some tools expect
+        trees to be strictly bifurcating. This function converts polytomies
+        into a series of bifurcations with branch length of zero.
+
+        :Parameters:
+            shuffle : bool
+                Randomly shuffle the order of child nodes when creating
+                bifurcations; otherwise, add in the order encountered.
+            recursive : bool
+                Resolve polytomies in all descendant clades; otherwise resolve
+                this node only.
+        """
+        if recursive:
+            for clade in self.get_nonterminals():
+                if len(clade.clades) > 2:
+                    clade._resolve_polytomy(shuffle=shuffle)
+        else:
+            try:
+                self._resolve_polytomy(shuffle=shuffle)
+            except AttributeError as e:
+                # self is a Tree object, start from its root instead
+                self.root._resolve_polytomy(shuffle=shuffle)
+
+    def _resolve_polytomy(self, shuffle=False):
+        """Resolve single polytomy into zero-length bifurcations (PRIVATE)."""
+        children = self.clades[:]  # shallow copy
+        if shuffle:
+            random.shuffle(children)
+        self.clades = []
+
+        def _recurse_add_branch(node, to_add):
+            if len(to_add) == 2:
+                node.clades = to_add
+                return
+            else:
+                new_clade = Clade(branch_length=0.0)
+                node.clades.append(to_add[0])
+                node.clades.append(new_clade)
+                return _recurse_add_branch(new_clade, to_add[1:])
+
+        _recurse_add_branch(self, children)
+
 
 class Tree(TreeElement, TreeMixin):
     """A phylogenetic tree, containing global info for the phylogeny.
