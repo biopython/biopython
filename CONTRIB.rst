@@ -280,6 +280,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Oscar G. Garcia <https://github.com/oscarmaestre>
 - Osvaldo Zagordi <https://github.com/ozagordi>
 - Owen Solberg <https://github.com/odoublewen>
+- Oz Nova <https://github.com/ozan>
 - Pamela Russell <https://github.com/pamelarussell>
 - Pascal Schläpfer <https://github.com/pascalschlaepferprivate>
 - Patrick Kunzmann <https://github.com/padix-key>
