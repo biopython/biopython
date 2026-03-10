@@ -59,10 +59,12 @@ class Header:
 
     query               Name of query sequence.
     query_letters       Number of letters in the query sequence.  (int)
+                        DEPRECATED: Use query_length instead.
 
     database            Name of the database.
     database_sequences  Number of sequences in the database.  (int)
     database_letters    Number of letters in the database.  (int)
+                        DEPRECATED: Use database_length instead.
 
     """
 
@@ -74,11 +76,43 @@ class Header:
         self.reference = ""
 
         self.query = ""
-        self.query_letters = None
+        self._query_letters = None
 
         self.database = ""
         self.database_sequences = None
-        self.database_letters = None
+        self._database_letters = None
+
+    @property
+    def query_letters(self):
+        """DEPRECATED: Use query_length instead."""
+        warnings.warn(
+            "The query_letters attribute is deprecated. "
+            "Please use query_length instead.",
+            BiopythonParserWarning,
+            stacklevel=2,
+        )
+        return self._query_letters
+
+    @query_letters.setter
+    def query_letters(self, value):
+        """Set query_letters (deprecated)."""
+        self._query_letters = value
+
+    @property
+    def database_letters(self):
+        """DEPRECATED: Use database_length instead."""
+        warnings.warn(
+            "The database_letters attribute is deprecated. "
+            "Please use database_length instead.",
+            BiopythonParserWarning,
+            stacklevel=2,
+        )
+        return self._database_letters
+
+    @database_letters.setter
+    def database_letters(self, value):
+        """Set database_letters (deprecated)."""
+        self._database_letters = value
 
 
 class Description:
@@ -774,21 +808,16 @@ class BlastParser(_XMLparser):
             self._blast.query = self._header.query
         if not hasattr(self._blast, "query_id") or not self._blast.query_id:
             self._blast.query_id = self._header.query_id
-        if not hasattr(self._blast, "query_letters") or not self._blast.query_letters:
-            self._blast.query_letters = self._header.query_letters
+        if not self._blast._query_letters:
+            self._blast._query_letters = self._header._query_letters
 
-        # Hack to record the query length as both the query_letters and
-        # query_length properties (as in the plain text parser, see
-        # Bug 2176 comment 12):
-        self._blast.query_length = self._blast.query_letters
-        # Perhaps in the long term we should deprecate one, but I would
-        # prefer to drop query_letters - so we need a transition period
-        # with both.
+        # Record the query length (query_letters is now deprecated in
+        # favour of query_length, see Bug 2176 comment 12):
+        self._blast.query_length = self._blast._query_letters
 
         # Hack to record the claimed database size as database_length
         # (as well as in num_letters_in_database, see Bug 2176 comment 13):
         self._blast.database_length = self._blast.num_letters_in_database
-        # TODO? Deprecate database_letters next?
 
         # Hack to record the claimed database sequence count as database_sequences
         self._blast.database_sequences = self._blast.num_sequences_in_database
@@ -877,7 +906,7 @@ class BlastParser(_XMLparser):
         Important in old pre 2.2.14 BLAST, for recent versions
         <Iteration_query-len> is enough
         """
-        self._header.query_letters = int(self._value)
+        self._header._query_letters = int(self._value)
 
     def _set_record_query_id(self):
         """Record the identifier of the query (PRIVATE)."""
@@ -889,7 +918,7 @@ class BlastParser(_XMLparser):
 
     def _set_record_query_letters(self):
         """Record the length of the query (PRIVATE)."""
-        self._blast.query_letters = int(self._value)
+        self._blast._query_letters = int(self._value)
 
     # def _end_BlastOutput_query_seq(self):
     #     """The query sequence (PRIVATE)."""

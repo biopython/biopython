@@ -79,6 +79,12 @@ From now on one should use the following commands:
 Biopython modules, methods, functions
 =====================================
 
+Bio.Blast.NCBIXML
+-----------------
+The ``query_letters`` and ``database_letters`` attributes of the ``Header``
+class (also inherited by the ``Blast`` and ``PSIBlast`` classes) were deprecated.
+Please use ``query_length`` and ``database_length`` instead.
+
 Bio.SeqIO.FastaIO
 -----------------
 Parsing a FASTA file using Bio.SeqIO.parse with ``format='fasta'`` interprets
