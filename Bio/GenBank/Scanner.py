@@ -133,7 +133,11 @@ class InsdcScanner:
             # if line[:self.HEADER_WIDTH]==self.FEATURE_START_MARKER[:self.HEADER_WIDTH]:
             #    if self.debug : print("Found header table (?)")
             #    break
-            if line[: self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS:
+            # Skip BASE COUNT line that may be misplaced
+            if (
+                line[: self.HEADER_WIDTH].rstrip() in self.SEQUENCE_HEADERS
+                and line[: self.HEADER_WIDTH].rstrip() != "BASE COUNT"
+            ):
                 if self.debug:
                     print("Found start of sequence")
                 break
