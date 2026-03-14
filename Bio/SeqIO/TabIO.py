@@ -119,12 +119,14 @@ class TabWriter(SequenceWriter):
         """Return record as tab separated (id(tab)seq) string."""
         title = _clean(record.id)
         seq = _get_seq_string(record)  # Catches sequence being None
-        assert "\t" not in title
-        assert "\n" not in title
-        assert "\r" not in title
-        assert "\t" not in seq
-        assert "\n" not in seq
-        assert "\r" not in seq
+        if "\t" in title or "\n" in title or "\r" in title:
+            raise ValueError(
+                f"Record id contains a tab, newline or carriage return: {title!r}"
+            )
+        if "\t" in seq or "\n" in seq or "\r" in seq:
+            raise ValueError(
+                f"Record sequence contains a tab, newline or carriage return: {seq!r}"
+            )
         return f"{title}\t{seq}\n"
 
     def write_record(self, record):
