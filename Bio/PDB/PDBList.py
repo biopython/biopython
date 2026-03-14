@@ -351,7 +351,7 @@ class PDBList:
         return final_file
 
     @staticmethod
-    def _get_obsolete_filename(pdb_code: str, file_format: str) -> Optional[str]:
+    def _get_obsolete_filename(pdb_code: str, file_format: str) -> str | None:
         """Return the structure filename for a format, or None if obsolete not available."""
         final = {
             "pdb": f"pdb{pdb_code}.ent",
