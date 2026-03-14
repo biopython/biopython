@@ -141,7 +141,8 @@ def __read(handle):
             else:
                 record["CF"] = value
         elif key == "PR":
-            assert value.startswith("PROSITE; ")
+            if not value.startswith("PROSITE; "):
+                raise ValueError(f"Unexpected PR line value in Enzyme record: {value!r}")
             value = value[9:].rstrip(";")
             record["PR"].append(value)
         elif key == "CC":
