@@ -140,7 +140,7 @@ class AFDBList:
     def __init__(
         self,
         server: str = "https://alphafold.ebi.ac.uk",
-        pdb: Optional[str] = None,
+        pdb: str | None = None,
         verbose: bool = True,
     ):
         """Set up the download interface.
@@ -156,11 +156,11 @@ class AFDBList:
     def retrieve_pdb_file(
         self,
         uniprot_id: str,
-        pdir: Optional[str] = None,
-        file_format: Optional[str] = None,
+        pdir: str | None = None,
+        file_format: str | None = None,
         overwrite: bool = False,
         model_index: int = 0,
-    ) -> Optional[str]:
+    ) -> str | None:
         """Download an AlphaFold structure for a UniProt accession.
 
         :param uniprot_id: UniProt accession (e.g. P00520, Q9Y2X3)
