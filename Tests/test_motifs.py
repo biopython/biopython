@@ -235,6 +235,43 @@ U:   0.50   0.17   0.50   0.17   0.50
         self.assertEqual(str(m_rna.reverse_complement().pwm), expected_reverse_rna_pwm)
 
 
+class TestCalculateConsensus(unittest.TestCase):
+    """Tests for calculate_consensus edge cases."""
+
+    def test_zero_counts_returns_undefined(self):
+        """Test that all-zero counts produce undefined characters (bug #5000)."""
+        # When a motif is initialized with wrong-case alphabet, all counts
+        # are zero, which previously caused UnboundLocalError.
+        from Bio.Align import Alignment
+
+        alignment = Alignment(
+            [Seq("acgt"), Seq("acgt")],
+        )
+        motif = motifs.Motif("ACGT", alignment)
+        # All counts are zero because sequences are lowercase but alphabet
+        # is uppercase. calculate_consensus should return undefined ("N")
+        # for each position instead of raising UnboundLocalError.
+        result = motif.counts.calculate_consensus()
+        self.assertEqual(result, "NNNN")
+
+    def test_zero_counts_with_identity(self):
+        """Test that all-zero counts with identity parameter also works."""
+        from Bio.Align import Alignment
+
+        alignment = Alignment(
+            [Seq("acgt"), Seq("acgt")],
+        )
+        motif = motifs.Motif("ACGT", alignment)
+        result = motif.counts.calculate_consensus(identity=0.5)
+        self.assertEqual(result, "NNNN")
+
+    def test_normal_consensus_unchanged(self):
+        """Test that normal consensus behavior is not affected by the fix."""
+        motif = motifs.create([Seq("AAGC"), Seq("AAGC")])
+        result = motif.counts.calculate_consensus()
+        self.assertEqual(result, "AAGC")
+
+
 class TestAlignAce(unittest.TestCase):
     """Testing parsing AlignAce output files."""
 
