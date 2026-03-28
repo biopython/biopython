@@ -108,8 +108,17 @@ class TestPDBListCLIParser(unittest.TestCase):
     def test_all_options_combined(self):
         """Test combining multiple options."""
         args = self.parser.parse_args(
-            ["fetch", "1a2b", "--pdb-path", "/tmp/pdb", "--format", "pdb",
-             "--flat", "--overwrite", "--with-assemblies"]
+            [
+                "fetch",
+                "1a2b",
+                "--pdb-path",
+                "/tmp/pdb",
+                "--format",
+                "pdb",
+                "--flat",
+                "--overwrite",
+                "--with-assemblies",
+            ]
         )
         self.assertEqual(args.command, "fetch")
         self.assertEqual(args.codes, ["1a2b"])
@@ -222,11 +231,7 @@ class TestPDBListCLIDispatch(unittest.TestCase):
         """Test that --flat sets pl.flat_tree = True."""
         from unittest.mock import patch
 
-        with patch.object(PDBList, "download_entire_pdb"):
-            with patch.object(PDBList, "__init__", return_value=None) as mock_init:
-                # Can't easily check flat_tree via mock, so just verify no crash
-                pass
-        # Simpler approach: just verify it runs without error
+        # Verify --flat runs without error
         with patch.object(PDBList, "download_entire_pdb"):
             cli(["all", "--flat"])
 

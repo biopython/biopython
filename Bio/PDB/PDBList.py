@@ -40,11 +40,9 @@ import functools
 import gzip
 import json
 import os
-import re
 import shutil
 import sys
 from concurrent.futures import ThreadPoolExecutor
-from typing import Optional
 from urllib.request import Request
 from urllib.request import urlcleanup
 from urllib.request import urlopen
@@ -373,7 +371,7 @@ class PDBList:
                     assemblies = self.get_all_assemblies()
                     for a_pdb_code, assembly_num in assemblies:
                         if a_pdb_code == pdb_code:
-                            pl.retrieve_assembly_file(
+                            self.retrieve_assembly_file(
                                 pdb_code,
                                 assembly_num,
                                 file_format=file_format,
@@ -732,9 +730,7 @@ def _build_parser():
     )
     _add_common_args(sub_update)
 
-    sub_all = subparsers.add_parser(
-        "all", help="Download the entire PDB."
-    )
+    sub_all = subparsers.add_parser("all", help="Download the entire PDB.")
     _add_common_args(sub_all)
 
     sub_obsol = subparsers.add_parser(
