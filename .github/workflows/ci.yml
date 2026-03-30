@@ -209,7 +209,7 @@ jobs:
       shell: bash
 
     - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         name: Linux GitHub Actions ${{ matrix.python-version }}
         disable_search: true
@@ -255,7 +255,7 @@ jobs:
         coverage xml
 
     - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         name: macOS GitHub Actions ${{ matrix.python-version }}
         disable_search: true
@@ -301,7 +301,7 @@ jobs:
         coverage xml
 
     - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         name: Windows GitHub Actions ${{ matrix.python-version }}
         disable_search: true
