@@ -7,6 +7,10 @@ followed by code (modules, methods, functions).
 Python
 ======
 
+Python 3.10
+-----------
+First supported in release 1.80. Support deprecated as of Release 1.88.
+
 Python 3.9
 ----------
 No longer supported as of Release 1.86, having triggered a deprecation
