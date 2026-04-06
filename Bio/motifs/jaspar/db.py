@@ -88,7 +88,7 @@ class JASPAR5:
         """Construct a JASPAR5 instance and connect to specified DB.
 
         Arguments:
-         - host - host name of the the JASPAR DB server
+         - host - host name of the JASPAR DB server
          - name - name of the JASPAR database
          - user - user name to connect to the JASPAR DB
          - password - JASPAR DB password
