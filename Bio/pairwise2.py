@@ -157,7 +157,7 @@ Some examples:
       Score=3
     <BLANKLINE>
 
-  To restore the 'historic' behaviour of ``format_alignemt``, i.e., showing
+  To restore the 'historic' behaviour of ``format_alignment``, i.e., showing
   also the un-aligned parts of both sequences, use the new keyword parameter
   ``full_sequences``:
 
