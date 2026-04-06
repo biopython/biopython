@@ -195,7 +195,7 @@ scikit-learn instead.
 Bio.NaiveBayes
 --------------
 Deprecated in release 1.82, and removed in release 1.86.  Consider using
-skikit-learn instead.
+scikit-learn instead.
 
 Bio.MaxEntropy
 --------------
@@ -691,7 +691,7 @@ way.
 
 Bio.Align.Generic
 -----------------
-This module which defined to original (Multiple-Sequence) Alignment class was
+This module which defined the original (Multiple-Sequence) Alignment class was
 deprecated in Release 1.57 and removed in Release 1.69.
 
 Bio.ParserSupport
