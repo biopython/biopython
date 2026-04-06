@@ -11,7 +11,6 @@
  */
 #define PY_SSIZE_T_CLEAN
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#include <numpy/arrayobject.h>
 #include <math.h>
 #include "search_algorithms.h"
 
@@ -83,7 +82,7 @@ static char search__doc__[] =
 "  q         (int)    : Size of q-tuples for 'superalphabet' method (optional).\n"
 "\n"
 "Returns:\n"
-"  A numpy array of (position, score) pairs for each match found.\n";
+"  2 Python lists: one for positions and another for scores.\n";
   
 /*
     Python entry point
@@ -91,18 +90,18 @@ static char search__doc__[] =
 static PyObject* py_search(PyObject* self, PyObject* args, PyObject* kwargs) 
 {
     const char* sequence;          // DNA sequence input to search
-    const char* algorithm;         // algorithm selected
-    Py_ssize_t s;                  // sequence length
-    float threshold;               // threshold
-    Py_buffer matrix;              // position-weight matrix input
-    DArray scores;                 // dinamic array where matchs will be stored
+    const char* algorithm;         // Algorithm selected
+    Py_ssize_t s;                  // Sequence length
+    float threshold;               // Threshold
+    Py_buffer matrix;              // Position-weight matrix input
+    DArray scores;                 // Dynamic array where matchs will be stored
     int status = -1;
-    Py_ssize_t q;                  //length of super-alphabet symbols (if super-alphabet algorithm selected)
+    Py_ssize_t q;                  // Length of super-alphabet symbols (if super-alphabet algorithm selected)
 
-    //accepted parameter keywords
+    // Accepted parameter keywords
     static char* kwlist[] = {"sequence", "matrix", "threshold", "algorithm", "q", NULL};
     
-    //parse the parameters of the function into local variables
+    // Parse the parameters of the function into local variables
     if (!PyArg_ParseTupleAndKeywords(args, kwargs, "y#O&fyn", kwlist,
                                         &sequence, &s,
                                         matrix_converter, &matrix,
@@ -111,7 +110,7 @@ static PyObject* py_search(PyObject* self, PyObject* args, PyObject* kwargs)
                                         &q)) return NULL;
  
     Py_ssize_t m = matrix.shape[0];
-    // init scores (solution array)
+    // Initialize scores (solution array)
     status = init_darray(&scores, 1000);
     if (status < 0) {
         free_darray(&scores);    
@@ -119,7 +118,7 @@ static PyObject* py_search(PyObject* self, PyObject* args, PyObject* kwargs)
         return PyErr_NoMemory();
     }
 
-    //lookup array to quickly get the value of a base of the sequence.
+    // Lookup array to quickly get the value of a base of the sequence.
     int base_lookup[256];
     for (Py_ssize_t i = 0; i < 256; i++) base_lookup[i] = -1;
     base_lookup['A'] = base_lookup['a'] = 0;
@@ -147,31 +146,56 @@ static PyObject* py_search(PyObject* self, PyObject* args, PyObject* kwargs)
         return NULL;
     }
 
-    //Create and return a numpy array:
-    //This array contains all the matches found by the search algorithm in the following format:
-    //[(index(float32), score(float32))] 
-    npy_intp dims[2] = { scores.used, 2 };
-    PyObject *array = PyArray_SimpleNew(2, dims, NPY_FLOAT32);
-    if (!array) {
-        free_darray(&scores);    
+   // Create and return 2 Python lists. One for positions and another for scores.
+    PyObject *positions = PyList_New(scores.used);
+    PyObject *scores_list = PyList_New(scores.used);
+
+    if (!positions || !scores_list) {
+        Py_XDECREF(positions);
+        Py_XDECREF(scores_list);
+        free_darray(&scores);
         PyBuffer_Release(&matrix);
         return PyErr_NoMemory();
     }
 
-    float *data = PyArray_DATA((PyArrayObject*)array);
     for (Py_ssize_t i = 0; i < scores.used; i++) {
-        data[i * 2] = (double)scores.data[i].position;
-        data[i * 2 + 1] = (double)scores.data[i].score;
+        PyObject *pos = PyLong_FromLong(scores.data[i].position);
+        PyObject *score = PyFloat_FromDouble(scores.data[i].score);
+
+        if (!pos || !score) {
+            Py_XDECREF(pos);
+            Py_XDECREF(score);
+            Py_DECREF(positions);
+            Py_DECREF(scores_list);
+            free_darray(&scores);
+            PyBuffer_Release(&matrix);
+            return PyErr_NoMemory();
+        }
+
+        PyList_SET_ITEM(positions, i, pos);      
+        PyList_SET_ITEM(scores_list, i, score);  
     }
+
+    PyObject *result = PyTuple_New(2);
+    if (!result) {
+        Py_DECREF(positions);
+        Py_DECREF(scores_list);
+        free_darray(&scores);
+        PyBuffer_Release(&matrix);
+        return PyErr_NoMemory();
+    }
+
+    PyTuple_SET_ITEM(result, 0, positions);     
+    PyTuple_SET_ITEM(result, 1, scores_list);   
     
     free_darray(&scores);    
     PyBuffer_Release(&matrix);
-    return array;
+    return result;
 }
   
 /*Public methods in this module*/
 static struct PyMethodDef methods[] = {
-    {"search",              //name of the function py_search visble from python
+    {"search",              // Name of the function py_search visible from python
     (PyCFunction)py_search, 
     METH_VARARGS | METH_KEYWORDS,  
     PyDoc_STR(search__doc__),  
@@ -181,7 +205,7 @@ static struct PyMethodDef methods[] = {
   
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,    
-    "_searchmodule",   //name of module 
+    "_searchmodule",   // Name of the module 
     PyDoc_STR("Motif search module."), 
     -1,                       
                                
@@ -195,7 +219,6 @@ static struct PyModuleDef moduledef = {
 /* Initialization function*/
 PyMODINIT_FUNC* PyInit__searchmodule(void)  
 {
-    import_array(); 
     return PyModule_Create(&moduledef);
 }
   

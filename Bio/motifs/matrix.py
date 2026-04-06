@@ -418,7 +418,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
 
         # NOTE: The C code handles mixed case input as this could be large
         # (e.g. contig or chromosome), so requiring it be all upper or lower
-        # case would impose an overhead to allocate the extra memory.
+        # case would impose an overhead to allocate the extra memory.c
         sequence = self._validate_sequence(sequence)
 
         n = len(sequence)
@@ -517,27 +517,23 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             subseq = self._validate_sequence(
                 sequence[chunk_start : chunk_start + chunksize + motif_l - 1]
             )
-            pos_hits = _searchmodule.search(
+            pos_positions, pos_scores = _searchmodule.search(
                 bytes(subseq), logodds, threshold, algorithm.encode(), q
             )
-            pos_hits[:, 0] += chunk_start
+            pos_hits = [(p + chunk_start, s) for p, s in zip(pos_positions, pos_scores)]
             if both:
-                rc_hits = _searchmodule.search(
+                rc_positions, rc_scores = _searchmodule.search(
                     bytes(subseq), rc_logodds, threshold, algorithm.encode(), q
                 )
-                rc_hits[:, 0] += chunk_start
-                rc_hits[:, 0] -= seq_len
+                rc_hits = [
+                    (p + chunk_start - seq_len, s)
+                    for p, s in zip(rc_positions, rc_scores)
+                ]
             else:
-                rc_hits = np.empty((0, 2), dtype=np.float64)
-            all_hits = np.vstack((pos_hits, rc_hits))
-            # positive positions: sort by position (distance to 0)
-            # negative positions: sort by (position + seq_len) (distance to -seq_len)
-            sort_key = np.where(
-                all_hits[:, 0] >= 0, all_hits[:, 0], all_hits[:, 0] + seq_len
-            )
-            order = np.argsort(sort_key)
-            all_hits = all_hits[order]
-            yield from zip(all_hits[:, 0].astype(np.int64), all_hits[:, 1])
+                rc_hits = []
+            all_hits = pos_hits + rc_hits
+            all_hits.sort(key=lambda x: x[0] if x[0] >= 0 else x[0] + seq_len)
+            yield from all_hits
 
     @property
     def max(self):
