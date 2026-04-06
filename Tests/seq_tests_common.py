@@ -77,7 +77,7 @@ class SeqRecordTestBaseClass(unittest.TestCase):
         # assert old_f.location_operator == new_f.location_operator, \
         #        "%s -> %s" % (old_f.location_operator, new_f.location_operator)
 
-        # We dont store fuzzy locations:
+        # We don't store fuzzy locations:
         if not (
             isinstance(old_f.location.start, UnknownPosition)
             and isinstance(new_f.location.start, UnknownPosition)
