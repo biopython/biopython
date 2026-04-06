@@ -11,7 +11,7 @@ int init_darray(DArray *a, Py_ssize_t initial_size) {
 int insert_in_darray(DArray *a, Py_ssize_t pos, float score) {
   
     if (a->used == a->size) {
-        //if the array is full
+        // If the array is full
         Py_ssize_t newSize = a->size * 3 / 2 + 8; 
         
         if (newSize < a->size) {
@@ -21,7 +21,7 @@ int insert_in_darray(DArray *a, Py_ssize_t pos, float score) {
   
         Hit *tmp = realloc(a->data, newSize * sizeof(Hit));
         if (!tmp) {
-            PyErr_NoMemory();// Sets the exception and returns NULL
+            PyErr_NoMemory();
             return -1;
         }
         a->data = tmp;

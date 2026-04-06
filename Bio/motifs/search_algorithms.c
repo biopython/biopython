@@ -59,7 +59,7 @@ int search_lookahead(const char sequence[], Py_ssize_t s, double* matrix, Py_ssi
         return -1;
     }
 
-    //Fill min_scores with (threshold - S)
+    // Fill min_scores with (threshold - S)
     min_scores[m-1] = threshold;
     for(i = m-2; i >= 0; i--)
     {
@@ -72,7 +72,7 @@ int search_lookahead(const char sequence[], Py_ssize_t s, double* matrix, Py_ssi
         min_scores[i] = min_scores[i+1] - max_score;
     }
 
-    //lookahead search
+    // Lookahead search
     for (i = 0; i <= s - m; i++) {
         float score = 0.0;
         Py_ssize_t col = 0;
@@ -188,7 +188,7 @@ int search_permuted_lookahead(const char sequence[], Py_ssize_t s,  double* matr
     Py_ssize_t i, j;
     float bkg[4] = {0.25,0.25,0.25,0.25};  
     
-    int* perm = malloc(m * sizeof(int)); //stores the order of evaluation of the subsequence positions
+    int* perm = malloc(m * sizeof(int)); // Stores the order of evaluation of the subsequence positions
     if (!perm) {
         PyErr_NoMemory();
         return -1;
@@ -267,17 +267,17 @@ int compute_mhat(const double* mat, Py_ssize_t m, Py_ssize_t q, double* mhat) {
         Py_ssize_t remaining = m - j * q;                          //if m / q is not divisible the last block 
         Py_ssize_t effective_q = remaining < q ? remaining : q;    //will be smaller than q.
 
-        //for every symbol in the super-alphabet AAA-->TTT
+        // For every symbol in the super-alphabet AAA-->TTT
         for (Py_ssize_t sym = 0; sym < sigma_q; sym++) {
-            //Decode sym as a base-4 number → digits[0..q-1]
+            // Decode sym as a base-4 number → digits[0..q-1]
             Py_ssize_t tmp = sym;
             for (Py_ssize_t h = q - 1; h >= 0; h--) {
                 digits[h] = tmp % 4;
                 tmp /= 4;
             }
 
-            //Compute the sum of scores.
-            //If the last block is smaller than q, we use only the valid positions.
+            // Compute the sum of scores.
+            // If the last block is smaller than q, we use only the valid positions.
             float sum = 0.0f;
             for (Py_ssize_t h = 0; h < effective_q; h++) {
                 Py_ssize_t row = j * q + h;
@@ -320,20 +320,20 @@ int search_superalphabet(const char sequence[], Py_ssize_t s, double* matrix, Py
 
     int result = -1;
     Py_ssize_t i, j;
-    Py_ssize_t sa_size = 1;  //number of q-tuples in the super-alphabet (4^q) 
+    Py_ssize_t sa_size = 1;  // Number of q-tuples in the super-alphabet (4^q) 
     for (i = 0; i < q; i++) {
         sa_size *= 4;
     }
-    Py_ssize_t sa_motif_length = (m + q -1)/q;  //⌈m / q⌉ length of the motif using the new super-alphabet
+    Py_ssize_t sa_motif_length = (m + q -1)/q;  // ⌈m / q⌉ length of the motif using the new super-alphabet
 
-    //Init the super-alphabet scoring matrix.
+    // Init the super-alphabet scoring matrix.
     double* sa_matrix = malloc(sa_motif_length * sa_size * sizeof(double));
     if (!sa_matrix) {
         PyErr_NoMemory();
         return -1;
     }
 
-    //Compute the super-alphabet scoring matrix.
+    // Compute the super-alphabet scoring matrix.
     result = compute_mhat(matrix, m, q, sa_matrix);
     if(result < 0){
         free(sa_matrix);
@@ -349,18 +349,18 @@ int search_superalphabet(const char sequence[], Py_ssize_t s, double* matrix, Py
             Py_ssize_t remaining = m - j * q;
             Py_ssize_t len = remaining < q ? remaining : q;
 
-            //qtuple to index
+            // Convert q-tuple to index
             Py_ssize_t idx = 0;
             for (Py_ssize_t x = 0; x < q; x++) {
                 Py_ssize_t b;
                 if (x < len) {
                     b = base_lookup[sequence[offset+x]];
                     if (b == -1){  
-                        idx = -1; //if the letter is not valid -> skip subsequence.
+                        idx = -1; // If the letter is not valid -> skip subsequence.
                         break;
                     }
                 } else {
-                    b = 0;   //if the sequence is shorter than q we pad with "A"
+                    b = 0;   // If the sequence is shorter than q we pad with "A"
                 }
                 idx = idx * 4 + b;
             }
@@ -369,7 +369,7 @@ int search_superalphabet(const char sequence[], Py_ssize_t s, double* matrix, Py
             else
                 score += sa_matrix[j * sa_size + idx];
         }
-        //if the sequen
+        // If the sequence is valid and the score meets the threshold
         if (valid && score >= threshold) {
             if (insert_in_darray(scores, i, score) < 0) {
                 free(sa_matrix);
