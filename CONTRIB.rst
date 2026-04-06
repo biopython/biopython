@@ -19,6 +19,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Adhemar Zerlotini <https://github.com/azneto>
 - Adil Iqbal <https://github.com/Adil-Iqbal>
 - Adrian Altenhoff <https://github.com/alpae>
+- Al Fattah Suyadi <https://github.com/afsuyadi>
 - Alan Medlar <https://github.com/ajm>
 - Alessio Papini <first dot last at unifi dot it>
 - Alessio Quercia <https://github.com/AlessioQuercia>

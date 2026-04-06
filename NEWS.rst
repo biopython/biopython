@@ -20,6 +20,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Peter Cock
+- Al Fattah Suyadi
 
 30 March 2026: Biopython 1.87
 =============================
