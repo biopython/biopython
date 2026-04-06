@@ -18,7 +18,7 @@ class Tree(BaseTree.Tree):
     """CDAO Tree object."""
 
     def __init__(self, root=None, rooted=False, id=None, name=None, weight=1.0):
-        """Initialize value of for the CDAO tree object."""
+        """Initialize values for the CDAO tree object."""
         BaseTree.Tree.__init__(
             self, root=root or Clade(), rooted=rooted, id=id, name=name
         )
