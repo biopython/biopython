@@ -1867,7 +1867,7 @@ class GenBankScanner(InsdcScanner):
                             break
                 else:
                     if self.debug:
-                        print("Ignoring GenBank header line:\n" % line)
+                        print(f"Ignoring GenBank header line:\n{line)")
                     # Read in next line
                     line = next(line_iter)
         except StopIteration:
