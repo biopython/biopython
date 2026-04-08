@@ -5026,10 +5026,7 @@ class TestTransfac(unittest.TestCase):
 class MotifTestPWM(unittest.TestCase):
     """PWM motif tests."""
 
-    import os
-
-    this_dir = os.path.dirname(__file__)
-    with open(os.path.join(this_dir, "motifs", "SRF.pfm")) as stream:
+    with open("motifs/SRF.pfm") as stream:
         m = motifs.read(stream, "pfm")
 
     s = Seq("ACGTGTGCGTAGTGCGT")
