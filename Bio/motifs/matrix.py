@@ -672,7 +672,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
             background[letter] /= total
         return ScoreDistribution(precision=precision, pssm=self, background=background)
 
-    def _validate_sequence(self, sequence: Union[str, Seq, bytes]) -> bytes:
+    def _validate_sequence(self, sequence: str | Seq | bytes) -> bytes:
         """Validate and convert sequence to bytes."""
         if isinstance(sequence, bytes):
             return sequence
