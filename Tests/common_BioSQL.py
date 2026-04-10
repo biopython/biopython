@@ -87,27 +87,17 @@ def check_config(dbdriver, dbtype, dbhost, dbuser, dbpasswd, testdb):
         raise MissingExternalDependencyError("Incomplete BioSQL test settings")
 
     # Check the database driver is installed:
-    if SYSTEM == "Java":
-        try:
-            if DBDRIVER in ["MySQLdb"]:
-                import com.mysql.jdbc.Driver  # noqa: F401
-            elif DBDRIVER in ["psycopg2", "pgdb"]:
-                import org.postgresql.Driver  # noqa: F401
-        except ImportError:
-            message = f"Install the JDBC driver for {DBTYPE} to use BioSQL "
-            raise MissingExternalDependencyError(message) from None
-    else:
-        try:
-            __import__(DBDRIVER)
-        except ImportError:
-            if DBDRIVER in ["MySQLdb"]:
-                message = (
-                    "Install MySQLdb or mysqlclient if you want to use %s with BioSQL "
-                    % (DBTYPE)
-                )
-            else:
-                message = f"Install {DBDRIVER} if you want to use {DBTYPE} with BioSQL "
-            raise MissingExternalDependencyError(message) from None
+    try:
+        __import__(DBDRIVER)
+    except ImportError:
+        if DBDRIVER in ["MySQLdb"]:
+            message = (
+                "Install MySQLdb or mysqlclient if you want to use %s with BioSQL "
+                % (DBTYPE)
+            )
+        else:
+            message = f"Install {DBDRIVER} if you want to use {DBTYPE} with BioSQL "
+        raise MissingExternalDependencyError(message) from None
 
     try:
         if DBDRIVER in ["sqlite3"]:
