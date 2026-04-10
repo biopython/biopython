@@ -113,7 +113,7 @@ def open_database(driver="MySQLdb", **kwargs):
         server = DBServer(conn, module)
 
     # Sets MySQL to allow double quotes, rather than only backticks
-    if driver in ["MySQLdb", "mysql.connector"]:
+    if driver in ["MySQLdb", "mysql.connector", "pymysql"]:
         server.adaptor.execute("SET sql_mode='ANSI_QUOTES';")
 
     # TODO - Remove the following once BioSQL Bug 2839 is fixed.
