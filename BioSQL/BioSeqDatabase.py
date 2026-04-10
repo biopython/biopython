@@ -16,8 +16,6 @@ This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
 
-import os
-
 from . import BioSeq
 from . import DBUtils
 from . import Loader
@@ -49,25 +47,12 @@ def open_database(driver="MySQLdb", **kwargs):
             "Using BioSQL with psycopg (version one) is no "
             "longer supported. Use psycopg2 instead."
         )
-
-    if os.name == "java":
-        from com.ziclix.python.sql import zxJDBC
-
-        module = zxJDBC
-        if driver in ["MySQLdb"]:
-            jdbc_driver = "com.mysql.jdbc.Driver"
-            url_pref = "jdbc:mysql://" + kwargs["host"] + "/"
-        elif driver in ["psycopg2"]:
-            jdbc_driver = "org.postgresql.Driver"
-            url_pref = "jdbc:postgresql://" + kwargs["host"] + "/"
-
-    else:
-        module = __import__(driver, fromlist=["connect"])
+    module = __import__(driver, fromlist=["connect"])
     connect = module.connect
 
     # Different drivers use different keywords...
     kw = kwargs.copy()
-    if driver in ["MySQLdb", "mysql.connector"] and os.name != "java":
+    if driver in ["MySQLdb", "mysql.connector"]:
         if "database" in kw:
             kw["db"] = kw["database"]
             del kw["database"]
@@ -87,30 +72,12 @@ def open_database(driver="MySQLdb", **kwargs):
     if driver in ["psycopg2", "pgdb"] and not kw.get("database"):
         kw["database"] = "template1"
     # SQLite connect takes the database name as input
-    if os.name == "java":
-        if driver in ["MySQLdb"]:
-            conn = connect(
-                url_pref + kw.get("database", "mysql"),
-                kw["user"],
-                kw["password"],
-                jdbc_driver,
-            )
-        elif driver in ["psycopg2"]:
-            conn = connect(
-                url_pref + kw.get("database", "postgresql") + "?stringtype=unspecified",
-                kw["user"],
-                kw["password"],
-                jdbc_driver,
-            )
-    elif driver in ["sqlite3"]:
+    if driver in ["sqlite3"]:
         conn = connect(kw["database"])
     else:
         conn = connect(**kw)
 
-    if os.name == "java":
-        server = DBServer(conn, module, driver)
-    else:
-        server = DBServer(conn, module)
+    server = DBServer(conn, module)
 
     # Sets MySQL to allow double quotes, rather than only backticks
     if driver in ["MySQLdb", "mysql.connector"]:
@@ -542,14 +509,10 @@ class Adaptor:
 
     def execute(self, sql, args=None):
         """Just execute an sql command."""
-        if os.name == "java":
-            sql = sql.replace("%s", "?")
         self.dbutils.execute(self.cursor, sql, args)
 
     def executemany(self, sql, args):
         """Execute many sql commands."""
-        if os.name == "java":
-            sql = sql.replace("%s", "?")
         self.dbutils.executemany(self.cursor, sql, args)
 
     def get_subseq_as_string(self, seqid, start, end):
