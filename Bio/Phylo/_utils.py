@@ -288,6 +288,12 @@ def draw(
     axes=None,
     branch_labels=None,
     label_colors=None,
+    orient_tree="vertical",
+    horizontal_direction="down",
+    vertical_direction="right",
+    circular_span=355,
+    draw_labels=True,
+    align_labels=False,
     *args,
     **kwargs,
 ):
@@ -343,6 +349,29 @@ def draw(
             A function or a dictionary specifying the color of the tip label.
             If the tip label can't be found in the dict or label_colors is
             None, the label will be shown in black.
+        orient_tree : str
+            One of ``'vertical'`` (default), ``'horizontal'``, or
+            ``'circular'``.  Vertical trees have leaves plotted top-to-bottom;
+            horizontal trees have leaves plotted left-to-right; circular trees
+            use a polar projection (requires *numpy* and *scipy*).
+            Note that confidence labels are not plotted on circular trees.
+        vertical_direction : str
+            For vertical trees only: ``'right'`` (default) or ``'left'``.
+            Controls whether the root is on the left or right side.
+        horizontal_direction : str
+            For horizontal trees only: ``'down'`` (default) or ``'up'``.
+            Controls whether the root is at the top or the bottom.
+        circular_span : int or float
+            How many degrees of a full circle the circular tree should span.
+            Must be between 0 and 360.  Default is 355 (a small gap between
+            the first and last leaf to avoid label collision).
+        draw_labels : bool
+            Whether to draw labels on the tree (both branch and leaf labels).
+            Default ``True``.
+        align_labels : bool
+            Whether terminal leaf labels should be aligned at the same
+            position, connected from the branch tip by a dash-dot line.
+            Default ``False``.
 
     """
     try:
@@ -356,6 +385,15 @@ def draw(
             ) from None
 
     import matplotlib.collections as mpcollections
+
+    if orient_tree not in ("horizontal", "vertical", "circular"):
+        raise ValueError(
+            "orient_tree must be one of 'horizontal', 'vertical' or 'circular'"
+        )
+    if orient_tree == "vertical" and vertical_direction not in ("right", "left"):
+        raise ValueError("vertical_direction must be one of 'right' or 'left'")
+    if orient_tree == "horizontal" and horizontal_direction not in ("up", "down"):
+        raise ValueError("horizontal_direction must be one of 'up' or 'down'")
 
     # Arrays that store lines for the plot of clades
     horizontal_linecollections = []
@@ -458,10 +496,23 @@ def draw(
 
     x_posns = get_x_positions(tree)
     y_posns = get_y_positions(tree)
+    # Cache terminal set for O(1) membership testing in draw_clade
+    terminal_set = frozenset(tree.get_terminals())
     # The function draw_clade closes over the axes object
     if axes is None:
         fig = plt.figure()
-        axes = fig.add_subplot(1, 1, 1)
+        if orient_tree == "circular":
+            axes = fig.add_subplot(1, 1, 1, projection="polar")
+            axes.yaxis.grid(False)
+            axes.set_xticks([])
+            axes.set_yticklabels([])
+        else:
+            axes = fig.add_subplot(1, 1, 1)
+    elif orient_tree == "circular":
+        if str(axes.name) != "polar":
+            raise ValueError(
+                f"Axes {axes} must have projection='polar' for a circular plot"
+            )
     elif not isinstance(axes, plt.matplotlib.axes.Axes):
         raise ValueError(f"Invalid argument for axes: {axes}")
 
@@ -475,6 +526,7 @@ def draw(
         y_top=0,
         color="black",
         lw=".1",
+        linestyle="solid",
         capstyle="round",
         joinstyle="round",
     ):
@@ -484,7 +536,9 @@ def draw(
         customized by altering this function.
         """
         if not use_linecollection and orientation == "horizontal":
-            line = axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
+            line = axes.hlines(
+                y_here, x_start, x_here, color=color, lw=lw, linestyle=linestyle
+            )
             line.set_solid_capstyle(capstyle)
             line.set_solid_joinstyle(joinstyle)
 
@@ -494,13 +548,15 @@ def draw(
                     [[(x_start, y_here), (x_here, y_here)]],
                     color=color,
                     lw=lw,
-                    linestyle="solid",
+                    linestyle=linestyle,
                     capstyle=capstyle,
                     joinstyle=joinstyle,
                 )
             )
         elif not use_linecollection and orientation == "vertical":
-            line = axes.vlines(x_here, y_bot, y_top, color=color, lw=lw)
+            line = axes.vlines(
+                x_here, y_bot, y_top, color=color, lw=lw, linestyle=linestyle
+            )
             line.set_solid_capstyle(capstyle)
             line.set_solid_joinstyle(joinstyle)
         elif use_linecollection and orientation == "vertical":
@@ -509,7 +565,7 @@ def draw(
                     [[(x_here, y_bot), (x_here, y_top)]],
                     color=color,
                     lw=lw,
-                    linestyle="solid",
+                    linestyle=linestyle,
                     capstyle=capstyle,
                     joinstyle=joinstyle,
                 )
@@ -519,67 +575,302 @@ def draw(
         """Recursively draw a tree, down from the given clade."""
         x_here = x_posns[clade]
         y_here = y_posns[clade]
+        xmax = max(x_posns.values())
         # phyloXML-only graphics annotations
         if hasattr(clade, "color") and clade.color is not None:
             color = clade.color.to_hex()
         if hasattr(clade, "width") and clade.width is not None:
             lw = clade.width * plt.rcParams["lines.linewidth"]
-        # Draw a horizontal line from start to here
-        draw_clade_lines(
-            use_linecollection=True,
-            orientation="horizontal",
-            y_here=y_here,
-            x_start=x_start,
-            x_here=x_here,
-            color=color,
-            lw=lw,
-        )
-        # Add node/taxon labels
-        label = label_func(clade)
-        if label not in (None, clade.__class__.__name__):
-            axes.text(
-                x_here,
-                y_here,
-                f" {label}",
-                verticalalignment="center",
-                color=get_label_color(label),
-            )
-        # Add label above the branch (optional)
-        conf_label = format_branch_label(clade)
-        if conf_label:
-            axes.text(
-                0.5 * (x_start + x_here),
-                y_here,
-                conf_label,
-                fontsize="small",
-                horizontalalignment="center",
-            )
-        if clade.clades:
-            # Draw a vertical line connecting all children
-            y_top = y_posns[clade.clades[0]]
-            y_bot = y_posns[clade.clades[-1]]
-            # Only apply widths to horizontal lines, like Archaeopteryx
+
+        if orient_tree == "vertical":
+            # Draw a horizontal line from start to here
             draw_clade_lines(
                 use_linecollection=True,
-                orientation="vertical",
+                orientation="horizontal",
+                y_here=y_here,
+                x_start=x_start,
                 x_here=x_here,
-                y_bot=y_bot,
-                y_top=y_top,
                 color=color,
                 lw=lw,
             )
-            # Draw descendents
+            # If terminal and align_labels, draw a dash-dot line to the label
+            if clade in terminal_set and align_labels:
+                draw_clade_lines(
+                    use_linecollection=True,
+                    orientation="horizontal",
+                    y_here=y_here,
+                    x_start=x_here,
+                    x_here=xmax,
+                    color=color,
+                    lw=max(lw - 1, 0.1),
+                    linestyle="-.",
+                )
+            # Add node/taxon labels
+            label = label_func(clade)
+            if label not in (None, clade.__class__.__name__):
+                if align_labels and clade in terminal_set:
+                    xplc = xmax + xmax / 30
+                else:
+                    xplc = x_here
+                if draw_labels:
+                    if vertical_direction == "right":
+                        va, ha = "center", "left"
+                    else:
+                        va, ha = "center", "right"
+                    axes.text(
+                        xplc,
+                        y_here,
+                        f" {label}",
+                        verticalalignment=va,
+                        horizontalalignment=ha,
+                        color=get_label_color(label),
+                    )
+            # Add label above the branch (optional)
+            if draw_labels:
+                conf_label = format_branch_label(clade)
+                if conf_label:
+                    axes.text(
+                        0.5 * (x_start + x_here),
+                        y_here,
+                        conf_label,
+                        fontsize="small",
+                        horizontalalignment="center",
+                    )
+            if clade.clades:
+                # Draw a vertical line connecting all children
+                y_top = y_posns[clade.clades[0]]
+                y_bot = y_posns[clade.clades[-1]]
+                draw_clade_lines(
+                    use_linecollection=True,
+                    orientation="vertical",
+                    x_here=x_here,
+                    y_bot=y_bot,
+                    y_top=y_top,
+                    color=color,
+                    lw=lw,
+                )
+                # Draw descendents
+                for child in clade:
+                    draw_clade(child, x_here, color, lw)
+
+        elif orient_tree == "horizontal":
+            # For horizontal trees, swap x/y roles
+            draw_clade_lines(
+                use_linecollection=True,
+                orientation="vertical",
+                x_here=y_here,
+                y_bot=x_start,
+                y_top=x_here,
+                color=color,
+                lw=lw,
+            )
+            # If terminal and align_labels, draw a dash-dot line to the label
+            if clade in terminal_set and align_labels:
+                draw_clade_lines(
+                    use_linecollection=True,
+                    orientation="vertical",
+                    x_here=y_here,
+                    y_bot=x_here,
+                    y_top=xmax,
+                    color=color,
+                    lw=max(lw - 1, 0.1),
+                    linestyle="-.",
+                )
+            # Add node/taxon labels
+            label = label_func(clade)
+            if label not in (None, clade.__class__.__name__):
+                if align_labels and clade in terminal_set:
+                    xplc = xmax + xmax / 30
+                else:
+                    xplc = x_here
+                if draw_labels:
+                    if horizontal_direction == "up":
+                        va, ha = "bottom", "center"
+                    else:
+                        va, ha = "top", "center"
+                    axes.text(
+                        y_here,
+                        xplc,
+                        f" {label}",
+                        verticalalignment=va,
+                        horizontalalignment=ha,
+                        color=get_label_color(label),
+                        rotation=90,
+                    )
+            # Add label above the branch (optional)
+            if draw_labels:
+                conf_label = format_branch_label(clade)
+                if conf_label:
+                    axes.text(
+                        (
+                            0.5 * (y_posns[clade.clades[-1]] + y_here)
+                            if clade.clades
+                            else y_here
+                        ),
+                        x_here,
+                        conf_label,
+                        fontsize="small",
+                        horizontalalignment="center",
+                    )
+            if clade.clades:
+                # Draw a horizontal line connecting all children
+                y_top = y_posns[clade.clades[0]]
+                y_bot = y_posns[clade.clades[-1]]
+                draw_clade_lines(
+                    use_linecollection=True,
+                    orientation="horizontal",
+                    y_here=x_here,
+                    x_start=y_bot,
+                    x_here=y_top,
+                    color=color,
+                    lw=lw,
+                )
+                # Draw descendents
+                for child in clade:
+                    draw_clade(child, x_here, color, lw)
+
+    def draw_clade_polar(clade, color, lw, x_start=0, y_start=0):
+        """Recursively draw a circular tree in polar coordinates."""
+        try:
+            import numpy as np
+        except ImportError:
+            raise MissingPythonDependencyError(
+                "Install numpy if you want to draw a circular tree."
+            ) from None
+
+        try:
+            from scipy.interpolate import interp1d
+        except ImportError:
+            raise MissingPythonDependencyError(
+                "Install scipy if you want to draw a circular tree."
+            ) from None
+
+        # Convert y positions to angular (radian) coordinates
+        ymax = max(y_posns.values())
+        yang = circular_span / ymax
+        xmax = max(x_posns.values()) + max(x_posns.values()) / 30
+
+        rad = (circular_span * np.pi / 180) / ymax
+
+        x_here = x_posns[clade]
+        y_here = y_posns[clade] * rad
+
+        # Draw a radial line from start to here
+        axes.plot([y_start, y_here], [x_start, x_here], color=color, lw=lw)
+
+        # If terminal and align_labels, draw a dash-dot line to aligned position
+        if clade in terminal_set and align_labels:
+            axes.plot(
+                [y_start, y_here],
+                [x_here, xmax],
+                color=color,
+                lw=max(lw - 1, 0.1),
+                linestyle="-.",
+            )
+
+        # Plot the labels on branches and rotate them appropriately
+        rot = y_here * (180 / np.pi)
+        label = label_func(clade)
+        if label not in (None, clade.__class__.__name__):
+            if align_labels and clade in terminal_set:
+                xplc = xmax
+            else:
+                xplc = x_here
+
+            if rot <= 90:
+                va, ha = "center", "left"
+            elif rot <= 180:
+                va, ha, rot = "center", "right", rot - 180
+            elif rot <= 270:
+                va, ha, rot = "center", "right", rot - 180
+            else:
+                va, ha = "center", "left"
+
+            if draw_labels:
+                axes.text(
+                    y_here,
+                    xplc,
+                    label,
+                    color="k",
+                    rotation=rot,
+                    rotation_mode="anchor",
+                    va=va,
+                    ha=ha,
+                )
+
+        if clade.clades:
+            # Draw an arc connecting all children
+            y_top = y_posns[clade.clades[0]] * yang * np.pi / 180
+            y_bot = y_posns[clade.clades[-1]] * yang * np.pi / 180
+
+            # Plot a curve between the angular positions at this radius
+            x = np.linspace(y_bot, y_top, 500)
+            y = interp1d([y_bot, y_top], [x_here, x_here])(x)
+            axes.plot(x, y, color=color, lw=lw)
+
+            # Calculate start angles for each child branch
+            ymin_arc, ymax_arc = min(x), max(x)
+            ydiff = ymax_arc - ymin_arc
+            n_children = len(clade.clades)
+            locs = [ymin_arc]
+            for a in range(n_children - 2):
+                locs.append(ydiff / (n_children - 1) + ymin_arc)
+            locs.append(ymax_arc)
+
+            count = 0
             for child in clade:
-                draw_clade(child, x_here, color, lw)
+                if child in terminal_set:
+                    child_y_start = y_posns[child] * rad
+                else:
+                    child_y_start = locs[count]
+                draw_clade_polar(
+                    child, color, lw, x_start=x_here, y_start=child_y_start
+                )
+                count += 1
 
-    draw_clade(tree.root, 0, "k", plt.rcParams["lines.linewidth"])
+    # --- Main drawing dispatch ---
 
-    # If line collections were used to create clade lines, here they are added
-    # to the pyplot plot.
-    for i in horizontal_linecollections:
-        axes.add_collection(i)
-    for i in vertical_linecollections:
-        axes.add_collection(i)
+    if orient_tree in ("horizontal", "vertical"):
+        draw_clade(tree.root, 0, "k", plt.rcParams["lines.linewidth"])
+        # Add line collections to the axes
+        for i in horizontal_linecollections:
+            axes.add_collection(i)
+        for i in vertical_linecollections:
+            axes.add_collection(i)
+
+        if orient_tree == "vertical":
+            axes.set_xlabel("branch length")
+            axes.set_ylabel("taxa")
+            # Invert y-axis (origin at the top)
+            axes.set_ylim(max(y_posns.values()) + 0.8, 0.2)
+            xmax = max(x_posns.values())
+            if vertical_direction == "right":
+                axes.set_xlim(-0.05 * xmax, 1.25 * xmax)
+            else:
+                axes.set_xlim(1.25 * xmax, -0.05 * xmax)
+        else:
+            axes.set_ylabel("branch length")
+            axes.set_xlabel("taxa")
+            axes.set_xlim(max(y_posns.values()) + 0.8, 0.2)
+            xmax = max(x_posns.values())
+            if horizontal_direction == "down" and align_labels:
+                axes.set_ylim(1.5 * xmax, -0.05 * xmax)
+            elif horizontal_direction == "down":
+                axes.set_ylim(1.25 * xmax, -0.05 * xmax)
+            elif horizontal_direction == "up" and align_labels:
+                axes.set_ylim(-0.05 * xmax, 1.6 * xmax)
+            else:
+                axes.set_ylim(-0.05 * xmax, 1.25 * xmax)
+
+    elif orient_tree == "circular":
+        draw_clade_polar(tree.root, "k", plt.rcParams["lines.linewidth"])
+        xmax = max(x_posns.values())
+        if draw_labels and align_labels:
+            axes.set_ylim([0, 1.5 * xmax])
+        elif draw_labels:
+            axes.set_ylim([0, 1.25 * xmax])
+        else:
+            axes.set_ylim([0, xmax])
 
     # Aesthetics
 
@@ -590,14 +881,6 @@ def draw(
     else:
         if name:
             axes.set_title(name)
-    axes.set_xlabel("branch length")
-    axes.set_ylabel("taxa")
-    # Add margins around the tree to prevent overlapping the axes
-    xmax = max(x_posns.values())
-    axes.set_xlim(-0.05 * xmax, 1.25 * xmax)
-    # Also invert the y-axis (origin at the top)
-    # Add a small vertical margin, but avoid including 0 and N+1 on the y axis
-    axes.set_ylim(max(y_posns.values()) + 0.8, 0.2)
 
     # Parse and process key word arguments as pyplot options
     for key, value in kwargs.items():

@@ -467,6 +467,80 @@ accepts to customize the output.
 
 See :numref:`fig:phylo-draw-example` for example.
 
+Drawing trees in different orientations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The ``draw`` function supports rendering trees in multiple orientations:
+**vertical** (default), **horizontal**, and **circular**.  These are
+controlled by the ``orient_tree`` parameter.
+
+**Vertical trees** are the classic phylogram layout.  The direction of
+the root can be switched with ``vertical_direction``:
+
+.. code:: pycon
+
+   >>> Phylo.draw(tree, orient_tree="vertical", vertical_direction="right",
+   ...            do_show=False)   # default — root on the left
+   >>> Phylo.draw(tree, orient_tree="vertical", vertical_direction="left",
+   ...            do_show=False)   # mirror — root on the right
+
+**Horizontal trees** draw the leaves from left to right and the root
+at the top or bottom:
+
+.. code:: pycon
+
+   >>> Phylo.draw(tree, orient_tree="horizontal", horizontal_direction="down",
+   ...            do_show=False)   # root at the top (default)
+   >>> Phylo.draw(tree, orient_tree="horizontal", horizontal_direction="up",
+   ...            do_show=False)   # root at the bottom
+
+**Circular trees** use a polar projection.  They require ``numpy`` and
+``scipy``.  The ``circular_span`` parameter controls how many degrees
+of a circle the tree occupies (default 355°, leaving a small gap to
+prevent label collision):
+
+.. code:: pycon
+
+   >>> Phylo.draw(tree, orient_tree="circular", do_show=False)
+   >>> Phylo.draw(tree, orient_tree="circular", circular_span=270,
+   ...            do_show=False)   # three-quarter circle
+
+When providing your own axes for a circular tree, make sure the axes
+use a polar projection:
+
+.. code:: pycon
+
+   >>> import matplotlib.pyplot as plt
+   >>> fig = plt.figure()
+   >>> ax = fig.add_subplot(111, projection="polar")
+   >>> Phylo.draw(tree, orient_tree="circular", axes=ax, do_show=False)
+
+Two additional options work with any orientation:
+
+- ``draw_labels=False`` suppresses all branch and leaf labels.
+- ``align_labels=True`` right-justifies terminal leaf labels and
+  connects them to the branch tip with a dash-dot line — useful when
+  branch lengths vary widely and the labels would otherwise be
+  scattered.
+
+.. code:: pycon
+
+   >>> Phylo.draw(tree, orient_tree="vertical", align_labels=True,
+   ...            do_show=False)
+
+.. figure:: ../images/phylo-draw-orientations.png
+   :alt: All six tree orientation variants produced by ``Phylo.draw``.
+   :name: fig:phylo-draw-orientations
+   :width: 90.0%
+
+   Trees drawn in six orientations: vertical right (default), vertical
+   left, horizontal down with aligned labels, horizontal up, circular
+   (355°) with aligned labels, and circular (270°) without labels.
+
+See :numref:`fig:phylo-draw-orientations`.
+
+A full example script is provided at ``Doc/examples/phylo_draw_orientations.py``.
+
 See the Phylo page on the Biopython wiki
 (http://biopython.org/wiki/Phylo) for descriptions and examples of the
 more advanced functionality in ``draw_ascii``, ``draw_graphviz`` and
