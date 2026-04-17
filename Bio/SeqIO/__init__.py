@@ -274,6 +274,10 @@ names are also used in Bio.AlignIO and include the following:
       lines of sequence.
     - fasta-2line - Stricter interpretation of the FASTA format using exactly
       two lines per record (no line wrapping).
+    - fasta-ncbi - Parses NCBI-style pipe-delimited FASTA headers
+      (e.g. ``>gi|186972394|gb|EU490707.1|``) to extract database
+      cross-references into ``SeqRecord.dbxrefs``. Sequences and ``id`` are
+      identical to the plain ``fasta`` parser for lossless roundtripping.
     - fastq   - A "FASTA like" format used by Sanger which also stores PHRED
       sequence quality values (with an ASCII offset of 33).
     - fastq-sanger - An alias for "fastq" for consistency with BioPerl and EMBOSS
@@ -418,6 +422,7 @@ _FormatToIterator = {
     "fasta": FastaIO.FastaIterator,
     "fasta-2line": FastaIO.FastaTwoLineIterator,
     "fasta-blast": FastaIO.FastaBlastIterator,
+    "fasta-ncbi": FastaIO.FastaNcbiIterator,
     "fasta-pearson": FastaIO.FastaPearsonIterator,
     "ig": IgIO.IgIterator,
     "embl": InsdcIO.EmblIterator,
