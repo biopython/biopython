@@ -479,20 +479,24 @@ the root can be switched with ``vertical_direction``:
 
 .. code:: pycon
 
-   >>> Phylo.draw(tree, orient_tree="vertical", vertical_direction="right",
-   ...            do_show=False)   # default — root on the left
-   >>> Phylo.draw(tree, orient_tree="vertical", vertical_direction="left",
-   ...            do_show=False)   # mirror — root on the right
+   >>> Phylo.draw(
+   ...     tree, orient_tree="vertical", vertical_direction="right", do_show=False
+   ... )  # default — root on the left
+   >>> Phylo.draw(
+   ...     tree, orient_tree="vertical", vertical_direction="left", do_show=False
+   ... )  # mirror — root on the right
 
 **Horizontal trees** draw the leaves from left to right and the root
 at the top or bottom:
 
 .. code:: pycon
 
-   >>> Phylo.draw(tree, orient_tree="horizontal", horizontal_direction="down",
-   ...            do_show=False)   # root at the top (default)
-   >>> Phylo.draw(tree, orient_tree="horizontal", horizontal_direction="up",
-   ...            do_show=False)   # root at the bottom
+   >>> Phylo.draw(
+   ...     tree, orient_tree="horizontal", horizontal_direction="down", do_show=False
+   ... )  # root at the top (default)
+   >>> Phylo.draw(
+   ...     tree, orient_tree="horizontal", horizontal_direction="up", do_show=False
+   ... )  # root at the bottom
 
 **Circular trees** use a polar projection.  They require ``numpy`` and
 ``scipy``.  The ``circular_span`` parameter controls how many degrees
@@ -502,8 +506,9 @@ prevent label collision):
 .. code:: pycon
 
    >>> Phylo.draw(tree, orient_tree="circular", do_show=False)
-   >>> Phylo.draw(tree, orient_tree="circular", circular_span=270,
-   ...            do_show=False)   # three-quarter circle
+   >>> Phylo.draw(
+   ...     tree, orient_tree="circular", circular_span=270, do_show=False
+   ... )  # three-quarter circle
 
 When providing your own axes for a circular tree, make sure the axes
 use a polar projection:
@@ -525,8 +530,7 @@ Two additional options work with any orientation:
 
 .. code:: pycon
 
-   >>> Phylo.draw(tree, orient_tree="vertical", align_labels=True,
-   ...            do_show=False)
+   >>> Phylo.draw(tree, orient_tree="vertical", align_labels=True, do_show=False)
 
 .. figure:: ../images/phylo-draw-orientations.png
    :alt: All six tree orientation variants produced by ``Phylo.draw``.
