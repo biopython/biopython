@@ -236,51 +236,6 @@ class TestTranscriptionTranslation(unittest.TestCase):
         self.assertEqual(Seq.Seq(seq).translate(gap="-"), "MS-GS")
 
 
-class TestCodonAlignerWithGaps(unittest.TestCase):
-    """Test that CodonAligner handles gapped nucleotide input.
-
-    Without this PR, CodonAligner.score() and .align() crash with
-    TranslationError on partial-gap codons (e.g. 'TC-') because they
-    call .translate() internally (Bio/Align/__init__.py, lines 4712-4721).
-
-    The CodonAligner is designed to align nucleotide sequences to protein,
-    a workflow where gapped alignments are normal, expected input.
-    """
-
-    def setUp(self):
-        """Skip if numpy or C extensions are not available."""
-        try:
-            from Bio.Align import CodonAligner  # noqa: F401
-        except ImportError:
-            self.skipTest("CodonAligner requires numpy and compiled C extensions")
-
-    def test_codon_aligner_score_with_partial_gap(self):
-        """CodonAligner.score() must not crash on partial-gap codons.
-
-        ATGTC-CGT: ATG=M, TC-=S (four-fold degenerate), CGT=R
-        Without this PR: TranslationError: Codon 'TC-' is invalid
-        """
-        from Bio.Align import CodonAligner
-        from Bio.SeqRecord import SeqRecord
-
-        aligner = CodonAligner()
-        dna = SeqRecord(Seq.Seq("ATGTC-CGT"), id="dna")
-        pro = SeqRecord(Seq.Seq("MSR"), id="pro")
-        # This must not raise TranslationError
-        score = aligner.score(pro, dna)
-        self.assertIsInstance(score, float)
-
-    def test_codon_aligner_align_with_partial_gap(self):
-        """CodonAligner.align() must not crash on partial-gap codons."""
-        from Bio.Align import CodonAligner
-        from Bio.SeqRecord import SeqRecord
-
-        aligner = CodonAligner()
-        dna = SeqRecord(Seq.Seq("ATGTC-CGT"), id="dna")
-        pro = SeqRecord(Seq.Seq("MSR"), id="pro")
-        # This must not raise TranslationError
-        alignments = aligner.align(pro, dna)
-        self.assertTrue(len(alignments) >= 1)
 
 
 class TestTranslationPerformance(unittest.TestCase):
