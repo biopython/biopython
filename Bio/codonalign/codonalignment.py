@@ -451,7 +451,7 @@ def _prim(G):
         conn[n1].append((c, n1, n2))
         conn[n2].append((c, n2, n1))
     mst = []  # minimum spanning tree
-    used = set(nodes[0])
+    used = set([nodes[0]])
     usable_edges = conn[nodes[0]][:]
     heapify(usable_edges)
     while usable_edges:
