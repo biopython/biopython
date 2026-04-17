@@ -106,6 +106,15 @@ class TestFastqErrors(unittest.TestCase):
         with self.assertRaises(ValueError, msg=msg) as cm:
             title, seq, qual = next(tuples)
 
+    def check_header_fails(self, filename, good_count):
+        titles = QualityIO.FastqHeaderParser(filename)
+        msg = f"FastqHeaderParser failed to detect error in {filename}"
+        for i in range(good_count):
+            title = next(titles)  # Make sure no errors!
+        # Detect error in the next record:
+        with self.assertRaises(ValueError, msg=msg) as cm:
+            title = next(titles)
+
     def check_general_passes(self, filename, record_count):
         tuples = QualityIO.FastqGeneralIterator(filename)
         # This "raw" parser doesn't check the ASCII characters which means
@@ -114,6 +123,14 @@ class TestFastqErrors(unittest.TestCase):
         count = 0
         for title, seq, qual in tuples:
             self.assertEqual(len(seq), len(qual), msg=msg)
+            count += 1
+        self.assertEqual(count, record_count, msg=msg)
+
+    def check_header_passes(self, filename, record_count):
+        titles = QualityIO.FastqHeaderParser(filename)
+        msg = f"FastqHeaderParser failed to parse {filename}"
+        count = 0
+        for _ in titles:
             count += 1
         self.assertEqual(count, record_count, msg=msg)
 
@@ -140,6 +157,7 @@ class TestFastqErrors(unittest.TestCase):
         for path, count in tests:
             self.check_fails(path, count)
             self.check_general_fails(path, count)
+            self.check_header_fails(path, count)
 
     def test_reject_high_but_not_low(self):
         # These FASTQ files which will be rejected by the high level SeqRecord
@@ -156,6 +174,7 @@ class TestFastqErrors(unittest.TestCase):
         for path, good_count, full_count in tests:
             self.check_fails(path, good_count)
             self.check_general_passes(path, full_count)
+            self.check_header_passes(path, full_count)
 
 
 class TestReferenceSffConversions(unittest.TestCase):
