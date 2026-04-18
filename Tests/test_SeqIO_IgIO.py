@@ -26,7 +26,9 @@ class TestIgHeaderParser(unittest.TestCase):
             self.assertEqual(list(IgHeaderParser(handle)), out)
 
     def test_multiple(self):
-        handle = StringIO(";;head\n;comment\nA_U455\nseq\n1\n;comment\nB_HXB2R\nseq2\n2\n")
+        handle = StringIO(
+            ";;head\n;comment\nA_U455\nseq\n1\n;comment\nB_HXB2R\nseq2\n2\n"
+        )
         self.assertEqual(list(IgHeaderParser(handle)), ["A_U455", "B_HXB2R"])
 
 
