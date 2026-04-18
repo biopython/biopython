@@ -236,8 +236,6 @@ class TestTranscriptionTranslation(unittest.TestCase):
         self.assertEqual(Seq.Seq(seq).translate(gap="-"), "MS-GS")
 
 
-
-
 class TestTranslationPerformance(unittest.TestCase):
     """Performance benchmarks: per-codon workaround vs. native translate().
 

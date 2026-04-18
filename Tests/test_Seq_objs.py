@@ -854,7 +854,7 @@ class StringMethodTests(unittest.TestCase):
 
     def test_the_translation_of_invalid_codons(self):
         """Check obj.translate() method with invalid codons."""
-        for codon in ["TA?", "N-N", "AC_", "Ac_"]:
+        for codon in ["TA?", "AC_", "Ac_"]:
             msg = f"Translating {codon} should fail"
             nuc = Seq(codon)
             with self.assertRaises(TranslationError, msg=msg):
@@ -862,6 +862,14 @@ class StringMethodTests(unittest.TestCase):
             nuc = MutableSeq(codon)
             with self.assertRaises(TranslationError, msg=msg):
                 nuc.translate()
+        # N-N with the default gap='-' is resolved via partial-gap logic
+        # (gap positions replaced by N -> NNN -> X), so it does NOT raise.
+        # Without gap handling it should still raise:
+        for codon in ["N-N"]:
+            nuc = Seq(codon)
+            self.assertEqual("X", str(nuc.translate()))
+            with self.assertRaises(TranslationError):
+                nuc.translate(gap=None)
 
     def test_the_translation_of_ambig_codons(self):
         """Check obj.translate() method with ambiguous codons."""
