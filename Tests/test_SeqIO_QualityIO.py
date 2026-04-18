@@ -111,9 +111,9 @@ class TestFastqErrors(unittest.TestCase):
         msg = f"FastqHeaderParser failed to detect error in {filename}"
         for i in range(good_count):
             title = next(titles)  # Make sure no errors!
-        # Detect error in the next record:
+        # Detect error in the remaining records:
         with self.assertRaises(ValueError, msg=msg) as cm:
-            title = next(titles)
+            list(titles)
 
     def check_general_passes(self, filename, record_count):
         tuples = QualityIO.FastqGeneralIterator(filename)

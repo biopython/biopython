@@ -882,12 +882,20 @@ def FastqHeaderParser(source: _TextIOSource) -> Iterator[str]:
             for line in handle:
                 if line[0] == "+":
                     break
-                seq_len += len(line.rstrip())
+                sline = line.rstrip()
+                if " " in sline or "\t" in sline:
+                    raise ValueError("Whitespace is not allowed in the sequence.")
+                seq_len += len(sline)
             else:
                 if seq_len:
                     raise ValueError("End of file without quality information.")
                 else:
                     raise ValueError("Unexpected end of file")
+
+            # The title here is optional, but if present must match!
+            second_title = line[1:].rstrip()
+            if second_title and second_title != title_line:
+                raise ValueError("Sequence and quality captions differ.")
 
             # There will now be at least one line of quality data, followed by
             # another sequence, or EOF

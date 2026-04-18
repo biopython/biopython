@@ -14,9 +14,9 @@ class TestIgHeaderParser(unittest.TestCase):
     """Test IgHeaderParser directly."""
 
     ins_ig = [
-        ";;Free text\n;A_U455\nsequence1\n1\n",
-        ";;Comment\n;;More\n;B_HXB2R\nsequence2\n2\n",
-        ";C_UG268A\nseq\n1\n",
+        ";;Free text\n;Comment\nA_U455\nsequence1\n1\n",
+        ";;Comment\n;;More\n;Comment\nB_HXB2R\nsequence2\n2\n",
+        ";Comment\nC_UG268A\nseq\n1\n",
     ]
     outs_ig = [["A_U455"], ["B_HXB2R"], ["C_UG268A"]]
 
@@ -26,7 +26,7 @@ class TestIgHeaderParser(unittest.TestCase):
             self.assertEqual(list(IgHeaderParser(handle)), out)
 
     def test_multiple(self):
-        handle = StringIO(";;head\n;A_U455\nseq\n1\n;B_HXB2R\nseq2\n2\n")
+        handle = StringIO(";;head\n;comment\nA_U455\nseq\n1\n;comment\nB_HXB2R\nseq2\n2\n")
         self.assertEqual(list(IgHeaderParser(handle)), ["A_U455", "B_HXB2R"])
 
 
