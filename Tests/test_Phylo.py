@@ -535,6 +535,20 @@ class MixinTests(unittest.TestCase):
             self.assertEqual(clade.name, name)
             self.assertEqual(clade.branch_length, blen)
 
+    def test_resolve_polytomies(self):
+        """TreeMixin: resolve_polytomies() method."""
+        poly_tree_str = "(A:2,(B:1,C:2,D:4,(E:3,(F:2,G:3,H:1):2):1):5);\n"
+        #                         ^   ^             ^   polytomies
+        resolved_tree_str = (
+            "(A:2,(B:1,(C:2,(D:4,(E:3,(F:2,(G:3,H:1):0):2):1):0):0):5);\n"
+        )
+        poly_tree = Phylo.read(StringIO(poly_tree_str), "newick")
+        resolved_tree = Phylo.read(StringIO(resolved_tree_str), "newick")
+        self.assertFalse(poly_tree.is_bifurcating())
+        poly_tree.resolve_polytomies(shuffle=False, recursive=True)
+        self.assertTrue(poly_tree.is_bifurcating())
+        self.assertEqual(poly_tree.format("newick"), resolved_tree.format("newick"))
+
 
 # ---------------------------------------------------------
 
