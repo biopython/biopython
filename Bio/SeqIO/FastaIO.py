@@ -223,6 +223,7 @@ the 'fasta-pearson' format, as it explicitly indicates which lines are comments.
         self._line = line
 
     def __next__(self):
+        """Return the next SeqRecord from the plain FASTA stream."""
         line = self._line
         if line is None:
             raise StopIteration
@@ -272,6 +273,7 @@ class FastaTwoLineIterator(SequenceIterator):
         self._data = FastaTwoLineParser(self.stream)
 
     def __next__(self):
+        """Return the next SeqRecord from the strict two-line FASTA stream."""
         try:
             title, sequence = next(self._data)
         except StopIteration:
@@ -357,6 +359,7 @@ class FastaBlastIterator(SequenceIterator):
             self._line = None
 
     def __next__(self):
+        """Return the next SeqRecord from the BLAST-style FASTA stream."""
         line = self._line
         if line is None:
             raise StopIteration
@@ -449,6 +452,7 @@ class FastaPearsonIterator(SequenceIterator):
             self._line = None
 
     def __next__(self):
+        """Return the next SeqRecord from the Pearson-style FASTA stream."""
         line = self._line
         if line is None:
             raise StopIteration
