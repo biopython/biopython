@@ -125,7 +125,7 @@ class TabWriter(SequenceWriter):
             )
         if "\t" in seq or "\n" in seq or "\r" in seq:
             raise ValueError(
-                f"Record sequence contains a tab, newline or carriage return: {seq!r}"
+                f"Record sequence contains a tab, newline or carriage return: {title!r}"
             )
         return f"{title}\t{seq}\n"
 
