@@ -80,6 +80,7 @@ class PhdIterator(SequenceIterator):
         super().__init__(source, fmt="PHD")
 
     def __next__(self):
+        """Return the next SeqRecord from the PHD stream."""
         phd_record = Phd._read(self.stream)
         if phd_record is None:
             raise StopIteration

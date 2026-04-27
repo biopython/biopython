@@ -83,6 +83,7 @@ class TabIterator(SequenceIterator):
         super().__init__(source, fmt="Tab-separated plain-text")
 
     def __next__(self):
+        """Return the next SeqRecord from the tab-delimited stream."""
         for line in self.stream:
             try:
                 title, seq = line.split("\t")  # will fail if more than one tab!

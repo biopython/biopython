@@ -75,6 +75,7 @@ class AceIterator(SequenceIterator):
         self.ace_contigs = Ace.parse(self.stream)
 
     def __next__(self):
+        """Return the next SeqRecord from the ACE stream."""
         try:
             ace_contig = next(self.ace_contigs)
         except StopIteration:

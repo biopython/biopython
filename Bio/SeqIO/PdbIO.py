@@ -352,6 +352,7 @@ class PdbAtomIterator(SequenceIterator):
         self.records = iter(records)
 
     def __next__(self):
+        """Return the next SeqRecord from the PDB ATOM stream."""
         return next(self.records)
 
 
@@ -498,6 +499,7 @@ class CifSeqresIterator(SequenceIterator):
         self.records = iter(records)
 
     def __next__(self):
+        """Return the next SeqRecord from the mmCIF chain stream."""
         return next(self.records)
 
 
@@ -565,6 +567,7 @@ class CifAtomIterator(SequenceIterator):
         self.records = AtomIterator(pdb_id, structure)
 
     def __next__(self):
+        """Return the next SeqRecord from the mmCIF ATOM stream."""
         return next(self.records)
 
 

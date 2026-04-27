@@ -52,6 +52,7 @@ class SwissIterator(SequenceIterator):
         super().__init__(source, fmt="SwissProt")
 
     def __next__(self):
+        """Return the next SeqRecord from the Swiss-Prot/UniProt stream."""
         swiss_record = SwissProt._read(self.stream)
         if swiss_record is None:
             raise StopIteration
