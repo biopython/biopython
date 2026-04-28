@@ -16,11 +16,17 @@ The latest news is at the top of this file.
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite and type annotations.
 
+Added ``fasta-ncbi`` format to ``Bio.SeqIO`` which parses NCBI-style
+pipe-delimited FASTA headers (e.g. ``>gi|186972394|gb|EU490707.1|``) into
+``SeqRecord.dbxrefs`` as ``"DB:accession"`` strings. The existing ``fasta``
+parser is unchanged. Based on the original work by Tianyi Shi in PR #2815.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Peter Cock
 - Al Fattah Suyadi (first contribution)
+- Tianyi Shi (first contribution)
 
 30 March 2026: Biopython 1.87
 =============================

@@ -140,6 +140,190 @@ def FastaTwoLineParser(handle):
         assert line[0] != ">", "line[0] == '>' ; this should be impossible!"
 
 
+# NCBI FASTA header identifier prefixes.
+# Based on https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.id1_fetch.html_ref_fasta
+# Cross-referenced with NCBI's dbxref list:
+#   https://www.ncbi.nlm.nih.gov/genbank/collab/db_xref/
+# and UniProt's dbxref list:
+#   https://www.uniprot.org/docs/dbxref
+ncbi_fasta_header_fields = {
+    "bbs": (("id",), "GenInfo backbone seqid"),
+    "bbm": (("id",), "GenInfo import ID"),
+    "gb": (("accession", "locus"), "GenBank"),
+    "emb": (("accession", "locus"), "EMBL"),
+    "pir": (("accession", "name"), "PIR"),
+    "sp": (("accession", "name"), "UniProtKB/Swiss-Prot"),
+    "pat": (("country", "patent", "sequence"), "Patent"),
+    "pgp": (("country", "application_number", "sequence"), "Pre-grant patent"),
+    "ref": (("accession", "name"), "RefSeq"),
+    "gnl": (("database", "id"), "General database reference"),
+    "gi": (("id",), "GI"),
+    "dbj": (("accession", "locus"), "DDBJ"),
+    "prf": (("accession", "name"), "PRF"),
+    "pdb": (("id", "chain"), "PDB"),
+    "tpg": (("accession", "name"), "Third-party GenBank"),
+    "tpe": (("accession", "name"), "Third-party EMBL"),
+    "tpd": (("accession", "name"), "Third-party DDBJ"),
+    "tr": (("accession", "name"), "UniProtKB/TrEMBL"),
+    "gpp": (("accession", "name"), "Genome pipeline"),
+    "nat": (("accession", "name"), "Named annotation track"),
+}
+
+
+def _parse_ncbi_fasta_header(title):
+    """Parse NCBI-style pipe-delimited FASTA title lines into dbxrefs.
+
+    Parses title lines formatted according to the NCBI FASTA standard:
+    https://ncbi.github.io/cxx-toolkit/pages/ch_demo#ch_demo.id1_fetch.html_ref_fasta
+
+    Returns a tuple of (id, name, dbxrefs) where:
+     - id is the first whitespace-delimited word (the raw pipe string)
+     - name is the first recognized accession, or same as id if none found
+     - dbxrefs is a list of "DB:accession" strings
+
+    Arguments:
+     - title - title line as a stripped string without '>' as parsed by
+       SimpleFastaParser
+
+    >>> _parse_ncbi_fasta_header("gi|3298468|dbj|BAA31520.1| SAMIPF")
+    ('gi|3298468|dbj|BAA31520.1|', '3298468', ['GI:3298468', 'DDBJ:BAA31520.1'])
+
+    >>> _parse_ncbi_fasta_header("sp|P05698|LYSC_HUMAN Lysozyme C")
+    ('sp|P05698|LYSC_HUMAN', 'P05698', ['UniProtKB/Swiss-Prot:P05698'])
+
+    >>> _parse_ncbi_fasta_header("pdb|1A2B|C some PDB chain")
+    ('pdb|1A2B|C', '1A2B', ['PDB:1A2B'])
+
+    >>> _parse_ncbi_fasta_header("plain_id no pipes")
+    ('plain_id', 'plain_id', [])
+
+    >>> _parse_ncbi_fasta_header("")
+    ('', '', [])
+
+    """
+    if not title:
+        return "", "", []
+
+    try:
+        first_word = title.split(None, 1)[0]
+    except IndexError:
+        return "", "", []
+
+    fields = first_word.split("|")
+
+    # If there are no pipes, this is a plain FASTA header
+    if len(fields) <= 1:
+        return first_word, first_word, []
+
+    dbxrefs = []
+    first_accession = None
+    i = 0
+    while i < len(fields):
+        field = fields[i]
+        if field in ncbi_fasta_header_fields:
+            field_names, db_name = ncbi_fasta_header_fields[field]
+            # The accession/id is the next field after the prefix
+            if i + 1 < len(fields) and fields[i + 1]:
+                accession = fields[i + 1]
+                dbxrefs.append(f"{db_name}:{accession}")
+                if first_accession is None:
+                    first_accession = accession
+            # Skip over the fields consumed by this identifier
+            i += 1 + len(field_names)
+        else:
+            i += 1
+
+    name = first_accession if first_accession else first_word
+    return first_word, name, dbxrefs
+
+
+class FastaNcbiIterator(SequenceIterator):
+    """Parser for FASTA files with NCBI-style pipe-delimited headers.
+
+    This parser extracts database cross-references (dbxrefs) from NCBI
+    FASTA title lines such as ``>gi|186972394|gb|EU490707.1| description``.
+
+    The ``id`` and ``description`` fields are set identically to the plain
+    ``fasta`` parser (for lossless FASTA roundtripping), but the ``name``
+    field is set to the first recognized accession and the ``dbxrefs``
+    list is populated with ``"DB:accession"`` strings.
+
+    Use ``SeqIO.parse(handle, "fasta-ncbi")`` to access this parser.
+
+    Examples
+    --------
+    Parse an NCBI FASTA file and access cross-references:
+
+    >>> from Bio import SeqIO
+    >>> for record in SeqIO.parse("Fasta/ncbi_headers.fasta", "fasta-ncbi"):
+    ...     if record.dbxrefs:
+    ...         print(f"{record.name}: {record.dbxrefs}")
+    ...
+    3298468: ['GI:3298468', 'DDBJ:BAA31520.1']
+    186972394: ['GI:186972394', 'GenBank:EU490707.1']
+    P05698: ['UniProtKB/Swiss-Prot:P05698']
+    1A2B: ['PDB:1A2B']
+    NM_001301717.2: ['RefSeq:NM_001301717.2']
+    A0A0C5B5G6: ['UniProtKB/TrEMBL:A0A0C5B5G6']
+    CAA12345.6: ['EMBL:CAA12345.6']
+    US: ['Patent:US']
+    taxon: ['General database reference:taxon']
+
+    """
+
+    modes = "t"
+
+    def __init__(
+        self,
+        source: _TextIOSource,
+        alphabet: None = None,
+    ) -> None:
+        """Iterate over FASTA records with NCBI dbxref parsing.
+
+        Arguments:
+         - source - input stream opened in text mode, or a path to a file
+         - alphabet - optional alphabet, not used. Leave as None.
+
+        """
+        if alphabet is not None:
+            raise ValueError("The alphabet argument is no longer supported")
+        super().__init__(source, fmt="Fasta")
+        line = self.stream.readline()
+        if not line:
+            line = None
+        elif not line.startswith(">"):
+            raise ValueError(
+                "Expected FASTA record starting with '>' character. "
+                f"Got: '{line.rstrip()}'"
+            )
+        self._line = line
+
+    def __next__(self):
+        line = self._line
+        if line is None:
+            raise StopIteration
+        title = line[1:].rstrip()
+        lines = []
+        for line in self.stream:
+            if line[0] == ">":
+                break
+            lines.append(line)
+        else:
+            line = None
+        self._line = line
+        sequence = "".join(lines).encode().translate(None, b" \t\r\n")
+
+        first_word, name, dbxrefs = _parse_ncbi_fasta_header(title)
+
+        return SeqRecord(
+            Seq(sequence),
+            id=first_word,
+            name=name,
+            description=title,
+            dbxrefs=dbxrefs,
+        )
+
+
 class FastaIterator(SequenceIterator):
     """Parser for plain Fasta files without comments."""
 
