@@ -302,6 +302,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Rob Miller <https://github.com/rob-miller>
 - Robert Ernst <https://github.com/rernst>
 - Robert Sawicki <https://github.com/Battlesheepu>
+- Robyn Wright <https://github.com/R-Wright-1>
 - Rodrigo Dorantes-Gilardi <https://github.com/rodogi>
 - Rona Costello <https://github.com/RonaCostello>
 - Rudolf Koopmann <https://github.com/koopmann>

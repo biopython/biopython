@@ -13,14 +13,21 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.88
 ===============================================
 
+``Bio.Phylo.draw`` now supports drawing trees in vertical, horizontal and
+circular orientations using the ``orient_tree`` parameter, with options for
+direction (``vertical_direction``, ``horizontal_direction``), circular span
+(``circular_span``), label suppression (``draw_labels``) and label alignment
+(``align_labels``).  Based on the original work by Robyn Wright in PR #3693.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite and type annotations.
 
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
-- Peter Cock
 - Al Fattah Suyadi (first contribution)
+- Peter Cock
+- Robyn Wright
 
 30 March 2026: Biopython 1.87
 =============================
