@@ -11,6 +11,7 @@
 import math
 import tempfile
 import unittest
+from io import StringIO
 
 try:
     import numpy as np
@@ -1318,6 +1319,26 @@ GCTCGCACGTAGCTG
 ACGCCGCCATGCGAC
 CCTCCAGGTCGCATG""",
         )
+
+    def test_alignace_malformed_motif_line(self):
+        """Reject AlignACE output where a 'Motif' line is malformed."""
+        # Line starts with "Motif" (passes the cheap prefix check) but the
+        # first whitespace-delimited token is not exactly "Motif".
+        bad_output = (
+            "AlignACE 4.0 05/13/04\n"
+            "./AlignACE -i test.fa\n"
+            "Parameter values:\n"
+            " expect = \t10\n"
+            "\n"
+            "Input sequences:\n"
+            "#0\tSEQ1; M: ACGT at 1\n"
+            "\n"
+            "MotifX 1\n"
+            "TCTACGATTGAG\t0\t51\t0\n"
+        )
+        handle = StringIO(bad_output)
+        with self.assertRaisesRegex(ValueError, "Unexpected line format in AlignACE"):
+            motifs.parse(handle, "AlignAce")
 
 
 class TestClusterBuster(unittest.TestCase):
