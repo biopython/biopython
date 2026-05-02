@@ -15,9 +15,9 @@ class TestTabIOInvalidInput(unittest.TestCase):
     """Tab format rejects records whose id or sequence contain reserved chars."""
 
     def test_tab_id_with_tab_raises(self):
-        """Reject tab-format write when record.id contains a tab character.
+        r"""Reject tab-format write when record.id contains a tab character.
 
-        Note: ``_clean`` already replaces ``\\n`` and ``\\r`` in the id with
+        Note: ``_clean`` already replaces ``\n`` and ``\r`` in the id with
         spaces before this check runs, so only the tab branch of the id check
         is reachable from a normal write call.
         """
