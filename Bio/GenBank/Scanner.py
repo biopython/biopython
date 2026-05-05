@@ -1407,53 +1407,18 @@ class GenBankScanner(InsdcScanner):
             if line[44:47] not in ["   ", "ss-", "ds-", "ms-"]:
                 warnings.warn(
                     "LOCUS line does not have valid strand type "
-                    "(Single stranded, ...) - attempting whitespace "
-                    "based parsing:\n" + line,
+                    "(Single stranded, ...) - falling back to minimal "
+                    "parsing of name and size only:\n" + line,
                     BiopythonParserWarning,
                 )
                 parts = line[self.GENBANK_INDENT :].split()
                 if len(parts) >= 2:
                     consumer.locus(parts[0])
                     consumer.size(parts[1])
-                    date_pattern = re.compile(r"^\d{2}-[A-Z]{3}-\d{4}$")
-                    molecule_set = False
-                    topology_set = False
-                    division_set = False
-                    date_set = False
-                    for part in parts[2:]:
-                        part_upper = part.upper()
-                        if part in ("bp", "aa", "rc"):
-                            if part == "aa" and not molecule_set:
-                                consumer.residue_type("PROTEIN")
-                                molecule_set = True
-                            continue
-                        if not molecule_set and (
-                            "DNA" in part_upper or "RNA" in part_upper
-                        ):
-                            consumer.molecule_type(part)
-                            consumer.residue_type(part)
-                            molecule_set = True
-                        elif not topology_set and part.lower() in (
-                            "linear",
-                            "circular",
-                        ):
-                            consumer.topology(part.lower())
-                            topology_set = True
-                        elif not date_set and date_pattern.match(part):
-                            consumer.date(part)
-                            date_set = True
-                        elif (
-                            not division_set
-                            and len(part) == 3
-                            and part.isalpha()
-                            and part.isupper()
-                        ):
-                            consumer.data_file_division(part)
-                            division_set = True
                     return
                 raise ValueError(
                     "LOCUS line does not have valid strand type "
-                    "and fallback parsing failed:\n" + line
+                    "and minimal fallback parsing failed:\n" + line
                 )
 
             if not (
