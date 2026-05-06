@@ -611,6 +611,55 @@ Biopython. It has been designed so that dealing with fuzziness is not
 that much more complicated than dealing with exact positions, and
 hopefully you find that true!
 
+Modifying locations
+^^^^^^^^^^^^^^^^^^^
+
+The ``start`` and ``end`` attributes of ``SimpleLocation`` and
+``CompoundLocation`` are read-only. Older code may still call
+``SimpleLocation`` by its alias ``FeatureLocation``. For compound
+locations this is deliberate, as the overall start and end are computed
+from the child parts.
+
+To change the boundaries of a simple location, create a new
+``SimpleLocation`` with the updated values:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> edited_location = SeqFeature.SimpleLocation(
+   ...     exact_location.start - 2,
+   ...     exact_location.end + 3,
+   ...     strand=exact_location.strand,
+   ... )
+   >>> print(edited_location)
+   [3:12]
+
+For a ``CompoundLocation``, update the child location you want to change
+and build a new compound location from the revised parts:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> joined_location = SeqFeature.CompoundLocation(
+   ...     [SeqFeature.SimpleLocation(5, 10), SeqFeature.SimpleLocation(20, 30)]
+   ... )
+   >>> updated_parts = list(joined_location.parts)
+   >>> updated_parts[1] = SeqFeature.SimpleLocation(
+   ...     updated_parts[1].start,
+   ...     updated_parts[1].end + 3,
+   ...     strand=updated_parts[1].strand,
+   ... )
+   >>> updated_location = SeqFeature.CompoundLocation(updated_parts)
+   >>> print(updated_location)
+   join{[5:10], [20:33]}
+
+When rebuilding a ``CompoundLocation``, keep the parts in biological
+order. For reverse-strand features this can differ from the numerical
+order of the coordinates, so sorting by ``.start`` may change the
+meaning of the annotation.
+
 Location testing
 ^^^^^^^^^^^^^^^^
 
