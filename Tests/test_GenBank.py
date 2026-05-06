@@ -7592,6 +7592,39 @@ class GenBankTests(unittest.TestCase):
                 str(cm.exception),
             )
 
+    def test_genbank_variation_insert_location_is_not_origin_wrap(self):
+        """Variation inserts should not be treated as origin wrapping."""
+        from Bio.SeqFeature import SeqFeature
+        from Bio.SeqFeature import SimpleLocation
+
+        original = SeqRecord(
+            Seq("ACGTACGTAA"),
+            id="TEST0001",
+            name="TEST0001",
+            description="insert case",
+            annotations={"molecule_type": "DNA"},
+        )
+        original.features = [
+            SeqFeature(SimpleLocation(0, len(original.seq)), type="source"),
+            SeqFeature(SimpleLocation(6, 6), type="variation"),
+        ]
+        mutated = original.format("gb").replace(
+            "variation       6^7", "variation       7..6"
+        )
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonParserWarning)
+            record = SeqIO.read(StringIO(mutated), "genbank")
+
+        insert = record.features[1]
+        self.assertIsNotNone(insert.location)
+        self.assertEqual(int(insert.location.start), 6)
+        self.assertEqual(int(insert.location.end), 6)
+
+        handle = StringIO()
+        self.assertEqual(1, SeqIO.write(record, handle, "gb"))
+        self.assertIn("variation       6^7", handle.getvalue())
+
     def test_001_implicit_orign_wrap_fix(self):
         """Attempt to fix implied origin wrapping."""
         path = "GenBank/bad_origin_wrap.gb"

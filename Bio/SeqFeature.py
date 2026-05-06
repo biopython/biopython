@@ -944,7 +944,12 @@ class SimpleLocation(Location):
             e_pos = Position.fromstring(e)
             # We have seen Ensembl data in "GenBank Format" with length zero in the LOCUS
             # and variation features with s_pos >= e_pos - they are not origin wrapping!
-            if e_pos <= s_pos and length and s_pos < length:
+            # On circular sequences, equal start/end can still represent a full wrap.
+            if (
+                (e_pos < s_pos or (e_pos == s_pos and circular))
+                and length
+                and s_pos < length
+            ):
                 # Assuming this is meant to be origin wrapping.
                 # Create a CompoundLocation of the wrapped feature,
                 # consisting of two SimpleLocation objects to extend to
