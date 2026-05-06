@@ -50,10 +50,13 @@ All the functions that send requests to the NCBI Entrez API will
 automatically respect the NCBI rate limit (of 3 requests per second
 without an API key, or 10 requests per second with an API key) and
 will automatically retry when encountering transient failures
-(i.e. connection failures or HTTP 5XX codes). By default, Biopython
-does a maximum of three tries before giving up, and sleeps for 15
-seconds between tries. You can tweak these parameters by setting
-``Bio.Entrez.max_tries`` and ``Bio.Entrez.sleep_between_tries``.
+(i.e. connection failures or HTTP 5XX codes) while opening the URL.
+By default, Biopython does a maximum of three tries before giving up,
+and sleeps for 15 seconds between tries. You can tweak these
+parameters by setting ``Bio.Entrez.max_tries`` and
+``Bio.Entrez.sleep_between_tries``. Network problems that occur after
+the handle has been returned, for example while reading the response
+body, are not automatically retried.
 
 The Entrez module also provides an XML parser which takes a handle
 as input.
@@ -564,9 +567,13 @@ def parse(source, validate=True, escape=False, ignore_errors=False):
 def _open(request):
     """Make an HTTP request to Entrez, handling errors and enforcing rate limiting (PRIVATE).
 
-    Does some simple error checking and will try again after certain types of errors, up to
-    ``max_retries`` times. This function also enforces the "up to three queries per second
-    rule" to avoid abusing the NCBI servers (this limit is increased to 10 if using an API key).
+    Does some simple error checking and will try again after certain
+    types of errors, up to ``max_retries`` times, while opening the
+    request. Network errors that happen after this function has returned
+    the handle, for example while reading the response body, are passed
+    to the caller. This function also enforces the "up to three queries
+    per second rule" to avoid abusing the NCBI servers (this limit is
+    increased to 10 if using an API key).
 
     :param req_or_cgi: A Request object returned by ``_build_request``.
     :type req_or_cgi: urllib.request.Request

@@ -1944,32 +1944,47 @@ it is better to download in batches. You use the ``retstart`` and
 ``retmax`` parameters to specify which range of search results you want
 returned (starting entry using zero-based counting, and maximum number
 of results to return). Note that if Biopython encounters a transient
-failure like a HTTP 500 response when communicating with NCBI, it will
-automatically try again a couple of times. For example,
+failure like a HTTP 500 response when communicating with NCBI while
+opening the handle, it will automatically try again a couple of times.
+However, if the network connection drops while you are reading the
+response body, you may still need to retry the current batch in your own
+code. For example,
 
 .. code:: python
 
    # This assumes you have already run a search as shown above,
    # and set the variables count, webenv, query_key
 
+   import time
+
    batch_size = 3
    output = open("orchid_rpl16.fasta", "w")
    for start in range(0, count, batch_size):
        end = min(count, start + batch_size)
        print("Going to download record %i to %i" % (start + 1, end))
-       stream = Entrez.efetch(
-           db="nucleotide",
-           rettype="fasta",
-           retmode="text",
-           retstart=start,
-           retmax=batch_size,
-           webenv=webenv,
-           query_key=query_key,
-           idtype="acc",
-       )
-       data = stream.read()
-       stream.close()
-       output.write(data)
+       for attempt in range(3):
+           stream = Entrez.efetch(
+               db="nucleotide",
+               rettype="fasta",
+               retmode="text",
+               retstart=start,
+               retmax=batch_size,
+               webenv=webenv,
+               query_key=query_key,
+               idtype="acc",
+           )
+           try:
+               data = stream.read()
+           except OSError:
+               stream.close()
+               if attempt == 2:
+                   raise
+               print("Connection error, retrying...")
+               time.sleep(15)
+           else:
+               stream.close()
+               output.write(data)
+               break
    output.close()
 
 For illustrative purposes, this example downloaded the FASTA records in
