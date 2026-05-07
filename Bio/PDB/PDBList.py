@@ -35,6 +35,7 @@
 
 """Access the PDB over the internet (e.g. to download structures)."""
 
+import argparse
 import contextlib
 import functools
 import gzip
@@ -687,8 +688,6 @@ class PDBList:
 
 def _build_parser():
     """Build the argparse parser for the PDBList CLI."""
-    import argparse
-
     parser = argparse.ArgumentParser(
         prog="PDBList",
         description="Download structures from the PDB database.",
@@ -759,8 +758,6 @@ def _build_parser():
 def cli(args=None):
     """Command-line interface for PDBList.
 
-    Replaces the previous sys.argv-based interface with argparse subcommands.
-
     Subcommands::
 
         PDBList.py update [--pdb-path PATH] [options]
@@ -777,10 +774,10 @@ def cli(args=None):
         parser.print_help()
         return
 
-    pdb_path = getattr(args, "pdb_path", os.getcwd())
+    pdb_path = args.pdb_path
     file_format = args.format
     overwrite = args.overwrite
-    with_assemblies = getattr(args, "with_assemblies", False)
+    with_assemblies = args.with_assemblies
 
     if with_assemblies and file_format not in ("mmCif", "pdb"):
         parser.error(
