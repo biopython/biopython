@@ -1649,7 +1649,7 @@ class _SeqAbstractBaseClass(ABC):
         MutableSeq('GCT')
 
         As ``Seq`` objects are immutable, a ``TypeError`` is raised if
-        ``complement_rna`` is called on a ``Seq`` object with ``inplace=True``.
+        ``complement`` is called on a ``Seq`` object with ``inplace=True``.
         """
         ttable = _dna_complement_table
         try:
@@ -1888,7 +1888,7 @@ class _SeqAbstractBaseClass(ABC):
         MutableSeq('ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG')
 
         As ``Seq`` objects are immutable, a ``TypeError`` is raised if
-        ``transcribe`` is called on a ``Seq`` object with ``inplace=True``.
+        ``back_transcribe`` is called on a ``Seq`` object with ``inplace=True``.
 
         Trying to back-transcribe DNA has no effect, If you have a nucleotide
         sequence which might be DNA or RNA (or even a mixture), calling the
@@ -3123,7 +3123,7 @@ def reverse_complement_rna(sequence, inplace=False):
     MutableSeq('UCG')
 
     As strings and ``Seq`` objects are immutable, a ``TypeError`` is
-    raised if ``reverse_complement`` is called on a ``Seq`` object with
+    raised if ``reverse_complement_rna`` is called on a ``Seq`` object with
     ``inplace=True``.
     """
     from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
@@ -3188,7 +3188,7 @@ def complement(sequence, inplace=False):
     MutableSeq('GCT')
 
     As strings and ``Seq`` objects are immutable, a ``TypeError`` is
-    raised if ``reverse_complement`` is called on a ``Seq`` object with
+    raised if ``complement`` is called on a ``Seq`` object with
     ``inplace=True``.
     """
     from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
@@ -3252,7 +3252,7 @@ def complement_rna(sequence, inplace=False):
     MutableSeq('GCT')
 
     As strings and ``Seq`` objects are immutable, a ``TypeError`` is
-    raised if ``reverse_complement`` is called on a ``Seq`` object with
+    raised if ``complement_rna`` is called on a ``Seq`` object with
     ``inplace=True``.
     """
     from Bio.SeqRecord import SeqRecord  # Lazy to avoid circular imports
