@@ -16,6 +16,7 @@ class, used in the Bio.AlignIO module.
 import copy
 import importlib
 import numbers
+import shutil
 import sys
 import types
 import warnings
@@ -1010,7 +1011,11 @@ class Alignment:
          - column_annotations - A dictionary with annotations describing each
                                 column in the alignment;
          - score              - The alignment score.
+
+         - terminal_columns - The number of columns used to format the alignment
     """
+
+    terminal_columns = None
 
     @classmethod
     def parse_printed_alignment(cls, lines):
@@ -2484,7 +2489,12 @@ class Alignment:
                 raise ValueError("Inconsistent coordinates")
         prefix_width = 10
         position_width = 10
-        line_width = 80
+
+        if self.terminal_columns is None:
+            line_width = shutil.get_terminal_size().columns
+        else:
+            line_width = self.terminal_columns
+
         lines = []
         steps = indices[:, 1:] - indices[:, :-1]
         minstep = steps.min(0)
