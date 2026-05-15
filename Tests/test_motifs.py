@@ -57,6 +57,12 @@ XX
 """
         self.assertEqual(s3, expected_transfac)
         self.assertRaises(ValueError, format, m, "foo_bar")
+        
+    def test_degenerate_consensus_ambiguous_columns(self):
+        """Test degenerate consensus preserves fully ambiguous columns."""
+        instances = [Seq("ACGTN"), Seq("CGTAN")]
+        motif = motifs.create(instances)
+        self.assertEqual(motif.degenerate_consensus, "MSKWN")
 
     def test_relative_entropy(self):
         m = motifs.create([Seq("ATATA"), Seq("ATCTA"), Seq("TTGTA")])

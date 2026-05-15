@@ -207,7 +207,7 @@ class GenericPositionMatrix(dict):
                 key = nucleotides[0]
             elif 4 * sum(counts[:2]) > 3 * sum(counts):
                 key = "".join(sorted(nucleotides[:2]))
-            elif counts[3] == 0:
+            elif counts[3] == 0 and sum(counts[:3]) > 0:
                 key = "".join(sorted(nucleotides[:3]))
             else:
                 key = "ACGT"
