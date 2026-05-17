@@ -21,7 +21,7 @@ Functions
 
 import math
 
-from scipy.constants import gas_constant
+GAS_CONSTANT = 8.314462618
 
 
 def firstOrder(k, A0, t):
@@ -156,4 +156,4 @@ def Arrenheius(A, Ea, T):
     >>> print(f"{k:.3f}")
     0.725
     """
-    return A * math.exp(-1 * Ea / (gas_constant * T))
+    return A * math.exp(-1 * Ea / (GAS_CONSTANT * T))
