@@ -149,6 +149,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Gaetan Lehman <gaetan.lehmann at domain jouy.inra.fr>
 - Gavin E Crooks <https://github.com/gecrooks>
 - Gert Hulselmans <https://github.com/ghuls>
+- Giang (Zach) Nguyen <https://github.com/giang-nghg>
 - Gleb Kuznetsov <https://github.com/glebkuznetsov>
 - Gokcen Eraslan <https://github.com/gokceneraslan>
 - Harry Jubb <https://github.com/harryjubb>
