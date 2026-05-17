@@ -600,3 +600,21 @@ class DisorderedAtom(DisorderedEntityWrapper):
         """
         for child in self:
             child.coord = np.dot(child.coord, rot) + tran
+
+    def copy(self):
+        """Copy disorderd atom recursively.
+
+        Loses parent relationship, and sets selected_child to own of it's own
+        children.
+        """
+        shallow = copy.copy(self)
+        shallow.child_dict = {}
+        shallow.detach_parent()
+
+        shallow.selected_child = None
+        shallow.last_occupancy = 0
+
+        for child in self.disordered_get_list():
+            shallow.disordered_add(child.copy())
+
+        return shallow
