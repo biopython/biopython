@@ -292,20 +292,35 @@ class ProteinAnalysis:
 
         return scores
 
-    def isoelectric_point(self):
+    def isoelectric_point(self, pKa_scale=None):
         """Calculate the isoelectric point.
 
         Uses the module IsoelectricPoint to calculate the pI of a protein.
+
+        Arguments:
+         - pKa_scale: Optional pKa scale name (e.g. "IPC2_protein",
+           "Bjellqvist", "EMBOSS", etc.).  Default ``None`` uses the
+           Bjellqvist scale for backward compatibility.
+           For best accuracy with proteins, use ``"IPC2_protein"``;
+           for peptides, use ``"IPC2_peptide"``.
+           See ``Bio.SeqUtils.IsoelectricPoint`` for all available scales.
         """
         aa_content = self.count_amino_acids()
-
-        ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
+        ie_point = IsoelectricPoint.IsoelectricPoint(
+            self.sequence, pKa_scale, aa_content
+        )
         return ie_point.pi()
 
-    def charge_at_pH(self, pH):
-        """Calculate the charge of a protein at given pH."""
+    def charge_at_pH(self, pH, pKa_scale=None):
+        """Calculate the charge of a protein at given pH.
+
+        Arguments:
+         - pH: the pH value at which to compute the charge.
+         - pKa_scale: Optional pKa scale name.  Default ``None`` uses
+           the Bjellqvist scale.  See ``isoelectric_point`` for details.
+        """
         aa_content = self.count_amino_acids()
-        charge = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
+        charge = IsoelectricPoint.IsoelectricPoint(self.sequence, pKa_scale, aa_content)
         return charge.charge_at_pH(pH)
 
     def secondary_structure_fraction(self):

@@ -13,6 +13,15 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.88
 ===============================================
 
+``Bio.SeqUtils.IsoelectricPoint`` now supports 18 different pKa scales for
+isoelectric point calculation, selectable via the ``pKa_scale`` parameter.
+The default remains Bjellqvist for backward compatibility.  For improved
+accuracy, use ``"IPC2_protein"`` for proteins or ``"IPC2_peptide"`` for
+peptides (Kozlowski 2021, DOI: 10.1093/nar/gkab295).  The pKa scale can
+also be specified through ``ProteinAnalysis.isoelectric_point()`` and
+``ProteinAnalysis.charge_at_pH()``.  Based on the original work by
+Lukasz P. Kozlowski in PR #3819.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite and type annotations.
 
@@ -21,6 +30,7 @@ possible, especially the following contributors:
 
 - Peter Cock
 - Al Fattah Suyadi (first contribution)
+- Lukasz P. Kozlowski
 
 30 March 2026: Biopython 1.87
 =============================
