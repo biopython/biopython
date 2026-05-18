@@ -94,6 +94,7 @@ class GckIterator(SequenceIterator):
             raise ValueError("Improper header, cannot read 24 bytes from stream")
 
     def __next__(self):
+        """Return the next SeqRecord from the GCK stream."""
         stream = self.stream
         # Read the actual sequence data
         packet = _read_packet(stream)

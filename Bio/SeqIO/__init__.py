@@ -502,6 +502,7 @@ class AlignmentSequenceIterator(SequenceIterator):
         self.iterator = (record for alignment in alignments for record in alignment)
 
     def __next__(self):
+        """Return the next SeqRecord from the underlying alignment iterator."""
         return next(self.iterator)
 
 

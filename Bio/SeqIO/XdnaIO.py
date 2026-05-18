@@ -165,6 +165,7 @@ class XdnaIterator(SequenceIterator):
         self._header = header
 
     def __next__(self):
+        """Return the next SeqRecord from the Xdna stream."""
         if self._header is None:
             raise StopIteration
         stream = self.stream
