@@ -849,6 +849,7 @@ class SffIterator(SequenceIterator):
         self._read_counter = 0
 
     def __next__(self):
+        """Return the next SeqRecord from the SFF stream."""
         stream = self.stream
         if self._read_counter == self.number_of_reads:
             self._read_counter = None  # check EOF only once

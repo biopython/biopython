@@ -133,6 +133,7 @@ class Gfa1Iterator(SequenceIterator):
         super().__init__(source, fmt="GFA 1.0")
 
     def __next__(self):
+        """Return the next SeqRecord from the GFA 1.0 stream."""
         for line in self.stream:
             if line == "\n":
                 warnings.warn("GFA data has a blank line.", BiopythonWarning)
@@ -180,6 +181,7 @@ class Gfa2Iterator(SequenceIterator):
         super().__init__(source, fmt="GFA 2.0")
 
     def __next__(self):
+        """Return the next SeqRecord from the GFA 2.0 stream."""
         for line in self.stream:
             if line == "\n":
                 warnings.warn("GFA data has a blank line.", BiopythonWarning)

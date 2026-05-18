@@ -63,6 +63,7 @@ class UniprotIterator(SequenceIterator):
         )
 
     def __next__(self):
+        """Return the next SeqRecord from the UniProt XML stream."""
         try:
             for event, elem in self._data:
                 if event == "start-ns" and not (

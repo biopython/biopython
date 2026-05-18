@@ -340,6 +340,7 @@ class SnapGeneIterator(SequenceIterator):
         _parse_cookie_packet(length, data)
 
     def __next__(self):
+        """Return the next SeqRecord from the SnapGene stream."""
         packets = self.packets
         if packets is None:
             raise StopIteration
