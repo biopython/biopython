@@ -6,13 +6,12 @@
 # as part of this package.
 """Extract SCOP domain ATOM and HETATOM records from PDB."""
 
-
 import getopt
 import sys
-
 from urllib.request import urlretrieve as _urlretrieve
 
-from Bio.SCOP import Raf, Cla
+from Bio.SCOP import Cla
+from Bio.SCOP import Raf
 
 
 def usage():

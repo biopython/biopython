@@ -13,7 +13,7 @@
 import unittest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -21,10 +21,10 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB.MMCIF2Dict import MMCIF2Dict
-
 import io
 import textwrap
+
+from Bio.PDB.MMCIF2Dict import MMCIF2Dict
 
 
 class MMCIF2dictTests(unittest.TestCase):
@@ -322,6 +322,29 @@ class MMCIF2dictTests(unittest.TestCase):
             io.StringIO(textwrap.dedent(test_data.replace("_loop", "_LOOP")))
         )
         self.assertNotEqual(mmcif_dict, mmcif_dict2)
+
+    def test_file_not_starting_with_data_raises_error(self):
+        test_data = """\
+            error_test
+            _test_key_value foo # Ignore this comment
+            loop_
+            _test_loop
+            a b c d # Ignore this comment
+            e f g
+
+        """
+        test_data2 = """\
+            data error_test_data_
+            _test_key_value foo # Ignore this comment
+            loop_
+            _test_loop
+            a b c d # Ignore this comment
+            e f g
+        """
+        file = io.StringIO(textwrap.dedent(test_data))
+        file2 = io.StringIO(textwrap.dedent(test_data2))
+        self.assertRaises(ValueError, MMCIF2Dict, file)
+        self.assertRaises(ValueError, MMCIF2Dict, file2)
 
 
 if __name__ == "__main__":

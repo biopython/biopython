@@ -6,16 +6,17 @@
 # package.
 
 """Testing online code for Bio.motifs (weblogo etc)."""
+
 import os
 import unittest
+
+import requires_internet
 
 # We want to test these:
 from Bio import motifs
 
 # In order to check any sequences returned
 from Bio.Seq import Seq
-
-import requires_internet
 
 requires_internet.check()
 

@@ -131,3 +131,9 @@ def __make_diagram(record, sequence_tree):
     # remove 0-length gaps
     motifs_with_gaps = [s for s in motifs_with_gaps if s != "0"]
     return "-".join(motifs_with_gaps)
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

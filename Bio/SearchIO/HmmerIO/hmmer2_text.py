@@ -7,8 +7,11 @@
 
 import re
 
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 from Bio.SearchIO._utils import read_forward
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
 
 from ._base import _BaseHmmerTextIndexer
 
@@ -338,7 +341,7 @@ class Hmmer2TextIndexer(_BaseHmmerTextIndexer):
         handle = self._handle
         handle.seek(0)
         start_offset = handle.tell()
-        regex_id = re.compile(br"Query\s*(?:sequence|HMM)?:\s*(.*)")
+        regex_id = re.compile(rb"Query\s*(?:sequence|HMM)?:\s*(.*)")
 
         # determine flag for hmmsearch
         is_hmmsearch = False

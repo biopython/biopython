@@ -1,0 +1,319 @@
+<!-- DocSum DTD for clinvar database -->
+
+<!--~~ !dtd
+~~json
+   <json type='esummary' version='0.3'>
+       <config lcnames='true'/>
+   </json>
+~~-->
+
+<!ENTITY	 % T_string		"(#PCDATA)">
+
+<!-- Members definition of Structure type: T_variation_xref -->
+<!ELEMENT	db_source		%T_string;>
+<!ELEMENT	db_id		%T_string;>
+
+<!-- Definition of Structure type: T_variation_xref -->
+<!--~~ <variation_xref>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_variation_xref "(
+			db_source?,
+			db_id?
+			)
+			">
+
+<!-- Definition of List type: T_VariationXRefList -->
+<!ELEMENT	variation_xref	%T_variation_xref;>
+<!ENTITY	 % T_VariationXRefList	"(variation_xref)*">
+
+<!-- Definition of List type: T_AliasesType -->
+<!ELEMENT	string	%T_string;>
+<!ENTITY	 % T_AliasesType	"(string)*">
+
+<!-- Members definition of Structure type: T_assembly_set -->
+<!ELEMENT	status		%T_string;>
+<!ELEMENT	assembly_name		%T_string;>
+<!ELEMENT	chr		%T_string;>
+<!ELEMENT	band		%T_string;>
+<!ELEMENT	start		%T_string;>
+<!ELEMENT	stop		%T_string;>
+<!ELEMENT	inner_start		%T_string;>
+<!ELEMENT	inner_stop		%T_string;>
+<!ELEMENT	outer_start		%T_string;>
+<!ELEMENT	outer_stop		%T_string;>
+<!ELEMENT	display_start		%T_string;>
+<!ELEMENT	display_stop		%T_string;>
+<!ELEMENT	assembly_acc_ver		%T_string;>
+<!ELEMENT	annotation_release		%T_string;>
+<!ELEMENT	alt		%T_string;>
+<!ELEMENT	ref		%T_string;>
+
+<!-- Definition of Structure type: T_assembly_set -->
+<!--~~ <assembly_set>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_assembly_set "(
+			status?,
+			assembly_name?,
+			chr?,
+			band?,
+			start?,
+			stop?,
+			inner_start?,
+			inner_stop?,
+			outer_start?,
+			outer_stop?,
+			display_start?,
+			display_stop?,
+			assembly_acc_ver?,
+			annotation_release?,
+			alt?,
+			ref?
+			)
+			">
+
+<!-- Definition of List type: T_VariationLocType -->
+<!ELEMENT	assembly_set	%T_assembly_set;>
+<!ENTITY	 % T_VariationLocType	"(assembly_set)*">
+
+<!-- Members definition of Structure type: T_allele_freq -->
+<!ELEMENT	source		%T_string;>
+<!ELEMENT	value		%T_string;>
+<!ELEMENT	minor_allele		%T_string;>
+
+<!-- Definition of Structure type: T_allele_freq -->
+<!--~~ <allele_freq>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_allele_freq "(
+			source?,
+			value?,
+			minor_allele?
+			)
+			">
+
+<!-- Definition of List type: T_AlleleFreqSetType -->
+<!ELEMENT	allele_freq	%T_allele_freq;>
+<!ENTITY	 % T_AlleleFreqSetType	"(allele_freq)*">
+
+<!-- Members definition of Structure type: T_variation -->
+<!ELEMENT	measure_id		%T_string;>
+<!ELEMENT	variation_xrefs		%T_VariationXRefList;>
+<!ELEMENT	variation_name		%T_string;>
+<!ELEMENT	cdna_change		%T_string;>
+<!ELEMENT	aliases		%T_AliasesType;>
+<!ELEMENT	variation_loc		%T_VariationLocType;>
+<!ELEMENT	allele_freq_set		%T_AlleleFreqSetType;>
+<!ELEMENT	variant_type		%T_string;>
+<!ELEMENT	canonical_spdi		%T_string;>
+
+<!-- Definition of Structure type: T_variation -->
+<!--~~ <variation>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_variation "(
+			measure_id?,
+			variation_xrefs?,
+			variation_name?,
+			cdna_change?,
+			aliases?,
+			variation_loc?,
+			allele_freq_set?,
+			variant_type?,
+			canonical_spdi?
+			)
+			">
+
+<!-- Definition of List type: T_VariationSetType -->
+<!ELEMENT	variation	%T_variation;>
+<!ENTITY	 % T_VariationSetType	"(variation)*">
+
+<!-- Definition of List type: T_SCVType -->
+<!-- Already defined ...
+	string	 as %T_string;>
+ ... Already defined -->
+<!ENTITY	 % T_SCVType	"(string)*">
+
+<!-- Definition of List type: T_RCVType -->
+<!-- Already defined ...
+	string	 as %T_string;>
+ ... Already defined -->
+<!ENTITY	 % T_RCVType	"(string)*">
+
+<!-- Members definition of Structure type: T_SupportingSubmissionsType -->
+<!ELEMENT	scv		%T_SCVType;>
+<!ELEMENT	rcv		%T_RCVType;>
+
+<!-- Definition of Structure type: T_SupportingSubmissionsType -->
+<!--~~ <SupportingSubmissionsType>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_SupportingSubmissionsType "(
+			scv?,
+			rcv?
+			)
+			">
+<!ENTITY	 % T_date		"(#PCDATA)">
+
+<!-- Members definition of Structure type: T_trait_xref -->
+<!-- Already defined ...
+	db_source	 as 	%T_string;
+ ... Already defined -->
+<!-- Already defined ...
+	db_id	 as 	%T_string;
+ ... Already defined -->
+
+<!-- Definition of Structure type: T_trait_xref -->
+<!--~~ <trait_xref>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_trait_xref "(
+			db_source?,
+			db_id?
+			)
+			">
+
+<!-- Definition of List type: T_TraitXrefsType -->
+<!ELEMENT	trait_xref	%T_trait_xref;>
+<!ENTITY	 % T_TraitXrefsType	"(trait_xref)*">
+
+<!-- Members definition of Structure type: T_trait -->
+<!ELEMENT	trait_xrefs		%T_TraitXrefsType;>
+<!ELEMENT	trait_name		%T_string;>
+
+<!-- Definition of Structure type: T_trait -->
+<!--~~ <trait>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_trait "(
+			trait_xrefs?,
+			trait_name?
+			)
+			">
+
+<!-- Definition of List type: T_TraitSetType -->
+<!ELEMENT	trait	%T_trait;>
+<!ENTITY	 % T_TraitSetType	"(trait)*">
+
+<!-- Members definition of Structure type: T_ClassificationType -->
+<!ELEMENT	description		%T_string;>
+<!ELEMENT	last_evaluated		%T_date;>
+<!ELEMENT	review_status		%T_string;>
+<!ELEMENT	fda_recognized_database		%T_string;>
+<!ELEMENT	trait_set		%T_TraitSetType;>
+
+<!-- Definition of Structure type: T_ClassificationType -->
+<!--~~ <ClassificationType>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_ClassificationType "(
+			description?,
+			last_evaluated?,
+			review_status?,
+			fda_recognized_database?,
+			trait_set?
+			)
+			">
+
+<!-- Members definition of Structure type: T_gene -->
+<!ELEMENT	symbol		%T_string;>
+<!ELEMENT	GeneID		%T_string;>
+<!ELEMENT	strand		%T_string;>
+<!-- Already defined ...
+	source	 as 	%T_string;
+ ... Already defined -->
+
+<!-- Definition of Structure type: T_gene -->
+<!--~~ <gene>
+~~json <object/>
+~~-->
+<!ENTITY	 % T_gene "(
+			symbol?,
+			GeneID?,
+			strand?,
+			source?
+			)
+			">
+
+<!-- Definition of List type: T_GenesType -->
+<!ELEMENT	gene	%T_gene;>
+<!ENTITY	 % T_GenesType	"(gene)*">
+
+<!-- Definition of List type: T_MolecularConsequenceListType -->
+<!-- Already defined ...
+	string	 as %T_string;>
+ ... Already defined -->
+<!ENTITY	 % T_MolecularConsequenceListType	"(string)*">
+
+<!-- Members definition of Structure type: T_DocSum -->
+<!ELEMENT	obj_type		%T_string;>
+<!ELEMENT	accession		%T_string;>
+<!ELEMENT	accession_version		%T_string;>
+<!ELEMENT	title		%T_string;>
+<!ELEMENT	variation_set		%T_VariationSetType;>
+<!ELEMENT	supporting_submissions		%T_SupportingSubmissionsType;>
+<!ELEMENT	germline_classification		%T_ClassificationType;>
+<!ELEMENT	clinical_impact_classification		%T_ClassificationType;>
+<!ELEMENT	oncogenicity_classification		%T_ClassificationType;>
+<!ELEMENT	record_status		%T_string;>
+<!ELEMENT	gene_sort		%T_string;>
+<!ELEMENT	chr_sort		%T_string;>
+<!ELEMENT	location_sort		%T_string;>
+<!ELEMENT	variation_set_name		%T_string;>
+<!ELEMENT	variation_set_id		%T_string;>
+<!ELEMENT	genes		%T_GenesType;>
+<!ELEMENT	molecular_consequence_list		%T_MolecularConsequenceListType;>
+<!ELEMENT	protein_change		%T_string;>
+<!-- Already defined ...
+	fda_recognized_database	 as 	%T_string;
+ ... Already defined -->
+<!ELEMENT	error		%T_string;>
+
+<!-- Definition of Structure type: T_DocSum -->
+<!--~~ <DocumentSummary>
+~~json <object name='@uid'/>
+~~-->
+<!ENTITY	 % T_DocSum "((
+			obj_type?,
+			accession?,
+			accession_version?,
+			title?,
+			variation_set?,
+			supporting_submissions?,
+			germline_classification?,
+			clinical_impact_classification?,
+			oncogenicity_classification?,
+			record_status?,
+			gene_sort?,
+			chr_sort?,
+			location_sort?,
+			variation_set_name?,
+			variation_set_id?,
+			genes?,
+			molecular_consequence_list?,
+			protein_change?,
+			fda_recognized_database?
+			)
+			| error)
+			">
+
+<!ELEMENT DocumentSummary %T_DocSum;>
+<!ATTLIST DocumentSummary uid CDATA #IMPLIED>
+
+<!ELEMENT DbBuild      %T_string;>
+<!ELEMENT DocumentSummarySet (DbBuild?, DocumentSummary*)>
+<!ATTLIST DocumentSummarySet status CDATA #REQUIRED>
+<!--~~ <DocumentSummarySet>
+~~json
+   <object key="result">
+       <array key="uids" select='DocumentSummary/@uid'/>
+       <members select='DocumentSummary'/>
+   </object>
+~~-->
+<!--~~ <eSummaryResult>
+~~ json <member/>
+~~-->
+
+<!ELEMENT eSummaryResult (DocumentSummarySet?)>
+

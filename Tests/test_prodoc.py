@@ -7,6 +7,7 @@
 
 import os
 import unittest
+
 from Bio.ExPASy import Prodoc
 
 

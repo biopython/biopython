@@ -5,14 +5,11 @@
 
 """Unit tests for Bio.Phylo functions with external dependencies."""
 
-
 import unittest
-
-from io import StringIO
-from Bio import Phylo
 
 # Check for any missing dependencies at the top level so we can skip
 from Bio import MissingExternalDependencyError
+from Bio import Phylo
 
 try:
     import networkx

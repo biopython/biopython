@@ -9,20 +9,25 @@
 
 import os
 import string
-import numpy
+
+import numpy as np
+
+from Bio.File import as_handle
+from Bio.Align.substitution_matrices import _arraycore  # type: ignore
 
 
-class Array(numpy.ndarray):
+class Array(_arraycore.Array):
     """numpy array subclass indexed by integers and by letters."""
 
     def __new__(cls, alphabet=None, dims=None, data=None, dtype=float):
         """Create a new Array instance."""
         if isinstance(data, dict):
             if alphabet is not None:
-                raise ValueError("alphabet should be None if data is a dict")
+                raise ValueError("alphabet must be None if data is a dict")
             if dims is not None:
-                raise ValueError("dims should be None if data is a dict")
+                raise ValueError("dims must be None if data is a dict")
             alphabet = []
+            single_letters = True
             for key in data:
                 if isinstance(key, str):
                     if dims is None:
@@ -31,7 +36,6 @@ class Array(numpy.ndarray):
                         raise ValueError("inconsistent dimensions in data")
                     alphabet.append(key)
                 elif isinstance(key, tuple):
-                    single_letters = True
                     if dims is None:
                         dims = len(key)
                     elif dims != len(key):
@@ -76,52 +80,56 @@ class Array(numpy.ndarray):
                         key = (letter1, letter2)
                         value = data.get(key, 0.0)
                         obj[i1, i2] = value
-            obj._alphabet = alphabet
-            return obj
-        if alphabet is None:
-            alphabet = string.ascii_uppercase
-        elif not (isinstance(alphabet, str) or isinstance(alphabet, tuple)):
-            raise ValueError("alphabet should be a string or a tuple")
-        n = len(alphabet)
-        if data is None:
-            if dims is None:
-                dims = 1
-            elif dims not in (1, 2):
-                raise ValueError("dims should be 1 or 2 (found %s)" % dims)
-            shape = (n,) * dims
         else:
-            if dims is None:
-                shape = data.shape
-                dims = len(shape)
-                if dims == 1:
-                    pass
-                elif dims == 2:
-                    if shape[0] != shape[1]:
-                        raise ValueError("data array is not square")
-                else:
-                    raise ValueError(
-                        "data array should be 1- or 2- dimensional "
-                        "(found %d dimensions) " % dims
-                    )
-            else:
+            if alphabet is None:
+                alphabet = string.ascii_uppercase
+            elif not (isinstance(alphabet, (str, tuple))):
+                raise ValueError("alphabet should be a string or a tuple")
+            n = len(alphabet)
+            if data is None:
+                if dims is None:
+                    dims = 1
+                elif dims not in (1, 2):
+                    raise ValueError("dims should be 1 or 2 (found %s)" % dims)
                 shape = (n,) * dims
-                if data.shape != shape:
-                    raise ValueError(
-                        "data shape has inconsistent shape (expected (%s), found (%s))"
-                        % (shape, data.shape)
-                    )
-        obj = super().__new__(cls, shape, dtype)
-        if data is None:
-            obj[:] = 0.0
-        else:
-            obj[:] = data
-        obj._alphabet = alphabet
+            else:
+                if dims is None:
+                    shape = data.shape
+                    dims = len(shape)
+                    if dims == 1:
+                        pass
+                    elif dims == 2:
+                        if shape[0] != shape[1]:
+                            raise ValueError("data array is not square")
+                    else:
+                        raise ValueError(
+                            "data array should be 1- or 2- dimensional "
+                            "(found %d dimensions) " % dims
+                        )
+                else:
+                    shape = (n,) * dims
+                    if data.shape != shape:
+                        raise ValueError(
+                            "data shape has inconsistent shape (expected (%s), found (%s))"
+                            % (shape, data.shape)
+                        )
+            obj = super().__new__(cls, shape, dtype)
+            if data is None:
+                obj[:] = 0.0
+            else:
+                obj[:] = data
+        obj.alphabet = alphabet
         return obj
 
     def __array_finalize__(self, obj):
-        if obj is None:
-            return
-        self._alphabet = getattr(obj, "_alphabet", None)
+        try:
+            alphabet = obj.alphabet
+        except AttributeError:
+            # None, or plain numpy array
+            pass
+        else:
+            if alphabet is not None:
+                self.alphabet = alphabet
 
     def _convert_key(self, key):
         if isinstance(key, tuple):
@@ -129,21 +137,21 @@ class Array(numpy.ndarray):
             for index in key:
                 if isinstance(index, str):
                     try:
-                        index = self._alphabet.index(index)
+                        index = self.alphabet.index(index)
                     except ValueError:
                         raise IndexError("'%s'" % index) from None
                 indices.append(index)
             key = tuple(indices)
         elif isinstance(key, str):
             try:
-                key = self._alphabet.index(key)
+                key = self.alphabet.index(key)
             except ValueError:
                 raise IndexError("'%s'" % key) from None
         return key
 
     def __getitem__(self, key):
         key = self._convert_key(key)
-        value = numpy.ndarray.__getitem__(self, key)
+        value = np.ndarray.__getitem__(self, key)
         if value.ndim == 2:
             if self.ndim == 2:
                 if value.shape != self.shape:
@@ -158,12 +166,14 @@ class Array(numpy.ndarray):
                     raise IndexError("Requesting truncated array")
         elif value.ndim == 1:
             if value.shape[0] != self.shape[0]:
-                value._alphabet = self.alphabet[key]
+                raise IndexError("Requesting truncated array")
+        elif value.ndim == 0:
+            return value.item()
         return value.view(Array)
 
     def __setitem__(self, key, value):
         key = self._convert_key(key)
-        numpy.ndarray.__setitem__(self, key, value)
+        np.ndarray.__setitem__(self, key, value)
 
     def __contains__(self, key):
         # Follow dict definition of __contains__
@@ -177,21 +187,21 @@ class Array(numpy.ndarray):
             if isinstance(arg, Array):
                 if arg.alphabet != alphabet:
                     raise ValueError("alphabets are inconsistent")
-        return numpy.ndarray.__array_prepare__(self, out_arr, context)
+        return np.ndarray.__array_prepare__(self, out_arr, context)
 
     def __array_wrap__(self, out_arr, context=None):
         if len(out_arr) == 1:
             return out_arr[0]
-        return numpy.ndarray.__array_wrap__(self, out_arr, context)
+        return np.ndarray.__array_wrap__(self, out_arr, context)
 
     def __array_ufunc__(self, ufunc, method, *inputs, **kwargs):
         args = []
-        alphabet = self._alphabet
+        alphabet = self.alphabet
         for arg in inputs:
             if isinstance(arg, Array):
                 if arg.alphabet != alphabet:
                     raise ValueError("alphabets are inconsistent")
-                args.append(arg.view(numpy.ndarray))
+                args.append(arg.view(np.ndarray))
             else:
                 args.append(arg)
 
@@ -202,7 +212,7 @@ class Array(numpy.ndarray):
                 if isinstance(arg, Array):
                     if arg.alphabet != alphabet:
                         raise ValueError("alphabets are inconsistent")
-                    out_args.append(arg.view(numpy.ndarray))
+                    out_args.append(arg.view(np.ndarray))
                 else:
                     out_args.append(arg)
             kwargs["out"] = tuple(out_args)
@@ -224,11 +234,10 @@ class Array(numpy.ndarray):
             if raw_result.ndim == 0:
                 result = raw_result
             elif output is None:
-                result = numpy.asarray(raw_result).view(Array)
-                result._alphabet = self._alphabet
+                result = np.asarray(raw_result).view(Array)
+                result.alphabet = self.alphabet
             else:
                 result = output
-                result._alphabet = self._alphabet
             results.append(result)
 
         return results[0] if len(results) == 1 else results
@@ -236,9 +245,9 @@ class Array(numpy.ndarray):
     def __reduce__(self):
         import pickle
 
-        values = numpy.array(self)
+        values = np.array(self)
         state = pickle.dumps(values)
-        alphabet = self._alphabet
+        alphabet = self.alphabet
         dims = len(self.shape)
         dtype = self.dtype
         arguments = (Array, alphabet, dims, None, dtype)
@@ -249,22 +258,6 @@ class Array(numpy.ndarray):
 
         self[:, :] = pickle.loads(state)
 
-    def transpose(self, axes=None):
-        """Transpose the array."""
-        other = numpy.ndarray.transpose(self, axes)
-        other._alphabet = self._alphabet
-        return other
-
-    @property
-    def alphabet(self):
-        """Return the alphabet property."""
-        return self._alphabet
-
-    def copy(self):
-        """Create and return a copy of the array."""
-        other = Array(alphabet=self._alphabet, data=self)
-        return other
-
     def get(self, key, value=None):
         """Return the value of the key if found; return value otherwise."""
         try:
@@ -273,17 +266,17 @@ class Array(numpy.ndarray):
             return value
 
     def items(self):
-        """Return an iterator  of (key, value) pairs in the array."""
+        """Return an iterator of (key, value) pairs in the array."""
         dims = len(self.shape)
         if dims == 1:
-            for index, key in enumerate(self._alphabet):
-                value = numpy.ndarray.__getitem__(self, index)
+            for index, key in enumerate(self.alphabet):
+                value = np.ndarray.__getitem__(self, index)
                 yield key, value
         elif dims == 2:
-            for i1, c1 in enumerate(self._alphabet):
-                for i2, c2 in enumerate(self._alphabet):
+            for i1, c1 in enumerate(self.alphabet):
+                for i2, c2 in enumerate(self.alphabet):
                     key = (c1, c2)
-                    value = numpy.ndarray.__getitem__(self, (i1, i2))
+                    value = np.ndarray.__getitem__(self, (i1, i2))
                     yield key, value
         else:
             raise RuntimeError("array has unexpected shape %s" % self.shape)
@@ -291,7 +284,7 @@ class Array(numpy.ndarray):
     def keys(self):
         """Return a tuple with the keys associated with the array."""
         dims = len(self.shape)
-        alphabet = self._alphabet
+        alphabet = self.alphabet
         if dims == 1:
             return tuple(alphabet)
         elif dims == 2:
@@ -302,13 +295,13 @@ class Array(numpy.ndarray):
     def values(self):
         """Return a tuple with the values stored in the array."""
         dims = len(self.shape)
-        alphabet = self._alphabet
+        alphabet = self.alphabet
         if dims == 1:
             return tuple(self)
         elif dims == 2:
             n1, n2 = self.shape
             return tuple(
-                numpy.ndarray.__getitem__(self, (i1, i2))
+                np.ndarray.__getitem__(self, (i1, i2))
                 for i2 in range(n2)
                 for i1 in range(n1)
             )
@@ -335,21 +328,21 @@ class Array(numpy.ndarray):
         jj = []
         for i, key in enumerate(alphabet):
             try:
-                j = self._alphabet.index(key)
+                j = self.alphabet.index(key)
             except ValueError:
                 continue
             ii.append(i)
             jj.append(j)
         dims = len(self.shape)
         a = Array(alphabet, dims=dims)
-        ii = numpy.ix_(*[ii] * dims)
-        jj = numpy.ix_(*[jj] * dims)
-        a[ii] = numpy.ndarray.__getitem__(self, jj)
+        ii = np.ix_(*[ii] * dims)
+        jj = np.ix_(*[jj] * dims)
+        a[ii] = self.view(np.ndarray)[jj]
         return a
 
     def _format_1D(self, fmt):
-        _alphabet = self._alphabet
-        n = len(_alphabet)
+        alphabet = self.alphabet
+        n = len(alphabet)
         words = [None] * n
         lines = []
         try:
@@ -361,7 +354,7 @@ class Array(numpy.ndarray):
                 line = "#  %s\n" % line
                 lines.append(line)
         maxwidth = 0
-        for i, key in enumerate(_alphabet):
+        for i, key in enumerate(alphabet):
             value = self[key]
             word = fmt % value
             width = len(word)
@@ -369,7 +362,7 @@ class Array(numpy.ndarray):
                 maxwidth = width
             words[i] = word
         fmt2 = " %" + str(maxwidth) + "s"
-        for letter, word in zip(_alphabet, words):
+        for letter, word in zip(alphabet, words):
             word = fmt2 % word
             line = letter + word + "\n"
             lines.append(line)
@@ -389,8 +382,9 @@ class Array(numpy.ndarray):
             for line in header:
                 line = "#  %s\n" % line
                 lines.append(line)
-        width = max(len(c) for c in alphabet)
-        line = " " * width
+        keywidth = max(len(c) for c in alphabet)
+        keyfmt = "%" + str(keywidth) + "s"
+        line = " " * keywidth
         for j, c2 in enumerate(alphabet):
             maxwidth = 0
             for i, c1 in enumerate(alphabet):
@@ -410,7 +404,8 @@ class Array(numpy.ndarray):
         line = line.rstrip() + "\n"
         lines.append(line)
         for letter, row in zip(alphabet, words):
-            line = letter + "".join(row) + "\n"
+            key = keyfmt % letter
+            line = key + "".join(row) + "\n"
             lines.append(line)
         text = "".join(lines)
         return text
@@ -427,7 +422,7 @@ class Array(numpy.ndarray):
 
         """
         if fmt == "":
-            if numpy.issubdtype(self.dtype, numpy.integer):
+            if np.issubdtype(self.dtype, np.integer):
                 fmt = "%i"
             else:
                 fmt = "%.1f"
@@ -443,27 +438,19 @@ class Array(numpy.ndarray):
         return self.format()
 
     def __repr__(self):
-        text = numpy.ndarray.__repr__(self)
-        alphabet = self._alphabet
+        text = np.ndarray.__repr__(self)
+        alphabet = self.alphabet
         if isinstance(alphabet, str):
             assert text.endswith(")")
-            text = text[:-1] + ",\n         alphabet='%s')" % self._alphabet
+            text = text[:-1] + ",\n         alphabet='%s')" % self.alphabet
         return text
 
 
 def read(handle, dtype=float):
     """Parse the file and return an Array object."""
-    try:
-        fp = open(handle)
+    with as_handle(handle) as fp:
         lines = fp.readlines()
-    except TypeError:
-        fp = handle
-        try:
-            lines = fp.readlines()
-        except Exception as e:
-            raise e from None
-        finally:
-            fp.close()
+
     header = []
     for i, line in enumerate(lines):
         if not line.startswith("#"):
@@ -490,7 +477,8 @@ def read(handle, dtype=float):
             alphabet = "".join(alphabet)
         matrix = Array(alphabet=alphabet, dims=2, dtype=dtype)
         for letter1, row in zip(alphabet, rows):
-            assert letter1 == row.pop(0)
+            letter = row.pop(0)
+            assert letter1 == letter
             for letter2, word in zip(alphabet, row):
                 matrix[letter1, letter2] = float(word)
     matrix.header = header

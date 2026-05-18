@@ -12,6 +12,7 @@ with or without complementing C extensions.
 
 """
 
+import pickle
 import unittest
 import warnings
 
@@ -859,6 +860,12 @@ class TestOtherFunctions(unittest.TestCase):
         result = pairwise2._clean_alignments(alns)
         self.assertEqual(expected, result)
 
+    def test_alignments_can_be_pickled(self):
+        alns = [("ACCGT", "AC-G-", 3.0, 0, 4)]
+        expected = [("ACCGT", "AC-G-", 3.0, 0, 4)]
+        result = pickle.loads(pickle.dumps(pairwise2._clean_alignments(alns)))
+        self.assertEqual(expected, result)
+
     def test_print_matrix(self):
         """``print_matrix`` prints nested lists as nice matrices."""
         import sys
@@ -899,8 +906,7 @@ if __name__ == "__main__":
         unittest.main(testRunner=runner, exit=False)
     else:
         print(
-            "Import of C functions failed. Only testing pure Python "
-            "fallback functions."
+            "Import of C functions failed. Only testing pure Python fallback functions."
         )
 
     # Now, we switch explicitly to the fallback Python functions:

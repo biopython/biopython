@@ -1,12 +1,12 @@
 Command line: [exonerate -m protein2genome gene001_baits.fasta gene001_contigs.fasta --showcigar no --showvulgar no --bestn 1 --refine full]
-Hostname: [RBGs-MacBook-Air.local]
+Hostname: [Michiels-MacBook-Pro.local]
 
 C4 Alignment:
 ------------
          Query: Morus-gene001
         Target: NODE_1_length_2817_cov_100.387732 SPAdes contig NODE_1:[revcomp]
          Model: protein2genome:local
-     Raw score: 1958
+     Raw score: 1978
    Query range: 48 -> 482
   Target range: 2392 -> 388
 

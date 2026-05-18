@@ -16,13 +16,25 @@ and MAST programs, as well as files in the TRANSFAC format.
 """
 
 from urllib.parse import urlencode
-from urllib.request import urlopen, Request
+from urllib.request import Request
+from urllib.request import urlopen
+
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.motifs."
+    ) from None
+
+from Bio.Align import Alignment
 
 
 def create(instances, alphabet="ACGT"):
     """Create a Motif object."""
-    instances = Instances(instances, alphabet)
-    return Motif(instances=instances, alphabet=alphabet)
+    alignment = Alignment(instances)
+    return Motif(alignment=alignment, alphabet=alphabet)
 
 
 def parse(handle, fmt, strict=True):
@@ -36,8 +48,8 @@ def parse(handle, fmt, strict=True):
      - MINIMAL:          MINIMAL MEME output file motif
      - MAST:             MAST output file motif
      - TRANSFAC:         TRANSFAC database file format
-     - pfm-four-columns: Generic position-frequency matrix format with four columns. (cisbp, homer, hocomoco, neph, tiffin)
-     - pfm-four-rows:    Generic position-frequency matrix format with four row. (scertf, yetfasco, hdpi, idmmpmm, flyfactor survey)
+     - pfm-four-columns: Generic position-frequency matrix format with four columns. (CIS-BP, HOMER, HOCOMOCO, Neph, Tiffin)
+     - pfm-four-rows:    Generic position-frequency matrix format with four row. (ScerTF, YeTFaSCo, hDPI, iDMMPMM, FlyFactorSurvey, Cys2His2 Zinc Finger Proteins PWM Predictor)
      - pfm:              JASPAR-style position-frequency matrix
      - jaspar:           JASPAR-style multiple PFM format
      - sites:            JASPAR-style sites file
@@ -172,113 +184,34 @@ def read(handle, fmt, strict=True):
     return motif
 
 
-class Instances(list):
-    """Class containing a list of sequences that made the motifs."""
-
-    def __init__(self, instances=None, alphabet="ACGT"):
-        """Initialize the class."""
-        from Bio.Seq import Seq, MutableSeq
-
-        if isinstance(instances, (Seq, MutableSeq, str)):
-            raise TypeError(
-                "instances should be iterator of Seq objects or strings. "
-                "If a single sequence is given, will treat each character "
-                "as a separate sequence."
-            )
-
-        length = None
-        if instances is not None:
-            sequences = []
-            for instance in instances:
-                if length is None:
-                    length = len(instance)
-                elif length != len(instance):
-                    message = (
-                        "All instances should have the same length (%d found, %d expected)"
-                        % (len(instance), length)
-                    )
-                    raise ValueError(message)
-                if not isinstance(instance, Seq):
-                    instance = Seq(str(instance))
-                sequences.append(instance)
-            # no errors were raised; store the instances:
-            self.extend(sequences)
-        self.length = length
-        self.alphabet = alphabet
-
-    def __str__(self):
-        """Return a string containing the sequences of the motif."""
-        text = ""
-        for instance in self:
-            text += str(instance) + "\n"
-        return text
-
-    def count(self):
-        """Count nucleotides in a position."""
-        counts = {}
-        for letter in self.alphabet:
-            counts[letter] = [0] * self.length
-        for instance in self:
-            for position, letter in enumerate(instance):
-                counts[letter][position] += 1
-        return counts
-
-    def search(self, sequence):
-        """Find positions of motifs in a given sequence.
-
-        This is a generator function, returning found positions of motif
-        instances in a given sequence.
-        """
-        for pos in range(0, len(sequence) - self.length + 1):
-            for instance in self:
-                if instance == sequence[pos : pos + self.length]:
-                    yield (pos, instance)
-                    break  # no other instance will fit (we don't want to return multiple hits)
-
-    def reverse_complement(self):
-        """Compute reverse complement of sequences."""
-        from Bio.Seq import Seq, MutableSeq
-        from Bio.SeqRecord import SeqRecord
-
-        instances = Instances(alphabet=self.alphabet)
-        instances.length = self.length
-        for instance in self:
-            # TODO: remove inplace=False
-            if isinstance(instance, (Seq, MutableSeq)):
-                instance = instance.reverse_complement(inplace=False)
-            elif isinstance(instance, (str, SeqRecord)):
-                instance = instance.reverse_complement()
-            else:
-                raise RuntimeError("instance has unexpected type %s" % type(instance))
-            instances.append(instance)
-        return instances
-
-
 class Motif:
     """A class representing sequence motifs."""
 
-    def __init__(self, alphabet="ACGT", instances=None, counts=None):
+    def __init__(self, alphabet="ACGT", alignment=None, counts=None):
         """Initialize the class."""
         from . import matrix
 
         self.name = ""
-        if counts is not None and instances is not None:
+        if counts is not None and alignment is not None:
             raise Exception(
-                ValueError, "Specify either instances or counts, don't specify both"
+                ValueError, "Specify either counts or an alignment, don't specify both"
             )
         elif counts is not None:
-            self.instances = None
+            self.alignment = None
             self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
             self.length = self.counts.length
-        elif instances is not None:
-            self.instances = instances
-            alphabet = self.instances.alphabet
-            counts = self.instances.count()
-            self.counts = matrix.FrequencyPositionMatrix(alphabet, counts)
-            self.length = self.counts.length
+        elif alignment is not None:
+            length = alignment.length
+            frequencies = alignment.frequencies
+            for letter in alphabet:
+                if letter not in frequencies:
+                    frequencies[letter] = np.zeros(length, int)
+            self.counts = matrix.FrequencyPositionMatrix(alphabet, frequencies)
+            self.alignment = alignment
+            self.length = length
         else:
             self.counts = None
-            self.instances = None
+            self.alignment = None
             self.length = None
         self.alphabet = alphabet
         self.pseudocounts = None
@@ -295,8 +228,8 @@ class Motif:
             self.__mask = (1,) * self.length
         elif len(mask) != self.length:
             raise ValueError(
-                "The length (%d) of the mask is inconsistent with the length (%d) of the motif",
-                (len(mask), self.length),
+                "The length (%d) of the mask is inconsistent with the length (%d) of the motif"
+                % (len(mask), self.length),
             )
         elif isinstance(mask, str):
             self.__mask = []
@@ -342,15 +275,16 @@ class Motif:
         elif value is None:
             self._background = dict.fromkeys(self.alphabet, 1.0)
         else:
-            if sorted(self.alphabet) != ["A", "C", "G", "T"]:
+            if not self._has_dna_alphabet() and not self._has_rna_alphabet():
                 raise ValueError(
-                    "Setting the background to a single value only works for DNA motifs"
-                    " (in which case the value is interpreted as the GC content)"
+                    "Setting the background to a single value only works for DNA and RNA"
+                    "motifs (in which case the value is interpreted as the GC content)"
                 )
+            T_or_U = "T" if self._has_dna_alphabet() else "U"
             self._background["A"] = (1.0 - value) / 2.0
             self._background["C"] = value / 2.0
             self._background["G"] = value / 2.0
-            self._background["T"] = (1.0 - value) / 2.0
+            self._background[T_or_U] = (1.0 - value) / 2.0
         total = sum(self._background.values())
         for letter in self.alphabet:
             self._background[letter] /= total
@@ -359,21 +293,60 @@ class Motif:
     del __get_background
     del __set_background
 
+    def __getitem__(self, key):
+        """Return a new Motif object for the positions included in key.
+
+        >>> from Bio import motifs
+        >>> motif = motifs.create(["AACGCCA", "ACCGCCC", "AACTCCG"])
+        >>> print(motif)
+        AACGCCA
+        ACCGCCC
+        AACTCCG
+        >>> print(motif[:-1])
+        AACGCC
+        ACCGCC
+        AACTCC
+        """
+        if not isinstance(key, slice):
+            raise TypeError("motif indices must be slices")
+        alphabet = self.alphabet
+        if self.alignment is None:
+            alignment = None
+            if self.counts is None:
+                counts = None
+            else:
+                counts = {letter: self.counts[letter][key] for letter in alphabet}
+        else:
+            alignment = self.alignment[:, key]
+            counts = None
+        motif = Motif(alphabet=alphabet, alignment=alignment, counts=counts)
+        motif.mask = self.mask[key]
+        if alignment is None and counts is None:
+            try:
+                length = self.length
+            except AttributeError:
+                pass
+            else:
+                motif.length = len(range(*key.indices(length)))
+        motif.pseudocounts = self.pseudocounts.copy()
+        motif.background = self.background.copy()
+        return motif
+
     @property
     def pwm(self):
-        """Compute position weight matrices."""
+        """Calculate and return the position weight matrix for this motif."""
         return self.counts.normalize(self._pseudocounts)
 
     @property
     def pssm(self):
-        """Compute position specific scoring matrices."""
+        """Calculate and return the position specific scoring matrix for this motif."""
         return self.pwm.log_odds(self._background)
 
     def __str__(self, masked=False):
         """Return string representation of a motif."""
         text = ""
-        if self.instances is not None:
-            text += str(self.instances)
+        if self.alignment is not None:
+            text += "\n".join(self.alignment)
 
         if masked:
             for i in range(self.length):
@@ -394,32 +367,45 @@ class Motif:
         else:
             return self.length
 
+    def _has_dna_alphabet(self):
+        return sorted(self.alphabet) == ["A", "C", "G", "T"]
+
+    def _has_rna_alphabet(self):
+        return sorted(self.alphabet) == ["A", "C", "G", "U"]
+
     def reverse_complement(self):
         """Return the reverse complement of the motif as a new motif."""
         alphabet = self.alphabet
-        if self.instances is not None:
-            instances = self.instances.reverse_complement()
-            res = Motif(alphabet=alphabet, instances=instances)
+        if not self._has_dna_alphabet() and not self._has_rna_alphabet():
+            raise ValueError(
+                "Calculating reverse complement only works for DNA and RNA motifs"
+            )
+        T_or_U = "T" if self._has_dna_alphabet() else "U"
+        if self.alignment is not None:
+            alignment = self.alignment.reverse_complement()
+            if T_or_U == "U":
+                alignment.sequences = [s.replace("T", "U") for s in alignment.sequences]
+            res = Motif(alphabet=alphabet, alignment=alignment)
         else:  # has counts
             counts = {
-                "A": self.counts["T"][::-1],
+                "A": self.counts[T_or_U][::-1],
                 "C": self.counts["G"][::-1],
                 "G": self.counts["C"][::-1],
-                "T": self.counts["A"][::-1],
+                T_or_U: self.counts["A"][::-1],
             }
             res = Motif(alphabet=alphabet, counts=counts)
         res.__mask = self.__mask[::-1]
         res.background = {
-            "A": self.background["T"],
+            "A": self.background[T_or_U],
             "C": self.background["G"],
             "G": self.background["C"],
-            "T": self.background["A"],
+            T_or_U: self.background["A"],
         }
         res.pseudocounts = {
-            "A": self.pseudocounts["T"],
+            "A": self.pseudocounts[T_or_U],
             "C": self.pseudocounts["G"],
             "G": self.pseudocounts["C"],
-            "T": self.pseudocounts["A"],
+            T_or_U: self.pseudocounts["A"],
         }
         return res
 
@@ -446,7 +432,39 @@ class Motif:
         """
         return self.counts.degenerate_consensus
 
-    def weblogo(self, fname, fmt="PNG", version="2.8.2", **kwds):
+    @property
+    def relative_entropy(self):
+        """Return an array with the relative entropy for each column of the motif."""
+        background = self.background
+        pseudocounts = self.pseudocounts
+        alphabet = self.alphabet
+        counts = self.counts
+        length = self.length
+        values = np.zeros(length)
+        if self.alignment is None:
+            total = np.array(
+                [
+                    sum(counts[c][i] + pseudocounts[c] for c in alphabet)
+                    for i in range(length)
+                ]
+            )
+            for letter, frequencies in counts.items():
+                frequencies = np.array(frequencies) + pseudocounts[letter]
+                mask = frequencies > 0
+                frequencies = frequencies[mask] / total[mask]
+                values[mask] += frequencies * np.log2(frequencies / background[letter])
+        else:
+            total = np.zeros(length)
+            for letter, frequencies in counts.items():
+                total += np.array(frequencies) + pseudocounts[letter]
+            for letter, frequencies in counts.items():
+                frequencies = np.array(frequencies) + pseudocounts[letter]
+                mask = frequencies > 0
+                frequencies = frequencies[mask] / total[mask]
+                values[mask] += frequencies * np.log2(frequencies / background[letter])
+        return values
+
+    def weblogo(self, fname, fmt="PNG", **kwds):
         """Download and save a weblogo using the Berkeley weblogo service.
 
         Requires an internet connection.
@@ -503,7 +521,7 @@ class Motif:
             alpha = "auto"
 
         frequencies = format(self, "transfac")
-        url = "http://weblogo.threeplusone.com/create.cgi"
+        url = "https://weblogo.threeplusone.com/create.cgi"
         values = {
             "sequences": frequencies,
             "format": fmt.lower(),
@@ -550,19 +568,7 @@ class Motif:
             im = response.read()
             f.write(im)
 
-    def __format__(self, format_spec):
-        """Return a string representation of the Motif in the given format.
-
-        Currently supported formats:
-         - clusterbuster: Cluster Buster position frequency matrix format
-         - pfm : JASPAR single Position Frequency Matrix
-         - jaspar : JASPAR multiple Position Frequency Matrix
-         - transfac : TRANSFAC like files
-
-        """
-        return self.format(format_spec)
-
-    def format(self, format_spec):
+    def __format__(self, format_spec, **kwargs):
         """Return a string representation of the Motif in the given format.
 
         Currently supported formats:
@@ -586,12 +592,27 @@ class Motif:
             from Bio.motifs import clusterbuster
 
             motifs = [self]
-            return clusterbuster.write(motifs)
+            return clusterbuster.write(motifs, **kwargs)
+        elif not format_spec:
+            # Follow python convention and default to using __str__
+            return str(self)
         else:
             raise ValueError("Unknown format type %s" % format_spec)
 
+    def format(self, format_spec):
+        """Return a string representation of the Motif in the given format.
 
-def write(motifs, fmt):
+        Currently supported formats:
+         - clusterbuster: Cluster Buster position frequency matrix format
+         - pfm : JASPAR single Position Frequency Matrix
+         - jaspar : JASPAR multiple Position Frequency Matrix
+         - transfac : TRANSFAC like files
+
+        """
+        return self.__format__(format_spec)
+
+
+def write(motifs, fmt, **kwargs):
     """Return a string representation of motifs in the given format.
 
     Currently supported formats (case is ignored):
@@ -613,7 +634,7 @@ def write(motifs, fmt):
     elif fmt == "clusterbuster":
         from Bio.motifs import clusterbuster
 
-        return clusterbuster.write(motifs)
+        return clusterbuster.write(motifs, **kwargs)
     else:
         raise ValueError("Unknown format type %s" % fmt)
 

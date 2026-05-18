@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<BlastXML2
+    xmlns="http://www.ncbi.nlm.nih.gov"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+    xs:schemaLocation="http://www.ncbi.nlm.nih.gov http://www.ncbi.nlm.nih.gov/data_specs/schema_alt/NCBI_BlastOutput2.xsd"
+>
+<BlastOutput2>
+  <report>
+    <Report>
+      <program>rpsblast</program>
+      <version>RPSBLAST 2.15.0+</version>
+      <reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</reference>
+      <search-target>
+        <Target>
+          <db>Cdd</db>
+        </Target>
+      </search-target>
+      <params>
+        <Parameters>
+          <matrix>BLOSUM62</matrix>
+          <expect>1</expect>
+          <gap-open>11</gap-open>
+          <gap-extend>1</gap-extend>
+          <filter>F</filter>
+          <cbs>1</cbs>
+        </Parameters>
+      </params>
+      <results>
+        <Results>
+          <search>
+            <Search>
+              <query-id>Query_1</query-id>
+              <query-title>pdb|3FAJ|A Chain A, Structure of the structural protein P131 of the archaeal virus Acidianus Two-tailed virus (ATV)</query-title>
+              <query-len>151</query-len>
+              <hits>
+                <Hit>
+                  <num>1</num>
+                  <description>
+                    <HitDescr>
+                      <id>gnl|CDD|165101</id>
+                      <accession>165101</accession>
+                      <title>PHA02734, PHA02734, coat protein; Provisional.</title>
+                    </HitDescr>
+                  </description>
+                  <len>149</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>204.685</bit-score>
+                      <score>520</score>
+                      <evalue>9.29691e-69</evalue>
+                      <identity>94</identity>
+                      <positive>103</positive>
+                      <query-from>21</query-from>
+                      <query-to>151</query-to>
+                      <hit-from>1</hit-from>
+                      <hit-to>149</hit-to>
+                      <align-len>149</align-len>
+                      <gaps>18</gaps>
+                      <qseq>MAKYEPKKGDYAGGAVKILDMFENGQLGYPEVTLKLAGEEANARRAGDERTKEAIHAIVKMISDAMKPYRNKGSGFQ----------------SQPIPGEVIAQVTSNPE--YQQAKAFLASPATQVRNIEREEVLSKGAKKLAQAMAS</qseq>
+                      <hseq>MAKEEPKKGDYAGGAAKILDGFEAGQLGFPEVSLKLAGEEANARKAGDANAKAAIHAIIKMIKDAMKPLRNKGKGFKEAWVYFSQVPENAPPNSQAIPGEIAAQVKAKLEALYQQAKAFLAAPAAAAREAAKAEALSKGAKGLAMAAAM</hseq>
+                      <midline>MAK EPKKGDYAGGA KILD FE GQLG+PEV+LKLAGEEANAR+AGD   K AIHAI+KMI DAMKP RNKG GF+                SQ IPGE+ AQV +  E  YQQAKAFLA+PA   R   + E LSKGAK LA A A </midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+                <Hit>
+                  <num>2</num>
+                  <description>
+                    <HitDescr>
+                      <id>gnl|CDD|410801</id>
+                      <accession>410801</accession>
+                      <title>cd20027, FH_FOXL1, Forkhead (FH) domain found in Forkhead box protein L1 (FOXL1) and similar proteins.  FOXL1, also called Forkhead-related protein FKHL11 or Forkhead-related transcription factor 7 (FREAC-7), acts as a transcription factor required for proper proliferation and differentiation in the gastrointestinal epithelium. It may play a critical role in suppressing tumorigenesis. The FH domain is a winged helix DNA-binding domain. FOX transcription factors recognize the core sequence 5&apos;-(A/C)AA(C/T)A-3&apos;.</title>
+                    </HitDescr>
+                  </description>
+                  <len>98</len>
+                  <hsps>
+                    <Hsp>
+                      <num>1</num>
+                      <bit-score>29.0095</bit-score>
+                      <score>65</score>
+                      <evalue>0.517343</evalue>
+                      <identity>13</identity>
+                      <positive>15</positive>
+                      <query-from>15</query-from>
+                      <query-to>45</query-to>
+                      <hit-from>64</hit-from>
+                      <hit-to>90</hit-to>
+                      <align-len>31</align-len>
+                      <gaps>4</gaps>
+                      <qseq>VPRGSHMAKYEPKKGDYAGGAVKILDMFENG</qseq>
+                      <hseq>VPR----EKGRPGKGNYWTLDPDCEEMFENG</hseq>
+                      <midline>VPR     K  P KG+Y        +MFENG</midline>
+                    </Hsp>
+                  </hsps>
+                </Hit>
+              </hits>
+              <stat>
+                <Statistics>
+                  <db-num>59693</db-num>
+                  <db-len>13521240</db-len>
+                  <hsp-len>89</hsp-len>
+                  <eff-space>508930906</eff-space>
+                  <kappa>0.041</kappa>
+                  <lambda>0.267</lambda>
+                  <entropy>0.14</entropy>
+                </Statistics>
+              </stat>
+            </Search>
+          </search>
+        </Results>
+      </results>
+    </Report>
+  </report>
+</BlastOutput2>
+</BlastXML2>

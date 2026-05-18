@@ -10,11 +10,11 @@ tools.  These are for tested in Bio.SeqIO and Bio.AlignIO
 (where the format is called "fasta") as well as other older
 parts of Biopython such as the Bio.Fasta module.
 
-ID     Description
-f001   1 protein sequence
-f002   3 DNA sequences
-f003   2 proteins, with comments
-fa01   fasta alignment
+ID        Description
+f001      1 protein sequence
+f002      3 DNA sequences
+f003.fa   2 proteins, with comments
+fa01      fasta alignment
 
 The following are example "machine readable" pairwise alignment
 output files from the FASTA tools when using the -m 10 command

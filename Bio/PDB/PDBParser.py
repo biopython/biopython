@@ -5,26 +5,15 @@
 
 """Parser for PDB files."""
 
-
 import warnings
 
-try:
-    import numpy
-except ImportError:
-    from Bio import MissingPythonDependencyError
-
-    raise MissingPythonDependencyError(
-        "Install NumPy if you want to use the PDB parser."
-    ) from None
+import numpy as np
 
 from Bio.File import as_handle
-
+from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
 from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
-
 from Bio.PDB.StructureBuilder import StructureBuilder
-from Bio.PDB.parse_pdb_header import _parse_pdb_header_list
-
 
 # If PDB spec says "COLUMNS 18-20" this means line[17:20]
 
@@ -126,7 +115,7 @@ class PDBParser:
         """Get the header of the PDB file, return the rest (PRIVATE)."""
         structure_builder = self.structure_builder
         i = 0
-        for i in range(0, len(header_coords_trailer)):
+        for i in range(len(header_coords_trailer)):
             structure_builder.set_line_counter(i + 1)
             line = header_coords_trailer[i]
             record_type = line[0:6]
@@ -165,7 +154,7 @@ class PDBParser:
         current_residue_id = None
         current_resname = None
 
-        for i in range(0, len(coords_trailer)):
+        for i in range(len(coords_trailer)):
             line = coords_trailer[i].rstrip("\n")
             record_type = line[0:6]
             global_line_counter = self.line_counter + local_line_counter + 1
@@ -217,7 +206,7 @@ class PDBParser:
                         "Invalid or missing coordinate(s) at line %i."
                         % global_line_counter
                     ) from None
-                coord = numpy.array((x, y, z), "f")
+                coord = np.array((x, y, z), "f")
 
                 # occupancy & B factor
                 if not self.is_pqr:
@@ -338,7 +327,7 @@ class PDBParser:
                     )
                 ]
                 # U's are scaled by 10^4
-                anisou_array = (numpy.array(anisou, "f") / 10000.0).astype("f")
+                anisou_array = (np.array(anisou, "f") / 10000.0).astype("f")
                 structure_builder.set_anisou(anisou_array)
             elif record_type == "MODEL ":
                 try:
@@ -375,7 +364,7 @@ class PDBParser:
                     )
                 ]
                 # U sigma's are scaled by 10^4
-                siguij_array = (numpy.array(siguij, "f") / 10000.0).astype("f")
+                siguij_array = (np.array(siguij, "f") / 10000.0).astype("f")
                 structure_builder.set_siguij(siguij_array)
             elif record_type == "SIGATM":
                 # standard deviation of atomic positions
@@ -389,13 +378,11 @@ class PDBParser:
                         line[60:66],
                     )
                 ]
-                sigatm_array = numpy.array(sigatm, "f")
+                sigatm_array = np.array(sigatm, "f")
                 structure_builder.set_sigatm(sigatm_array)
             elif record_type not in allowed_records:
                 warnings.warn(
-                    "Ignoring unrecognized record '{}' at line {}".format(
-                        record_type, global_line_counter
-                    ),
+                    f"Ignoring unrecognized record '{record_type}' at line {global_line_counter}",
                     PDBConstructionWarning,
                 )
             local_line_counter += 1

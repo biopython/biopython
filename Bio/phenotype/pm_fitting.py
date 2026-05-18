@@ -24,11 +24,16 @@ import numpy as np
 
 try:
     from scipy.optimize.minpack import curve_fit
-    from scipy.integrate import trapz
 except ImportError:
     from Bio import MissingPythonDependencyError
 
     raise MissingPythonDependencyError("Install scipy to extract curve parameters.")
+
+try:
+    from scipy.integrate import trapezoid
+except ImportError:
+    # Assume this is prior to scipy 1.12.0 and try old name:
+    from scipy.integrate import trapz as trapezoid
 
 
 def logistic(x, A, u, d, v, y0):
@@ -143,4 +148,4 @@ def fit(function, x, y):
 
 def get_area(y, x):
     """Get the area under the curve."""
-    return trapz(y=y, x=x)
+    return trapezoid(y=y, x=x)

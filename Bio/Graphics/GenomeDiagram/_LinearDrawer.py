@@ -20,19 +20,25 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-# ReportLab imports
+from math import ceil
 
-from reportlab.graphics.shapes import Drawing, Line, String, Group, Polygon
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.shapes import Group
+from reportlab.graphics.shapes import Line
+from reportlab.graphics.shapes import Polygon
+from reportlab.graphics.shapes import String
 from reportlab.lib import colors
 
-# GenomeDiagram imports
-from ._AbstractDrawer import AbstractDrawer, draw_box, draw_arrow
-from ._AbstractDrawer import draw_cut_corner_box, _stroke_and_fill_colors
-from ._AbstractDrawer import intermediate_points, angle2trig, deduplicate
+from ._AbstractDrawer import _stroke_and_fill_colors
+from ._AbstractDrawer import AbstractDrawer
+from ._AbstractDrawer import angle2trig
+from ._AbstractDrawer import deduplicate
+from ._AbstractDrawer import draw_arrow
+from ._AbstractDrawer import draw_box
+from ._AbstractDrawer import draw_cut_corner_box
+from ._AbstractDrawer import intermediate_points
 from ._FeatureSet import FeatureSet
 from ._GraphSet import GraphSet
-
-from math import ceil
 
 
 class LinearDrawer(AbstractDrawer):
@@ -231,12 +237,10 @@ class LinearDrawer(AbstractDrawer):
     def init_fragments(self):
         """Initialize useful values for positioning diagram elements."""
         # Set basic heights, lengths etc
-        self.fragment_height = (
-            1.0 * self.pageheight / self.fragments
-        )  # total fragment height in pixels
-        self.fragment_bases = ceil(
-            1.0 * self.length / self.fragments
-        )  # fragment length in bases
+        self.fragment_height = self.pageheight / self.fragments
+        # total fragment height in pixels
+        self.fragment_bases = ceil(self.length / self.fragments)
+        # fragment length in bases
 
         # Key fragment base and top lines by fragment number
         # Holds bottom and top line locations of fragments, keyed by fragment number
@@ -282,9 +286,7 @@ class LinearDrawer(AbstractDrawer):
             trackunit_sum += trackheight  # increment total track unit height
             trackunits[track] = (heightholder, heightholder + trackheight)
             heightholder += trackheight  # move to next height
-        trackunit_height = (
-            1.0 * self.fragment_height * self.fragment_size / trackunit_sum
-        )
+        trackunit_height = self.fragment_height * self.fragment_size / trackunit_sum
 
         # Calculate top and bottom offsets for each track, relative to fragment
         # base
@@ -621,7 +623,9 @@ class LinearDrawer(AbstractDrawer):
             else:
                 x2 = self.xlim
             box = draw_box(
-                (x1, tbtm), (x2, ttop), colors.Color(0.96, 0.96, 0.96)  # Grey track bg
+                (x1, tbtm),
+                (x2, ttop),
+                colors.Color(0.96, 0.96, 0.96),  # Grey track bg
             )  # is just a box
             greytrack_bgs.append(box)
 
@@ -765,7 +769,7 @@ class LinearDrawer(AbstractDrawer):
                 )
                 feature_boxes.append((feature_box, label))
         # if locstart > locend:
-        #    print(locstart, locend, feature.strand, feature_boxes, feature.name)
+        #    print(locstart, locend, feature.location.strand, feature_boxes, feature.name)
         return feature_boxes
 
     def draw_cross_link(self, cross_link):
@@ -794,7 +798,7 @@ class LinearDrawer(AbstractDrawer):
         assert trackobjA is not None
         assert trackobjB is not None
         if trackobjA == trackobjB:
-            raise NotImplementedError()
+            raise NotImplementedError
 
         if trackobjA.start is not None:
             if endA < trackobjA.start:
@@ -820,7 +824,7 @@ class LinearDrawer(AbstractDrawer):
             if track == trackobjB:
                 trackB = track_level
         if trackA == trackB:
-            raise NotImplementedError()
+            raise NotImplementedError
 
         strokecolor, fillcolor = _stroke_and_fill_colors(
             cross_link.color, cross_link.border
@@ -1101,7 +1105,7 @@ class LinearDrawer(AbstractDrawer):
             top,
             x0,
             x1,
-            strand=feature.strand,
+            strand=feature.location.strand,
             color=feature.color,
             border=feature.border,
             **kwargs,
@@ -1110,7 +1114,7 @@ class LinearDrawer(AbstractDrawer):
         if feature.label_strand:
             strand = feature.label_strand
         else:
-            strand = feature.strand
+            strand = feature.location.strand
         if feature.label:  # Feature requires a label
             label = String(
                 0,
@@ -1465,7 +1469,7 @@ class LinearDrawer(AbstractDrawer):
             self.fragment_bases,
         )
         # Calculate number of pixels from start of fragment
-        x_offset = 1.0 * self.pagewidth * base_offset / self.fragment_bases
+        x_offset = self.pagewidth * base_offset / self.fragment_bases
         return fragment, x_offset
 
     def _draw_sigil_box(self, bottom, center, top, x1, x2, strand, **kwargs):

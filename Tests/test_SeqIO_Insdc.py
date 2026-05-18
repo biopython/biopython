@@ -3,17 +3,21 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for SeqIO Insdc module."""
-import unittest
 
+import unittest
+import warnings
 from io import StringIO
 
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqFeature import FeatureLocation
-from Bio.SeqFeature import SeqFeature
-from Bio.SeqRecord import SeqRecord
 from seq_tests_common import SeqRecordTestBaseClass
 from test_SeqIO import SeqIOConverterTestBaseClass
+
+from Bio import BiopythonParserWarning
+from Bio import BiopythonWarning
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
+from Bio.SeqRecord import SeqRecord
 
 
 class TestEmbl(unittest.TestCase):
@@ -51,7 +55,8 @@ class TestEmbl(unittest.TestCase):
 
     def test_annotation4(self):
         """Check parsing of annotation from EMBL files (4)."""
-        record = SeqIO.read("EMBL/location_wrap.embl", "embl")
+        with self.assertWarns(BiopythonParserWarning):
+            record = SeqIO.read("EMBL/location_wrap.embl", "embl")
         self.assertEqual(len(record), 120)
         self.assertNotIn("keywords", record.annotations)
         # The ID line has the topology as unspecified:
@@ -59,7 +64,7 @@ class TestEmbl(unittest.TestCase):
 
     def test_writing_empty_qualifiers(self):
         f = SeqFeature(
-            FeatureLocation(5, 20, strand=+1),
+            SimpleLocation(5, 20, strand=+1),
             type="region",
             qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
         )
@@ -70,6 +75,28 @@ class TestEmbl(unittest.TestCase):
         self.assertIn(" /zero=0\n", gbk)
         self.assertIn(" /one=1\n", gbk)
         self.assertIn(' /text="blah"\n', gbk)
+
+    def test_warn_on_writing_nonstandard_feature_key(self):
+        f = SeqFeature(
+            SimpleLocation(5, 20, strand=+1),
+            type="a" * 16,
+            qualifiers={"empty": None, "zero": 0, "one": 1, "text": "blah"},
+        )
+        record = SeqRecord(Seq("A" * 100), "dummy", features=[f])
+        record.annotations["molecule_type"] = "DNA"
+        with self.assertWarns(BiopythonWarning):
+            record.format("gb")
+
+    def test_warn_on_writing_nonstandard_qualifier_key(self):
+        f = SeqFeature(
+            SimpleLocation(5, 20, strand=+1),
+            type="region",
+            qualifiers={"a" * 21: "test"},
+        )
+        record = SeqRecord(Seq("A" * 100), "dummy", features=[f])
+        record.annotations["molecule_type"] = "DNA"
+        with self.assertWarns(BiopythonWarning):
+            record.format("gb")
 
 
 class TestEmblRewrite(SeqRecordTestBaseClass):
@@ -90,15 +117,21 @@ class TestEmblRewrite(SeqRecordTestBaseClass):
 
     def test_annotation1(self):
         """Check writing-and-parsing EMBL file (1)."""
-        self.check_rewrite("EMBL/TRBG361.embl")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.check_rewrite("EMBL/TRBG361.embl")
 
     def test_annotation2(self):
         """Check writing-and-parsing EMBL file (2)."""
-        self.check_rewrite("EMBL/DD231055_edited.embl")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.check_rewrite("EMBL/DD231055_edited.embl")
 
     def test_annotation3(self):
         """Check writing-and-parsing EMBL file (3)."""
-        self.check_rewrite("EMBL/AE017046.embl")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.check_rewrite("EMBL/AE017046.embl")
 
 
 class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
@@ -111,7 +144,7 @@ class ConvertTestsInsdc(SeqIOConverterTestBaseClass):
             ("GenBank/cor6_6.gb", "genbank"),
         ]
         for filename, fmt in tests:
-            for (in_format, out_format) in self.formats:
+            for in_format, out_format in self.formats:
                 if in_format != fmt:
                     continue
                 self.check_conversion(filename, in_format, out_format)

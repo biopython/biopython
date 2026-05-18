@@ -10,22 +10,21 @@
 import unittest
 
 from Bio.Data import IUPACData
-from Bio.Data.CodonTable import (
-    generic_by_id,
-    generic_by_name,
-    ambiguous_generic_by_id,
-    ambiguous_generic_by_name,
-    ambiguous_rna_by_id,
-    ambiguous_dna_by_id,
-    ambiguous_dna_by_name,
-    ambiguous_rna_by_name,
-    unambiguous_rna_by_id,
-    unambiguous_rna_by_name,
-    unambiguous_dna_by_id,
-    unambiguous_dna_by_name,
-)
-from Bio.Data.CodonTable import list_ambiguous_codons, list_possible_proteins
+from Bio.Data.CodonTable import ambiguous_dna_by_id
+from Bio.Data.CodonTable import ambiguous_dna_by_name
+from Bio.Data.CodonTable import ambiguous_generic_by_id
+from Bio.Data.CodonTable import ambiguous_generic_by_name
+from Bio.Data.CodonTable import ambiguous_rna_by_id
+from Bio.Data.CodonTable import ambiguous_rna_by_name
+from Bio.Data.CodonTable import generic_by_id
+from Bio.Data.CodonTable import generic_by_name
+from Bio.Data.CodonTable import list_ambiguous_codons
+from Bio.Data.CodonTable import list_possible_proteins
 from Bio.Data.CodonTable import TranslationError
+from Bio.Data.CodonTable import unambiguous_dna_by_id
+from Bio.Data.CodonTable import unambiguous_dna_by_name
+from Bio.Data.CodonTable import unambiguous_rna_by_id
+from Bio.Data.CodonTable import unambiguous_rna_by_name
 
 exception_list = []
 ids = list(unambiguous_dna_by_id)

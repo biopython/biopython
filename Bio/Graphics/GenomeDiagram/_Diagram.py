@@ -28,11 +28,11 @@ except ImportError:
     # This is an optional part of ReportLab, so may not be installed.
     renderPM = None
 
-from ._LinearDrawer import LinearDrawer
-from ._CircularDrawer import CircularDrawer
-from ._Track import Track
-
 from Bio.Graphics import _write
+
+from ._CircularDrawer import CircularDrawer
+from ._LinearDrawer import LinearDrawer
+from ._Track import Track
 
 
 def _first_defined(*args):

@@ -32,14 +32,14 @@ zero-based end position. We can therefore manipulate ``start`` and
 For an inclusive end coordinate, we need to use ``end = start + size - 1``.
 A 1-column wide alignment would have ``start == end``.
 """
-import os
 
+import os
 from itertools import islice
 
 try:
     from sqlite3 import dbapi2
 except ImportError:
-    dbapi2 = None
+    dbapi2 = None  # type: ignore
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
@@ -140,10 +140,14 @@ def MafIterator(handle, seq_count=None):
 
     while True:
         # allows parsing of the last bundle without duplicating code
+        line = handle.readline()
+
         try:
-            line = next(handle)
-        except StopIteration:
-            line = ""
+            # Will be in binary mode if called via the indexing code
+            # (which needs the raw offsets for cross platform indexing)
+            line = line.decode("ASCII")
+        except AttributeError:
+            pass
 
         if in_a_bundle:
             if line.startswith("s"):
@@ -184,7 +188,7 @@ def MafIterator(handle, seq_count=None):
                     ref = records[0].seq
                     new = []
 
-                    for (letter, ref_letter) in zip(sequence, ref):
+                    for letter, ref_letter in zip(sequence, ref):
                         new.append(ref_letter if letter == "." else letter)
 
                     sequence = "".join(new)
@@ -276,18 +280,41 @@ class MafIndex:
         # example: Tests/MAF/ucsc_mm9_chr10.maf
         self._maf_file = maf_file
 
-        self._maf_fp = open(self._maf_file)
+        # Opening in bytes mode as want real offsets, not where
+        # Python attempts to hide cross-platform newline differences etc
+        self._maf_fp = open(self._maf_file, "rb")
 
         # if sqlite_file exists, use the existing db, otherwise index the file
         if os.path.isfile(sqlite_file):
             self._con = dbapi2.connect(sqlite_file)
-            self._record_count = self.__check_existing_db()
+            try:
+                self._record_count = self.__check_existing_db()
+            except ValueError as err:
+                self._maf_fp.close()
+                self._con.close()
+                raise err from None
         else:
             self._con = dbapi2.connect(sqlite_file)
-            self._record_count = self.__make_new_index()
+            try:
+                self._record_count = self.__make_new_index()
+            except ValueError as err:
+                self._maf_fp.close()
+                self._con.close()
+                raise err from None
 
         # lastly, setup a MafIterator pointing at the open maf_file
         self._mafiter = MafIterator(self._maf_fp)
+
+    def close(self):
+        """Close the file handle being used to read the data.
+
+        Once called, further use of the index won't work. The sole
+        purpose of this method is to allow explicit handle closure
+        - for example if you wish to delete the file, on Windows
+        you must first close all open handles to that file.
+        """
+        self._con.close()
+        self._record_count = 0
 
     def __check_existing_db(self):
         """Perform basic sanity checks upon loading an existing index (PRIVATE)."""
@@ -451,7 +478,7 @@ class MafIndex:
         line = self._maf_fp.readline()
 
         while line:
-            if line.startswith("a"):
+            if line.startswith(b"a"):
                 # note the offset
                 offset = self._maf_fp.tell() - len(line)
 
@@ -459,15 +486,15 @@ class MafIndex:
                 while True:
                     line = self._maf_fp.readline()
 
-                    if not line.strip() or line.startswith("a"):
+                    if not line.strip() or line.startswith(b"a"):
                         # Empty line or new alignment record
                         raise ValueError(
                             "Target for indexing (%s) not found in this bundle"
                             % (self._target_seqname,)
                         )
-                    elif line.startswith("s"):
+                    elif line.startswith(b"s"):
                         # s (literal), src (ID), start, size, strand, srcSize, text (sequence)
-                        line_split = line.strip().split()
+                        line_split = line.decode("ASCII").strip().split()
 
                         if line_split[1] == self._target_seqname:
                             start = int(line_split[2])
@@ -735,7 +762,7 @@ class MafIndex:
             real_pos = rec_start
 
             # loop over the alignment to fill split_by_position
-            for gapped_pos in range(0, rec_length):
+            for gapped_pos in range(rec_length):
                 for seqrec in multiseq:
                     # keep track of this position's value for the target seqname
                     if seqrec.id == self._target_seqname:
@@ -824,11 +851,7 @@ class MafIndex:
         for seqid, seq in subseq.items():
             seq = Seq(seq)
 
-            seq = (
-                seq
-                if strand == ref_first_strand
-                else seq.reverse_complement(inplace=False)
-            )  # TODO: remove inplace=False
+            seq = seq if strand == ref_first_strand else seq.reverse_complement()
 
             result_multiseq.append(SeqRecord(seq, id=seqid, name=seqid, description=""))
 

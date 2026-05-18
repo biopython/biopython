@@ -7,7 +7,8 @@
 
 """Parsing AlignACE output files."""
 
-from Bio.motifs import Motif, Instances
+from Bio.Align import Alignment
+from Bio.motifs import Motif
 from Bio.Seq import Seq
 
 
@@ -51,8 +52,8 @@ def read(handle):
             instances = []
         elif line[:3] == "MAP":
             alphabet = "ACGT"
-            instances = Instances(instances, alphabet)
-            motif = Motif(alphabet, instances)
+            alignment = Alignment(instances)
+            motif = Motif(alphabet, alignment)
             motif.score = float(line.split()[-1])
             motif.number = number
             motif.mask = mask

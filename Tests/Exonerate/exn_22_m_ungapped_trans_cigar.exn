@@ -1,0 +1,6 @@
+Command line: [exonerate -m ungapped:trans ../scer_cad1.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no]
+Hostname: [blackbriar]
+cigar: gi|296143771|ref|NM_001180731.1| 1228 1 - gi|330443520|ref|NC_001136.10| 1318047 1319274 + 2151  M 1227
+cigar: gi|296143771|ref|NM_001180731.1| 0 1230 + gi|330443520|ref|NC_001136.10| 1319275 1318045 - 2106  M 1230
+cigar: gi|296143771|ref|NM_001180731.1| 1230 0 - gi|330443520|ref|NC_001136.10| 1318045 1319275 + 2072  M 1230
+-- completed exonerate analysis

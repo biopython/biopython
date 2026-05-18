@@ -1,0 +1,403 @@
+ID   CLD1_HUMAN              Reviewed;         211 AA.
+AC   O95832;
+DT   30-MAY-2000, integrated into UniProtKB/Swiss-Prot.
+DT   01-MAY-1999, sequence version 1.
+DT   12-OCT-2022, entry version 186.
+DE   RecName: Full=Claudin-1;
+DE   AltName: Full=Senescence-associated epithelial membrane protein;
+GN   Name=CLDN1; Synonyms=CLD1, SEMP1; ORFNames=UNQ481/PRO944;
+OS   Homo sapiens (Human).
+OC   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
+OC   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; Hominidae;
+OC   Homo.
+OX   NCBI_TaxID=9606;
+RN   [1]
+RP   NUCLEOTIDE SEQUENCE [MRNA], AND TISSUE SPECIFICITY.
+RX   PubMed=9931503; DOI=10.1016/s0378-1119(98)00553-8;
+RA   Swisshelm K.L., Machl A., Planitzer S., Robertson R., Kubbies M.,
+RA   Hosier S.;
+RT   "SEMP1, a senescence-associated cDNA isolated from human mammary epithelial
+RT   cells, is a member of an epithelial membrane protein superfamily.";
+RL   Gene 226:285-295(1999).
+RN   [2]
+RP   NUCLEOTIDE SEQUENCE [MRNA].
+RA   Mitic L.M., Anderson J.M.;
+RT   "Human claudin-1 isolated from Caco-2 mRNA.";
+RL   Submitted (DEC-1998) to the EMBL/GenBank/DDBJ databases.
+RN   [3]
+RP   NUCLEOTIDE SEQUENCE [MRNA].
+RX   PubMed=10828592; DOI=10.1159/000015553;
+RA   Halford S., Spencer P., Greenwood J., Winton H., Hunt D.M., Adamson P.;
+RT   "Assignment of claudin-1 (CLDN1) to human chromosome 3q28-->q29 with
+RT   somatic cell hybrids.";
+RL   Cytogenet. Cell Genet. 88:217-217(2000).
+RN   [4]
+RP   NUCLEOTIDE SEQUENCE [GENOMIC DNA].
+RX   PubMed=11071387; DOI=10.1007/s004390000375;
+RA   Kraemer F., White K., Kubbies M., Swisshelm K.L., Weber B.H.F.;
+RT   "Genomic organization of claudin-1 and its assessment in hereditary and
+RT   sporadic breast cancer.";
+RL   Hum. Genet. 107:249-256(2000).
+RN   [5]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RX   PubMed=12975309; DOI=10.1101/gr.1293003;
+RA   Clark H.F., Gurney A.L., Abaya E., Baker K., Baldwin D.T., Brush J.,
+RA   Chen J., Chow B., Chui C., Crowley C., Currell B., Deuel B., Dowd P.,
+RA   Eaton D., Foster J.S., Grimaldi C., Gu Q., Hass P.E., Heldens S., Huang A.,
+RA   Kim H.S., Klimowski L., Jin Y., Johnson S., Lee J., Lewis L., Liao D.,
+RA   Mark M.R., Robbie E., Sanchez C., Schoenfeld J., Seshagiri S., Simmons L.,
+RA   Singh J., Smith V., Stinson J., Vagts A., Vandlen R.L., Watanabe C.,
+RA   Wieand D., Woods K., Xie M.-H., Yansura D.G., Yi S., Yu G., Yuan J.,
+RA   Zhang M., Zhang Z., Goddard A.D., Wood W.I., Godowski P.J., Gray A.M.;
+RT   "The secreted protein discovery initiative (SPDI), a large-scale effort to
+RT   identify novel human secreted and transmembrane proteins: a bioinformatics
+RT   assessment.";
+RL   Genome Res. 13:2265-2270(2003).
+RN   [6]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RA   Ebert L., Schick M., Neubert P., Schatten R., Henze S., Korn B.;
+RT   "Cloning of human full open reading frames in Gateway(TM) system entry
+RT   vector (pDONR201).";
+RL   Submitted (JUN-2004) to the EMBL/GenBank/DDBJ databases.
+RN   [7]
+RP   NUCLEOTIDE SEQUENCE [LARGE SCALE MRNA].
+RC   TISSUE=Urinary bladder;
+RX   PubMed=15489334; DOI=10.1101/gr.2596504;
+RG   The MGC Project Team;
+RT   "The status, quality, and expansion of the NIH full-length cDNA project:
+RT   the Mammalian Gene Collection (MGC).";
+RL   Genome Res. 14:2121-2127(2004).
+RN   [8]
+RP   INVOLVEMENT IN NISCH.
+RX   PubMed=15521008; DOI=10.1053/j.gastro.2004.07.022;
+RA   Hadj-Rabia S., Baala L., Vabres P., Hamel-Teillac D., Jacquemin E.,
+RA   Fabre M., Lyonnet S., De Prost Y., Munnich A., Hadchouel M., Smahi A.;
+RT   "Claudin-1 gene mutations in neonatal sclerosing cholangitis associated
+RT   with ichthyosis: a tight junction disease.";
+RL   Gastroenterology 127:1386-1390(2004).
+RN   [9]
+RP   INVOLVEMENT IN NISCH.
+RX   PubMed=16619213; DOI=10.1002/humu.20333;
+RA   Feldmeyer L., Huber M., Fellmann F., Beckmann J.S., Frenk E., Hohl D.;
+RT   "Confirmation of the origin of NISCH syndrome.";
+RL   Hum. Mutat. 27:408-410(2006).
+RN   [10]
+RP   FUNCTION (MICROBIAL INFECTION), AND MUTAGENESIS OF ILE-32 AND GLU-48.
+RX   PubMed=17325668; DOI=10.1038/nature05654;
+RA   Evans M.J., von Hahn T., Tscherne D.M., Syder A.J., Panis M., Wolk B.,
+RA   Hatziioannou T., McKeating J.A., Bieniasz P.D., Rice C.M.;
+RT   "Claudin-1 is a hepatitis C virus co-receptor required for a late step in
+RT   entry.";
+RL   Nature 446:801-805(2007).
+RN   [11]
+RP   FUNCTION (MICROBIAL INFECTION), SUBCELLULAR LOCATION, INTERACTION WITH
+RP   OCLN; CD81; CLDN4; CLDN6 AND CLDN9, AND MUTAGENESIS OF ILE-32 AND GLU-48.
+RX   PubMed=20375010; DOI=10.1074/jbc.m110.104836;
+RA   Harris H.J., Davis C., Mullins J.G., Hu K., Goodall M., Farquhar M.J.,
+RA   Mee C.J., McCaffrey K., Young S., Drummer H., Balfe P., McKeating J.A.;
+RT   "Claudin association with CD81 defines hepatitis C virus entry.";
+RL   J. Biol. Chem. 285:21092-21102(2010).
+RN   [12]
+RP   IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS].
+RX   PubMed=21269460; DOI=10.1186/1752-0509-5-17;
+RA   Burkard T.R., Planyavsky M., Kaupe I., Breitwieser F.P., Buerckstuemmer T.,
+RA   Bennett K.L., Superti-Furga G., Colinge J.;
+RT   "Initial characterization of the human central proteome.";
+RL   BMC Syst. Biol. 5:17-17(2011).
+RN   [13]
+RP   INTERACTION WITH CD81.
+RX   PubMed=21516087; DOI=10.1038/nm.2341;
+RA   Lupberger J., Zeisel M.B., Xiao F., Thumann C., Fofana I., Zona L.,
+RA   Davis C., Mee C.J., Turek M., Gorke S., Royer C., Fischer B., Zahid M.N.,
+RA   Lavillette D., Fresquet J., Cosset F.L., Rothenberg S.M., Pietschmann T.,
+RA   Patel A.H., Pessaux P., Doffoel M., Raffelsberger W., Poch O.,
+RA   McKeating J.A., Brino L., Baumert T.F.;
+RT   "EGFR and EphA2 are host factors for hepatitis C virus entry and possible
+RT   targets for antiviral therapy.";
+RL   Nat. Med. 17:589-595(2011).
+RN   [14]
+RP   FUNCTION, AND SUBCELLULAR LOCATION.
+RX   PubMed=23407391; DOI=10.1038/jid.2012.507;
+RA   Kirschner N., Rosenthal R., Furuse M., Moll I., Fromm M., Brandner J.M.;
+RT   "Contribution of tight junction proteins to ion, macromolecule, and water
+RT   barrier in keratinocytes.";
+RL   J. Invest. Dermatol. 133:1161-1169(2013).
+RN   [15]
+RP   FUNCTION (MICROBIAL INFECTION), AND INTERACTION WITH DENGUE VIRUS SMALL
+RP   ENVELOPE PROTEIN M.
+RX   PubMed=24074594; DOI=10.1016/j.virol.2013.08.009;
+RA   Che P., Tang H., Li Q.;
+RT   "The interaction between claudin-1 and dengue viral prM/M protein for its
+RT   entry.";
+RL   Virology 446:303-313(2013).
+RN   [16]
+RP   SUBCELLULAR LOCATION, AND SUBUNIT.
+RX   PubMed=23704991; DOI=10.1371/journal.pone.0064517;
+RA   Bonander N., Jamshad M., Oberthuer D., Clare M., Barwell J., Hu K.,
+RA   Farquhar M.J., Stamataki Z., Harris H.J., Dierks K., Dafforn T.R.,
+RA   Betzel C., McKeating J.A., Bill R.M.;
+RT   "Production, purification and characterization of recombinant, full-length
+RT   human claudin-1.";
+RL   PLoS ONE 8:E64517-E64517(2013).
+RN   [17]
+RP   INTERACTION WITH HCV HETERODIMER E1/E2 (MICROBIAL INFECTION), AND FUNCTION
+RP   (MICROBIAL INFECTION).
+RX   PubMed=24038151; DOI=10.1002/hep.26733;
+RA   Douam F., Dao Thi V.L., Maurin G., Fresquet J., Mompelat D., Zeisel M.B.,
+RA   Baumert T.F., Cosset F.L., Lavillette D.;
+RT   "Critical interaction between E1 and E2 glycoproteins determines binding
+RT   and fusion properties of hepatitis C virus during cell entry.";
+RL   Hepatology 59:776-788(2014).
+CC   -!- FUNCTION: Claudins function as major constituents of the tight junction
+CC       complexes that regulate the permeability of epithelia. While some
+CC       claudin family members play essential roles in the formation of
+CC       impermeable barriers, others mediate the permeability to ions and small
+CC       molecules. Often, several claudin family members are coexpressed and
+CC       interact with each other, and this determines the overall permeability.
+CC       CLDN1 is required to prevent the paracellular diffusion of small
+CC       molecules through tight junctions in the epidermis and is required for
+CC       the normal barrier function of the skin. Required for normal water
+CC       homeostasis and to prevent excessive water loss through the skin,
+CC       probably via an indirect effect on the expression levels of other
+CC       proteins, since CLDN1 itself seems to be dispensable for water barrier
+CC       formation in keratinocyte tight junctions (PubMed:23407391).
+CC       {ECO:0000269|PubMed:23407391}.
+CC   -!- FUNCTION: (Microbial infection) Acts as a co-receptor for hepatitis C
+CC       virus (HCV) in hepatocytes (PubMed:17325668, PubMed:20375010,
+CC       PubMed:24038151). Associates with CD81 and the CLDN1-CD81 receptor
+CC       complex is essential for HCV entry into host cell (PubMed:20375010).
+CC       Acts as a receptor for dengue virus (PubMed:24074594).
+CC       {ECO:0000269|PubMed:17325668, ECO:0000269|PubMed:20375010,
+CC       ECO:0000269|PubMed:24038151, ECO:0000269|PubMed:24074594}.
+CC   -!- SUBUNIT: Homopolymers interact with CLDN3, but not CLDN2, homopolymers.
+CC       Can form homo- and heteropolymers with other claudin family members
+CC       (PubMed:23704991). Directly interacts with TJP1/ZO-1, TJP2/ZO-2 and
+CC       TJP3/ZO-3. Interacts with MPDZ and PATJ (By similarity). Interacts with
+CC       OCLN, CLDN4, CLDN6 and CLDN9 (PubMed:20375010). Interacts with CD81
+CC       (PubMed:20375010, PubMed:21516087). {ECO:0000250|UniProtKB:O88551,
+CC       ECO:0000269|PubMed:20375010, ECO:0000269|PubMed:21516087,
+CC       ECO:0000269|PubMed:23704991}.
+CC   -!- SUBUNIT: (Microbial infection) Interacts with hepatitis c virus
+CC       heterodimer E1/E2. {ECO:0000269|PubMed:24038151}.
+CC   -!- SUBUNIT: (Microbial infection) Interacts with dengue virus small
+CC       envelope protein M. {ECO:0000269|PubMed:24074594}.
+CC   -!- INTERACTION:
+CC       O95832; Q07108: CD69; NbExp=3; IntAct=EBI-723889, EBI-2836595;
+CC       O95832; P11912: CD79A; NbExp=3; IntAct=EBI-723889, EBI-7797864;
+CC       O95832; Q8TBE3: FNDC9; NbExp=3; IntAct=EBI-723889, EBI-12142257;
+CC       O95832; Q96HJ5: MS4A3; NbExp=3; IntAct=EBI-723889, EBI-12806656;
+CC       O95832; Q7Z7N9: TMEM179B; NbExp=3; IntAct=EBI-723889, EBI-11724423;
+CC       O95832; Q9P0T7: TMEM9; NbExp=3; IntAct=EBI-723889, EBI-723976;
+CC   -!- SUBCELLULAR LOCATION: Cell junction, tight junction
+CC       {ECO:0000269|PubMed:20375010, ECO:0000269|PubMed:23407391}. Cell
+CC       membrane {ECO:0000269|PubMed:23704991}; Multi-pass membrane protein
+CC       {ECO:0000255}. Basolateral cell membrane {ECO:0000269|PubMed:20375010}.
+CC       Note=Associates with CD81 and the CLDN1-CD81 complex localizes to the
+CC       basolateral cell membrane. {ECO:0000269|PubMed:20375010}.
+CC   -!- TISSUE SPECIFICITY: Strongly expressed in liver and kidney. Expressed
+CC       in heart, brain, spleen, lung and testis. {ECO:0000269|PubMed:9931503}.
+CC   -!- DISEASE: Ichthyosis-sclerosing cholangitis neonatal syndrome (NISCH)
+CC       [MIM:607626]: A rare autosomal recessive complex ichthyosis syndrome
+CC       characterized by scalp hypotrichosis, scarring alopecia, mild diffuse
+CC       ichthyosis, sclerosing cholangitis and leukocyte vacuolization.
+CC       {ECO:0000269|PubMed:15521008, ECO:0000269|PubMed:16619213}. Note=The
+CC       disease is caused by variants affecting the gene represented in this
+CC       entry.
+CC   -!- SIMILARITY: Belongs to the claudin family. {ECO:0000305}.
+CC   ---------------------------------------------------------------------------
+CC   Copyrighted by the UniProt Consortium, see https://www.uniprot.org/terms
+CC   Distributed under the Creative Commons Attribution (CC BY 4.0) License
+CC   ---------------------------------------------------------------------------
+DR   EMBL; AF101051; AAD16433.1; -; mRNA.
+DR   EMBL; AF115546; AAD22962.1; -; mRNA.
+DR   EMBL; AF134160; AAF61393.1; -; mRNA.
+DR   EMBL; AF260406; AAK20945.1; -; Genomic_DNA.
+DR   EMBL; AF260403; AAK20945.1; JOINED; Genomic_DNA.
+DR   EMBL; AF260404; AAK20945.1; JOINED; Genomic_DNA.
+DR   EMBL; AF260405; AAK20945.1; JOINED; Genomic_DNA.
+DR   EMBL; AY358652; AAQ89015.1; -; mRNA.
+DR   EMBL; CR457138; CAG33419.1; -; mRNA.
+DR   EMBL; BC012471; AAH12471.1; -; mRNA.
+DR   CCDS; CCDS3295.1; -.
+DR   RefSeq; NP_066924.1; NM_021101.4.
+DR   AlphaFoldDB; O95832; -.
+DR   SMR; O95832; -.
+DR   BioGRID; 114533; 23.
+DR   CORUM; O95832; -.
+DR   IntAct; O95832; 11.
+DR   MINT; O95832; -.
+DR   STRING; 9606.ENSP00000295522; -.
+DR   TCDB; 1.H.1.1.14; the claudin tight junction (claudin1) family.
+DR   GlyGen; O95832; 4 sites.
+DR   iPTMnet; O95832; -.
+DR   PhosphoSitePlus; O95832; -.
+DR   SwissPalm; O95832; -.
+DR   BioMuta; CLDN1; -.
+DR   EPD; O95832; -.
+DR   jPOST; O95832; -.
+DR   MassIVE; O95832; -.
+DR   MaxQB; O95832; -.
+DR   PaxDb; O95832; -.
+DR   PeptideAtlas; O95832; -.
+DR   PRIDE; O95832; -.
+DR   ProteomicsDB; 51077; -.
+DR   Antibodypedia; 3613; 816 antibodies from 43 providers.
+DR   DNASU; 9076; -.
+DR   Ensembl; ENST00000295522.4; ENSP00000295522.3; ENSG00000163347.6.
+DR   GeneID; 9076; -.
+DR   KEGG; hsa:9076; -.
+DR   MANE-Select; ENST00000295522.4; ENSP00000295522.3; NM_021101.5; NP_066924.1.
+DR   UCSC; uc003fsh.4; human.
+DR   CTD; 9076; -.
+DR   DisGeNET; 9076; -.
+DR   GeneCards; CLDN1; -.
+DR   HGNC; HGNC:2032; CLDN1.
+DR   HPA; ENSG00000163347; Tissue enhanced (liver, skin).
+DR   MalaCards; CLDN1; -.
+DR   MIM; 603718; gene.
+DR   MIM; 607626; phenotype.
+DR   neXtProt; NX_O95832; -.
+DR   OpenTargets; ENSG00000163347; -.
+DR   Orphanet; 59303; Neonatal ichthyosis-sclerosing cholangitis syndrome.
+DR   PharmGKB; PA26557; -.
+DR   VEuPathDB; HostDB:ENSG00000163347; -.
+DR   eggNOG; ENOG502R7HF; Eukaryota.
+DR   GeneTree; ENSGT00940000155387; -.
+DR   HOGENOM; CLU_076370_2_3_1; -.
+DR   InParanoid; O95832; -.
+DR   OMA; CCCPQKA; -.
+DR   OrthoDB; 1244077at2759; -.
+DR   PhylomeDB; O95832; -.
+DR   TreeFam; TF331936; -.
+DR   PathwayCommons; O95832; -.
+DR   Reactome; R-HSA-420029; Tight junction interactions.
+DR   SignaLink; O95832; -.
+DR   BioGRID-ORCS; 9076; 15 hits in 1073 CRISPR screens.
+DR   ChiTaRS; CLDN1; human.
+DR   GeneWiki; CLDN1; -.
+DR   GenomeRNAi; 9076; -.
+DR   Pharos; O95832; Tbio.
+DR   PRO; PR:O95832; -.
+DR   Proteomes; UP000005640; Chromosome 3.
+DR   RNAct; O95832; protein.
+DR   Bgee; ENSG00000163347; Expressed in upper leg skin and 139 other tissues.
+DR   ExpressionAtlas; O95832; baseline and differential.
+DR   Genevisible; O95832; HS.
+DR   GO; GO:0016324; C:apical plasma membrane; IEA:Ensembl.
+DR   GO; GO:0016323; C:basolateral plasma membrane; IDA:UniProtKB.
+DR   GO; GO:0005923; C:bicellular tight junction; IDA:UniProtKB.
+DR   GO; GO:0005737; C:cytoplasm; IEA:Ensembl.
+DR   GO; GO:0016021; C:integral component of membrane; TAS:ProtInc.
+DR   GO; GO:0005887; C:integral component of plasma membrane; IMP:UniProtKB.
+DR   GO; GO:0016328; C:lateral plasma membrane; IEA:Ensembl.
+DR   GO; GO:0005886; C:plasma membrane; IDA:ARUK-UCL.
+DR   GO; GO:0032991; C:protein-containing complex; IDA:UniProtKB.
+DR   GO; GO:0070160; C:tight junction; IDA:ARUK-UCL.
+DR   GO; GO:0042802; F:identical protein binding; IPI:UniProtKB.
+DR   GO; GO:0005198; F:structural molecule activity; IEA:InterPro.
+DR   GO; GO:0001618; F:virus receptor activity; IMP:UniProtKB.
+DR   GO; GO:0007568; P:aging; IEA:Ensembl.
+DR   GO; GO:0070830; P:bicellular tight junction assembly; IMP:UniProtKB.
+DR   GO; GO:0016338; P:calcium-independent cell-cell adhesion via plasma membrane cell-adhesion molecules; ISS:UniProtKB.
+DR   GO; GO:0007155; P:cell adhesion; IBA:GO_Central.
+DR   GO; GO:0034331; P:cell junction maintenance; ISS:ARUK-UCL.
+DR   GO; GO:0045216; P:cell-cell junction organization; IMP:MGI.
+DR   GO; GO:1903545; P:cellular response to butyrate; IEA:Ensembl.
+DR   GO; GO:0071346; P:cellular response to interferon-gamma; IEA:Ensembl.
+DR   GO; GO:0071284; P:cellular response to lead ion; IEA:Ensembl.
+DR   GO; GO:0071560; P:cellular response to transforming growth factor beta stimulus; IEA:Ensembl.
+DR   GO; GO:0071356; P:cellular response to tumor necrosis factor; IEA:Ensembl.
+DR   GO; GO:0008065; P:establishment of blood-nerve barrier; IEA:Ensembl.
+DR   GO; GO:0090557; P:establishment of endothelial intestinal barrier; IEA:Ensembl.
+DR   GO; GO:0061436; P:establishment of skin barrier; IMP:UniProtKB.
+DR   GO; GO:0042538; P:hyperosmotic salinity response; IEA:Ensembl.
+DR   GO; GO:0097421; P:liver regeneration; IEA:Ensembl.
+DR   GO; GO:0035633; P:maintenance of blood-brain barrier; NAS:ARUK-UCL.
+DR   GO; GO:1903348; P:positive regulation of bicellular tight junction assembly; IEA:Ensembl.
+DR   GO; GO:0030335; P:positive regulation of cell migration; IMP:ARUK-UCL.
+DR   GO; GO:0060054; P:positive regulation of epithelial cell proliferation involved in wound healing; IMP:ARUK-UCL.
+DR   GO; GO:0090303; P:positive regulation of wound healing; IMP:ARUK-UCL.
+DR   GO; GO:0051259; P:protein complex oligomerization; IDA:ARUK-UCL.
+DR   GO; GO:0071548; P:response to dexamethasone; IEA:Ensembl.
+DR   GO; GO:0045471; P:response to ethanol; IEA:Ensembl.
+DR   GO; GO:0070673; P:response to interleukin-18; IEA:Ensembl.
+DR   GO; GO:0032496; P:response to lipopolysaccharide; IEA:Ensembl.
+DR   GO; GO:0009636; P:response to toxic substance; IEA:Ensembl.
+DR   GO; GO:0061772; P:xenobiotic transport across blood-nerve barrier; IEA:Ensembl.
+DR   InterPro; IPR006187; Claudin.
+DR   InterPro; IPR003548; Claudin1.
+DR   InterPro; IPR017974; Claudin_CS.
+DR   InterPro; IPR004031; PMP22/EMP/MP20/Claudin.
+DR   PANTHER; PTHR12002; PTHR12002; 1.
+DR   PANTHER; PTHR12002:SF92; PTHR12002:SF92; 1.
+DR   Pfam; PF00822; PMP22_Claudin; 1.
+DR   PRINTS; PR01377; CLAUDIN1.
+DR   PROSITE; PS01346; CLAUDIN; 1.
+PE   1: Evidence at protein level;
+KW   Cell junction; Cell membrane; Disulfide bond;
+KW   Host cell receptor for virus entry; Host-virus interaction; Ichthyosis;
+KW   Membrane; Receptor; Reference proteome; Tight junction; Transmembrane;
+KW   Transmembrane helix.
+FT   CHAIN           1..211
+FT                   /note="Claudin-1"
+FT                   /id="PRO_0000144729"
+FT   TOPO_DOM        1..7
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000250"
+FT   TRANSMEM        8..28
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        29..81
+FT                   /note="Extracellular"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        82..102
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        103..115
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        116..136
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        137..163
+FT                   /note="Extracellular"
+FT                   /evidence="ECO:0000255"
+FT   TRANSMEM        164..184
+FT                   /note="Helical"
+FT                   /evidence="ECO:0000255"
+FT   TOPO_DOM        185..211
+FT                   /note="Cytoplasmic"
+FT                   /evidence="ECO:0000250"
+FT   REGION          192..211
+FT                   /note="Disordered"
+FT                   /evidence="ECO:0000256|SAM:MobiDB-lite"
+FT   REGION          210..211
+FT                   /note="Interactions with TJP1, TJP2, TJP3 and PATJ"
+FT                   /evidence="ECO:0000250"
+FT   DISULFID        54..64
+FT                   /evidence="ECO:0000250"
+FT   MUTAGEN         32
+FT                   /note="I->M: Loss of HCV receptor activity. Significant
+FT                   loss of interaction with CD81. Reduced interaction with
+FT                   OCLN."
+FT                   /evidence="ECO:0000269|PubMed:17325668,
+FT                   ECO:0000269|PubMed:20375010"
+FT   MUTAGEN         48
+FT                   /note="E->K: Loss of HCV receptor activity. Significant
+FT                   loss of interaction with CD81. Reduced interaction with
+FT                   OCLN. According to PubMed:17325668 no effect observed on
+FT                   HCV infection susceptibility in cell culture."
+FT                   /evidence="ECO:0000269|PubMed:17325668,
+FT                   ECO:0000269|PubMed:20375010"
+FT   CONFLICT        62
+FT                   /note="I -> V (in Ref. 2; AAD22962)"
+FT                   /evidence="ECO:0000305"
+FT   CONFLICT        135
+FT                   /note="V -> A (in Ref. 2; AAD22962)"
+FT                   /evidence="ECO:0000305"
+SQ   SEQUENCE   211 AA;  22744 MW;  07269000E6C214F0 CRC64;
+     MANAGLQLLG FILAFLGWIG AIVSTALPQW RIYSYAGDNI VTAQAMYEGL WMSCVSQSTG
+     QIQCKVFDSL LNLSSTLQAT RALMVVGILL GVIAIFVATV GMKCMKCLED DEVQKMRMAV
+     IGGAIFLLAG LAILVATAWY GNRIVQEFYD PMTPVNARYE FGQALFTGWA AASLCLLGGA
+     LLCCSCPRKT TSYPTPRPYP KPAPSSGKDY V
+//

@@ -4,30 +4,37 @@
 #
 
 """Testing code for Restriction enzyme classes of Biopython."""
+
 import unittest
 
-from Bio.Restriction import Analysis, Restriction, RestrictionBatch
-from Bio.Restriction import CommOnly, NonComm, AllEnzymes
-from Bio.Restriction import (
-    Acc65I,
-    Asp718I,
-    BamHI,
-    EcoRI,
-    EcoRV,
-    KpnI,
-    SmaI,
-    MluCI,
-    McrI,
-    NdeI,
-    BsmBI,
-    AanI,
-    EarI,
-    SnaI,
-    SphI,
-)
-from Bio.Restriction import FormattedSeq
-from Bio.Seq import Seq, MutableSeq
 from Bio import BiopythonWarning
+from Bio.Restriction import AanI
+from Bio.Restriction import Acc65I
+from Bio.Restriction import AllEnzymes
+from Bio.Restriction import Analysis
+from Bio.Restriction import Asp718I
+from Bio.Restriction import BamHI
+from Bio.Restriction import BsmBI
+from Bio.Restriction import CommOnly
+from Bio.Restriction import EarI
+from Bio.Restriction import EcoRI
+from Bio.Restriction import EcoRV
+from Bio.Restriction import FormattedSeq
+from Bio.Restriction import KpnI
+from Bio.Restriction import McrI
+from Bio.Restriction import MluCI
+from Bio.Restriction import NdeI
+from Bio.Restriction import NonComm
+from Bio.Restriction import Restriction
+from Bio.Restriction import RestrictionBatch
+from Bio.Restriction import SmaI
+from Bio.Restriction import SnaI
+from Bio.Restriction import SphI
+from Bio.Restriction import BsaI
+from Bio.Restriction import BsaXI
+from Bio.Restriction import BspCNI
+from Bio.Seq import MutableSeq
+from Bio.Seq import Seq
 
 
 class SequenceTesting(unittest.TestCase):
@@ -45,10 +52,13 @@ class SequenceTesting(unittest.TestCase):
         EcoRI.search(Seq("ATGC"))
         EcoRI.search(MutableSeq("TCAG"))
 
-    def test_non_iupac_letters(self):
-        """Test if non-IUPAC letters raise a TypeError."""
+    def test_non_allowed_characters(self):
+        """Test if non-allowed characters raise a TypeError."""
+        # Any letter is accepted, even if it's not a nucleotide
+        FormattedSeq(Seq("ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+        # Other characters are not accepted
         with self.assertRaises(TypeError):
-            seq = FormattedSeq(Seq("GATCZ"))
+            FormattedSeq(Seq("GATCZE-"))
 
     def test_formatted_seq(self):
         """Test several methods of FormattedSeq."""
@@ -98,7 +108,7 @@ class SimpleEnzyme(unittest.TestCase):
         self.assertFalse(EcoRI.is_unknown())
         self.assertTrue(EcoRI.is_palindromic())
         self.assertTrue(EcoRI.is_comm())
-        self.assertIn("Life Technologies", EcoRI.supplier_list())
+        self.assertIn("Thermo Fisher Scientific", EcoRI.supplier_list())
         self.assertEqual(EcoRI.elucidate(), "G^AATT_C")
         self.assertEqual(EcoRI.search(self.ecosite_seq), [6])
         self.assertEqual(EcoRI.characteristic(), (1, -1, None, None, "GAATTC"))
@@ -187,7 +197,11 @@ class SimpleEnzyme(unittest.TestCase):
     def test_cutting_border_positions(self):
         """Check if cutting after first and penultimate position works."""
         # Use EarI, cuts as follows: CTCTTCN^NNN_N
+        # Only when the cut produces double stranded DNA on both outputs
+        # it is returned.
         seq = Seq("CTCTTCA")
+        self.assertEqual(EarI.search(seq), [])
+        seq += "AAA"
         self.assertEqual(EarI.search(seq), [])
         seq += "A"
         self.assertEqual(EarI.search(seq), [8])
@@ -196,6 +210,18 @@ class SimpleEnzyme(unittest.TestCase):
         self.assertEqual(EarI.search(seq), [])
         seq = "A" + seq
         self.assertEqual(EarI.search(seq), [2])
+
+        # Examples from https://github.com/biopython/biopython/issues/4604
+        self.assertEqual(BsaI.search(Seq("GGTCTCATAAAA")), [8])
+        self.assertEqual(BsaI.search(Seq("GGTCTCATAAA")), [])
+        self.assertEqual(BsaI.search(Seq("GGTCTCGT")), [])
+        self.assertEqual(BsaI.search(Seq("GGTCTCGT").reverse_complement()), [])
+
+        self.assertEqual(BsaXI.search(Seq("AAATAAAAAAAAAACAAAAACTCC")), [5])
+        self.assertEqual(BsaXI.search(Seq("AATAAAAAAAAAACAAAAACTCC")), [])
+
+        self.assertEqual(BspCNI.search(Seq("CTCAGAAAAAAAAAT")), [15])
+        self.assertEqual(BspCNI.search(Seq("CTCAGAAAAAAAAA")), [])
 
     def test_recognition_site_on_both_strands(self):
         """Check if recognition sites on both strands are properly handled."""
@@ -469,7 +495,7 @@ class RestrictionBatches(unittest.TestCase):
         self.assertEqual(batch.current_suppliers(), ["Sigma Chemical Corporation"])
         self.assertIn(EcoRI, batch)
         self.assertNotIn(AanI, batch)
-        batch.add_supplier("B")  # Life Technologies
+        batch.add_supplier("B")  # Thermo Fisher Scientific
         self.assertIn(AanI, batch)
 
     def test_batch_analysis(self):
@@ -564,7 +590,7 @@ class TestPrintOutputs(unittest.TestCase):
         out = self.StringIO()
         self.sys.stdout = out
         EcoRI.suppliers()
-        self.assertIn("Life Technologies", out.getvalue())
+        self.assertIn("Thermo Fisher Scientific", out.getvalue())
         self.assertIsNone(SnaI.suppliers())
         EcoRI.all_suppliers()  # Independent of enzyme, list of all suppliers
         self.assertIn("Agilent Technologies", out.getvalue())

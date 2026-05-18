@@ -237,7 +237,8 @@ class Interaction:
 
     """
 
-    def __init_(self, data):
+    def __init__(self, data):
+        """Initialize the class."""
         self.data = data
 
     def __hash__(self):

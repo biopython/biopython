@@ -408,6 +408,26 @@
          </clade>
       </clade>
    </phylogeny>
+   <phylogeny rooted="true">
+      <clade>
+         <branch_length>0.04</branch_length>
+         <clade>
+            <branch_length>0.06</branch_length>
+            <clade>
+               <name>A</name>
+               <branch_length>0.102</branch_length>
+            </clade>
+            <clade>
+               <name>B</name>
+               <branch_length>0.23</branch_length>
+            </clade>
+         </clade>
+         <clade>
+            <name>C</name>
+            <branch_length>0.4</branch_length>
+         </clade>
+      </clade>
+   </phylogeny>
    <align:alignment xmlns:align="http://example.org/align">
       <seq name="A">acgtcgcggcccgtggaagtcctctcct</seq>
       <seq name="B">aggtcgcggcctgtggaagtcctctcct</seq>

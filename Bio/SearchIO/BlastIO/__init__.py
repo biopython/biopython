@@ -39,7 +39,6 @@ Bio.SearchIO.BlastIO supports the following BLAST+ output formats:
 
   - XML        - 'blast-xml'  - parsing, indexing, writing
   - Tabular    - 'blast-tab'  - parsing, indexing, writing
-  - Plain text - 'blast-text' - parsing
 
 
 blast-xml
@@ -59,7 +58,7 @@ It provides the following attributes for each SearchIO object:
 |                +-------------------------+-----------------------------+
 |                | reference               | BlastOutput_reference       |
 |                +-------------------------+-----------------------------+
-|                | version                 | BlastOutput_version [*]_    |
+|                | version                 | BlastOutput_version [#]_    |
 |                +-------------------------+-----------------------------+
 |                | description             | Iteration_query-def         |
 |                +-------------------------+-----------------------------+
@@ -277,7 +276,7 @@ blast-tab provides the following attributes for each SearchIO objects:
 |             +-------------------+--------------+
 |             | bitscore_raw      | score        |
 +-------------+-------------------+--------------+
-| HSPFragment | frames            | frames [*]_  |
+| HSPFragment | frames            | frames [#]_  |
 | (also via   +-------------------+--------------+
 | HSP)        | aln_span          | length       |
 |             +-------------------+--------------+
@@ -318,99 +317,19 @@ well:
 +--------------+---------------+----------------------------+
 
 
-blast-text
-==========
-The BLAST plain text output format has been known to change considerably between
-BLAST versions. NCBI itself has recommended that users not rely on the plain
-text output for parsing-related work.
+.. [#] may be modified
 
-However, in some cases parsing the plain text output may still be useful.
-SearchIO provides parsing support for the plain text output, but guarantees only
-a minimum level of support. Writing a parser that fully supports plain text
-output for all BLAST versions is not a priority at the moment.
-
-If you do have a BLAST plain text file that can not be parsed and would like to
-submit a patch, we are more than happy to accept it.
-
-The blast-text parser provides the following object attributes:
-
-+-----------------+-------------------------+----------------------------------+
-| Object          | Attribute               | Value                            |
-+=================+=========================+==================================+
-| QueryResult     | description             | query sequence description       |
-|                 +-------------------------+----------------------------------+
-|                 | id                      | query sequence ID                |
-|                 +-------------------------+----------------------------------+
-|                 | program                 | BLAST flavor                     |
-|                 +-------------------------+----------------------------------+
-|                 | seq_len                 | full length of query sequence    |
-|                 +-------------------------+----------------------------------+
-|                 | target                  | target database of the search    |
-|                 +-------------------------+----------------------------------+
-|                 | version                 | BLAST version                    |
-+-----------------+-------------------------+----------------------------------+
-| Hit             | evalue                  | hit-level evalue, from the hit   |
-|                 |                         | table                            |
-|                 +-------------------------+----------------------------------+
-|                 | id                      | hit sequence ID                  |
-|                 +-------------------------+----------------------------------+
-|                 | description             | hit sequence description         |
-|                 +-------------------------+----------------------------------+
-|                 | score                   | hit-level score, from the hit    |
-|                 |                         | table                            |
-|                 +-------------------------+----------------------------------+
-|                 | seq_len                 | full length of hit sequence      |
-+-----------------+-------------------------+----------------------------------+
-| HSP             | evalue                  | hsp-level evalue                 |
-|                 +-------------------------+----------------------------------+
-|                 | bitscore                | hsp-level bit score              |
-|                 +-------------------------+----------------------------------+
-|                 | bitscore_raw            | hsp-level score                  |
-|                 +-------------------------+----------------------------------+
-|                 | gap_num                 | number of gaps in alignment      |
-|                 +-------------------------+----------------------------------+
-|                 | ident_num               | number of identical residues     |
-|                 |                         | in alignment                     |
-|                 +-------------------------+----------------------------------+
-|                 | pos_num                 | number of positive matches in    |
-|                 |                         | alignment                        |
-+-----------------+-------------------------+----------------------------------+
-| HSPFragment     | aln_annotation          | alignment similarity string      |
-| (also via       +-------------------------+----------------------------------+
-| HSP)            | aln_span                | length of alignment fragment     |
-|                 +-------------------------+----------------------------------+
-|                 | hit                     | hit sequence                     |
-|                 +-------------------------+----------------------------------+
-|                 | hit_end                 | hit sequence end coordinate      |
-|                 +-------------------------+----------------------------------+
-|                 | hit_frame               | hit sequence reading frame       |
-|                 +-------------------------+----------------------------------+
-|                 | hit_start               | hit sequence start coordinate    |
-|                 +-------------------------+----------------------------------+
-|                 | hit_strand              | hit sequence strand              |
-|                 +-------------------------+----------------------------------+
-|                 | query                   | query sequence                   |
-|                 +-------------------------+----------------------------------+
-|                 | query_end               | query sequence end coordinate    |
-|                 +-------------------------+----------------------------------+
-|                 | query_frame             | query sequence reading frame     |
-|                 +-------------------------+----------------------------------+
-|                 | query_start             | query sequence start coordinate  |
-|                 +-------------------------+----------------------------------+
-|                 | query_strand            | query sequence strand            |
-+-----------------+-------------------------+----------------------------------+
-
-
-.. [*] may be modified
-
-.. [*] When 'frames' is present, both ``query_frame`` and ``hit_frame`` will be
+.. [#] When 'frames' is present, both ``query_frame`` and ``hit_frame`` will be
    present as well. It is recommended that you use these instead of 'frames' directly.
 
 """
 
-from .blast_tab import BlastTabParser, BlastTabIndexer, BlastTabWriter
-from .blast_xml import BlastXmlParser, BlastXmlIndexer, BlastXmlWriter
-from .blast_text import BlastTextParser
+from .blast_tab import BlastTabIndexer
+from .blast_tab import BlastTabParser
+from .blast_tab import BlastTabWriter
+from .blast_xml import BlastXmlIndexer
+from .blast_xml import BlastXmlParser
+from .blast_xml import BlastXmlWriter
 
 # if not used as a module, run the doctest
 if __name__ == "__main__":

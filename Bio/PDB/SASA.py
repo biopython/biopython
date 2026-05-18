@@ -18,6 +18,7 @@ Reference:
 
 import collections
 import math
+from collections.abc import MutableMapping
 
 import numpy as np
 
@@ -41,7 +42,7 @@ _ENTITY_HIERARCHY = {
 # References:
 # A. Bondi (1964). "van der Waals Volumes and Radii".
 # M. Mantina, A.C. et al., J. Phys. Chem. 2009, 113, 5806.
-ATOMIC_RADII = collections.defaultdict(lambda x: 2.0)
+ATOMIC_RADII: MutableMapping[str, float] = collections.defaultdict(lambda: 2.0)
 ATOMIC_RADII.update(
     {
         "H": 1.200,
@@ -123,7 +124,7 @@ class ShrakeRupley:
         """
         n = self.n_points
 
-        dl = np.pi * (3 - 5 ** 0.5)
+        dl = np.pi * (3 - 5**0.5)
         dz = 2.0 / n
 
         longitude = 0
@@ -203,10 +204,9 @@ class ShrakeRupley:
         twice_maxradii = np.max(radii) * 2
 
         # Calculate ASAs
-        asa_array = np.zeros((n_atoms, 1), dtype=np.int)
+        asa_array = np.zeros((n_atoms, 1), dtype=np.int64)
         ptset = set(range(self.n_points))
         for i in range(n_atoms):
-
             r_i = radii[i]
 
             # Move sphere to atom

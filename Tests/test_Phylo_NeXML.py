@@ -9,7 +9,6 @@
 import os
 import tempfile
 import unittest
-
 from io import BytesIO
 
 from Bio import Phylo

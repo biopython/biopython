@@ -1,6 +1,5 @@
 """Tests for SeqIO TwoBitIO module."""
-import os
-import random
+
 import unittest
 
 from Bio import SeqIO
@@ -282,16 +281,16 @@ class TestBaseClassMethods(unittest.TestCase):
         path = "TwoBit/sequence.bigendian.2bit"
         self.stream = open(path, "rb")
         records = SeqIO.parse(self.stream, "twobit")
-        record = next(records)
-        self.seq1_twobit = record.seq
-        record = next(records)
-        self.seq2_twobit = record.seq
+        self.record1_twobit = next(records)
+        self.seq1_twobit = self.record1_twobit.seq
+        self.record2_twobit = next(records)
+        self.seq2_twobit = self.record2_twobit.seq
         path = "TwoBit/sequence.fa"
         records = SeqIO.parse(path, "fasta")
-        record = next(records)
-        self.seq1_fasta = record.seq
-        record = next(records)
-        self.seq2_fasta = record.seq
+        self.record1_fasta = next(records)
+        self.seq1_fasta = self.record1_fasta.seq
+        self.record2_fasta = next(records)
+        self.seq2_fasta = self.record2_fasta.seq
 
     def tearDown(self):
         self.stream.close()
@@ -305,6 +304,14 @@ class TestBaseClassMethods(unittest.TestCase):
         self.assertEqual(self.seq2_twobit[30], self.seq2_fasta[30])
         self.assertEqual(self.seq1_twobit[-30], self.seq1_fasta[-30])
         self.assertEqual(self.seq2_twobit[-30], self.seq2_fasta[-30])
+        self.assertEqual(self.record1_twobit.seq, self.record1_fasta.seq)
+        self.assertEqual(self.record2_twobit.seq, self.record2_fasta.seq)
+        self.assertEqual(self.record1_twobit[:].seq, self.record1_fasta[:].seq)
+        self.assertEqual(self.record2_twobit[:].seq, self.record2_fasta[:].seq)
+        self.assertEqual(self.record1_twobit[30], self.record1_fasta[30])
+        self.assertEqual(self.record2_twobit[30], self.record2_fasta[30])
+        self.assertEqual(self.record1_twobit[-30], self.record1_fasta[-30])
+        self.assertEqual(self.record2_twobit[-30], self.record2_fasta[-30])
 
     def test_bytes(self):
         b = bytes(self.seq1_twobit)
@@ -322,10 +329,18 @@ class TestBaseClassMethods(unittest.TestCase):
     def test_add(self):
         self.assertIsInstance(self.seq1_twobit + "ABCD", Seq)
         self.assertEqual(self.seq1_twobit + "ABCD", self.seq1_fasta + "ABCD")
+        self.assertIsInstance(self.record1_twobit + "ABCD", SeqRecord)
+        record1_twobit = self.record1_twobit + "ABCD"
+        record1_fasta = self.record1_fasta + "ABCD"
+        self.assertEqual(self.record1_twobit.seq, self.record1_fasta.seq)
 
     def test_radd(self):
         self.assertIsInstance("ABCD" + self.seq1_twobit, Seq)
         self.assertEqual("ABCD" + self.seq1_twobit, "ABCD" + self.seq1_fasta)
+        self.assertIsInstance("ABCD" + self.record1_twobit, SeqRecord)
+        record1_twobit = "ABCD" + self.record1_twobit
+        record1_fasta = "ABCD" + self.record1_fasta
+        self.assertEqual(self.record1_twobit.seq, self.record1_fasta.seq)
 
     def test_mul(self):
         self.assertIsInstance(2 * self.seq1_twobit, Seq)
@@ -334,7 +349,12 @@ class TestBaseClassMethods(unittest.TestCase):
         self.assertEqual(self.seq1_twobit * 2, self.seq1_fasta * 2)
 
     def test_contains(self):
-        for seq in (self.seq1_twobit, self.seq1_fasta):
+        for seq in (
+            self.seq1_twobit,
+            self.seq1_fasta,
+            self.record1_twobit,
+            self.record1_fasta,
+        ):
             self.assertIn("ACCCCT", seq)
             self.assertNotIn("ACGTACGT", seq)
 
@@ -354,6 +374,16 @@ class TestBaseClassMethods(unittest.TestCase):
         self.assertEqual(
             self.seq1_twobit.count("CT", 125, 250),
             self.seq1_fasta.count("CT", 125, 250),
+        )
+        self.assertEqual(
+            self.record1_twobit.count("CT"), self.record1_fasta.count("CT")
+        )
+        self.assertEqual(
+            self.record1_twobit.count("CT", 75), self.record1_fasta.count("CT", 75)
+        )
+        self.assertEqual(
+            self.record1_twobit.count("CT", 125, 250),
+            self.record1_fasta.count("CT", 125, 250),
         )
 
     def test_find(self):
@@ -462,18 +492,27 @@ class TestBaseClassMethods(unittest.TestCase):
     def test_isupper(self):
         self.assertEqual(self.seq1_twobit.isupper(), self.seq1_fasta.isupper())
         self.assertEqual(self.seq2_twobit.isupper(), self.seq2_fasta.isupper())
+        self.assertEqual(self.record1_twobit.isupper(), self.record1_fasta.isupper())
+        self.assertEqual(self.record2_twobit.isupper(), self.record2_fasta.isupper())
 
     def test_islower(self):
         self.assertEqual(self.seq1_twobit.islower(), self.seq1_fasta.islower())
         self.assertEqual(self.seq2_twobit.islower(), self.seq2_fasta.islower())
+        self.assertEqual(self.record1_twobit.islower(), self.record1_fasta.islower())
+        self.assertEqual(self.record2_twobit.islower(), self.record2_fasta.islower())
 
     def test_replace(self):
         # seq.transcribe uses seq._data.replace
         self.assertEqual(self.seq1_twobit.transcribe(), self.seq1_fasta.transcribe())
 
     def test_translate(self):
-        # seq.complement uses seq._data.translate
-        self.assertEqual(self.seq1_twobit.complement(), self.seq1_fasta.complement())
+        # seq.reverse_complement uses seq._data.translate
+        self.assertEqual(
+            self.seq1_twobit.reverse_complement(), self.seq1_fasta.reverse_complement()
+        )
+        record1_twobit = self.record1_twobit.reverse_complement()
+        record1_fasta = self.record1_fasta.reverse_complement()
+        self.assertEqual(record1_twobit.seq, record1_fasta.seq)
 
     def test_defined(self):
         self.assertTrue(self.seq1_twobit.defined)

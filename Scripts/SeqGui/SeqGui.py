@@ -17,12 +17,14 @@ from several codon tables which are implemented in Biopython.
 It runs as a standalone application.
 
 """
+
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from Bio.Seq import translate, transcribe, back_transcribe
 from Bio.Data import CodonTable
-
+from Bio.Seq import back_transcribe
+from Bio.Seq import transcribe
+from Bio.Seq import translate
 
 main_window = tk.Tk()
 main_window.title("Greetings from Biopython")

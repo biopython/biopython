@@ -12,7 +12,6 @@ from search_tests_common import CheckIndex
 
 
 class ExonerateVulgarIndexCases(CheckIndex):
-
     fmt = "exonerate-vulgar"
 
     def test_exn_22_m_est2genome(self):

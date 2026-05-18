@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seqXML seqXMLversion="0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.seqxml.org/0.2/seqxml.xsd" speciesName="fake">
+    <!-- Should fail because "source" attribute on entries is only version >=0.3 -->
+    <entry id="fakeDNA" source="Fake">
+        <DNAseq>AAAAAACGTAAA</DNAseq>
+    </entry>
+</seqXML>

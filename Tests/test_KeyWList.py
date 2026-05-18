@@ -4,8 +4,9 @@
 # as part of this package.
 """Tests for KeyWList."""
 
-import unittest
 import os.path
+import unittest
+
 from Bio.SwissProt import KeyWList
 
 

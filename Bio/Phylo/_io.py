@@ -11,9 +11,12 @@ This API follows the same semantics as Biopython's ``SeqIO`` and
 ``AlignIO``.
 """
 
-
 from Bio import File
-from Bio.Phylo import BaseTree, NewickIO, NexusIO, PhyloXMLIO, NeXMLIO
+from Bio.Phylo import BaseTree
+from Bio.Phylo import NewickIO
+from Bio.Phylo import NeXMLIO
+from Bio.Phylo import NexusIO
+from Bio.Phylo import PhyloXMLIO
 
 supported_formats = {
     "newick": NewickIO,

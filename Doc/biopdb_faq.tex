@@ -109,13 +109,6 @@ Bio.PDB is automatically installed as part of Biopython. Biopython
 can be obtained from \url{http://www.biopython.org}. It runs on many
 platforms (Linux/Unix, windows, Mac,...).
 
-However, the \verb|Bio.PDB.mmCIF.MMCIFlex| module (used internally by
-\verb|Bio.PDB.MMCIFParser| to parse mmCIF files) is \emph{not} currently
-installed by default.  This module relies on a third party tool called
-flex (fast lexical analyzer generator).
-At the time of writing, in order to parse mmCIF files you'll have to
-install flex, then tweak your \verb|setup.py| file and (re)install
-Biopython from source.
 
 \section{Who's using Bio.PDB?}
 
@@ -842,7 +835,7 @@ Moreover, it is quite easy to build more specialised data structures
 on top of the \texttt{Structure} class (eg. there's a \texttt{Polypeptide}
 class). On the other hand, the \texttt{Structure} object is built
 using a Parser/\-Consumer approach (called \texttt{PDBParser/\-MMCIFParser}
-and \texttt{Structure\-Builder}, respectively). One can easily re-use
+and \texttt{Structure\-Builder}, respectively). One can easily reuse
 the PDB/mmCIF parsers by implementing a specialised \texttt{Structure\-Builder}
 class. It is of course also trivial to add support for new file formats
 by writing new parsers.

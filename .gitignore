@@ -5,7 +5,7 @@ build
 dist
 
 #Ignore backup files from some Unix editors,
-\#*.py\#
+\#*\#
 *~
 *.swp
 *.bak
@@ -63,11 +63,6 @@ Tests/Cluster/cyano_result*
 # Created by Tests/test_BWA_tool.py:
 Tests/out.bam
 
-#TODO - The Tutorial doctests should leave example files after
-#running Tests/test_Tutorial.py
-Doc/examples/other_trees.nwk
-Doc/examples/tree1.nwk
-
 #Ignore LaTeX temp files, and compiled output
 Doc/*.aux
 Doc/*.gz
@@ -89,11 +84,13 @@ Doc/*/*/*.toc
 Doc/*/*/*.haux
 Doc/*/*/*.htoc
 Doc/_minted-Tutorial/
+Doc/_build/
 Doc/Tutorial.txt
 Doc/Tutorial.pdf
 Doc/Tutorial.html
 Doc/Tutorial.pyg
 Doc/biopdb_faq.pdf
+Doc/Biopython_doc.pdf
 Doc/version.sh
 Doc/install/Installation.txt
 Doc/install/Installation.pdf
@@ -123,5 +120,18 @@ Doc/api/*.rst
 #Ignore mypy cache directory
 .mypy_cache
 
-#Ignore virtual environment file
+#Ignore virtual environments
 .env
+.venv
+env/
+venv/
+ENV/
+
+# Testing
+**/.coverage
+
+# Ignore the .python-version file used by pyenv
+# This file specifies the Python version for a project,
+# but should not be committed to Git, as different developers
+# may use different Python versions.
+.python-version

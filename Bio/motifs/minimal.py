@@ -56,11 +56,11 @@ def read(handle):
         name = line.split()[1]
         motif_number += 1
         length, num_occurrences, evalue = _read_motif_statistics(handle)
-        counts = _read_lpm(handle, num_occurrences)
+        counts = _read_lpm(record, handle, length, num_occurrences)
         # {'A': 0.25, 'C': 0.25, 'T': 0.25, 'G': 0.25}
         motif = motifs.Motif(alphabet=record.alphabet, counts=counts)
         motif.background = record.background
-        motif.length = length
+        motif.length = motif.counts.length
         motif.num_occurrences = num_occurrences
         motif.evalue = evalue
         motif.name = name
@@ -98,21 +98,29 @@ def _read_background(record, handle):
     """Read background letter frequencies (PRIVATE)."""
     for line in handle:
         if line.startswith("Background letter frequencies"):
+            background_freqs = []
+            for line in handle:
+                line = line.rstrip()
+                if line:
+                    background_freqs.extend(
+                        [
+                            float(freq)
+                            for i, freq in enumerate(line.split(" "))
+                            if i % 2 == 1
+                        ]
+                    )
+                else:
+                    break
+            if not background_freqs:
+                raise ValueError(
+                    "Unexpected end of stream: Expected to find line starting background frequencies."
+                )
             break
     else:
         raise ValueError(
             "Improper input file. File should contain a line starting background frequencies."
         )
-    try:
-        line = next(handle)
-    except StopIteration:
-        raise ValueError(
-            "Unexpected end of stream: Expected to find line starting background frequencies."
-        )
-    line = line.strip()
-    ls = line.split()
-    A, C, G, T = float(ls[1]), float(ls[3]), float(ls[5]), float(ls[7])
-    record.background = {"A": A, "C": C, "G": G, "T": T}
+    record.background = dict(zip(record.alphabet, background_freqs))
 
 
 def _read_version(record, handle):
@@ -143,12 +151,15 @@ def _read_alphabet(record, handle):
     line = line.strip().replace("ALPHABET= ", "")
     if line == "ACGT":
         al = "ACGT"
+    elif line == "ACGU":
+        al = "ACGU"
     else:
-        al = "ACDEFGHIKLMNPQRSTVWY"
+        # al = "ACDEFGHIKLMNPQRSTVWY"
+        raise ValueError("Only parsing of DNA and RNA motifs is implemented")
     record.alphabet = al
 
 
-def _read_lpm(handle, num_occurrences):
+def _read_lpm(record, handle, length, num_occurrences):
     """Read letter probability matrix (PRIVATE)."""
     counts = [[], [], [], []]
     for line in handle:
@@ -159,24 +170,35 @@ def _read_lpm(handle, num_occurrences):
         counts[1].append(round(float(freqs[1]) * num_occurrences))
         counts[2].append(round(float(freqs[2]) * num_occurrences))
         counts[3].append(round(float(freqs[3]) * num_occurrences))
-    c = {}
-    c["A"] = counts[0]
-    c["C"] = counts[1]
-    c["G"] = counts[2]
-    c["T"] = counts[3]
+        if length and len(counts[0]) == length:
+            break
+    c = dict(zip(record.alphabet, counts))
     return c
 
 
 def _read_motif_statistics(handle):
     """Read motif statistics (PRIVATE)."""
-    # minimal :
+    # minimal MEME motif format letter-probability matrix line:
     #      letter-probability matrix: alength= 4 w= 19 nsites= 17 E= 4.1e-009
+    #
+    # All the "key= value" pairs after the "letter-probability matrix:" text are optional.
+    # The "alength= alphabet length" and "w= motif length" can be derived from the matrix
+    # if they are not specified, provided there is an empty line following the letter
+    # probability matrix.
+    # The "nsites= source sites" will default to 20 if it is not provided and the
+    # "E= source E-value" will default to zero.
     for line in handle:
         if line.startswith("letter-probability matrix:"):
             break
-    num_occurrences = int(line.split("nsites=")[1].split()[0])
-    length = int(line.split("w=")[1].split()[0])
-    evalue = float(line.split("E=")[1].split()[0])
+
+    # The "nsites= source sites" will default to 20 if it is not provided.
+    num_occurrences = (
+        int(line.split("nsites=")[1].split()[0]) if line.find("nsites=") != -1 else 20
+    )
+    # Length can be infered later if it is not provided.
+    length = int(line.split("w=")[1].split()[0]) if line.find("w=") != -1 else None
+    # E-value will default to zero if it is not provided.
+    evalue = float(line.split("E=")[1].split()[0]) if line.find("E=") != -1 else 0.0
     return length, num_occurrences, evalue
 
 
@@ -191,3 +213,9 @@ def _read_motif_name(handle):
     words = line.split()
     name = " ".join(words[0:2])
     return name
+
+
+if __name__ == "__main__":
+    from Bio._utils import run_doctest
+
+    run_doctest()

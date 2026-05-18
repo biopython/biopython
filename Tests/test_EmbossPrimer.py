@@ -11,8 +11,10 @@
 import os
 import unittest
 
+from Bio.Emboss import Primer3
+
 # local stuff
-from Bio.Emboss import PrimerSearch, Primer3
+from Bio.Emboss import PrimerSearch
 
 
 class Primer3ParseTest(unittest.TestCase):

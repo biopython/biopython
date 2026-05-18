@@ -18,8 +18,8 @@
 
 Bio/Alphabet @peterjc
 
-Bio/Align/* @peterjc
-Bio/Align/_aligners.c @mdehoon
+Bio/Align/* @mdehoon
+Tests/test_Align_* @mdehoon
 Bio/AlignIO/* @peterjc
 Tests/test_AlignIO* @peterjc
 

@@ -11,7 +11,7 @@
 import unittest
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -19,8 +19,8 @@ except ImportError:
         "Install NumPy if you want to use Bio.PDB."
     ) from None
 
-from Bio.PDB import PDBParser
 from Bio.PDB import FragmentMapper
+from Bio.PDB import PDBParser
 from Bio.PDB import Selection
 
 

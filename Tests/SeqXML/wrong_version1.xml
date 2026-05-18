@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seqXML seqXMLversion="0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.seqxml.org/0.2/seqxml.xsd">
+    <entry id="fakeDNA">
+        <DNAseq>AAAAAACGTAAA</DNAseq>
+        <!-- Should fail because v0.2 DBRef tags must have a type attribute -->
+        <DBRef source="test" id="test"/>
+    </entry>
+    <entry id="fakeRNA">
+        <RNAseq>AAAUUUUCTGAA</RNAseq>
+    </entry>
+    <entry id="fakeAA">
+        <AAseq>GAKKVFIEDVSKEFVEEFIWPAVQSSALYE</AAseq>
+    </entry>
+</seqXML>

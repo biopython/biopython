@@ -7,7 +7,8 @@
 
 import unittest
 
-from search_tests_common import CheckRaw, CheckIndex
+from search_tests_common import CheckIndex
+from search_tests_common import CheckRaw
 
 
 class BlastTabRawCases(CheckRaw):
@@ -120,7 +121,6 @@ gi|11464971:4-101	gi|365982352|ref|XM_003667962.1|	30.77	52	27	1	12	54	3181	3336
 
 
 class BlastTabIndexCases(CheckIndex):
-
     fmt = "blast-tab"
 
     def test_blasttab_2226_tblastn_001(self):

@@ -25,8 +25,9 @@ sequencing. If memory is an issue, the index_db(...) interface stores the
 keys and offsets in an SQLite database - which can be re-used to avoid
 re-indexing the file for use another time.
 """
-import re
 
+import re
+import struct
 from io import BytesIO
 from io import StringIO
 
@@ -67,13 +68,16 @@ class SffRandomAccess(SeqFileRandomAccess):
         SeqFileRandomAccess.__init__(self, filename, format)
         (
             header_length,
-            index_offset,
-            index_length,
+            self.index_offset,
+            self.index_length,
             number_of_reads,
-            self._flows_per_read,
-            self._flow_chars,
-            self._key_sequence,
+            self.number_of_flows_per_read,
+            self.flow_chars,
+            self.key_sequence,
         ) = SeqIO.SffIO._sff_file_header(self._handle)
+        # Now on to the reads...
+        self.read_flow_fmt = ">%iH" % self.number_of_flows_per_read
+        self.read_flow_size = struct.calcsize(self.read_flow_fmt)
 
     def __iter__(self):
         """Load any index block in the file, or build it the slow way (PRIVATE)."""
@@ -85,9 +89,9 @@ class SffRandomAccess(SeqFileRandomAccess):
             index_offset,
             index_length,
             number_of_reads,
-            self._flows_per_read,
-            self._flow_chars,
-            self._key_sequence,
+            self.number_of_flows_per_read,
+            self.flow_chars,
+            self.key_sequence,
         ) = SeqIO.SffIO._sff_file_header(handle)
         if index_offset and index_length:
             # There is an index provided, try this the fast way:
@@ -105,6 +109,7 @@ class SffRandomAccess(SeqFileRandomAccess):
                 # If that worked, call _check_eof ...
             except ValueError as err:
                 import warnings
+
                 from Bio import BiopythonParserWarning
 
                 warnings.warn(
@@ -119,9 +124,12 @@ class SffRandomAccess(SeqFileRandomAccess):
                     # Can have an index at start (or mid-file)
                     handle.seek(max_offset)
                     # Parse the final read,
-                    SeqIO.SffIO._sff_read_raw_record(handle, self._flows_per_read)
+                    SeqIO.SffIO._sff_read_raw_record(
+                        handle, self.number_of_flows_per_read
+                    )
                     # Should now be at the end of the file!
-                SeqIO.SffIO._check_eof(handle, index_offset, index_length)
+                self._offset = handle.tell()
+                SeqIO.SffIO.SffIterator._check_eof(self, handle)
                 return
         # We used to give a warning in this case, but Ion Torrent's
         # SFF files don't have an index so that would be annoying.
@@ -134,21 +142,23 @@ class SffRandomAccess(SeqFileRandomAccess):
             raise ValueError(
                 "Indexed %i records, expected %i" % (count, number_of_reads)
             )
-        SeqIO.SffIO._check_eof(handle, index_offset, index_length)
+        self._offset = handle.tell()
+        SeqIO.SffIO.SffIterator._check_eof(self, handle)
 
     def get(self, offset):
         """Return the SeqRecord starting at the given offset."""
         handle = self._handle
         handle.seek(offset)
-        return SeqIO.SffIO._sff_read_seq_record(
-            handle, self._flows_per_read, self._flow_chars, self._key_sequence
-        )
+        self._offset = offset
+        self.trim = False
+        return SeqIO.SffIO.SffIterator._sff_read_seq_record(self, handle)
 
     def get_raw(self, offset):
         """Return the raw record from the file as a bytes string."""
         handle = self._handle
         handle.seek(offset)
-        return SeqIO.SffIO._sff_read_raw_record(handle, self._flows_per_read)
+        self.stream = handle
+        return SeqIO.SffIO._sff_read_raw_record(handle, self.number_of_flows_per_read)
 
 
 class SffTrimedRandomAccess(SffRandomAccess):
@@ -158,13 +168,9 @@ class SffTrimedRandomAccess(SffRandomAccess):
         """Return the SeqRecord starting at the given offset."""
         handle = self._handle
         handle.seek(offset)
-        return SeqIO.SffIO._sff_read_seq_record(
-            handle,
-            self._flows_per_read,
-            self._flow_chars,
-            self._key_sequence,
-            trim=True,
-        )
+        self._offset = offset
+        self.trim = True
+        return SeqIO.SffIO.SffIterator._sff_read_seq_record(self, handle)
 
 
 ###################
@@ -642,7 +648,6 @@ class FastqRandomAccess(SeqFileRandomAccess):
                 raise ValueError("Problem with quality section")
             yield id.decode(), start_offset, length
             start_offset = end_offset
-        # print("EOF")
 
     def get_raw(self, offset):
         """Return the raw record from the file as a bytes string."""

@@ -5,9 +5,10 @@
 
 """Tests for PAML baseml module."""
 
-import unittest
 import os
 import os.path
+import unittest
+
 from Bio.Phylo.PAML import baseml
 from Bio.Phylo.PAML._paml import PamlError
 

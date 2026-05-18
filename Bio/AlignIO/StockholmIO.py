@@ -152,6 +152,7 @@ You can also see this in the Stockholm output of this partial-alignment:
     <BLANKLINE>
 
 """
+
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -469,7 +470,6 @@ class StockholmIterator(AlignmentIterator):
         self.seq_col_annotation = gr
 
         if ids and seqs:
-
             if (
                 self.records_per_alignment is not None
                 and self.records_per_alignment != len(ids)

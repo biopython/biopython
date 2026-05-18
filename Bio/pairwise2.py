@@ -157,7 +157,7 @@ Some examples:
       Score=3
     <BLANKLINE>
 
-  To restore the 'historic' behaviour of ``format_alignemt``, i.e., showing
+  To restore the 'historic' behaviour of ``format_alignment``, i.e., showing
   also the un-aligned parts of both sequences, use the new keyword parameter
   ``full_sequences``:
 
@@ -271,8 +271,9 @@ type ``help(pairwise2.align.localds)`` at the Python prompt.
 import warnings
 from collections import namedtuple
 
-from Bio import BiopythonWarning
 from Bio import BiopythonDeprecationWarning
+from Bio import BiopythonWarning
+from Bio.Align import substitution_matrices
 
 warnings.warn(
     "Bio.pairwise2 has been deprecated, and we intend to remove it in a "
@@ -284,6 +285,8 @@ warnings.warn(
 
 
 MAX_ALIGNMENTS = 1000  # maximum alignments recovered in traceback
+
+Alignment = namedtuple("Alignment", ("seqA, seqB, score, start, end"))
 
 
 class align:
@@ -1151,7 +1154,6 @@ def _clean_alignments(alignments):
     Remove duplicates, make sure begin and end are set correctly, remove
     empty alignments.
     """
-    Alignment = namedtuple("Alignment", ("seqA, seqB, score, start, end"))
     unique_alignments = []
     for align in alignments:
         if align not in unique_alignments:
@@ -1282,6 +1284,8 @@ class dictionary_match:
 
     def __init__(self, score_dict, symmetric=1):
         """Initialize the class."""
+        if isinstance(score_dict, substitution_matrices.Array):
+            score_dict = dict(score_dict)  # Access to dict is much faster
         self.score_dict = score_dict
         self.symmetric = symmetric
 

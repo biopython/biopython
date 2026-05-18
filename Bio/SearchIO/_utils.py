@@ -5,6 +5,8 @@
 # package.
 """Common SearchIO utility functions."""
 
+import sys
+
 
 def getattr_str(obj, attr, fmt=None, fallback="?"):
     """Return string of the given object's attribute.

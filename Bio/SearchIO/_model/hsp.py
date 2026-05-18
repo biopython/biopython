@@ -6,20 +6,18 @@
 """Bio.SearchIO objects to model high scoring regions between query and hit."""
 
 import warnings
-from operator import ge, le
+from operator import ge
+from operator import le
 
 from Bio import BiopythonWarning
 from Bio.Align import MultipleSeqAlignment
+from Bio.SearchIO._utils import allitems
+from Bio.SearchIO._utils import fragcascade
+from Bio.SearchIO._utils import fullcascade
+from Bio.SearchIO._utils import getattr_str
+from Bio.SearchIO._utils import singleitem
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-
-from Bio.SearchIO._utils import (
-    singleitem,
-    allitems,
-    fullcascade,
-    fragcascade,
-    getattr_str,
-)
 
 from ._base import _BaseHSP
 

@@ -12,7 +12,6 @@ The KGML definition is as of release KGML v0.7.1
 Classes:
 """
 
-
 import os
 import tempfile
 from io import BytesIO
@@ -231,7 +230,7 @@ class KGMLCanvas:
             else:
                 self.drawing.setLineWidth(1)
             p.moveTo(x, y)
-            for (x, y) in graphics.coords:
+            for x, y in graphics.coords:
                 p.lineTo(x, y)
             self.drawing.drawPath(p)
             self.drawing.setLineWidth(1)  # Return to default
@@ -275,7 +274,7 @@ class KGMLCanvas:
             # maybe even parameterising it to a proportion of the total line
             # length.
             mid_idx = len(graphics.coords) * 0.5
-            if not int(mid_idx) == mid_idx:
+            if int(mid_idx) != mid_idx:
                 idx1, idx2 = int(mid_idx - 0.5), int(mid_idx + 0.5)
             else:
                 idx1, idx2 = int(mid_idx - 1), int(mid_idx)

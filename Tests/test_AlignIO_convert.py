@@ -3,8 +3,8 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Unit tests for Bio.SeqIO.convert(...) function."""
-import unittest
 
+import unittest
 from io import StringIO
 
 from Bio import AlignIO

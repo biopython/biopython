@@ -200,7 +200,7 @@ X.3 Build a Codon Alignment
 ---------------------------
 
 Building a codon alignment is the first step of many evolutionary
-anaysis. But how to do that? ``Bio.codonalign`` provides you an easy
+analysis. But how to do that? ``Bio.codonalign`` provides you an easy
 function ``build()`` to achieve all. The data you need to prepare in
 advance is a protein alignment and a set of DNA sequences that can be
 translated into the protein sequences in the alignment.
@@ -371,7 +371,7 @@ in the python working space):
    >>> print(dN, dS)
    0.0193877676103 0.0217247139962
 
-If you are using maximum likelihood methdo to estimate dN and dS, you
+If you are using maximum likelihood method to estimate dN and dS, you
 are also able to specify equilibrium codon frequency to ``cfreq``
 argument. Available options include ``F1x4``, ``F3x4`` and ``F61``.
 

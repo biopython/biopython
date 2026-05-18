@@ -82,6 +82,108 @@ def to_networkx(tree):
     return G
 
 
+def to_igraph(tree, vertex_attributes=None, edge_attributes=("color", "width")):
+    """Convert a Tree object to an igraph Graph.
+
+    The result is useful for graph-oriented analysis and interactive plotting
+    with matplotlib, Cairo, and plotly.
+
+    Requires python-igraph version 0.10.0 or later.
+
+    :Parameters:
+        vertex_attributes : sequence of strings
+            A sequence of strings containing the Clade properties that are to
+            be stored as vertex attributes, e.g. "name".
+        edge_attributes : sequence of strings
+            A sequence of strings containing the Clade properties that are to
+            be stored as edge attributes, e.g. "color" and "width".
+
+    In both cases, if a property is not found it will be ignored.
+    """
+    try:
+        import igraph as ig
+    except ImportError:
+        raise MissingPythonDependencyError(
+            "Install igraph if you want to use to_igraph."
+        ) from None
+
+    if ig.__version__ < "0.10":
+        raise MissingPythonDependencyError(
+            "Update igraph to 0.10 or later if you want to use to_igraph."
+        )
+
+    # Count the leaves, thereby the total number of nodes in the tree
+    n_nodes = sum(1 for x in tree.find_clades())
+
+    # Empty tree
+    if n_nodes == 0:
+        return ig.Graph()
+
+    # NOTE: In igraph, adding all edges at once is much faster, so we prepare
+    # an edgelist and related attributes
+    def add_subtree(node, n_node, counter, edges, edge_attrs, vertex_attrs):
+        """Add edges from this subtree, breath-first."""
+        # NOTE: Bio.Phylo stores both vertex and edge attributes in the
+        # same place as "clade" attributes. However, the root node can have
+        # a vertex attribute but no edge attribute, hence the code blocks are
+        # in different places
+        for attrname in vertex_attrs:
+            if hasattr(node, attrname):
+                # Sometimes, only some tree nodes (e.g. leaves) have
+                # a certain attribute, e.g. a name
+                if len(vertex_attrs[attrname]) == 0:
+                    vertex_attrs[attrname] = [None] * n_nodes
+                vertex_attrs[attrname][n_node] = getattr(node, attrname)
+
+        delta_counter = 0
+        for i, child in enumerate(node):
+            n_child = counter + 1 + i
+            delta_counter += 1
+            edges.append((n_node, n_child))
+
+            # NOTE: The root cannot have an edge attribute, therefore to have
+            # an edge attribute you must be child of some other node.
+            for attrname in edge_attrs:
+                if hasattr(child, attrname):
+                    # Sometimes, only some tree edges (i.e. branches) have
+                    # a certain attribute, e.g. a name
+                    edge_attrs[attrname].append(getattr(child, attrname))
+
+        old_counter = counter
+        counter = counter + delta_counter
+        for i, child in enumerate(node):
+            n_child = old_counter + 1 + i
+            counter = add_subtree(
+                child, n_child, counter, edges, edge_attrs, vertex_attrs
+            )
+
+        return counter
+
+    edges = []
+    if vertex_attributes is None:
+        vertex_attributes = ()
+    edge_attrs = {attrname: [] for attrname in edge_attributes}
+    vertex_attrs = {attrname: [] for attrname in vertex_attributes}
+
+    add_subtree(tree.root, 0, 0, edges, edge_attrs, vertex_attrs)
+
+    # Remove unused attributes
+    for attrname in vertex_attributes:
+        if len(vertex_attrs[attrname]) == 0:
+            del vertex_attrs[attrname]
+    for attrname in edge_attributes:
+        if len(edge_attrs[attrname]) == 0:
+            del edge_attrs[attrname]
+
+    graph = ig.Graph(
+        edges=edges,
+        vertex_attrs=vertex_attrs,
+        edge_attrs=edge_attrs,
+        directed=bool(tree.rooted),
+    )
+    return graph
+
+
 def draw_ascii(tree, file=None, column_width=80):
     """Draw an ascii-art phylogram of the given tree.
 
@@ -123,9 +225,7 @@ def draw_ascii(tree, file=None, column_width=80):
             depths = tree.depths(unit_branch_lengths=True)
         # Potential drawing overflow due to rounding -- 1 char per tree layer
         fudge_margin = int(math.ceil(math.log(len(taxa), 2)))
-        cols_per_branch_unit = (drawing_width - fudge_margin) / float(
-            max(depths.values())
-        )
+        cols_per_branch_unit = (drawing_width - fudge_margin) / max(depths.values())
         return {
             clade: int(blen * cols_per_branch_unit + 1.0)
             for clade, blen in depths.items()
@@ -375,6 +475,8 @@ def draw(
         y_top=0,
         color="black",
         lw=".1",
+        capstyle="round",
+        joinstyle="round",
     ):
         """Create a line with or without a line collection object.
 
@@ -382,19 +484,34 @@ def draw(
         customized by altering this function.
         """
         if not use_linecollection and orientation == "horizontal":
-            axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
+            line = axes.hlines(y_here, x_start, x_here, color=color, lw=lw)
+            line.set_solid_capstyle(capstyle)
+            line.set_solid_joinstyle(joinstyle)
+
         elif use_linecollection and orientation == "horizontal":
             horizontal_linecollections.append(
                 mpcollections.LineCollection(
-                    [[(x_start, y_here), (x_here, y_here)]], color=color, lw=lw
+                    [[(x_start, y_here), (x_here, y_here)]],
+                    color=color,
+                    lw=lw,
+                    linestyle="solid",
+                    capstyle=capstyle,
+                    joinstyle=joinstyle,
                 )
             )
         elif not use_linecollection and orientation == "vertical":
-            axes.vlines(x_here, y_bot, y_top, color=color)
+            line = axes.vlines(x_here, y_bot, y_top, color=color, lw=lw)
+            line.set_solid_capstyle(capstyle)
+            line.set_solid_joinstyle(joinstyle)
         elif use_linecollection and orientation == "vertical":
             vertical_linecollections.append(
                 mpcollections.LineCollection(
-                    [[(x_here, y_bot), (x_here, y_top)]], color=color, lw=lw
+                    [[(x_here, y_bot), (x_here, y_top)]],
+                    color=color,
+                    lw=lw,
+                    linestyle="solid",
+                    capstyle=capstyle,
+                    joinstyle=joinstyle,
                 )
             )
 

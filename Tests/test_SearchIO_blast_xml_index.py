@@ -7,7 +7,8 @@
 
 import unittest
 
-from search_tests_common import CheckRaw, CheckIndex
+from search_tests_common import CheckIndex
+from search_tests_common import CheckRaw
 
 
 class BlastXmlRawCases(CheckRaw):
@@ -727,7 +728,6 @@ class BlastXmlRawCases(CheckRaw):
 
 
 class BlastXmlIndexCases(CheckIndex):
-
     fmt = "blast-xml"
 
     def test_blastxml_2212L_blastp_001(self):

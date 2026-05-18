@@ -20,6 +20,7 @@ specifically requested, making the parser memory-efficient.
 The TwoBitIterator object implements the __getitem__, keys, and __len__
 methods that allow it to be used as a dictionary.
 """
+
 # The .2bit file format is defined by UCSC as follows
 # (see http://genome.ucsc.edu/FAQ/FAQformat.html#format7):
 #
@@ -69,15 +70,23 @@ methods that allow it to be used as a dictionary.
 # reserved - always zero for now
 # packedDna - the DNA packed to two bits per base, represented as so:
 #             T - 00, C - 01, A - 10, G - 11. The first base is in the most
-#             significant 2-bit byte; the last base is in the least significan
+#             significant 2-bit byte; the last base is in the least significant
 #             2 bits. For example, the sequence TCAG is represented as 00011011.
-import numpy
+try:
+    import numpy as np
+except ImportError:
+    from Bio import MissingPythonDependencyError
+
+    raise MissingPythonDependencyError(
+        "Install NumPy if you want to use Bio.SeqIO with TwoBit files."
+        "See http://www.numpy.org/"
+    ) from None
 
 from Bio.Seq import Seq
 from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import SeqRecord
 
-from . import _twoBitIO
+from . import _twoBitIO  # type: ignore
 from .Interfaces import SequenceIterator
 
 
@@ -130,7 +139,7 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
             if str(exception) == "seek of closed file":
                 raise ValueError("cannot retrieve sequence: file is closed") from None
             raise
-        data = numpy.fromfile(stream, dtype="uint8", count=byteSize)
+        data = np.fromfile(stream, dtype="uint8", count=byteSize)
         sequence = _twoBitIO.convert(
             data, start, end, step, self.nBlocks, self.maskBlocks
         )
@@ -147,25 +156,25 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
         """Remove the sequence mask."""
         data = _TwoBitSequenceData(self.stream, self.offset, self.length)
         data.nBlocks = self.nBlocks[:, :]
-        data.maskBlocks = numpy.empty((0, 2), dtype="uint32")
+        data.maskBlocks = np.empty((0, 2), dtype="uint32")
         return data
 
     def lower(self):
         """Extend the sequence mask to the full sequence."""
         data = _TwoBitSequenceData(self.stream, self.offset, self.length)
         data.nBlocks = self.nBlocks[:, :]
-        data.maskBlocks = numpy.array([[0, self.length]], dtype="uint32")
+        data.maskBlocks = np.array([[0, self.length]], dtype="uint32")
         return data
 
 
 class TwoBitIterator(SequenceIterator):
     """Parser for UCSC twoBit (.2bit) files."""
 
+    modes = "b"
+
     def __init__(self, source):
         """Read the file index."""
-        super().__init__(source, mode="b", fmt="twoBit")
-        # wait to close the file until the TwoBitIterator goes out of scope:
-        self.should_close_stream = False
+        super().__init__(source, fmt="twoBit")
         stream = self.stream
         data = stream.read(4)
         if not data:
@@ -210,16 +219,16 @@ class TwoBitIterator(SequenceIterator):
             sequence = _TwoBitSequenceData(stream, offset, dnaSize)
             data = stream.read(4)
             nBlockCount = int.from_bytes(data, byteorder, signed=False)
-            nBlockStarts = numpy.fromfile(stream, dtype=dtype, count=nBlockCount)
-            nBlockSizes = numpy.fromfile(stream, dtype=dtype, count=nBlockCount)
-            sequence.nBlocks = numpy.empty((nBlockCount, 2), dtype="uint32")
+            nBlockStarts = np.fromfile(stream, dtype=dtype, count=nBlockCount)
+            nBlockSizes = np.fromfile(stream, dtype=dtype, count=nBlockCount)
+            sequence.nBlocks = np.empty((nBlockCount, 2), dtype="uint32")
             sequence.nBlocks[:, 0] = nBlockStarts
             sequence.nBlocks[:, 1] = nBlockStarts + nBlockSizes
             data = stream.read(4)
             maskBlockCount = int.from_bytes(data, byteorder, signed=False)
-            maskBlockStarts = numpy.fromfile(stream, dtype=dtype, count=maskBlockCount)
-            maskBlockSizes = numpy.fromfile(stream, dtype=dtype, count=maskBlockCount)
-            sequence.maskBlocks = numpy.empty((maskBlockCount, 2), dtype="uint32")
+            maskBlockStarts = np.fromfile(stream, dtype=dtype, count=maskBlockCount)
+            maskBlockSizes = np.fromfile(stream, dtype=dtype, count=maskBlockCount)
+            sequence.maskBlocks = np.empty((maskBlockCount, 2), dtype="uint32")
             sequence.maskBlocks[:, 0] = maskBlockStarts
             sequence.maskBlocks[:, 1] = maskBlockStarts + maskBlockSizes
             data = stream.read(4)
@@ -227,14 +236,15 @@ class TwoBitIterator(SequenceIterator):
             if reserved != 0:
                 raise ValueError("Found non-zero reserved field %u" % reserved)
             sequence.offset = stream.tell()
-            sequences[name] = sequence
-
-    def parse(self, stream):
-        """Iterate over the sequences in the file."""
-        for name, sequence in self.sequences.items():
             sequence = Seq(sequence)
-            record = SeqRecord(sequence, id=name)
-            yield record
+            sequences[name] = sequence
+        self._names = iter(self.sequences)
+
+    def __next__(self):
+        """Return the next entry."""
+        name = next(self._names)
+        sequence = self.sequences[name]
+        return SeqRecord(sequence, id=name)
 
     def __getitem__(self, name):
         """Return sequence associated with given name as a SeqRecord object."""
@@ -242,7 +252,6 @@ class TwoBitIterator(SequenceIterator):
             sequence = self.sequences[name]
         except ValueError:
             raise KeyError(name) from None
-        sequence = Seq(sequence)
         return SeqRecord(sequence, id=name)
 
     def keys(self):

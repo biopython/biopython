@@ -37,16 +37,18 @@ written solution, since the number of DTDs is rather large and their
 contents may change over time. About half the code in this parser deals
 with parsing the DTD, and the other half with the XML itself.
 """
+
 import os
 import warnings
-from collections import Counter
-from xml.parsers import expat
-from io import BytesIO
 import xml.etree.ElementTree as ET
+from collections import Counter
+from io import BytesIO
+from urllib.parse import urlparse
+from urllib.request import urlopen
+from xml.parsers import expat
 from xml.sax.saxutils import escape
 
-from urllib.request import urlopen, urlparse
-
+from Bio import StreamModeError
 
 # The following four classes are used to add a member .attributes to integers,
 # strings, lists, and dictionaries, respectively.
@@ -61,24 +63,6 @@ class NoneElement:
         self.key = key
         self.attributes = attributes
 
-    def __eq__(self, other):
-        """Define equality with other None objects."""
-        if other is None:
-            return True
-        elif other.__eq__(None):
-            return True
-        else:
-            return False
-
-    def __ne__(self, other):
-        """Define non-equality."""
-        if other is None:
-            return False
-        elif other.__eq__(None):
-            return False
-        else:
-            return True
-
     def __repr__(self):
         """Return a string representation of the object."""
         try:
@@ -86,6 +70,11 @@ class NoneElement:
         except AttributeError:
             return "NoneElement"
         return "NoneElement(attributes=%r)" % attributes
+
+    def __eq__(self, other):
+        if isinstance(other, NoneElement):
+            return True
+        return False
 
 
 class IntegerElement(int):
@@ -159,6 +148,7 @@ class ListElement(list):
         key = value.key
         if self.allowed_tags is not None and key not in self.allowed_tags:
             raise ValueError("Unexpected item '%s' in list" % key)
+        del value.key
         self.append(value)
 
 
@@ -193,6 +183,7 @@ class DictionaryElement(dict):
         tag = value.tag
         if self.allowed_tags is not None and tag not in self.allowed_tags:
             raise ValueError("Unexpected item '%s' in dictionary" % key)
+        del value.key
         if self.repeated_tags and key in self.repeated_tags:
             self[key].append(value)
         else:
@@ -234,6 +225,24 @@ class OrderedListElement(list):
         if key == self.first_tag:
             self.append([])
         self[-1].append(value)
+
+
+class ErrorElement(str):
+    """NCBI Entrez XML element containing an error message."""
+
+    def __new__(cls, value, *args, **kwargs):
+        """Create an ErrorElement."""
+        return str.__new__(cls, value)
+
+    def __init__(self, value, tag):
+        """Initialize an ErrorElement."""
+        self.tag = tag
+        self.key = tag
+
+    def __repr__(self):
+        """Return the error message as a string."""
+        text = str.__repr__(self)
+        return f"ErrorElement({text})"
 
 
 class NotXMLError(ValueError):
@@ -293,10 +302,13 @@ class DataHandlerMeta(type):
 
     def __init__(cls, *args, **kwargs):
         """Initialize the class."""
+        from Bio import Entrez
+
         try:
-            cls.directory = None  # use default directory for local cache
+            cls.directory = Entrez.local_cache  # use default directory for local cache
         except PermissionError:
-            cls._directory = None  # no local cache
+            cls._directory = Entrez.local_cache  # no local cache
+        del Entrez
 
     @property
     def directory(cls):
@@ -337,11 +349,12 @@ class DataHandler(metaclass=DataHandlerMeta):
 
     del Entrez
 
-    def __init__(self, validate, escape):
+    def __init__(self, validate, escape, ignore_errors):
         """Create a DataHandler object."""
         self.dtd_urls = []
         self.element = None
         self.level = 0
+        self.bypass_url_security = False
         self.data = []
         self.attributes = None
         self.allowed_tags = None
@@ -350,6 +363,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.items = set()
         self.errors = set()
         self.validating = validate
+        self.ignore_errors = ignore_errors
         self.parser = expat.ParserCreate(namespace_separator=" ")
         self.parser.SetParamEntityParsing(expat.XML_PARAM_ENTITY_PARSING_ALWAYS)
         self.parser.XmlDeclHandler = self.xmlDeclHandler
@@ -361,14 +375,22 @@ class DataHandler(metaclass=DataHandlerMeta):
         else:
             self.characterDataHandler = self.characterDataHandlerRaw
 
-    def read(self, handle):
-        """Set up the parser and let it parse the XML results."""
+    def read(self, source):
+        """Set up the parser and let it read the XML results."""
         # Expat's parser.ParseFile function only accepts binary data;
         # see also the comment below for Entrez.parse.
-        if handle.read(0) != b"":
+        try:
+            stream = open(source, "rb")
+        except TypeError:  # not a path, assume we received a stream
+            if source.read(0) != b"":
+                raise StreamModeError(
+                    "the XML file must be opened in binary mode."
+                ) from None
+            stream = source
+        if stream.read(0) != b"":
             raise TypeError("file should be opened in binary mode")
         try:
-            self.parser.ParseFile(handle)
+            self.parser.ParseFile(stream)
         except expat.ExpatError as e:
             if self.parser.StartElementHandler:
                 # We saw the initial <!xml declaration, so we can be sure that
@@ -379,8 +401,11 @@ class DataHandler(metaclass=DataHandlerMeta):
                 # We have not seen the initial <!xml declaration, so probably
                 # the input data is not in XML format.
                 raise NotXMLError(e) from None
+        finally:
+            if stream is not source:
+                stream.close()
         try:
-            return self.record
+            record = self.record
         except AttributeError:
             if self.parser.StartElementHandler:
                 # We saw the initial <!xml declaration, and expat didn't notice
@@ -395,72 +420,87 @@ class DataHandler(metaclass=DataHandlerMeta):
                 # We did not see the initial <!xml declaration, so probably
                 # the input data is not in XML format.
                 raise NotXMLError("XML declaration not found") from None
+        else:
+            del record.key
+            return record
 
-    def parse(self, handle):
-        """Parse the XML in the given file handle."""
-        # The handle should have been opened in binary mode; data read from
-        # the handle are then bytes. Expat will pick up the encoding from the
-        # XML declaration (or assume UTF-8 if it is missing), and use this
-        # encoding to convert the binary data to a string before giving it to
-        # characterDataHandler.
+    def parse(self, source):
+        """Set up the parser and let it read the XML results."""
+        # The source must be a filename, or a file-like object opened in binary
+        # mode. Data read from the file or file-like object as bytes. Expat will
+        # pick up the encoding from the XML declaration (or assume UTF-8 if it
+        # is missing), and use this encoding to convert the binary data to a
+        # string before giving it to characterDataHandler.
         # While parser.ParseFile only accepts binary data, parser.Parse accepts
         # both binary data and strings. However, a file in text mode may have
         # been opened with an encoding different from the encoding specified in
         # the XML declaration at the top of the file. If so, the data in the
         # file will have been decoded with an incorrect encoding. To avoid
         # this, and to be consistent with parser.ParseFile (which is used in
-        # the Entrez.read function above), we require the handle to be in
+        # the Entrez.read function above), we require the source data to be in
         # binary mode here as well.
-        if handle.read(0) != b"":
+        try:
+            stream = open(source, "rb")
+        except TypeError:  # not a path, assume we received a stream
+            if source.read(0) != b"":
+                raise StreamModeError(
+                    "the XML file must be opened in binary mode."
+                ) from None
+            stream = source
+        if stream.read(0) != b"":
             raise TypeError("file should be opened in binary mode")
         BLOCK = 1024
-        while True:
-            # Read in another block of data from the file.
-            data = handle.read(BLOCK)
-            try:
+        try:
+            while True:
+                # Read in another block of data from the file.
+                data = stream.read(BLOCK)
                 self.parser.Parse(data, False)
-            except expat.ExpatError as e:
-                if self.parser.StartElementHandler:
-                    # We saw the initial <!xml declaration, so we can be sure
-                    # that we are parsing XML data. Most likely, the XML file
-                    # is corrupted.
-                    raise CorruptedXMLError(e) from None
-                else:
-                    # We have not seen the initial <!xml declaration, so
-                    # probably the input data is not in XML format.
-                    raise NotXMLError(e) from None
-            try:
-                records = self.record
-            except AttributeError:
-                if self.parser.StartElementHandler:
-                    # We saw the initial <!xml declaration, and expat
-                    # didn't notice any errors, so self.record should be
-                    # defined. If not, this is a bug.
+                try:
+                    records = self.record
+                except AttributeError:
+                    if self.parser.StartElementHandler:
+                        # We saw the initial <!xml declaration, and expat
+                        # didn't notice any errors, so self.record should be
+                        # defined. If not, this is a bug.
 
-                    raise RuntimeError(
-                        "Failed to parse the XML file correctly, possibly due to a "
-                        "bug in Bio.Entrez. Please contact the Biopython "
-                        "developers via the mailing list or GitHub for assistance."
-                    ) from None
-                else:
-                    # We did not see the initial <!xml declaration, so
-                    # probably the input data is not in XML format.
-                    raise NotXMLError("XML declaration not found") from None
+                        raise RuntimeError(
+                            "Failed to parse the XML file correctly, possibly due to a "
+                            "bug in Bio.Entrez. Please contact the Biopython "
+                            "developers via the mailing list or GitHub for assistance."
+                        ) from None
+                    else:
+                        # We did not see the initial <!xml declaration, so
+                        # probably the input data is not in XML format.
+                        raise NotXMLError("XML declaration not found") from None
 
-            if not isinstance(records, list):
-                raise ValueError(
-                    "The XML file does not represent a list. Please use Entrez.read "
-                    "instead of Entrez.parse"
-                )
+                if not isinstance(records, list):
+                    raise ValueError(
+                        "The XML file does not represent a list. Please use "
+                        "Entrez.read instead of Entrez.parse."
+                    )
 
-            if not data:
-                break
+                if not data:
+                    break
 
-            while len(records) >= 2:
-                # Then the first record is finished, while the second record
-                # is still a work in progress.
-                record = records.pop(0)
-                yield record
+                while len(records) >= 2:
+                    # Then the first record is finished, while the second record
+                    # is still a work in progress.
+                    record = records.pop(0)
+                    yield record
+
+        except expat.ExpatError as e:
+            if self.parser.StartElementHandler:
+                # We saw the initial <!xml declaration, so we can be sure
+                # that we are parsing XML data. Most likely, the XML file
+                # is corrupted.
+                raise CorruptedXMLError(e) from None
+            else:
+                # We have not seen the initial <!xml declaration, so
+                # probably the input data is not in XML format.
+                raise NotXMLError(e) from None
+        finally:
+            if stream is not source:
+                stream.close()
 
         # We have reached the end of the XML file
         self.parser = None
@@ -504,7 +544,7 @@ class DataHandler(metaclass=DataHandlerMeta):
             elif prefix == "xlink":
                 assert uri == "http://www.w3.org/1999/xlink"
             elif prefix == "ali":
-                assert uri == "http://www.niso.org/schemas/ali/1.0/"
+                assert uri.rstrip("/") == "http://www.niso.org/schemas/ali/1.0"
             else:
                 raise ValueError(f"Unknown prefix '{prefix}' with uri '{uri}'")
             self.namespace_level[prefix] += 1
@@ -526,6 +566,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         """Process the XML schema (before processing the element)."""
         key = "%s noNamespaceSchemaLocation" % self.schema_namespace
         schema = attrs[key]
+        self.verify_security(schema)
         handle = self.open_xsd_file(os.path.basename(schema))
         # if there is no local xsd file grab the url and parse the file
         if not handle:
@@ -733,7 +774,7 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.allowed_tags = None
 
     def endRawElementHandler(self, name):
-        """Handle start of an XML raw element."""
+        """Handle end of an XML raw element."""
         self.level -= 1
         if self.level == 0:
             self.parser.EndElementHandler = self.endStringElementHandler
@@ -746,22 +787,30 @@ class DataHandler(metaclass=DataHandlerMeta):
         self.data.append(tag)
 
     def endSkipElementHandler(self, name):
-        """Handle start of an XML skip element."""
+        """Handle end of an XML skip element."""
         self.level -= 1
         if self.level == 0:
             self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.endElementHandler
 
-    def endErrorElementHandler(self, name):
-        """Handle start of an XML error element."""
-        if self.data:
-            # error found:
-            value = "".join(self.data)
-            raise RuntimeError(value)
-        # no error found:
-        if self.element is not None:
+    def endErrorElementHandler(self, tag):
+        """Handle end of an XML error element."""
+        element = self.element
+        if element is not None:
+            self.parser.StartElementHandler = self.startElementHandler
             self.parser.EndElementHandler = self.endElementHandler
             self.parser.CharacterDataHandler = self.skipCharacterDataHandler
+        data = "".join(self.data)
+        if data == "":
+            return
+        if self.ignore_errors is False:
+            raise RuntimeError(data)
+        self.data = []
+        value = ErrorElement(data, tag)
+        if element is None:
+            self.record = element
+        else:
+            element.store(value)
 
     def endElementHandler(self, name):
         """Handle end of an XML element."""
@@ -901,14 +950,10 @@ class DataHandler(metaclass=DataHandlerMeta):
             self.constructors[name] = (DictionaryElement, args)
             return
         # List-type elements
-        if (
-            model[0]
-            in (
-                expat.model.XML_CTYPE_CHOICE,
-                expat.model.XML_CTYPE_SEQ,
-            )
-            and model[1] in (expat.model.XML_CQUANT_PLUS, expat.model.XML_CQUANT_REP)
-        ):
+        if model[0] in (
+            expat.model.XML_CTYPE_CHOICE,
+            expat.model.XML_CTYPE_SEQ,
+        ) and model[1] in (expat.model.XML_CQUANT_PLUS, expat.model.XML_CQUANT_REP):
             children = model[3]
             allowed_tags = frozenset(child[2] for child in children)
             if model[0] == expat.model.XML_CTYPE_SEQ:
@@ -932,9 +977,9 @@ class DataHandler(metaclass=DataHandlerMeta):
         # only once, and which can occur multiple times.
         single = []
         multiple = []
+        errors = []
         # The 'count' function is called recursively to make sure all the
-        # children in this model are counted. Error keys are ignored;
-        # they raise an exception in Python.
+        # children in this model are counted.
 
         def count(model):
             quantifier, key, children = model[1:]
@@ -948,7 +993,9 @@ class DataHandler(metaclass=DataHandlerMeta):
                 else:
                     for child in children:
                         count(child)
-            elif key.upper() != "ERROR":
+            elif key.upper() == "ERROR":
+                errors.append(key)
+            else:
                 if quantifier in (
                     expat.model.XML_CQUANT_NONE,
                     expat.model.XML_CQUANT_OPT,
@@ -962,10 +1009,10 @@ class DataHandler(metaclass=DataHandlerMeta):
 
         count(model)
         if len(single) == 0 and len(multiple) == 1:
-            allowed_tags = frozenset(multiple)
+            allowed_tags = frozenset(multiple + errors)
             self.constructors[name] = (ListElement, (allowed_tags,))
         else:
-            allowed_tags = frozenset(single + multiple)
+            allowed_tags = frozenset(single + multiple + errors)
             repeated_tags = frozenset(multiple)
             args = (allowed_tags, repeated_tags)
             self.constructors[name] = (DictionaryElement, args)
@@ -1034,6 +1081,21 @@ class DataHandler(metaclass=DataHandlerMeta):
             handle.write(text)
             handle.close()
 
+    def verify_security(self, url, verify_hostname=True):
+        """Check if the given URL is from a trustable source.
+
+        When ``self.bypass_url_security`` evaluates to ``True``,
+        all URL security checks will be skipped.
+        """
+        if not self.bypass_url_security:
+            parts = urlparse(url)
+            scheme = parts.scheme
+            hostname = parts.hostname
+            if scheme != "https" or (
+                verify_hostname and not hostname.endswith(".nlm.nih.gov")
+            ):
+                raise ValueError(f"Expected secure URL to NCBI, found {url!r}")
+
     def externalEntityRefHandler(self, context, base, systemId, publicId):
         """Handle external entity reference in order to cache DTD locally.
 
@@ -1055,33 +1117,49 @@ class DataHandler(metaclass=DataHandlerMeta):
             except IndexError:
                 # Assume the default URL for DTDs if the top parent
                 # does not contain an absolute path
-                source = "http://www.ncbi.nlm.nih.gov/dtd/"
+                source = "https://www.ncbi.nlm.nih.gov/dtd/"
             else:
                 source = os.path.dirname(source)
             # urls always have a forward slash, don't use os.path.join
             url = source.rstrip("/") + "/" + systemId
         else:
             raise ValueError("Unexpected URL scheme %r" % urlinfo.scheme)
-        self.dtd_urls.append(url)
-        # First, try to load the local version of the DTD file
-        location, filename = os.path.split(systemId)
-        handle = self.open_dtd_file(filename)
-        if not handle:
-            # DTD is not available as a local file. Try accessing it through
-            # the internet instead.
-            try:
-                handle = urlopen(url)
-            except OSError:
-                raise RuntimeError(f"Failed to access {filename} at {url}") from None
-            text = handle.read()
-            handle.close()
-            self.save_dtd_file(filename, text)
-            handle = BytesIO(text)
 
-        parser = self.parser.ExternalEntityParserCreate(context)
-        parser.ElementDeclHandler = self.elementDecl
-        parser.ParseFile(handle)
-        handle.close()
-        self.dtd_urls.pop()
+        # NOTE: This trusts any external references from a trusted parent,
+        #       even if these external references go to unknown hosts,
+        #       e.g. when NCBI starts referencing things on a new host
+        #       from existing DTD files.
+        #       Needs to be checked *prior* to appending to ``self.dtd_urls``.
+        self.verify_security(url, verify_hostname=not self.dtd_urls)
+
+        # NOTE: Since ``self.dtd_urls`` being non-empty has security
+        #       consequences with the check above, we use a ``finally`` wrap
+        #       here, in order to guarantee that push and pop are matched.
+        self.dtd_urls.append(url)
+        try:
+            # First, try to load the local version of the DTD file
+            location, filename = os.path.split(systemId)
+            handle = self.open_dtd_file(filename)
+            if not handle:
+                # DTD is not available as a local file. Try accessing it through
+                # the internet instead.
+                try:
+                    handle = urlopen(url)
+                except OSError:
+                    raise RuntimeError(
+                        f"Failed to access {filename} at {url}"
+                    ) from None
+                text = handle.read()
+                handle.close()
+                self.save_dtd_file(filename, text)
+                handle = BytesIO(text)
+
+            parser = self.parser.ExternalEntityParserCreate(context)
+            parser.ElementDeclHandler = self.elementDecl
+            parser.ParseFile(handle)
+            handle.close()
+        finally:
+            self.dtd_urls.pop()
+
         self.parser.StartElementHandler = self.startElementHandler
         return 1

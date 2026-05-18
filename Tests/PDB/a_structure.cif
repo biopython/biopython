@@ -1,3 +1,4 @@
+data_a_structure
 loop_
 _atom_type.symbol 
 N  

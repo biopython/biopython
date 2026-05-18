@@ -1,0 +1,170 @@
+[build-system]
+requires = ["setuptools>=74.1", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "biopython"
+dynamic = ["version"]
+description = "Freely available tools for computational molecular biology."
+readme = "README.rst"
+requires-python = ">=3.10"
+license = "LicenseRef-Biopython-License-Agreement"
+license-files = ["LICENSE.rst"]
+authors = [
+    {name = "The Biopython Contributors", email = "biopython@biopython.org"}
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "numpy",
+]
+
+[project.urls]
+Homepage = "https://biopython.org/"
+Documentation = "https://biopython.org/wiki/Documentation"
+Source = "https://github.com/biopython/biopython/"
+Tracker = "https://github.com/biopython/biopython/issues"
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+packages = [
+    "Bio",
+    "Bio.Affy",
+    "Bio.Align",
+    "Bio.Align.substitution_matrices",
+    "Bio.Align.substitution_matrices.data",
+    "Bio.AlignIO",
+    "Bio.Alphabet",
+    "Bio.Blast",
+    "Bio.CAPS",
+    "Bio.Cluster",
+    "Bio.codonalign",
+    "Bio.Compass",
+    "Bio.Data",
+    "Bio.Emboss",
+    "Bio.Entrez",
+    "Bio.Entrez.DTDs",
+    "Bio.Entrez.XSDs",
+    "Bio.ExPASy",
+    "Bio.GenBank",
+    "Bio.Geo",
+    "Bio.Graphics",
+    "Bio.Graphics.GenomeDiagram",
+    "Bio.HMM",
+    "Bio.KEGG",
+    "Bio.KEGG.Compound",
+    "Bio.KEGG.Enzyme",
+    "Bio.KEGG.Gene",
+    "Bio.KEGG.Map",
+    "Bio.KEGG.KGML",
+    "Bio.Medline",
+    "Bio.motifs",
+    "Bio.motifs.jaspar",
+    "Bio.Nexus",
+    "Bio.NMR",
+    "Bio.Pathway",
+    "Bio.Pathway.Rep",
+    "Bio.PDB",
+    "Bio.PDB.mmtf",
+    "Bio.phenotype",
+    "Bio.PopGen",
+    "Bio.PopGen.GenePop",
+    "Bio.Restriction",
+    "Bio.SCOP",
+    "Bio.SearchIO",
+    "Bio.SearchIO._model",
+    "Bio.SearchIO.BlastIO",
+    "Bio.SearchIO.HHsuiteIO",
+    "Bio.SearchIO.HmmerIO",
+    "Bio.SearchIO.InfernalIO",
+    "Bio.SearchIO.ExonerateIO",
+    "Bio.SearchIO.InterproscanIO",
+    "Bio.SeqIO",
+    "Bio.SeqUtils",
+    "Bio.Sequencing",
+    "Bio.SVDSuperimposer",
+    "Bio.SwissProt",
+    "Bio.TogoWS",
+    "Bio.Phylo",
+    "Bio.Phylo.PAML",
+    "Bio.UniGene",
+    "Bio.UniProt",
+    "BioSQL",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "Bio.__version__"}
+
+# C extension modules using setuptools 74.1+ native support
+[[tool.setuptools.ext-modules]]
+name = "Bio.Align._aligncore"
+sources = ["Bio/Align/_aligncore.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.Align._alignmentcounts"
+sources = ["Bio/Align/_alignmentcounts.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.Align._codonaligner"
+sources = ["Bio/Align/_codonaligner.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.Align._pairwisealigner"
+sources = ["Bio/Align/_pairwisealigner.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.Align.substitution_matrices._arraycore"
+sources = ["Bio/Align/substitution_matrices/_arraycore.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.cpairwise2"
+sources = ["Bio/cpairwise2module.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.Nexus.cnexus"
+sources = ["Bio/Nexus/cnexus.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.motifs._pwm"
+sources = ["Bio/motifs/_pwm.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.Cluster._cluster"
+sources = ["Bio/Cluster/cluster.c", "Bio/Cluster/clustermodule.c"]
+extra-compile-args = ["-DCLUSTER_USE_PYTHON_MEMORY"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.PDB.ccealign"
+sources = ["Bio/PDB/ccealignmodule.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.PDB.kdtrees"
+sources = ["Bio/PDB/kdtrees.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.PDB._bcif_helper"
+sources = ["Bio/PDB/bcifhelpermodule.c"]
+
+[[tool.setuptools.ext-modules]]
+name = "Bio.SeqIO._twoBitIO"
+sources = ["Bio/SeqIO/_twoBitIO.c"]
+
+[dependency-groups]
+dev = [
+    "setuptools>=74.1.0",
+]

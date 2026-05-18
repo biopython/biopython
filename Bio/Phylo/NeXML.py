@@ -34,7 +34,7 @@ class Clade(BaseTree.Clade):
         clades=None,
         confidence=None,
         comment=None,
-        **kwargs
+        **kwargs,
     ):
         """Initialize parameters for NeXML Clade object."""
         BaseTree.Clade.__init__(

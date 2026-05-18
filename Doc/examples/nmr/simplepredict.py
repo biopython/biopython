@@ -49,13 +49,8 @@ This script generates a human readable standard output version of the
 NOE coordinates as well as an nmrview peaklist out_example.xpk.
 """
 
-
-# -- don't need to modify sys.path with the *tools in Biopython
-# -- just need Biopython installed somewhere in the PYTHONPATH
-# sys.path=[sys.path,"./"]
-# sys.path=[sys.path,"/usr/people/robert/development/xpktools"]
-from Bio.NMR import xpktools  # Contains data classes and functions for .xpk files
 from Bio.NMR import NOEtools  # A module specific for generate NOE predictions
+from Bio.NMR import xpktools  # Contains data classes and functions for .xpk files
 
 # * * * * * * * * * * MAIN * * * * * * * * * *
 
@@ -80,13 +75,13 @@ peaklist = xpktools.Peaklist(infn)  # infn is the name of the xpk file
 # of any of the nuclei in the file -- here, the detected atom
 # is used
 
-dict = peaklist.residue_dict(detectatom)
+res_dict = peaklist.residue_dict(detectatom)
 
 # As well as the data, the dictionary contains two other entries,
 # corresponding to the maximum and minimum residues indexed
 
-MAXRES = dict["maxres"]
-MINRES = dict["minres"]
+MAXRES = res_dict["maxres"]
+MINRES = res_dict["minres"]
 
 # ****** CALCULATE AND WRITE CROSSPEAK PEAKLIST *****
 
@@ -119,7 +114,6 @@ while res <= MAXRES:
     entry1 = xpktools.XpkEntry(noe1, peaklist.datalabels)
 
     if noe1 != "":
-
         # Here I'm using the XpkEntry class to gain access to
         # specific fields in the file that make the information
         # more readable and suitable for creating data tables

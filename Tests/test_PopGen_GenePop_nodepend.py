@@ -7,10 +7,11 @@
 """Tests for PopGen GenePop nodepend module."""
 
 import os
+import tempfile
 import unittest
+
 from Bio.PopGen import GenePop
 from Bio.PopGen.GenePop import FileParser
-import tempfile
 
 
 class RecordTest(unittest.TestCase):

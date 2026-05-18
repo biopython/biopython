@@ -16,26 +16,41 @@ Comput Appl Biosci 1997 , 13:291-295
 ftp://ftp.lmcp.jussieu.fr/pub/sincris/software/protein/p-sea/
 """
 
+import os
 import subprocess
+import tempfile
+
 
 from Bio.PDB.Polypeptide import is_aa
 
 
-def run_psea(fname):
-    """Run PSEA and return output filename.
+def run_psea(fname, verbose=False):
+    """Run PSEA and return output filename."""
+    last = os.path.basename(fname)
+    base = os.path.splitext(last)[0]
+    cmd = ["psea", fname]
 
-    Note that this assumes the P-SEA binary is called "psea" and that it is
-    on the path.
+    curdir = os.getcwd()
 
-    Note that P-SEA will write an output file in the current directory using
-    the input filename with extension ".sea".
+    with tempfile.TemporaryDirectory() as tmpdir:
+        os.chdir(tmpdir)
 
-    Note that P-SEA will write output to the terminal while run.
-    """
-    subprocess.call(["psea", fname])
-    last = fname.split("/")[-1]
-    base = last.split(".")[0]
-    return base + ".sea"
+        p = subprocess.run(cmd, capture_output=True, text=True)
+
+        if verbose:
+            print(p.stdout)
+
+        output = base + ".sea"
+
+        if not p.stderr.strip() and os.path.exists(output):
+            # move output back to original directory
+            final_path = os.path.join(curdir, output)
+            os.rename(output, final_path)
+            os.chdir(curdir)
+            return final_path
+        else:
+            os.chdir(curdir)
+            raise RuntimeError(f"Error running p-sea: {p.stderr}")
 
 
 def psea(pname):
@@ -44,15 +59,15 @@ def psea(pname):
     start = 0
     ss = ""
     with open(fname) as fp:
-        for l in fp:
-            if l[0:6] == ">p-sea":
+        for line in fp:
+            if line[0:6] == ">p-sea":
                 start = 1
                 continue
             if not start:
                 continue
-            if l[0] == "\n":
+            if line[0] == "\n":
                 break
-            ss = ss + l[0:-1]
+            ss = ss + line[0:-1]
     return ss
 
 
@@ -82,7 +97,7 @@ def annotate(m, ss_seq):
     L = len(residues)
     if not L == len(ss_seq):
         raise ValueError("Length mismatch %i %i" % (L, len(ss_seq)))
-    for i in range(0, L):
+    for i in range(L):
         residues[i].xtra["SS_PSEA"] = ss_seq[i]
     # subprocess.call(["rm", fname])
 
@@ -103,16 +118,3 @@ class PSEA:
     def get_seq(self):
         """Return secondary structure string."""
         return self.ss_seq
-
-
-if __name__ == "__main__":
-
-    import sys
-    from Bio.PDB import PDBParser
-
-    # Parse PDB file
-    p = PDBParser()
-    s = p.get_structure("X", sys.argv[1])
-
-    # Annotate structure with PSEA secondary structure info
-    PSEA(s[0], sys.argv[1])

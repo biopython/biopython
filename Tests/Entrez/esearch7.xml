@@ -1,24 +1,24 @@
-<?xml version="1.0"?>
-<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
-<eSearchResult>
-	<Count>3</Count>
-	<RetMax>3</RetMax>
-	<RetStart>0</RetStart>
-	<IdList>
-		<Id>16766766</Id>
-		<Id>16422035</Id>
-		<Id>4104812</Id>
-	</IdList>
-	<TranslationSet>
-	</TranslationSet>
-	<TranslationStack>
-		<TermSet>
-			<Term>000200020[molecular weight]</Term>
-			<Field>molecular weight</Field>
-			<Count>3</Count>
-			<Explode>Y</Explode>
-		</TermSet>
-		<OP>GROUP</OP>
-	</TranslationStack>
-	<QueryTranslation>000200020[molecular weight]</QueryTranslation>
-</eSearchResult>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD esearch 20060628//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20060628/esearch.dtd">
+<eSearchResult><Count>330</Count><RetMax>20</RetMax><RetStart>0</RetStart><IdList>
+<Id>3108048616</Id>
+<Id>3076096315</Id>
+<Id>3070972985</Id>
+<Id>3070963398</Id>
+<Id>3042783758</Id>
+<Id>3042778745</Id>
+<Id>3042773739</Id>
+<Id>3042768843</Id>
+<Id>3042764246</Id>
+<Id>3042754755</Id>
+<Id>3042750053</Id>
+<Id>3037813595</Id>
+<Id>3032309824</Id>
+<Id>1468867753</Id>
+<Id>2994907531</Id>
+<Id>2994891115</Id>
+<Id>2993271659</Id>
+<Id>2993266811</Id>
+<Id>2993262038</Id>
+<Id>2174081062</Id>
+</IdList><TranslationSet/><TranslationStack>   <TermSet>    <Term>000200020[molecular weight]</Term>    <Field>molecular weight</Field>    <Count>330</Count>    <Explode>N</Explode>   </TermSet>   <OP>GROUP</OP>  </TranslationStack><QueryTranslation>000200020[molecular weight]</QueryTranslation></eSearchResult>

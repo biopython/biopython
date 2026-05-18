@@ -1,0 +1,321 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>blastp</BlastOutput_program>
+  <BlastOutput_version>BLASTP 2.15.0+</BlastOutput_version>
+  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+  <BlastOutput_db>nr</BlastOutput_db>
+  <BlastOutput_query-ID>WXX52402.1</BlastOutput_query-ID>
+  <BlastOutput_query-def>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</BlastOutput_query-def>
+  <BlastOutput_query-len>239</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+      <Parameters_expect>0.05</Parameters_expect>
+      <Parameters_gap-open>11</Parameters_gap-open>
+      <Parameters_gap-extend>1</Parameters_gap-extend>
+      <Parameters_filter>F</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+  <Iteration_iter-num>1</Iteration_iter-num>
+  <Iteration_query-ID>WXX52402.1</Iteration_query-ID>
+  <Iteration_query-def>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</Iteration_query-def>
+  <Iteration_query-len>239</Iteration_query-len>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>ref|WP_003221446.1|</Hit_id>
+  <Hit_def>MULTISPECIES: RNA polymerase sporulation sigma factor SigE [Bacillales] &gt;ref|NP_389415.2| RNA polymerase sporulation-specific sigma-29 factor (sigma-E) [Bacillus subtilis subsp. subtilis str. 168] &gt;sp|P06222.1| RecName: Full=RNA polymerase sigma-E factor; AltName: Full=P31; AltName: Full=Sigma-29; AltName: Full=Stage II sporulation protein GB; Flags: Precursor [Bacillus subtilis subsp. subtilis str. 168] &gt;gb|KFI04694.1| sporulation sigma factor SigE [Bacillus sp. BSC154] &gt;gb|MDZ5720185.1| RNA polymerase sporulation sigma factor SigE [Bacillus sp. X(2023)] &gt;gb|POO83984.1| RNA polymerase sporulation sigma factor SigE [Bacillus sp. MBGLi97] &gt;dbj|BAM52179.1| sporulation sigma factor SigE [Bacillus subtilis BEST7613] &gt;gb|ADM37626.1| sporulation-specific sigma factor sigma-E [Bacillus spizizenii str. W23]</Hit_def>
+  <Hit_accession>WP_003221446</Hit_accession>
+  <Hit_len>239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>477.248</Hsp_bit-score>
+      <Hsp_score>1227</Hsp_score>
+      <Hsp_evalue>2.44722e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>239</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>239</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>dbj|BAI85158.2|</Hit_id>
+  <Hit_def>sporulation sigma factor SigE [Bacillus subtilis subsp. natto BEST195]</Hit_def>
+  <Hit_accession>BAI85158</Hit_accession>
+  <Hit_len>260</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>477.248</Hsp_bit-score>
+      <Hsp_score>1227</Hsp_score>
+      <Hsp_evalue>3.91488e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>22</Hsp_hit-from>
+      <Hsp_hit-to>260</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>239</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>ref|WP_120028072.1|</Hit_id>
+  <Hit_def>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] &gt;gb|RJS52520.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</Hit_def>
+  <Hit_accession>WP_120028072</Hit_accession>
+  <Hit_len>239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>476.478</Hsp_bit-score>
+      <Hsp_score>1225</Hsp_score>
+      <Hsp_evalue>4.00949e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>239</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>238</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLIGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGL+GEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>ref|WP_326121348.1|</Hit_id>
+  <Hit_def>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] &gt;gb|MEC0320584.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</Hit_def>
+  <Hit_accession>WP_326121348</Hit_accession>
+  <Hit_len>239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>476.093</Hsp_bit-score>
+      <Hsp_score>1224</Hsp_score>
+      <Hsp_evalue>5.63375e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>239</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>238</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLIMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVL+MKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>ref|WP_128473893.1|</Hit_id>
+  <Hit_def>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] &gt;gb|QAR61557.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</Hit_def>
+  <Hit_accession>WP_128473893</Hit_accession>
+  <Hit_len>239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>476.093</Hsp_bit-score>
+      <Hsp_score>1224</Hsp_score>
+      <Hsp_evalue>5.6959e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>239</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>238</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYKLLMKLGMKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWYKLLMKLG+KSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>ref|WP_174228079.1|</Hit_id>
+  <Hit_def>RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis] &gt;gb|NTU26438.1| RNA polymerase sporulation sigma factor SigE [Bacillus tequilensis]</Hit_def>
+  <Hit_accession>WP_174228079</Hit_accession>
+  <Hit_len>239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>476.093</Hsp_bit-score>
+      <Hsp_score>1224</Hsp_score>
+      <Hsp_evalue>7.17171e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>239</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>238</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYRLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWY+LLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>ref|WP_315947263.1|</Hit_id>
+  <Hit_def>RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii] &gt;gb|MDU0153406.1| RNA polymerase sporulation sigma factor SigE [Bacillus cabrialesii]</Hit_def>
+  <Hit_accession>WP_315947263</Hit_accession>
+  <Hit_len>239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>476.093</Hsp_bit-score>
+      <Hsp_score>1224</Hsp_score>
+      <Hsp_evalue>7.17171e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>239</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>238</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYKLLMRLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWYKLLM+LGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>ref|WP_219912761.1|</Hit_id>
+  <Hit_def>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] &gt;emb|COM82207.1| RNA polymerase sigma factor RpoD [Bacillus subtilis]</Hit_def>
+  <Hit_accession>WP_219912761</Hit_accession>
+  <Hit_len>239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>475.707</Hsp_bit-score>
+      <Hsp_score>1223</Hsp_score>
+      <Hsp_evalue>7.49345e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>239</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>238</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYSSRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATY+SRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>9</Hit_num>
+  <Hit_id>ref|WP_038828182.1|</Hit_id>
+  <Hit_def>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</Hit_def>
+  <Hit_accession>WP_038828182</Hit_accession>
+  <Hit_len>239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>475.707</Hsp_bit-score>
+      <Hsp_score>1223</Hsp_score>
+      <Hsp_evalue>7.49345e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>239</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>238</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARSILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAAR+ILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>10</Hit_num>
+  <Hit_id>ref|WP_326211018.1|</Hit_id>
+  <Hit_def>RNA polymerase sporulation sigma factor SigE [Bacillus subtilis] &gt;gb|MEC1541690.1| RNA polymerase sporulation sigma factor SigE [Bacillus subtilis]</Hit_def>
+  <Hit_accession>WP_326211018</Hit_accession>
+  <Hit_len>239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>475.707</Hsp_bit-score>
+      <Hsp_score>1223</Hsp_score>
+      <Hsp_evalue>8.36237e-169</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>239</Hsp_query-to>
+      <Hsp_hit-from>1</Hsp_hit-from>
+      <Hsp_hit-to>239</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>0</Hsp_hit-frame>
+      <Hsp_identity>238</Hsp_identity>
+      <Hsp_positive>239</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>239</Hsp_align-len>
+      <Hsp_qseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMV</Hsp_qseq>
+      <Hsp_hseq>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKMM</Hsp_hseq>
+      <Hsp_midline>MKKLKLRLTHLWYKLLMKLGLKSDEVYYIGGSEALPPPLSKDEEQVLLMKLPNGDQAARAILIERNLRLVVYIARKFENTGINIEDLISIGTIGLIKAVNTFNPEKKIKLATYASRCIENEILMYLRRNNKIRSEVSFDEPLNIDWDGNELLLSDVLGTDDDIITKDIEANVDKKLLKKALEQLNEREKQIMELRFGLVGEEEKTQKDVADMMGISQSYISRLEKRIIKRLRKEFNKM+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+</Iteration_hits>
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>718658123</Statistics_db-num>
+      <Statistics_db-len>277418989154</Statistics_db-len>
+      <Statistics_hsp-len>0</Statistics_hsp-len>
+      <Statistics_eff-space>0</Statistics_eff-space>
+      <Statistics_kappa>0.041</Statistics_kappa>
+      <Statistics_lambda>0.267</Statistics_lambda>
+      <Statistics_entropy>0.14</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>

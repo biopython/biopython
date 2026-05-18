@@ -1,0 +1,5 @@
+Command line: [exonerate -m coding2coding c2c_frameshift2.fa scer_cad1.fa --showcigar yes --showvulgar no --showalignment no --bestn 3]
+Hostname: [blackbriar]
+cigar: gi|296143771|ref|NM_001180731.1| 0 160 + gi|296143771|ref|NM_001180731.1| 465 630 + 213  M 93 I 1 M 33 D 2 M 12 D 4 M 21
+cigar: gi|296143771|ref|NM_001180731.1| 158 1 - gi|296143771|ref|NM_001180731.1| 628 466 - 201  M 24 D 6 M 39 I 1 M 93
+-- completed exonerate analysis

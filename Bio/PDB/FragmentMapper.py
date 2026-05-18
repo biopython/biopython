@@ -42,14 +42,11 @@ The library files can be found in directory 'fragment_data'.
 
 """
 
-
-import numpy
-
-from Bio.SVDSuperimposer import SVDSuperimposer
+import numpy as np
 
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Polypeptide import PPBuilder
-
+from Bio.SVDSuperimposer import SVDSuperimposer
 
 # fragment file (lib_SIZE_z_LENGTH.txt)
 # SIZE=number of fragments
@@ -78,11 +75,11 @@ def _read_fragments(size, length, dir="."):
         flist = []
         # ID of fragment=rank in spec file
         fid = 0
-        for l in fp:
+        for line in fp:
             # skip comment and blank lines
-            if l[0] == "*" or l[0] == "\n":
+            if line[0] == "*" or line[0] == "\n":
                 continue
-            sl = l.split()
+            sl = line.split()
             if sl[1] == "------":
                 # Start of fragment definition
                 f = Fragment(length, fid)
@@ -91,7 +88,7 @@ def _read_fragments(size, length, dir="."):
                 fid += 1
                 continue
             # Add CA coord to Fragment
-            coord = numpy.array([float(x) for x in sl[0:3]])
+            coord = np.array([float(x) for x in sl[0:3]])
             # XXX= dummy residue name
             f.add_residue("XXX", coord)
     return flist
@@ -115,7 +112,7 @@ class Fragment:
         self.counter = 0
         self.resname_list = []
         # CA coordinate matrix
-        self.coords_ca = numpy.zeros((length, 3), "d")
+        self.coords_ca = np.zeros((length, 3), "d")
         self.fid = fid
 
     def get_resname_list(self):
@@ -138,7 +135,7 @@ class Fragment:
         """Get the CA coordinates in the fragment.
 
         :return: the CA coords in the fragment
-        :rtype: Numeric (Nx3) array
+        :rtype: NumPy (Nx3) array
         """
         return self.coords_ca
 
@@ -149,7 +146,7 @@ class Fragment:
         :type resname: string
 
         :param ca_coord: the c-alpha coordinates of the residues
-        :type ca_coord: Numeric array with length 3
+        :type ca_coord: NumPy array with length 3
         """
         if self.counter >= self.length:
             raise PDBException("Fragment boundary exceeded.")
@@ -198,9 +195,9 @@ def _make_fragment_list(pp, length):
     :type length: int
     """
     frag_list = []
-    for i in range(0, len(pp) - length + 1):
+    for i in range(len(pp) - length + 1):
         f = Fragment(length, -1)
-        for j in range(0, length):
+        for j in range(length):
             residue = pp[i + j]
             resname = residue.get_resname()
             if residue.has_id("CA"):
@@ -231,7 +228,7 @@ def _map_fragment_list(flist, reflist):
     mapped = []
     for f in flist:
         rank = []
-        for i in range(0, len(reflist)):
+        for i in range(len(reflist)):
             rf = reflist[i]
             rms = f - rf
             rank.append((rms, rf))
@@ -287,7 +284,7 @@ class FragmentMapper:
                 flist = _make_fragment_list(pp, self.flength)
                 # classify fragments
                 mflist = _map_fragment_list(flist, self.reflist)
-                for i in range(0, len(pp)):
+                for i in range(len(pp)):
                     res = pp[i]
                     if i < self.edge:
                         # start residues

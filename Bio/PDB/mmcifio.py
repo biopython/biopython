@@ -13,8 +13,9 @@ See https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax for syntax.
 import re
 from collections import defaultdict
 
+from Bio.PDB.PDBIO import Select
+from Bio.PDB.PDBIO import StructureIO
 from Bio.PDB.StructureBuilder import StructureBuilder
-from Bio.PDB.PDBIO import Select, StructureIO
 
 # If certain entries should have a certain order of keys, that is specified here
 mmcif_order = {
@@ -67,7 +68,6 @@ class MMCIFIO(StructureIO):
 
     def __init__(self):
         """Initialise."""
-        pass
 
     def set_dict(self, dic):
         """Set the mmCIF dictionary to be written out."""
@@ -149,6 +149,8 @@ class MMCIFIO(StructureIO):
         # Write out top data_ line
         if data_val:
             out_file.write("data_" + data_val + "\n#\n")
+        else:
+            out_file.write("data_" + "\n#\n")
 
         for key, key_list in key_lists.items():
             # Pick a sample mmCIF value, which can be a list or a single value
@@ -253,8 +255,7 @@ class MMCIFIO(StructureIO):
             or "'" in val
             or '"' in val
             or val[0] in ["_", "#", "$", "[", "]", ";"]
-            or val.startswith("data_")
-            or val.startswith("save_")
+            or val.startswith(("data_", "save_"))
             or val in ["loop_", "stop_", "global_"]
         ):
             return True

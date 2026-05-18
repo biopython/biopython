@@ -15,11 +15,12 @@ import unittest
 import warnings
 
 try:
-    import numpy
+    import numpy as np
     from numpy import dot  # Missing on old PyPy's micronumpy
 
     del dot
-    from numpy.linalg import svd, det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import det  # Missing in PyPy 2.0 numpypy
+    from numpy.linalg import svd  # Missing in PyPy 2.0 numpypy
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -28,16 +29,15 @@ except ImportError:
     ) from None
 
 
+from Bio.PDB import CaPPBuilder
+from Bio.PDB import PDBIO
+from Bio.PDB import PDBParser
+from Bio.PDB import PPBuilder
+from Bio.PDB.MMCIFParser import FastMMCIFParser
+from Bio.PDB.MMCIFParser import MMCIFParser
+from Bio.PDB.PDBExceptions import PDBConstructionWarning
+from Bio.PDB.PDBExceptions import PDBIOException
 from Bio.Seq import Seq
-from Bio.PDB.PDBExceptions import (
-    PDBConstructionException,
-    PDBConstructionWarning,
-    PDBIOException,
-)
-
-from Bio.PDB import PPBuilder, CaPPBuilder
-from Bio.PDB.MMCIFParser import MMCIFParser, FastMMCIFParser
-from Bio.PDB import PDBParser, PDBIO
 
 
 class ParseReal(unittest.TestCase):
@@ -53,6 +53,21 @@ class ParseReal(unittest.TestCase):
 
         self.assertEqual(len(structure), 1)
         self.assertEqual(len(f_structure), 1)
+
+        parser_lab_res = MMCIFParser(auth_residues=False, QUIET=True)
+        fast_parser_lab_res = FastMMCIFParser(auth_residues=False, QUIET=True)
+        parser_lab_chain = MMCIFParser(auth_chains=False, QUIET=True)
+        fast_parser_lab_chain = FastMMCIFParser(auth_chains=False, QUIET=True)
+
+        structure_lr = parser_lab_res.get_structure("example", "PDB/1A8O.cif")
+        f_structure_lr = fast_parser_lab_res.get_structure("example", "PDB/1A8O.cif")
+        structure_lc = parser_lab_chain.get_structure("example", "PDB/1A8O.cif")
+        f_structure_lc = fast_parser_lab_chain.get_structure("example", "PDB/1A8O.cif")
+
+        self.assertEqual(len(list(structure_lr.get_atoms())), 556)
+        self.assertEqual(len(list(f_structure_lr.get_atoms())), 556)
+        self.assertEqual(len(list(structure_lc.get_atoms())), 644)
+        self.assertEqual(len(list(f_structure_lc.get_atoms())), 644)
 
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # ==========================================================
@@ -135,9 +150,9 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(
                 [a.get_occupancy() for a in atoms[:5]], [1.0, 1.0, 1.0, 1.0, 1.0]
             )
-            self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
-            coord = numpy.array([19.594, 32.367, 28.012], dtype=numpy.float32)
-            numpy.testing.assert_array_equal(atoms[0].get_coord(), coord)
+            self.assertIsInstance(atoms[0].get_coord(), np.ndarray)
+            coord = np.array([19.594, 32.367, 28.012], dtype=np.float32)
+            np.testing.assert_array_equal(atoms[0].get_coord(), coord)
 
             self.assertEqual(atoms[0].get_bfactor(), 18.03)
             for atom in atoms:
@@ -166,20 +181,20 @@ class ParseReal(unittest.TestCase):
             self.assertEqual(
                 [a.get_occupancy() for a in atoms[:5]], [1.0, 1.0, 1.0, 1.0, 1.0]
             )
-            self.assertIsInstance(atoms[0].get_coord(), numpy.ndarray)
-            coord = numpy.array([50.346, 19.287, 17.288], dtype=numpy.float32)
-            numpy.testing.assert_array_equal(atoms[0].get_coord(), coord)
+            self.assertIsInstance(atoms[0].get_coord(), np.ndarray)
+            coord = np.array([50.346, 19.287, 17.288], dtype=np.float32)
+            np.testing.assert_array_equal(atoms[0].get_coord(), coord)
             self.assertEqual(atoms[0].get_bfactor(), 32.02)
 
-            ansiou = numpy.array(
-                [0.4738, -0.0309, -0.0231, 0.4524, 0.0036, 0.2904], dtype=numpy.float32
+            ansiou = np.array(
+                [0.4738, -0.0309, -0.0231, 0.4524, 0.0036, 0.2904], dtype=np.float32
             )
-            numpy.testing.assert_array_equal(atoms[0].get_anisou(), ansiou)
-            ansiou = numpy.array(
-                [1.1242, 0.2942, -0.0995, 1.1240, -0.1088, 0.8221], dtype=numpy.float32
+            np.testing.assert_array_equal(atoms[0].get_anisou(), ansiou)
+            ansiou = np.array(
+                [1.1242, 0.2942, -0.0995, 1.1240, -0.1088, 0.8221], dtype=np.float32
             )
             atom_937 = list(f_structure[0]["A"])[114]["CB"]
-            numpy.testing.assert_array_equal(atom_937.get_anisou(), ansiou)
+            np.testing.assert_array_equal(atom_937.get_anisou(), ansiou)
 
     def testModels(self):
         """Test file with multiple models."""
@@ -335,9 +350,10 @@ class ParseReal(unittest.TestCase):
         self.assertEqual("X-RAY DIFFRACTION", structure.header["structure_method"])
         self.assertEqual(1.7, structure.header["resolution"])
 
-        # test not confused by '.'
+        # test not confused by '.' or '?'
         structure = parser.get_structure("example", "PDB/1SSU_mod.cif")
-        self.assertIsNone(structure.header["resolution"])
+        # self.assertIsNone(structure.header["resolution"])
+        self.assertEqual(4.1, structure.header["resolution"])
 
 
 class CIFtoPDB(unittest.TestCase):

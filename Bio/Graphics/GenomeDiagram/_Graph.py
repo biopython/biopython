@@ -21,11 +21,9 @@ For drawing capabilities, this module uses reportlab to draw and write
 the diagram: http://www.reportlab.com
 """
 
-# ReportLab imports
+from math import sqrt
 
 from reportlab.lib import colors
-
-from math import sqrt
 
 
 class GraphData:
@@ -93,7 +91,7 @@ class GraphData:
 
     def set_data(self, data):
         """Add data as a list of (position, value) tuples."""
-        for (pos, val) in data:  # Fill data dictionary
+        for pos, val in data:  # Fill data dictionary
             self.data[pos] = val
 
     def get_data(self):
@@ -136,10 +134,7 @@ class GraphData:
     def mean(self):
         """Return the mean value for the data points (float)."""
         data = list(self.data.values())
-        sum = 0.0
-        for item in data:
-            sum += float(item)
-        return sum / len(data)
+        return sum(data) / len(data)
 
     def stdev(self):
         """Return the sample standard deviation for the data (float)."""
@@ -147,7 +142,7 @@ class GraphData:
         m = self.mean()
         runtotal = 0.0
         for entry in data:
-            runtotal += float((entry - m) ** 2)
+            runtotal += (entry - m) ** 2
         # This is sample standard deviation; population stdev would involve
         # division by len(data), rather than len(data)-1
         return sqrt(runtotal / (len(data) - 1))

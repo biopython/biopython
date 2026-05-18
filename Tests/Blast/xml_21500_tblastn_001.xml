@@ -1,0 +1,321 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>tblastn</BlastOutput_program>
+  <BlastOutput_version>TBLASTN 2.15.0+</BlastOutput_version>
+  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+  <BlastOutput_db>nt</BlastOutput_db>
+  <BlastOutput_query-ID>CAJ99216.1</BlastOutput_query-ID>
+  <BlastOutput_query-def>tim [Helicobacter acinonychis str. Sheeba]</BlastOutput_query-def>
+  <BlastOutput_query-len>234</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+      <Parameters_expect>10</Parameters_expect>
+      <Parameters_gap-open>11</Parameters_gap-open>
+      <Parameters_gap-extend>1</Parameters_gap-extend>
+      <Parameters_filter>L;</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+  <Iteration_iter-num>1</Iteration_iter-num>
+  <Iteration_query-ID>CAJ99216.1</Iteration_query-ID>
+  <Iteration_query-def>tim [Helicobacter acinonychis str. Sheeba]</Iteration_query-def>
+  <Iteration_query-len>234</Iteration_query-len>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|109713861|emb|AM260522.1|</Hit_id>
+  <Hit_def>Helicobacter acinonychis str. Sheeba complete genome, strain Sheeba</Hit_def>
+  <Hit_accession>AM260522</Hit_accession>
+  <Hit_len>1553927</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>442.58</Hsp_bit-score>
+      <Hsp_score>1137</Hsp_score>
+      <Hsp_evalue>1.28996e-138</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>325802</Hsp_hit-from>
+      <Hsp_hit-to>326503</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>2</Hsp_hit-frame>
+      <Hsp_identity>234</Hsp_identity>
+      <Hsp_positive>234</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|1336928286|emb|LT900055.1|</Hit_id>
+  <Hit_def>Helicobacter acinonychis isolate 212_9 genome assembly, chromosome: I</Hit_def>
+  <Hit_accession>LT900055</Hit_accession>
+  <Hit_len>1550239</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>439.113</Hsp_bit-score>
+      <Hsp_score>1128</Hsp_score>
+      <Hsp_evalue>2.05117e-137</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>325704</Hsp_hit-from>
+      <Hsp_hit-to>326405</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>3</Hsp_hit-frame>
+      <Hsp_identity>232</Hsp_identity>
+      <Hsp_positive>232</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRALLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESPNFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gi|1033012332|gb|CP011486.1|</Hit_id>
+  <Hit_def>Helicobacter pylori strain K26A1, complete genome</Hit_def>
+  <Hit_accession>CP011486</Hit_accession>
+  <Hit_len>1570310</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>419.083</Hsp_bit-score>
+      <Hsp_score>1076</Hsp_score>
+      <Hsp_evalue>2.02413e-130</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>196043</Hsp_hit-from>
+      <Hsp_hit-to>196744</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>2</Hsp_hit-frame>
+      <Hsp_identity>221</Hsp_identity>
+      <Hsp_positive>224</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGAQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRTLLKESPSFLKEKFDFFKDKNFKIIYCIGEDLKTREKGLAAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHGFLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERR LLKESP+FLKEKFDFFKDK FKI+YCIGEDLKTREKGL AVKEFLNEQLENIDL Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gi|2641533851|gb|CP078169.1|</Hit_id>
+  <Hit_def>Helicobacter pylori strain HpGP-ZAF-006 chromosome, complete genome</Hit_def>
+  <Hit_accession>CP078169</Hit_accession>
+  <Hit_len>1641225</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>416.387</Hsp_bit-score>
+      <Hsp_score>1069</Hsp_score>
+      <Hsp_evalue>1.58851e-129</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>260420</Hsp_hit-from>
+      <Hsp_hit-to>261121</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>2</Hsp_hit-frame>
+      <Hsp_identity>221</Hsp_identity>
+      <Hsp_positive>224</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQNAYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRALLKESPSFLKEKFDFFKDKNFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLSYHNLIVAYEPIWAIGTKKSASLEDIYLTHGFLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLIGSASLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDK FKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDL Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLLIGS SLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gi|2641529532|gb|CP078166.1|</Hit_id>
+  <Hit_def>Helicobacter pylori strain HpGP-ZAF-009 chromosome, complete genome</Hit_def>
+  <Hit_accession>CP078166</Hit_accession>
+  <Hit_len>1681930</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>415.616</Hsp_bit-score>
+      <Hsp_score>1067</Hsp_score>
+      <Hsp_evalue>3.21842e-129</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>198327</Hsp_hit-from>
+      <Hsp_hit-to>199028</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>3</Hsp_hit-frame>
+      <Hsp_identity>220</Hsp_identity>
+      <Hsp_positive>226</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQNAYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIYCIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHGFLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKGLGAVKEFLNEQLENIDL Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>gi|1033009499|gb|CP011484.1|</Hit_id>
+  <Hit_def>Helicobacter pylori strain CC33C, complete genome</Hit_def>
+  <Hit_accession>CP011484</Hit_accession>
+  <Hit_len>1659899</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>415.231</Hsp_bit-score>
+      <Hsp_score>1066</Hsp_score>
+      <Hsp_evalue>4.05935e-129</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>248047</Hsp_hit-from>
+      <Hsp_hit-to>248748</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>220</Hsp_identity>
+      <Hsp_positive>227</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSSMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQNAYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHGFLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKS+MPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDKKFKIVYCIGEDLKTREKGLGAVKEFLNEQLENIDL+Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLL+GS SLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>gi|317010283|gb|CP002336.1|</Hit_id>
+  <Hit_def>Helicobacter pylori SouthAfrica7, complete genome</Hit_def>
+  <Hit_accession>CP002336</Hit_accession>
+  <Hit_len>1653913</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>415.231</Hsp_bit-score>
+      <Hsp_score>1066</Hsp_score>
+      <Hsp_evalue>4.73879e-129</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>194539</Hsp_hit-from>
+      <Hsp_hit-to>195240</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>221</Hsp_identity>
+      <Hsp_positive>226</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQNAYPKDYGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIYCIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHGFLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLVGSASLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKD GAFTGEITSKHLEELKINTLLIGHSERRVLLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKGLGAVKEFLNEQLENIDL Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLL+GS SLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>gi|2641538240|gb|CP078172.1|</Hit_id>
+  <Hit_def>Helicobacter pylori strain HpGP-ZAF-001 chromosome, complete genome</Hit_def>
+  <Hit_accession>CP078172</Hit_accession>
+  <Hit_len>1714499</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>413.69</Hsp_bit-score>
+      <Hsp_score>1062</Hsp_score>
+      <Hsp_evalue>1.37323e-128</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>1021670</Hsp_hit-from>
+      <Hsp_hit-to>1022371</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>-2</Hsp_hit-frame>
+      <Hsp_identity>219</Hsp_identity>
+      <Hsp_positive>225</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQNAYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRTLLKESPSFLKEKFDFFKDKKFKIIYCIGEDLKTREKGLGAVKEFLNEQLENIDLSYHHLIVAYEPIWAIGTKKSASLEDIYLTHGFLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERR LLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKGLGAVKEFLNEQLENIDL Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLL+GS SLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>9</Hit_num>
+  <Hit_id>gi|2640367186|gb|CP079077.1|</Hit_id>
+  <Hit_def>Helicobacter pylori strain HpGP-ARG-001 chromosome, complete genome</Hit_def>
+  <Hit_accession>CP079077</Hit_accession>
+  <Hit_len>1624657</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>412.535</Hsp_bit-score>
+      <Hsp_score>1059</Hsp_score>
+      <Hsp_evalue>3.5777e-128</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>197481</Hsp_hit-from>
+      <Hsp_hit-to>198182</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>3</Hsp_hit-frame>
+      <Hsp_identity>220</Hsp_identity>
+      <Hsp_positive>225</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHFDRVFVFPDFLGLLPNAFLHFTLGVQNAYPRDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKNFKIVYCIGEDLKTREKGFKAVKEFLSEQLENIDLNYSNLIVAYEPIWAIGTKKSASLEDIYLTHGFLKQILNQKTPLLYGGSVNTQNAKEILGIDSVDGLLIGSASLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQH DRVFVFPDFLGLLPNAFLHFTLGVQNAYP+DCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDK FKIVYCIGEDLKTREKG  AVKEFL+EQLENIDL+Y NLIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVNTQNAKEILGIDSVDGLLIGS SLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>10</Hit_num>
+  <Hit_id>gi|532105813|gb|CP006691.1|</Hit_id>
+  <Hit_def>Helicobacter pylori SouthAfrica20, complete genome</Hit_def>
+  <Hit_accession>CP006691</Hit_accession>
+  <Hit_len>1622903</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>411.764</Hsp_bit-score>
+      <Hsp_score>1057</Hsp_score>
+      <Hsp_evalue>7.68167e-128</Hsp_evalue>
+      <Hsp_query-from>1</Hsp_query-from>
+      <Hsp_query-to>234</Hsp_query-to>
+      <Hsp_hit-from>197836</Hsp_hit-from>
+      <Hsp_hit-to>198537</Hsp_hit-to>
+      <Hsp_query-frame>0</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>218</Hsp_identity>
+      <Hsp_positive>225</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>234</Hsp_align-len>
+      <Hsp_qseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDRVFVFPDFLGLLPNAFLHFTLGVQNAYPKDCGAFTGEITSKHLEELKINTLLIGHSERRVLLKESPNXXXXXXXXXXXXXXXIVYCIGEDLKTREKGLGAVKEFLNEQLENIDLDYQNLIVAYEPIWAIGTGKSASLEDIYLTHGFLKQHLNQKMPLLYGGSVNTQNAKEILGIDSVDGLLIGSTSLELENFKTIISFL</Hsp_qseq>
+      <Hsp_hseq>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCDKVFVFPDFLGLLPNAFLHFTLGAQNAYPKDCGAFTGEITSKHLEELKIHTLLIGHSERRVLLKESPSFLKEKFDFFKDKKFKIIYCIGEDLKTREKGFNAVKEFLNEQLENIDLNYHHLIVAYEPIWAIGTKKSASLEDIYLTHGFLKQILNQKTPLLYGGSVNAQNAKEILGIDSVDGLLVGSASLELENFKTIISFL</Hsp_hseq>
+      <Hsp_midline>MTKIAMANFKSAMPIFKSHAYLKELEKTLKPQHCD+VFVFPDFLGLLPNAFLHFTLG QNAYPKDCGAFTGEITSKHLEELKI+TLLIGHSERRVLLKESP+FLKEKFDFFKDKKFKI+YCIGEDLKTREKG  AVKEFLNEQLENIDL+Y +LIVAYEPIWAIGT KSASLEDIYLTHGFLKQ LNQK PLLYGGSVN QNAKEILGIDSVDGLL+GS SLELENFKTIISFL</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+</Iteration_hits>
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>104338276</Statistics_db-num>
+      <Statistics_db-len>348058846</Statistics_db-len>
+      <Statistics_hsp-len>0</Statistics_hsp-len>
+      <Statistics_eff-space>0</Statistics_eff-space>
+      <Statistics_kappa>0.041</Statistics_kappa>
+      <Statistics_lambda>0.267</Statistics_lambda>
+      <Statistics_entropy>0.14</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>

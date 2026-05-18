@@ -4,11 +4,13 @@
 # as part of this package.
 """Test the NCBI XML parser."""
 
+import io
 import os
 import unittest
-from Bio.Blast import NCBIXML
+import warnings
 
-E_VALUE_THRESH = 1e-10
+from Bio import BiopythonParserWarning
+from Bio.Blast import NCBIXML
 
 
 class TestNCBIXML(unittest.TestCase):
@@ -22,7 +24,21 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_blastp_001(record)
 
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+            self.check_xml_2212L_blastp_001(record)
+
+    def check_xml_2212L_blastp_001(self, record):
+        self.assertEqual(
+            record.reference,
+            'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.date, "Aug-07-2005")
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "BLASTP")
         alignments = record.alignments
         self.assertEqual(len(alignments), 212)
         self.assertEqual(record.query_id, "gi|49176427|ref|NP_418280.3|")
@@ -517,7 +533,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 76)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.66928e-10, places=15)
 
         alignment = alignments[24]
         self.assertEqual(
@@ -525,7 +541,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 77)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.18014e-10, places=15)
 
         alignment = alignments[25]
         self.assertEqual(
@@ -533,7 +549,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 74)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.71876e-10, places=15)
 
         alignment = alignments[26]
         self.assertEqual(
@@ -541,7 +557,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 88)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.71876e-10, places=15)
 
         alignment = alignments[27]
         self.assertEqual(
@@ -549,7 +565,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.85685e-10, places=15)
 
         alignment = alignments[28]
         self.assertEqual(
@@ -557,7 +573,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 6.34325e-10, places=15)
 
         alignment = alignments[29]
         self.assertEqual(
@@ -565,7 +581,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 81)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.08199e-09, places=14)
 
         alignment = alignments[30]
         self.assertEqual(
@@ -573,7 +589,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 83)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.41313e-09, places=14)
 
         alignment = alignments[31]
         self.assertEqual(
@@ -581,7 +597,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 82)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.5624e-08, places=12)
 
         alignment = alignments[32]
         self.assertEqual(
@@ -589,7 +605,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 90)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.04055e-08, places=13)
 
         alignment = alignments[33]
         self.assertEqual(
@@ -597,7 +613,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 70)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.48066e-08, places=13)
 
         alignment = alignments[34]
         self.assertEqual(
@@ -605,7 +621,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 90)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.9371e-08, places=12)
 
         alignment = alignments[35]
         self.assertEqual(
@@ -613,7 +629,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 67)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.32265e-07, places=12)
 
         alignment = alignments[36]
         self.assertEqual(
@@ -621,7 +637,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 76)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.72743e-07, places=12)
 
         alignment = alignments[37]
         self.assertEqual(
@@ -629,19 +645,19 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 73)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.2561e-07, places=11)
 
         alignment = alignments[38]
         self.assertEqual(alignment.title[:50], "gi|455172|gb|AAA24073.1| ORF; putative")
         self.assertEqual(alignment.length, 67)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.94655e-07, places=12)
 
         alignment = alignments[39]
         self.assertEqual(alignment.title[:50], "gi|1224007|gb|AAA92108.1| ORF4")
         self.assertEqual(alignment.length, 192)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.84832e-07, places=12)
 
         alignment = alignments[40]
         self.assertEqual(
@@ -649,7 +665,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 95)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 6.56423e-07, places=12)
 
         alignment = alignments[41]
         self.assertEqual(
@@ -657,7 +673,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 73)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.11969e-06, places=11)
 
         alignment = alignments[42]
         self.assertEqual(
@@ -665,7 +681,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 84)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.46236e-06, places=11)
 
         alignment = alignments[43]
         self.assertEqual(
@@ -673,7 +689,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 75)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.9099e-06, places=10)
 
         alignment = alignments[44]
         self.assertEqual(
@@ -681,7 +697,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 109)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.49441e-06, places=11)
 
         alignment = alignments[45]
         self.assertEqual(
@@ -689,7 +705,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 77)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.25779e-06, places=11)
 
         alignment = alignments[46]
         self.assertEqual(
@@ -697,7 +713,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 76)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.25779e-06, places=11)
 
         alignment = alignments[47]
         self.assertEqual(
@@ -705,7 +721,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 85)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.25779e-06, places=11)
 
         alignment = alignments[48]
         self.assertEqual(
@@ -713,7 +729,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 65)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.25779e-06, places=11)
 
         alignment = alignments[49]
         self.assertEqual(
@@ -721,7 +737,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 76)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.25481e-06, places=11)
 
         alignment = alignments[50]
         self.assertEqual(
@@ -729,7 +745,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 75)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.25481e-06, places=11)
 
         alignment = alignments[51]
         self.assertEqual(
@@ -737,7 +753,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 76)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.25481e-06, places=11)
 
         alignment = alignments[52]
         self.assertEqual(
@@ -745,7 +761,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 75)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.55696e-06, places=11)
 
         alignment = alignments[53]
         self.assertEqual(
@@ -753,7 +769,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 85)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.55696e-06, places=11)
 
         alignment = alignments[54]
         self.assertEqual(
@@ -761,7 +777,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 76)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.55696e-06, places=11)
 
         alignment = alignments[55]
         self.assertEqual(
@@ -769,7 +785,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 89)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 7.25761e-06, places=11)
 
         alignment = alignments[56]
         self.assertEqual(
@@ -777,7 +793,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 73)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 9.47873e-06, places=11)
 
         alignment = alignments[57]
         self.assertEqual(
@@ -785,7 +801,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 77)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 9.47873e-06, places=11)
 
         alignment = alignments[58]
         self.assertEqual(
@@ -793,7 +809,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 67)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.61683e-05, places=10)
 
         alignment = alignments[59]
         self.assertEqual(
@@ -801,7 +817,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 77)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.61683e-05, places=10)
 
         alignment = alignments[60]
         self.assertEqual(
@@ -809,7 +825,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.75789e-05, places=10)
 
         alignment = alignments[61]
         self.assertEqual(
@@ -817,7 +833,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 92)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.75789e-05, places=10)
 
         alignment = alignments[62]
         self.assertEqual(
@@ -825,7 +841,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 57)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.75789e-05, places=10)
 
         alignment = alignments[63]
         self.assertEqual(
@@ -833,7 +849,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 75)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.60191e-05, places=10)
 
         alignment = alignments[64]
         self.assertEqual(
@@ -841,7 +857,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 68)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.60191e-05, places=10)
 
         alignment = alignments[65]
         self.assertEqual(
@@ -849,7 +865,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 83)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.70425e-05, places=10)
 
         alignment = alignments[66]
         self.assertEqual(
@@ -857,7 +873,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 90)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.70425e-05, places=10)
 
         alignment = alignments[67]
         self.assertEqual(
@@ -865,7 +881,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 78)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 6.14393e-05, places=10)
 
         alignment = alignments[68]
         self.assertEqual(
@@ -873,7 +889,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 75)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 8.02423e-05, places=10)
 
         alignment = alignments[69]
         self.assertEqual(
@@ -881,7 +897,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 70)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 8.02423e-05, places=10)
 
         alignment = alignments[70]
         self.assertEqual(
@@ -889,7 +905,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 80)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 8.02423e-05, places=10)
 
         alignment = alignments[71]
         self.assertEqual(
@@ -897,7 +913,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 76)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 8.02423e-05, places=10)
 
         alignment = alignments[72]
         self.assertEqual(
@@ -905,7 +921,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 77)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0001048)
 
         alignment = alignments[73]
         self.assertEqual(
@@ -913,7 +929,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 91)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0001048)
 
         alignment = alignments[74]
         self.assertEqual(
@@ -921,7 +937,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 72)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0001048)
 
         alignment = alignments[75]
         self.assertEqual(
@@ -929,7 +945,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 72)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000136873)
 
         alignment = alignments[76]
         self.assertEqual(
@@ -937,7 +953,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 76)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000136873)
 
         alignment = alignments[77]
         self.assertEqual(
@@ -945,7 +961,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 78)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000136873)
 
         alignment = alignments[78]
         self.assertEqual(
@@ -953,7 +969,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 93)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000136873)
 
         alignment = alignments[79]
         self.assertEqual(
@@ -961,7 +977,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 91)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000178761)
 
         alignment = alignments[80]
         self.assertEqual(
@@ -969,7 +985,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 91)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000178761)
 
         alignment = alignments[81]
         self.assertEqual(
@@ -977,7 +993,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 78)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000233469)
 
         alignment = alignments[82]
         self.assertEqual(
@@ -985,7 +1001,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 77)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00030492)
 
         alignment = alignments[83]
         self.assertEqual(
@@ -993,7 +1009,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 53)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000398238)
 
         alignment = alignments[84]
         self.assertEqual(
@@ -1001,7 +1017,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 71)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000520115)
 
         alignment = alignments[85]
         self.assertEqual(
@@ -1009,7 +1025,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 91)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000679292)
 
         alignment = alignments[86]
         self.assertEqual(
@@ -1017,7 +1033,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 83)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000679292)
 
         alignment = alignments[87]
         self.assertEqual(
@@ -1025,7 +1041,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 82)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000679292)
 
         alignment = alignments[88]
         self.assertEqual(
@@ -1033,7 +1049,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 54)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.000887182)
 
         alignment = alignments[89]
         self.assertEqual(
@@ -1041,7 +1057,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0011587)
 
         alignment = alignments[90]
         self.assertEqual(
@@ -1049,7 +1065,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 87)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0015133)
 
         alignment = alignments[91]
         self.assertEqual(
@@ -1057,7 +1073,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00197644)
 
         alignment = alignments[92]
         self.assertEqual(
@@ -1065,7 +1081,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 73)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00337129)
 
         alignment = alignments[93]
         self.assertEqual(
@@ -1073,7 +1089,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 81)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00337129)
 
         alignment = alignments[94]
         self.assertEqual(
@@ -1081,7 +1097,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 85)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00440304)
 
         alignment = alignments[95]
         self.assertEqual(
@@ -1089,7 +1105,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00440304)
 
         alignment = alignments[96]
         self.assertEqual(
@@ -1097,7 +1113,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 61)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00751045)
 
         alignment = alignments[97]
         self.assertEqual(
@@ -1105,7 +1121,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 61)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00751045)
 
         alignment = alignments[98]
         self.assertEqual(
@@ -1113,7 +1129,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 94)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00751045)
 
         alignment = alignments[99]
         self.assertEqual(
@@ -1121,7 +1137,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 80)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00751045)
 
         alignment = alignments[100]
         self.assertEqual(
@@ -1129,7 +1145,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 77)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.00980895)
 
         alignment = alignments[101]
         self.assertEqual(
@@ -1137,7 +1153,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 78)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0128109)
 
         alignment = alignments[102]
         self.assertEqual(
@@ -1145,7 +1161,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 70)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0128109)
 
         alignment = alignments[103]
         self.assertEqual(
@@ -1153,7 +1169,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 72)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0167315)
 
         alignment = alignments[104]
         self.assertEqual(
@@ -1161,7 +1177,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 80)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0167315)
 
         alignment = alignments[105]
         self.assertEqual(
@@ -1169,7 +1185,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 78)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0167315)
 
         alignment = alignments[106]
         self.assertEqual(
@@ -1177,7 +1193,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0167315)
 
         alignment = alignments[107]
         self.assertEqual(
@@ -1185,7 +1201,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0218521)
 
         alignment = alignments[108]
         self.assertEqual(
@@ -1193,7 +1209,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 78)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0285397)
 
         alignment = alignments[109]
         self.assertEqual(
@@ -1201,7 +1217,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 89)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.037274)
 
         alignment = alignments[110]
         self.assertEqual(
@@ -1209,7 +1225,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 71)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0486813)
 
         alignment = alignments[111]
         self.assertEqual(
@@ -1217,7 +1233,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 71)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0486813)
 
         alignment = alignments[112]
         self.assertEqual(
@@ -1225,7 +1241,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 68)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0486813)
 
         alignment = alignments[113]
         self.assertEqual(
@@ -1233,7 +1249,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 63)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0830377)
 
         alignment = alignments[114]
         self.assertEqual(
@@ -1241,7 +1257,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 72)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.0830377)
 
         alignment = alignments[115]
         self.assertEqual(
@@ -1249,7 +1265,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 80)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.108451)
 
         alignment = alignments[116]
         self.assertEqual(
@@ -1257,7 +1273,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 82)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.108451)
 
         alignment = alignments[117]
         self.assertEqual(
@@ -1265,7 +1281,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 62)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.141641)
 
         alignment = alignments[118]
         self.assertEqual(
@@ -1273,7 +1289,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 159)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.141641)
 
         alignment = alignments[119]
         self.assertEqual(
@@ -1281,7 +1297,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 59)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.184989)
 
         alignment = alignments[120]
         self.assertEqual(
@@ -1289,7 +1305,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 77)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.241603)
 
         alignment = alignments[121]
         self.assertEqual(
@@ -1297,7 +1313,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 130)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.315543)
 
         alignment = alignments[122]
         self.assertEqual(
@@ -1305,7 +1321,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 147)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.412112)
 
         alignment = alignments[123]
         self.assertEqual(
@@ -1313,7 +1329,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 90)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.412112)
 
         alignment = alignments[124]
         self.assertEqual(
@@ -1321,7 +1337,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 57)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.412112)
 
         alignment = alignments[125]
         self.assertEqual(
@@ -1329,7 +1345,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 91)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.538235)
 
         alignment = alignments[126]
         self.assertEqual(
@@ -1337,7 +1353,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 68)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.538235)
 
         alignment = alignments[127]
         self.assertEqual(
@@ -1345,7 +1361,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 91)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.538235)
 
         alignment = alignments[128]
         self.assertEqual(
@@ -1353,7 +1369,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 96)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.702957)
 
         alignment = alignments[129]
         self.assertEqual(
@@ -1361,7 +1377,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 67)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.702957)
 
         alignment = alignments[130]
         self.assertEqual(
@@ -1369,7 +1385,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 170)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.702957)
 
         alignment = alignments[131]
         self.assertEqual(
@@ -1377,7 +1393,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 126)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.702957)
 
         alignment = alignments[132]
         self.assertEqual(
@@ -1385,7 +1401,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 66)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.702957)
 
         alignment = alignments[133]
         self.assertEqual(
@@ -1393,7 +1409,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 90)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.702957)
 
         alignment = alignments[134]
         self.assertEqual(
@@ -1401,7 +1417,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 69)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.91809)
 
         alignment = alignments[135]
         self.assertEqual(
@@ -1409,7 +1425,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 54)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.91809)
 
         alignment = alignments[136]
         self.assertEqual(
@@ -1417,7 +1433,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 69)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 0.91809)
 
         alignment = alignments[137]
         self.assertEqual(
@@ -1425,7 +1441,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 78)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.19906)
 
         alignment = alignments[138]
         self.assertEqual(
@@ -1433,7 +1449,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 312)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[139]
         self.assertEqual(
@@ -1441,7 +1457,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 237)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[140]
         self.assertEqual(
@@ -1449,7 +1465,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 237)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[141]
         self.assertEqual(
@@ -1457,7 +1473,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 234)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[142]
         self.assertEqual(
@@ -1465,7 +1481,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 237)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[143]
         self.assertEqual(
@@ -1473,7 +1489,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 5476)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[144]
         self.assertEqual(
@@ -1481,7 +1497,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 5533)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[145]
         self.assertEqual(
@@ -1489,7 +1505,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 5560)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[146]
         self.assertEqual(
@@ -1497,7 +1513,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 69)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[147]
         self.assertEqual(
@@ -1505,7 +1521,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 81)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[148]
         self.assertEqual(
@@ -1513,7 +1529,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 1521)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[149]
         self.assertEqual(
@@ -1521,7 +1537,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 5554)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[150]
         self.assertEqual(
@@ -1529,7 +1545,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 5533)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[151]
         self.assertEqual(
@@ -1537,7 +1553,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 80)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 1.56602)
 
         alignment = alignments[152]
         self.assertEqual(
@@ -1545,7 +1561,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 68)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.04529)
 
         alignment = alignments[153]
         self.assertEqual(
@@ -1553,7 +1569,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 71)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.04529)
 
         alignment = alignments[154]
         self.assertEqual(
@@ -1561,7 +1577,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 77)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.04529)
 
         alignment = alignments[155]
         self.assertEqual(
@@ -1569,7 +1585,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 238)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.04529)
 
         alignment = alignments[156]
         self.assertEqual(
@@ -1577,7 +1593,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 84)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.04529)
 
         alignment = alignments[157]
         self.assertEqual(
@@ -1585,7 +1601,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 236)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.04529)
 
         alignment = alignments[158]
         self.assertEqual(
@@ -1593,7 +1609,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 238)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.04529)
 
         alignment = alignments[159]
         self.assertEqual(
@@ -1601,7 +1617,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 96)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.67123)
 
         alignment = alignments[160]
         self.assertEqual(
@@ -1609,7 +1625,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 83)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.67123)
 
         alignment = alignments[161]
         self.assertEqual(
@@ -1617,7 +1633,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 69)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.67123)
 
         alignment = alignments[162]
         self.assertEqual(
@@ -1625,7 +1641,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 90)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.67123)
 
         alignment = alignments[163]
         self.assertEqual(
@@ -1633,7 +1649,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.67123)
 
         alignment = alignments[164]
         self.assertEqual(
@@ -1641,7 +1657,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 63)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.67123)
 
         alignment = alignments[165]
         self.assertEqual(
@@ -1649,7 +1665,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 84)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.67123)
 
         alignment = alignments[166]
         self.assertEqual(
@@ -1657,7 +1673,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 67)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 2.67123)
 
         alignment = alignments[167]
         self.assertEqual(
@@ -1665,7 +1681,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 823)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.48874)
 
         alignment = alignments[168]
         self.assertEqual(
@@ -1673,7 +1689,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 169)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.48874)
 
         alignment = alignments[169]
         self.assertEqual(
@@ -1681,7 +1697,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 56)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.48874)
 
         alignment = alignments[170]
         self.assertEqual(
@@ -1689,7 +1705,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 79)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.48874)
 
         alignment = alignments[171]
         self.assertEqual(
@@ -1697,7 +1713,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 73)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 3.48874)
 
         alignment = alignments[172]
         self.assertEqual(
@@ -1705,7 +1721,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 60)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[173]
         self.assertEqual(
@@ -1713,7 +1729,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 434)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[174]
         self.assertEqual(
@@ -1721,7 +1737,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 424)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[175]
         self.assertEqual(
@@ -1729,7 +1745,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 249)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[176]
         self.assertEqual(
@@ -1737,7 +1753,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 184)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[177]
         self.assertEqual(
@@ -1745,7 +1761,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 340)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[178]
         self.assertEqual(
@@ -1753,7 +1769,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 192)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[179]
         self.assertEqual(
@@ -1761,7 +1777,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 721)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[180]
         self.assertEqual(
@@ -1769,7 +1785,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 69)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[181]
         self.assertEqual(
@@ -1777,7 +1793,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 53)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[182]
         self.assertEqual(
@@ -1785,7 +1801,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 236)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[183]
         self.assertEqual(
@@ -1793,7 +1809,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 59)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[184]
         self.assertEqual(
@@ -1801,7 +1817,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 66)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[185]
         self.assertEqual(
@@ -1809,7 +1825,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 53)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[186]
         self.assertEqual(
@@ -1817,7 +1833,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 93)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[187]
         self.assertEqual(
@@ -1825,7 +1841,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 424)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[188]
         self.assertEqual(
@@ -1833,7 +1849,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 87)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 4.55643)
 
         alignment = alignments[189]
         self.assertEqual(
@@ -1841,7 +1857,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 95)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[190]
         self.assertEqual(
@@ -1849,7 +1865,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 140)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[191]
         self.assertEqual(
@@ -1857,7 +1873,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 784)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[192]
         self.assertEqual(
@@ -1865,7 +1881,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 53)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[193]
         self.assertEqual(
@@ -1873,7 +1889,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 170)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[194]
         self.assertEqual(
@@ -1881,7 +1897,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 707)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[195]
         self.assertEqual(
@@ -1889,7 +1905,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 216)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[196]
         self.assertEqual(
@@ -1897,7 +1913,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 70)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[197]
         self.assertEqual(
@@ -1905,7 +1921,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 58)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[198]
         self.assertEqual(
@@ -1913,7 +1929,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 65)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[199]
         self.assertEqual(
@@ -1921,7 +1937,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 297)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[200]
         self.assertEqual(
@@ -1929,7 +1945,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 53)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[201]
         self.assertEqual(
@@ -1937,7 +1953,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 65)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[202]
         self.assertEqual(
@@ -1945,7 +1961,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 56)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[203]
         self.assertEqual(
@@ -1953,7 +1969,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 71)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[204]
         self.assertEqual(
@@ -1961,7 +1977,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 98)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[205]
         self.assertEqual(
@@ -1969,7 +1985,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 946)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 5.95088)
 
         alignment = alignments[206]
         self.assertEqual(
@@ -1977,7 +1993,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 50)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 7.7721)
 
         alignment = alignments[207]
         self.assertEqual(
@@ -1985,7 +2001,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 335)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 7.7721)
 
         alignment = alignments[208]
         self.assertEqual(
@@ -1993,7 +2009,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 2691)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 7.7721)
 
         alignment = alignments[209]
         self.assertEqual(
@@ -2001,7 +2017,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 438)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 7.7721)
 
         alignment = alignments[210]
         self.assertEqual(
@@ -2009,7 +2025,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 9904)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 7.7721)
 
         alignment = alignments[211]
         self.assertEqual(
@@ -2017,10 +2033,7 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignment.length, 960)
         self.assertEqual(len(alignment.hsps), 1)
-        self.assertGreater(alignment.hsps[0].expect, E_VALUE_THRESH)
-
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
+        self.assertAlmostEqual(alignment.hsps[0].expect, 7.7721)
 
     def test_xml_2212L_blastn_001(self):
         """Parsing BLASTN 2.2.12, gi|1348916|gb|G26684.1|G26684 (xml_2212L_blastn_001)."""
@@ -2030,6 +2043,21 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_blastn_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        self.check_xml_2212L_blastn_001(record)
+
+    def check_xml_2212L_blastn_001(self, record):
+        self.assertEqual(
+            record.reference,
+            'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.date, "Aug-07-2005")
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "BLASTN")
         alignments = record.alignments
 
         self.assertEqual(record.query_id, "gi|1348916|gb|G26684.1|G26684")
@@ -2041,17 +2069,14 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignments[0].length, 11884)
         self.assertEqual(len(alignments[0].hsps), 1)
-        self.assertGreater(alignments[0].hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[0].hsps[0].expect, 1.0598)
         self.assertEqual(
             alignments[1].title[:50],
             "gi|15073988|emb|AL591786.1|SME591786 Sinorhizobium",
         )
         self.assertEqual(alignments[1].length, 299350)
         self.assertEqual(len(alignments[1].hsps), 1)
-        self.assertGreater(alignments[1].hsps[0].expect, E_VALUE_THRESH)
-
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
+        self.assertAlmostEqual(alignments[1].hsps[0].expect, 4.18768)
 
     def test_xml_2212L_blastx_001(self):
         """Parsing BLASTX 2.2.12, gi|1347369|gb|G25137.1|G25137 (xml_2212L_blastx_001)."""
@@ -2062,13 +2087,25 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_blastx_001(record)
+
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        self.check_xml_2212L_blastx_001(record)
+
+    def check_xml_2212L_blastx_001(self, record):
+        self.assertEqual(
+            record.reference,
+            'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.date, "Aug-07-2005")
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "BLASTX")
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1347369|gb|G25137.1|G25137")
         self.assertEqual(len(alignments), 78)
         self.assertEqual(sum(len(a.hsps) for a in alignments), 84)
-
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
 
         hsp = record.alignments[0].hsps[0]
         self.assertEqual(hsp.score, 630.0)
@@ -2083,14 +2120,25 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_tblastn_001(record)
 
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        self.check_xml_2212L_tblastn_001(record)
+
+    def check_xml_2212L_tblastn_001(self, record):
+        self.assertEqual(
+            record.reference,
+            'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.date, "Aug-07-2005")
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "TBLASTN")
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|729325|sp|P39483|DHG2_BACME")
         self.assertEqual(len(alignments), 100)
         self.assertEqual(sum(len(a.hsps) for a in alignments), 127)
-
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
 
     def test_xml_2212L_tblastx_001(self):
         """Parsing TBLASTX 2.2.12, gi|1348853|gb|G26621.1|G26621, BLOSUM80 (xml_2212L_tblastx_001)."""
@@ -2101,14 +2149,25 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2212L_tblastx_001(record)
 
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+        self.check_xml_2212L_tblastx_001(record)
+
+    def check_xml_2212L_tblastx_001(self, record):
+        self.assertEqual(
+            record.reference,
+            'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.date, "Aug-07-2005")
+        self.assertEqual(record.version, "2.2.12")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "TBLASTX")
         alignments = record.alignments
         self.assertEqual(record.query_id, "gi|1348853|gb|G26621.1|G26621")
         self.assertEqual(len(alignments), 10)
         self.assertEqual(sum(len(a.hsps) for a in alignments), 102)
-
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
 
     def test_xml_2218_blastp_001(self):
         """Parsing BLASTP 2.2.18+, gi|160837788|ref|NP_075631.2| (xml_2218_blastp_001)."""
@@ -2121,7 +2180,22 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
+        self.check_xml_2218_blastp_001(record)
 
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+            handle.close()
+        self.check_xml_2218_blastp_001(record)
+
+    def check_xml_2218_blastp_001(self, record):
+        self.assertEqual(
+            record.reference,
+            'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.version, "2.2.18+")
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.application, "BLASTP")
         alignments = record.alignments
         self.assertEqual(record.query_id, "31493")
         self.assertEqual(len(alignments), 10)
@@ -2132,78 +2206,74 @@ class TestNCBIXML(unittest.TestCase):
         )
         self.assertEqual(alignments[0].length, 330)
         self.assertEqual(len(alignments[0].hsps), 1)
-        self.assertGreater(alignments[0].hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[0].hsps[0].expect, 0.0185319)
         self.assertEqual(
             alignments[1].title[:50],
             "gi|476059|emb|CAA55606.1| YBR0832 [Saccharomyces c",
         )
         self.assertEqual(alignments[1].length, 535)
         self.assertEqual(len(alignments[1].hsps), 1)
-        self.assertGreater(alignments[1].hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[1].hsps[0].expect, 0.0185319)
         self.assertEqual(
             alignments[2].title[:50],
             "gi|6320473|ref|NP_010553.1| Essential protein invo",
         )
         self.assertEqual(alignments[2].length, 330)
         self.assertEqual(len(alignments[2].hsps), 1)
-        self.assertGreater(alignments[2].hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[2].hsps[0].expect, 0.0185319)
         self.assertEqual(
             alignments[3].title[:50],
             "gi|61679798|pdb|1R5M|A Chain A, Crystal Structure ",
         )
         self.assertEqual(alignments[3].length, 425)
         self.assertEqual(len(alignments[3].hsps), 1)
-        self.assertGreater(alignments[3].hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[3].hsps[0].expect, 0.0185319)
         self.assertEqual(
             alignments[4].title[:50],
             "gi|6319579|ref|NP_009661.1| WD40 repeat-containing",
         )
         self.assertEqual(alignments[4].length, 535)
         self.assertEqual(len(alignments[4].hsps), 1)
-        self.assertGreater(alignments[4].hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[4].hsps[0].expect, 0.0185319)
         self.assertEqual(
             alignments[5].title[:50],
             "gi|151946495|gb|EDN64717.1| Sir4p-interacting fact",
         )
         self.assertEqual(alignments[5].length, 535)
         self.assertEqual(len(alignments[5].hsps), 1)
-        self.assertGreater(alignments[5].hsps[0].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[5].hsps[0].expect, 0.0412849)
         self.assertEqual(
             alignments[6].title[:50],
             "gi|151943708|gb|EDN62018.1| nuclear pore complex s",
         )
         self.assertEqual(alignments[6].length, 349)
         self.assertEqual(len(alignments[6].hsps), 2)
-        self.assertGreater(alignments[6].hsps[0].expect, E_VALUE_THRESH)
-        self.assertGreater(alignments[6].hsps[1].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[6].hsps[0].expect, 0.0704213)
+        self.assertAlmostEqual(alignments[6].hsps[1].expect, 2.26538)
         self.assertEqual(
             alignments[7].title[:50],
             "gi|151567866|pdb|2PM7|B Chain B, Crystal Structure",
         )
         self.assertEqual(alignments[7].length, 297)
         self.assertEqual(len(alignments[7].hsps), 2)
-        self.assertGreater(alignments[7].hsps[0].expect, E_VALUE_THRESH)
-        self.assertGreater(alignments[7].hsps[1].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[7].hsps[0].expect, 0.0704213)
+        self.assertAlmostEqual(alignments[7].hsps[1].expect, 0.456458)
         self.assertEqual(
             alignments[8].title[:50],
             "gi|6321338|ref|NP_011415.1| Nuclear pore protein t",
         )
         self.assertEqual(alignments[8].length, 349)
         self.assertEqual(len(alignments[8].hsps), 2)
-        self.assertGreater(alignments[8].hsps[0].expect, E_VALUE_THRESH)
-        self.assertGreater(alignments[8].hsps[1].expect, E_VALUE_THRESH)
+        self.assertAlmostEqual(alignments[8].hsps[0].expect, 0.0704213)
+        self.assertAlmostEqual(alignments[8].hsps[1].expect, 2.26538)
         self.assertEqual(
             alignments[9].title[:50],
             "gi|151567870|pdb|2PM9|B Chain B, Crystal Structure",
         )
         self.assertEqual(alignments[9].length, 297)
         self.assertEqual(len(alignments[9].hsps), 2)
-        self.assertGreater(alignments[9].hsps[0].expect, E_VALUE_THRESH)
-        self.assertGreater(alignments[9].hsps[1].expect, E_VALUE_THRESH)
-
-        with open(datafile, "rb") as handle:
-            record = NCBIXML.read(handle)
-            handle.close()
+        self.assertAlmostEqual(alignments[9].hsps[0].expect, 0.0919731)
+        self.assertAlmostEqual(alignments[9].hsps[1].expect, 0.267601)
 
     def test_xml_2218_blastp_002(self):
         """Parsing BLASTP 2.2.18+, SwissProt Q08386 and P07175, no hits (xml_2218_blastp_002)."""
@@ -2212,9 +2282,25 @@ class TestNCBIXML(unittest.TestCase):
         with open(datafile, "rb") as handle:
             records = NCBIXML.parse(handle)
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.version, "2.2.18+")
+            self.assertEqual(record.database, "gpipe/9606/Previous/protein")
+            self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.query_id, "gi|585505|sp|Q08386|MOPB_RHOCA")
             self.assertEqual(len(record.alignments), 0)
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                'Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.date, "")
+            self.assertEqual(record.version, "2.2.18+")
+            self.assertEqual(record.database, "gpipe/9606/Previous/protein")
+            self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.query_id, "gi|129628|sp|P07175.1|PARA_AGRTU")
             self.assertEqual(len(record.alignments), 0)
             self.assertRaises(StopIteration, next, records)
@@ -2228,12 +2314,26 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
             record = next(records)
             self.assertRaises(StopIteration, next, records)
-        self.assertEqual(record.query_id, "lcl|1_0")
-        alignments = record.alignments
-        self.assertEqual(len(alignments), 0)
+        self.check_xml_2218L_blastp_001(record)
 
         with open(datafile, "rb") as handle:
             record = NCBIXML.read(handle)
+        self.check_xml_2218L_blastp_001(record)
+
+    def check_xml_2218L_blastp_001(self, record):
+        self.assertEqual(
+            record.reference,
+            '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.date, "Mar-02-2008")
+        self.assertEqual(record.version, "2.2.18")
+        self.assertEqual(
+            record.database, "/Users/pjcock/Downloads/Software/blast-2.2.18/data/nr"
+        )
+        self.assertEqual(record.application, "BLASTP")
+        self.assertEqual(record.query_id, "lcl|1_0")
+        alignments = record.alignments
+        self.assertEqual(len(alignments), 0)
 
     def test_xml_2222_blastx_001(self):
         """Parsing BLASTX 2.2.22+, multiple queries against NR (xml_2222_blastx_001)."""
@@ -2246,6 +2346,11 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2254,7 +2359,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|4104054|gb|AH007193.1|SEG_CVIGS Centaurea vallesiaca 18S ribosomal RNA gene, partial sequence",
             )
             self.assertEqual(record.query_letters, 1002)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2264,6 +2368,11 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[0].hsps), 1)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2272,7 +2381,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|4218935|gb|AF074388.1|AF074388 Sambucus nigra hevein-like protein HLPf gene, partial cds",
             )
             self.assertEqual(record.query_letters, 2050)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2285,6 +2393,11 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[9].hsps), 2)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2293,7 +2406,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|5690369|gb|AF158246.1|AF158246 Cricetulus griseus glucose phosphate isomerase (GPI) gene, partial intron sequence",
             )
             self.assertEqual(record.query_letters, 550)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2302,6 +2414,11 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments), 0)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2310,7 +2427,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|5049839|gb|AI730987.1|AI730987 BNLGHi8354 Six-day Cotton fiber Gossypium hirsutum cDNA 5' similar to TUBULIN BETA-1 CHAIN gi|486734|pir|S35142 tubulin beta chain - white lupine gi|402636 (X70184) Beta tubulin 1 [Lupinus albus], mRNA sequence",
             )
             self.assertEqual(record.query_letters, 655)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2321,6 +2437,11 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[9].hsps), 1)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2329,7 +2450,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|5052071|gb|AF067555.1|AF067555 Phlox stansburyi internal transcribed spacer 1, 5.8S ribosomal RNA gene, and internal transcribed spacer 2, complete sequence",
             )
             self.assertEqual(record.query_letters, 623)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2340,6 +2460,11 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[9].hsps), 1)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2348,7 +2473,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|3176602|gb|U78617.1|LOU78617 Lathyrus odoratus phytochrome A (PHYA) gene, partial cds",
             )
             self.assertEqual(record.query_letters, 309)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2359,6 +2483,11 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[9].hsps), 1)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.application, "BLASTX")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
@@ -2367,7 +2496,6 @@ class TestNCBIXML(unittest.TestCase):
                 "gi|5817701|gb|AF142731.1|AF142731 Wisteria frutescens maturase-like protein (matK) gene, complete cds; chloroplast gene for chloroplast product",
             )
             self.assertEqual(record.query_letters, 2551)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2393,9 +2521,13 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.version, "2.2.22+")
             self.assertEqual(record.date, "")
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(record.query, "gi|3298468|dbj|BAA31520.1| SAMIPF")
             self.assertEqual(record.query_letters, 107)
-            self.assertEqual(record.database, "nr")
             self.assertEqual(record.num_sequences_in_database, 8994603)
             self.assertEqual(record.database_sequences, 8994603)
             # self.assertEqual(record.database_length, 3078807967)
@@ -2405,6 +2537,14 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(len(record.alignments[0].hsps), 1)
 
             record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(
                 record.query,
                 "gi|2781234|pdb|1JLY|B Chain B, Crystal Structure Of Amaranthus Caudatus Agglutinin",
@@ -2412,6 +2552,14 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(record.query_letters, 304)
 
             record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(
                 record.query,
                 "gi|4959044|gb|AAD34209.1|AF069992_1 LIM domain interacting RING finger protein",
@@ -2419,6 +2567,14 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(record.query_letters, 600)
 
             record = next(records)
+            self.assertEqual(record.application, "BLASTP")
+            self.assertEqual(record.version, "2.2.22+")
+            self.assertEqual(record.date, "")
+            self.assertEqual(
+                record.reference,
+                'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "nr")
             self.assertEqual(
                 record.query, "gi|671626|emb|CAA85685.1| rubisco large subunit"
             )
@@ -2440,12 +2596,16 @@ class TestNCBIXML(unittest.TestCase):
             records = NCBIXML.parse(handle)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.version, "2.2.18")
             self.assertEqual(record.date, "Mar-02-2008")
             self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
             self.assertEqual(record.query_letters, 131)
-            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.num_sequences_in_database, 2563094)
             self.assertEqual(record.database_sequences, 2563094)
             self.assertEqual(record.database_length, 864488805)
@@ -2499,12 +2659,16 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(hsp.sbjct_end, 76)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.version, "2.2.18")
             self.assertEqual(record.date, "Mar-02-2008")
             self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
             self.assertEqual(record.query_letters, 131)
-            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.num_sequences_in_database, 2563094)
             self.assertEqual(record.database_sequences, 2563094)
             self.assertEqual(record.database_length, 864488805)
@@ -2535,12 +2699,16 @@ class TestNCBIXML(unittest.TestCase):
             self.assertEqual(hsp.sbjct_end, 131)
 
             record = next(records)
+            self.assertEqual(
+                record.reference,
+                '~Reference: Altschul, Stephen F., Thomas L. Madden, Alejandro A. Schaffer, ~Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), ~"Gapped BLAST and PSI-BLAST: a new generation of protein database search~programs",  Nucleic Acids Res. 25:3389-3402.',
+            )
+            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.application, "BLASTP")
             self.assertEqual(record.version, "2.2.18")
             self.assertEqual(record.date, "Mar-02-2008")
             self.assertEqual(record.query, "tr|Q3V4Q3|Q3V4Q3_9VIRU")
             self.assertEqual(record.query_letters, 131)
-            self.assertEqual(record.database, "/opt/BlastDBs/nr")
             self.assertEqual(record.num_sequences_in_database, 2563094)
             self.assertEqual(record.database_sequences, 2563094)
             self.assertEqual(record.database_length, 864488805)
@@ -2673,10 +2841,15 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.application, "BLASTP")
         self.assertEqual(record.version, "2.9.0+")
         self.assertEqual(
+            record.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.date, "")
+        self.assertEqual(
             record.query, "twin argininte translocase protein A [Escherichia coli K12]"
         )
         self.assertEqual(record.query_letters, 103)
-        self.assertEqual(record.database, "nr")
         self.assertEqual(record.num_sequences_in_database, 194611632)
         self.assertEqual(record.database_sequences, 194611632)
         self.assertEqual(record.database_length, 2104817704)
@@ -3025,11 +3198,16 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.application, "BLASTN")
         self.assertEqual(record.version, "2.9.0+")
-        self.assertEqual(record.query, "human STS STS_D11570, sequence tagged site")
-        self.assertEqual(record.query_letters, 285)
+        self.assertEqual(
+            record.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
         self.assertEqual(
             record.database, "GPIPE/10090/current/all_top_level GPIPE/10090/current/rna"
         )
+        self.assertEqual(record.date, "")
+        self.assertEqual(record.query, "human STS STS_D11570, sequence tagged site")
+        self.assertEqual(record.query_letters, 285)
         self.assertEqual(record.num_sequences_in_database, 107382)
         self.assertEqual(record.database_sequences, 107382)
         self.assertEqual(record.database_length, 3164670549)
@@ -3406,11 +3584,16 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.application, "BLASTX")
         self.assertEqual(record.version, "2.9.0+")
         self.assertEqual(
+            record.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.date, "")
+        self.assertEqual(
             record.query,
             "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
         )
         self.assertEqual(record.query_letters, 365)
-        self.assertEqual(record.database, "nr")
 
         alignment = record.alignments[0]
         self.assertEqual(alignment.hit_id, "gi|1530504495|emb|VDM03167.1|")
@@ -3832,9 +4015,14 @@ class TestNCBIXML(unittest.TestCase):
 
         self.assertEqual(record.application, "TBLASTN")
         self.assertEqual(record.version, "2.9.0+")
+        self.assertEqual(
+            record.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.date, "")
         self.assertEqual(record.query, "tim [Helicobacter acinonychis str. Sheeba]")
         self.assertEqual(record.query_letters, 234)
-        self.assertEqual(record.database, "nr")
 
         alignment = record.alignments[4]
         self.assertEqual(alignment.hit_id, "gi|1143706535|gb|CP018823.1|")
@@ -3895,11 +4083,16 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(record.application, "TBLASTX")
         self.assertEqual(record.version, "2.9.0+")
         self.assertEqual(
+            record.reference,
+            'Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and PSI-BLAST: a new generation of protein database search programs", Nucleic Acids Res. 25:3389-3402.',
+        )
+        self.assertEqual(record.database, "nr")
+        self.assertEqual(record.date, "")
+        self.assertEqual(
             record.query,
             "MAAD0534.RAR Schistosoma mansoni, adult worm (J.C.Parra) Schistosoma mansoni cDNA clone MAAD0534.RAR 5' end similar to S. mansoni actin mRNA, complete cds, mRNA sequence",
         )
         self.assertEqual(record.query_letters, 365)
-        self.assertEqual(record.database, "nr")
 
         alignment = record.alignments[4]
         self.assertEqual(alignment.hit_id, "gi|1590279025|ref|XM_028307351.1|")
@@ -4121,6 +4314,93 @@ class TestNCBIXML(unittest.TestCase):
         self.assertEqual(description.score, 325.0)
         self.assertEqual(description.e, 7.83523e-61)
         self.assertEqual(description.num_alignments, 12)
+
+    def test_create_view_warning(self):
+        """Test that CREATE_VIEW between Hit tags raises a BiopythonParserWarning."""
+        # Minimal BLAST XML with CREATE_VIEW text between Hit tags
+        xml_data = b"""\
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>blastp</BlastOutput_program>
+  <BlastOutput_version>BLASTP 2.2.12 [Aug-07-2005]</BlastOutput_version>
+  <BlastOutput_reference>Altschul et al.</BlastOutput_reference>
+  <BlastOutput_db>nr</BlastOutput_db>
+  <BlastOutput_query-ID>test_query</BlastOutput_query-ID>
+  <BlastOutput_query-def>test query</BlastOutput_query-def>
+  <BlastOutput_query-len>100</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+      <Parameters_expect>10</Parameters_expect>
+      <Parameters_gap-open>11</Parameters_gap-open>
+      <Parameters_gap-extend>1</Parameters_gap-extend>
+      <Parameters_filter>L;</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+  <BlastOutput_iterations>
+    <Iteration>
+      <Iteration_iter-num>1</Iteration_iter-num>
+      <Iteration_hits>
+        CREATE_VIEW
+        <Hit>
+          <Hit_num>1</Hit_num>
+          <Hit_id>test_hit</Hit_id>
+          <Hit_def>test hit definition</Hit_def>
+          <Hit_accession>TEST123</Hit_accession>
+          <Hit_len>100</Hit_len>
+          <Hit_hsps>
+            <Hsp>
+              <Hsp_num>1</Hsp_num>
+              <Hsp_bit-score>50.0</Hsp_bit-score>
+              <Hsp_score>100</Hsp_score>
+              <Hsp_evalue>1e-10</Hsp_evalue>
+              <Hsp_query-from>1</Hsp_query-from>
+              <Hsp_query-to>100</Hsp_query-to>
+              <Hsp_hit-from>1</Hsp_hit-from>
+              <Hsp_hit-to>100</Hsp_hit-to>
+              <Hsp_query-frame>0</Hsp_query-frame>
+              <Hsp_hit-frame>0</Hsp_hit-frame>
+              <Hsp_identity>100</Hsp_identity>
+              <Hsp_positive>100</Hsp_positive>
+              <Hsp_gaps>0</Hsp_gaps>
+              <Hsp_align-len>100</Hsp_align-len>
+              <Hsp_qseq>TESTSEQUENCE</Hsp_qseq>
+              <Hsp_hseq>TESTSEQUENCE</Hsp_hseq>
+              <Hsp_midline>TESTSEQUENCE</Hsp_midline>
+            </Hsp>
+          </Hit_hsps>
+        </Hit>
+      </Iteration_hits>
+      <Iteration_stat>
+        <Statistics>
+          <Statistics_db-num>1000</Statistics_db-num>
+          <Statistics_db-len>100000</Statistics_db-len>
+          <Statistics_hsp-len>10</Statistics_hsp-len>
+          <Statistics_eff-space>1000000</Statistics_eff-space>
+          <Statistics_kappa>0.041</Statistics_kappa>
+          <Statistics_lambda>0.267</Statistics_lambda>
+          <Statistics_entropy>0.14</Statistics_entropy>
+        </Statistics>
+      </Iteration_stat>
+    </Iteration>
+  </BlastOutput_iterations>
+</BlastOutput>
+"""
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", BiopythonParserWarning)
+            handle = io.BytesIO(xml_data)
+            records = list(NCBIXML.parse(handle))
+            self.assertEqual(len(records), 1)
+            # Check that the CREATE_VIEW warning was raised
+            create_view_warnings = [
+                w
+                for w in caught
+                if issubclass(w.category, BiopythonParserWarning)
+                and "CREATE_VIEW" in str(w.message)
+            ]
+            self.assertEqual(len(create_view_warnings), 1)
+            self.assertIn("NCBIXML: Ignored:", str(create_view_warnings[0].message))
 
 
 if __name__ == "__main__":

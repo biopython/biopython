@@ -6,7 +6,6 @@
 """Code to parse the keywlist.txt file from SwissProt/UniProt.
 
 See:
- - https://www.uniprot.org/docs/keywlist
  - https://www.uniprot.org/docs/keywlist.txt
 
 Classes:
@@ -85,7 +84,7 @@ def parse(handle):
             elif key in ("DE", "SY", "GO", "HI", "WW"):
                 record[key].append(value)
             else:
-                print(f"Ignoring: {line.strip()}")
+                raise ValueError(f"Cannot parse line '{line.strip()}'")
     # Read the footer and throw it away
     for line in handle:
         pass

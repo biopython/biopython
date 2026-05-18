@@ -5,18 +5,18 @@
 
 """Unit tests for the Bio.codonalign modules."""
 
-import warnings
 import tempfile
 import unittest
+import warnings
 
-from Bio import BiopythonWarning, BiopythonExperimentalWarning
-from Bio import SeqIO
 from Bio import AlignIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
+from Bio import BiopythonExperimentalWarning
+from Bio import BiopythonWarning
+from Bio import SeqIO
 from Bio.Align import MultipleSeqAlignment
 from Bio.Data import CodonTable
-
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore", BiopythonExperimentalWarning)
@@ -32,7 +32,7 @@ TEST_ALIGN_FILE6 = [
     ("codonalign/egfr_nucl.fa", "codonalign/egfr_pro.aln", "codonalign/egfr_id"),
     "id",
 ]
-TEST_ALIGN_FILE7 = [("codonalign/drosophilla.fasta", "codonalign/adh.aln"), "index"]
+TEST_ALIGN_FILE7 = [("codonalign/drosophila.fasta", "codonalign/adh.aln"), "index"]
 
 temp_dir = tempfile.mkdtemp()
 
@@ -106,7 +106,9 @@ class TestAddition(unittest.TestCase):
 
     def test_addition_CodonAlignment(self):
         """Check addition of CodonAlignment and CodonAlignment."""
-        new_aln = self.codon_aln + self.codon_aln
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonWarning)
+            new_aln = self.codon_aln + self.codon_aln
 
         self.assertIsInstance(new_aln, codonalign.CodonAlignment)
         for x in range(len(self.codon_aln)):
@@ -173,7 +175,6 @@ class TestBuildAndIO(unittest.TestCase):
 
     def test_IO(self):
         self.assertEqual(len(self.alns), 6)
-        # print(temp_dir)
         for n, i in enumerate(self.alns):
             aln = i.toMultipleSeqAlignment()
             AlignIO.write(aln, temp_dir + "/aln" + str(n) + ".clw", "clustal")
@@ -275,7 +276,11 @@ class Test_build(unittest.TestCase):
         codon_aln3 = codonalign.build(
             self.aln3, self.seqlist3, codon_table=self.codontable3
         )
-        codon_aln4 = codonalign.build(self.aln1, self.seqlist1, complete_protein=True)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=BiopythonWarning)
+            codon_aln4 = codonalign.build(
+                self.aln1, self.seqlist1, complete_protein=True
+            )
 
 
 class Test_dn_ds(unittest.TestCase):
@@ -447,11 +452,11 @@ class Test_dn_ds(unittest.TestCase):
 
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
-    numpy = None
+    np = None
 
-if numpy:
+if np:
 
     class Test_MK(unittest.TestCase):
         def test_mk(self):

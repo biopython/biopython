@@ -7,11 +7,15 @@
 
 """The structure class, representing a macromolecular structure."""
 
+from typing import TYPE_CHECKING
+
 from Bio.PDB.Entity import Entity
-from Bio.PDB.internal_coords import IC_Chain
+
+if TYPE_CHECKING:
+    from Bio.PDB.Model import Model
 
 
-class Structure(Entity):
+class Structure(Entity[None, "Model"]):
     """The Structure class contains a collection of Model instances."""
 
     def __init__(self, id):
@@ -60,7 +64,7 @@ class Structure(Entity):
         :param verbose bool: default False
             describe runtime problems
 
-        :raises Exception: if any chain does not have .pic attribute
+        :raises Exception: if any chain does not have .internal_coord attribute
         """
         for chn in self.get_chains():
             chn.internal_to_atom_coordinates(verbose)

@@ -17,10 +17,10 @@ Examples
 6
 >>> print(X.count_amino_acids()['E'])
 12
->>> print("%0.2f" % X.get_amino_acids_percent()['A'])
-0.04
->>> print("%0.2f" % X.get_amino_acids_percent()['L'])
-0.12
+>>> print("%0.2f" % X.amino_acids_percent['A'])
+3.95
+>>> print("%0.2f" % X.amino_acids_percent['L'])
+11.84
 >>> print("%0.2f" % X.molecular_weight())
 17103.16
 >>> print("%0.2f" % X.aromaticity())
@@ -33,7 +33,11 @@ Examples
 7.04
 >>> sec_struc = X.secondary_structure_fraction()  # [helix, turn, sheet]
 >>> print("%0.2f" % sec_struc[0])  # helix
-0.28
+0.33
+>>> print("%0.2f" % sec_struc[1])  # turn
+0.29
+>>> print("%0.2f" % sec_struc[2])  # sheet
+0.37
 >>> epsilon_prot = X.molar_extinction_coefficient()  # [reduced, oxidized]
 >>> print(epsilon_prot[0])  # with reduced cysteines
 17420
@@ -48,22 +52,21 @@ Other public methods are:
 
 """
 
-
+import functools
 import sys
-from Bio.SeqUtils import ProtParamData  # Local
-from Bio.SeqUtils import IsoelectricPoint  # Local
-from Bio.Seq import Seq
+
 from Bio.Data import IUPACData
+from Bio.Seq import Seq
+from Bio.SeqUtils import IsoelectricPoint  # Local
 from Bio.SeqUtils import molecular_weight
+from Bio.SeqUtils import ProtParamData  # Local
 
 
 class ProteinAnalysis:
     """Class containing methods for protein analysis.
 
     The constructor takes two arguments.
-    The first is the protein sequence as a string, which is then converted to a
-    sequence object using the Bio.Seq module. This is done just to make sure
-    the sequence is a protein sequence and not anything else.
+    The first is the protein sequence as a string or a Seq object.
 
     The second argument is optional. If set to True, the weight of the amino
     acids will be calculated using their monoisotopic mass (the weight of the
@@ -76,12 +79,8 @@ class ProteinAnalysis:
 
     def __init__(self, prot_sequence, monoisotopic=False):
         """Initialize the class."""
-        if prot_sequence.islower():
-            self.sequence = Seq(prot_sequence.upper())
-        else:
-            self.sequence = Seq(prot_sequence)
+        self.sequence = prot_sequence.upper()
         self.amino_acids_content = None
-        self.amino_acids_percent = None
         self.length = len(self.sequence)
         self.monoisotopic = monoisotopic
 
@@ -95,7 +94,7 @@ class ProteinAnalysis:
         It is not recalculated upon subsequent calls.
         """
         if self.amino_acids_content is None:
-            prot_dic = {k: 0 for k in IUPACData.protein_letters}
+            prot_dic = dict.fromkeys(IUPACData.protein_letters, 0)
             for aa in prot_dic:
                 prot_dic[aa] = self.sequence.count(aa)
 
@@ -103,27 +102,20 @@ class ProteinAnalysis:
 
         return self.amino_acids_content
 
-    def get_amino_acids_percent(self):
-        """Calculate the amino acid content in percentages.
+    @functools.cached_property
+    def amino_acids_percent(self):
+        """Get the amino acid content in percentages.
 
-        The same as count_amino_acids only returns the Number in percentage of
-        entire sequence. Returns a dictionary of {AminoAcid:percentage}.
-
-        The return value is cached in self.amino_acids_percent.
-
-        input is the dictionary self.amino_acids_content.
-        output is a dictionary with amino acids as keys.
+        The same as count_amino_acids, but returns the number as a percentage
+        of the sequence length. Returns a dictionary of {AminoAcid:percentage},
+        where the percentage is in the range 0-100.
         """
-        if self.amino_acids_percent is None:
-            aa_counts = self.count_amino_acids()
+        aa_counts = self.count_amino_acids()
+        percentages = {
+            aa: (count * 100 / self.length) for aa, count in aa_counts.items()
+        }
 
-            percentages = {}
-            for aa in aa_counts:
-                percentages[aa] = aa_counts[aa] / float(self.length)
-
-            self.amino_acids_percent = percentages
-
-        return self.amino_acids_percent
+        return percentages
 
     def molecular_weight(self):
         """Calculate MW from Protein sequence."""
@@ -138,9 +130,9 @@ class ProteinAnalysis:
         It is simply the relative frequency of Phe+Trp+Tyr.
         """
         aromatic_aas = "YWF"
-        aa_percentages = self.get_amino_acids_percent()
+        aa_percentages = self.amino_acids_percent
 
-        aromaticity = sum(aa_percentages[aa] for aa in aromatic_aas)
+        aromaticity = sum(aa_percentages[aa] / 100 for aa in aromatic_aas)
 
         return aromaticity
 
@@ -325,19 +317,23 @@ class ProteinAnalysis:
         """Calculate fraction of helix, turn and sheet.
 
         Returns a list of the fraction of amino acids which tend
-        to be in Helix, Turn or Sheet.
+        to be in Helix, Turn or Sheet, according to Haimov and Srebnik, 2016;
+        Hutchinson and Thornton, 1994; and Kim and Berg, 1993, respectively.
 
-        Amino acids in helix: V, I, Y, F, W, L.
-        Amino acids in Turn: N, P, G, S.
-        Amino acids in sheet: E, M, A, L.
+        Amino acids in helix: E, M, A, L, K.
+        Amino acids in turn: N, P, G, S, D.
+        Amino acids in sheet: V, I, Y, F, W, L, T.
+
+        Note that, prior to v1.82, this method wrongly returned
+        (Sheet, Turn, Helix) while claiming to return (Helix, Turn, Sheet).
 
         Returns a tuple of three floats (Helix, Turn, Sheet).
         """
-        aa_percentages = self.get_amino_acids_percent()
+        aa_percentages = self.amino_acids_percent
 
-        helix = sum(aa_percentages[r] for r in "VIYFWL")
-        turn = sum(aa_percentages[r] for r in "NPGS")
-        sheet = sum(aa_percentages[r] for r in "EMAL")
+        helix = sum(aa_percentages[r] / 100 for r in "EMALK")
+        turn = sum(aa_percentages[r] / 100 for r in "NPGSD")
+        sheet = sum(aa_percentages[r] / 100 for r in "VIYFWLT")
 
         return helix, turn, sheet
 

@@ -4,15 +4,19 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.Align.msf module."""
+
 import unittest
 import warnings
-
+from io import StringIO
 
 from Bio import BiopythonParserWarning
-from Bio.Align.msf import AlignmentIterator
+from Bio import Align
+from Bio.Align import substitution_matrices
+
+substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -24,11 +28,21 @@ except ImportError:
 class TestMSF(unittest.TestCase):
     def test_protein1(self):
         path = "msf/W_prot.msf"
-        with open(path) as stream:
-            alignments = AlignmentIterator(stream)
-            alignments = list(alignments)
-        self.assertEqual(len(alignments), 1)
-        alignment = alignments[0]
+        alignments = Align.parse(path, "msf")
+        self.check_alignments(alignments)
+        alignments = iter(alignments)
+        self.check_alignments(alignments)
+        with Align.parse(path, "msf") as alignments:
+            self.check_alignments(alignments)
+        with self.assertRaises(AttributeError):
+            alignments._stream
+        with Align.parse(path, "msf") as alignments:
+            pass
+        with self.assertRaises(AttributeError):
+            alignments._stream
+
+    def check_alignments(self, alignments):
+        alignment = next(alignments)
         self.assertEqual(len(alignment), 11)
         self.assertEqual(alignment.shape, (11, 99))
         self.assertEqual(alignment.sequences[0].id, "W*01:01:01:01")
@@ -86,11 +100,38 @@ class TestMSF(unittest.TestCase):
             alignment.sequences[10].seq,
             "GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSCSKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*01:01:0         0 GLTPFNGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*02:01           0 GLTPSNGYTAATWTRTAASSVGMNIPYDGASYLVRNQELRSWTAADKAAQMPWRRNMQSC
+W*03:01:0         0 GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*03:01:0         0 GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
+W*04:01           0 GLTPSNGYTAATWTRTAASSVGMNIPYDGASYLVRNQELRSWTAADKAAQMPWRRNMQSC
+W*05:01           0 GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSC
 
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*01:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+W*02:01          60 SKPTCREGGRSGSAKSLRMGRRRCTAQNPKRLT------ 93
+W*03:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKRLT------ 93
+W*03:01:0        60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKRLT------ 93
+W*04:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKRLT------ 93
+W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
+""",
+        )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         [0, 93, 99],
                         [0, 93, 99],
@@ -151,21 +192,37 @@ class TestMSF(unittest.TestCase):
             alignment[10],
             "GLTPSSGYTAATWTRTAVSSVGMNIPYHGASYLVRNQELRSWTAADKAAQMPWRRNRQSCSKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL",
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 0)
+        self.assertEqual(counts.left_deletions, 0)
+        self.assertEqual(counts.right_insertions, 24)
+        self.assertEqual(counts.right_deletions, 144)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 0)
+        self.assertEqual(counts.right_gaps, 168)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 24)
+        self.assertEqual(counts.deletions, 144)
+        self.assertEqual(counts.gaps, 168)
+        self.assertEqual(counts.aligned, 5241)
+        self.assertEqual(counts.identities, 5029)
+        self.assertEqual(counts.mismatches, 212)
+        self.assertEqual(counts.positives, 5063)
+        with self.assertRaises(StopIteration):
+            next(alignments)
 
     def test_protein2(self):
         path = "msf/DOA_prot.msf"
 
+        alignments = Align.parse(path, "msf")
         with warnings.catch_warnings(record=True) as w:
-            with open(path) as stream:
-                alignments = AlignmentIterator(stream)
-                alignments = list(alignments)
+            alignment = next(alignments)
         self.assertEqual(len(w), 1)
         self.assertIsInstance(w[0].message, BiopythonParserWarning)
         self.assertEqual(
             str(w[0].message), "GCG MSF headers said alignment length 62, but found 250"
         )
-        self.assertEqual(len(alignments), 1)
-        alignment = alignments[0]
         self.assertEqual(len(alignment), 12)
         self.assertEqual(alignment.shape, (12, 250))
         self.assertEqual(alignment.sequences[0].id, "DOA*01:01:01")
@@ -228,10 +285,79 @@ class TestMSF(unittest.TestCase):
             alignment.sequences[11].seq,
             "MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPPSTSLTAPRASSPMNLMRNSCSLWTX",
         )
+        self.assertEqual(
+            str(alignment),
+            """\
+DOA*01:01         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:01         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:01         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:01         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:01         0 ----------------------------DHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:01         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:01         0 ----------------------------DHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:01         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:01         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:02         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:03         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPAFYQSYGASGQFTHEFDEEQLFSV
+DOA*01:04         0 MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPPSTSLTAPRASSPMNLMRNSCSLW
+
+DOA*01:01        60 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNRSRAINVPPRVTVLPK
+DOA*01:01        60 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNRSRAINVPPRVTVLPK
+DOA*01:01        60 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNRSRAINVPPRVTVLPK
+DOA*01:01        60 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNRSRAINVPPRVTVLPK
+DOA*01:01        32 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNRSRAINVPPRVTVLPK
+DOA*01:01        60 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNRSRAINVPPRVTVLPK
+DOA*01:01        32 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNRSRAINVPPRVTVLPK
+DOA*01:01        60 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNRSRAINVPPRVTVLPK
+DOA*01:01        60 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNRSRAINVPPRVTVLPK
+DOA*01:02        60 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDILVERSNCSRAINVPPRVTVLPK
+DOA*01:03        60 DLKKSEAVWRLPEFGDFARFDPQGGLAGIAAIKAHLDIVVERSNRSRAINVPPRVTVLPK
+DOA*01:04        60 TX----------------------------------------------------------
+
+DOA*01:01       120 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:01       120 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:01       120 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:01       120 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:01        92 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:01       120 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:01        92 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:01       120 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:01       120 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:02       120 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:03       120 SRVELGQPNILICIVDNIFPPVINITWLRNGQTVTEGVAQTSFYSQPDHLFRKFHYLPFV
+DOA*01:04        62 ------------------------------------------------------------
+
+DOA*01:01       180 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:01       180 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:01       180 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:01       180 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:01       152 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:01       180 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:01       152 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:01       180 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:01       180 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:02       180 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:03       180 PSAEDVYDCQVEHWGLDAPLLRHWELQVPIPPPDAMETLVCALGLAIGLVGFLVGTVLII
+DOA*01:04        62 ------------------------------------------------------------
+
+DOA*01:01       240 MGTYVSSVPR 250
+DOA*01:01       240 MGTYVSSVPR 250
+DOA*01:01       240 MGTYVSSVPR 250
+DOA*01:01       240 MGTYVSSVPR 250
+DOA*01:01       212 MGTYVSSVPR 222
+DOA*01:01       240 MGTYVSSVPR 250
+DOA*01:01       212 MGTYVSSVPR 222
+DOA*01:01       240 MGTYVSSVPR 250
+DOA*01:01       240 MGTYVSSVPR 250
+DOA*01:02       240 MGTYVSSVPR 250
+DOA*01:03       240 MGTYVSSVPR 250
+DOA*01:04        62 ----------  62
+""",
+        )
         self.assertTrue(
-            numpy.array_equal(
+            np.array_equal(
                 alignment.coordinates,
-                numpy.array(
+                np.array(
                     [
                         [0, 28, 62, 250],
                         [0, 28, 62, 250],
@@ -297,6 +423,33 @@ class TestMSF(unittest.TestCase):
             alignment[11],
             "MALRAGLVLGFHTLMTLLSPQEAGATKADHMGSYGPPSTSLTAPRASSPMNLMRNSCSLWTX--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------",
         )
+        counts = alignment.counts(substitution_matrix)
+        self.assertEqual(counts.left_insertions, 308)
+        self.assertEqual(counts.left_deletions, 252)
+        self.assertEqual(counts.right_insertions, 0)
+        self.assertEqual(counts.right_deletions, 2068)
+        self.assertEqual(counts.internal_insertions, 0)
+        self.assertEqual(counts.internal_deletions, 0)
+        self.assertEqual(counts.left_gaps, 560)
+        self.assertEqual(counts.right_gaps, 2068)
+        self.assertEqual(counts.internal_gaps, 0)
+        self.assertEqual(counts.insertions, 308)
+        self.assertEqual(counts.deletions, 2320)
+        self.assertEqual(counts.gaps, 2628)
+        self.assertEqual(counts.aligned, 13844)
+        self.assertEqual(counts.identities, 13538)
+        self.assertEqual(counts.mismatches, 306)
+        self.assertEqual(counts.positives, 13548)
+        with self.assertRaises(StopIteration):
+            next(alignments)
+
+    def test_empty(self):
+        """Checking empty file."""
+        stream = StringIO()
+        alignments = Align.parse(stream, "msf")
+        with self.assertRaises(ValueError) as cm:
+            next(alignments)
+        self.assertEqual(str(cm.exception), "Empty file.")
 
 
 if __name__ == "__main__":

@@ -5,9 +5,9 @@
 # Please see the LICENSE file that should have been included as part of this
 # package.
 """Tests for the SeqIO SnapGene module."""
+
 import datetime
 import unittest
-
 from io import BytesIO
 
 from Bio import SeqIO
@@ -15,7 +15,6 @@ from Bio.SeqFeature import CompoundLocation
 
 
 class TestSnapGene(unittest.TestCase):
-
     sample_data = {
         "sample-d": {
             "file": "SnapGene/sample-d.dna",
@@ -97,7 +96,7 @@ class TestSnapGene(unittest.TestCase):
             "id": "Sample",
             "description": "Sample Sequence F",
             "length": 1000,
-            "date": datetime.datetime(2021, 7, 26, 0, 0),
+            "date": datetime.datetime(2023, 1, 22, 0, 0),
             "topology": "circular",
             "features": [
                 {
@@ -127,6 +126,13 @@ class TestSnapGene(unittest.TestCase):
                         {"start": 187, "end": 207},
                         {"start": 214, "end": 241},
                     ],
+                },
+                {
+                    "type": "primer_bind",
+                    "start": 751,
+                    "end": 776,
+                    "strand": 1,
+                    "label": ["Primer 1"],
                 },
             ],
         },
@@ -253,6 +259,45 @@ class TestSnapGene(unittest.TestCase):
                     self.assertTrue("name" not in read_feat.qualifiers)
                 if "segments" in exp_feat:
                     self._check_feature_segments(exp_feat["segments"], read_feat)
+
+    def test_filter_with_hybridization_params(self):
+        """Ensure only releveant `primer_bind` features from SnapGene files are retained in
+        the `SeqRecord`. See the docstring of `_parse_primers_packet` for more details.
+        """
+        record = SeqIO.read("SnapGene/sample-hybridization-params.dna", "snapgene")
+        count_primer_features = 0
+        for feature in record.features:
+            if "XhoI-hht2(US)-Fwd" in feature.qualifiers["label"]:
+                count_primer_features += 1
+        self.assertEqual(count_primer_features, 1)
+
+    def test_remove_linebreaks_from_qualifier_values(self):
+        """Test that linebreaks are removed from qualifier values.
+
+        Otherwise, when writing to GenBank, the linebreaks will be preserved,
+        messing up the format.
+        """
+        record = SeqIO.read("SnapGene/linebreak_in_qualifier_text.dna", "snapgene")
+        for feature in record.features:
+            for qualifier in feature.qualifiers:
+                for value in feature.qualifiers[qualifier]:
+                    self.assertFalse("\n" in value)
+                    self.assertFalse("\r" in value)
+
+    def test_looped_feature(self):
+        """Read a file that has a circular sequence with a feature that spans the entire sequence"""
+
+        # If the feature spans the sequence from start to end
+        record = SeqIO.read("SnapGene/looped_feature_origin.dna", "snapgene")
+        self.assertEqual(record.annotations["topology"], "circular")
+        self.assertEqual(len(record.features), 1)
+        self.assertEqual(str(record.features[0].location), "[0:10](+)")
+
+        # If the feature spans the entire sequence, but starts somewhere in the middle
+        record = SeqIO.read("SnapGene/looped_feature.dna", "snapgene")
+        self.assertEqual(record.annotations["topology"], "circular")
+        self.assertEqual(len(record.features), 1)
+        self.assertEqual(str(record.features[0].location), "join{[2:10](+), [0:2](+)}")
 
 
 class TestCorruptedSnapGene(unittest.TestCase):

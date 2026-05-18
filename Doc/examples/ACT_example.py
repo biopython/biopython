@@ -5,15 +5,17 @@
 
 """Example of using GenomeDiagram cross-links to mimic ACT."""
 
-
-import sys
 import os
+import sys
+
 from reportlab.lib import colors
 from reportlab.lib.units import cm
 
-from Bio.Graphics.GenomeDiagram import Diagram, CrossLink
-from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio import SeqIO
+from Bio.Graphics.GenomeDiagram import CrossLink
+from Bio.Graphics.GenomeDiagram import Diagram
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 
 # Modify this line to point at the Artemis/ACT example data which is online at:
 # https://github.com/sanger-pathogens/Artemis/tree/master/etc
@@ -98,10 +100,10 @@ for i, crunch_file in enumerate(comparisons):
                 c = colors.Color(1, 0, 0, alpha=0.25)
                 b = False
             q_feature = q_set.add_feature(
-                SeqFeature(FeatureLocation(q_start - 1, q_end)), color=c, border=b
+                SeqFeature(SimpleLocation(q_start - 1, q_end)), color=c, border=b
             )
             s_feature = s_set.add_feature(
-                SeqFeature(FeatureLocation(s_start - 1, s_end)), color=c, border=b
+                SeqFeature(SimpleLocation(s_start - 1, s_end)), color=c, border=b
             )
             gd_diagram.cross_track_links.append(CrossLink(q_feature, s_feature, c, b))
             # NOTE: We are using the same colour for all the matches,

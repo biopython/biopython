@@ -6,6 +6,7 @@
  * package.
  */
 
+
 #include <math.h>
 #include <stdlib.h>
 #include <Python.h>
@@ -20,7 +21,7 @@ static int DataPoint_current_dim = 0;
 
 typedef struct
 {
-    long int _index;
+    Py_ssize_t _index;
     double _coord[DIM];
 } DataPoint;
 
@@ -35,7 +36,7 @@ static int compare(const void* self, const void* other)
     return 0;
 }
 
-static void DataPoint_sort(DataPoint* list, int n, int i)
+static void DataPoint_sort(DataPoint* list, Py_ssize_t n, int i)
 {
     /* set sort dimension */
     DataPoint_current_dim = i;
@@ -46,7 +47,7 @@ static void DataPoint_sort(DataPoint* list, int n, int i)
 
 typedef struct {
     PyObject_HEAD
-    long int index;
+    Py_ssize_t index;
     double radius;
 } Point;
 
@@ -78,7 +79,7 @@ static char Point_index__doc__[] =
 static PyObject*
 Point_getindex(Point* self, void* closure)
 {
-    return PyLong_FromLong(self->index);
+    return PyLong_FromSsize_t(self->index);
 }
 
 static char Point_radius__doc__[] = "the radius";
@@ -93,7 +94,7 @@ Point_getradius(Point* self, void* closure)
 static PyGetSetDef Point_getset[] = {
     {"index", (getter)Point_getindex, NULL, Point_index__doc__, NULL},
     {"radius", (getter)Point_getradius, NULL, Point_radius__doc__, NULL},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, NULL, NULL, NULL}  /* Sentinel */
 };
 
 static char Point_doc[] =
@@ -101,49 +102,21 @@ static char Point_doc[] =
 
 static PyTypeObject PointType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Point",                   /* tp_name*/
-    sizeof(Point),             /* tp_basicsize*/
-    0,                         /* tp_itemsize*/
-    0,                         /* tp_dealloc*/
-    0,                         /* tp_print*/
-    0,                         /* tp_getattr*/
-    0,                         /* tp_setattr*/
-    0,                         /* tp_compare*/
-    (reprfunc)Point_repr,      /* tp_repr*/
-    0,                         /* tp_as_number*/
-    0,                         /* tp_as_sequence*/
-    0,                         /* tp_as_mapping*/
-    0,                         /* tp_hash */
-    0,                         /* tp_call*/
-    0,                         /* tp_str*/
-    0,                         /* tp_getattro*/
-    0,                         /* tp_setattro*/
-    0,                         /* tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /* tp_flags*/
-    Point_doc,                 /* tp_doc */
-    0,                         /* tp_traverse */
-    0,                         /* tp_clear */
-    0,                         /* tp_richcompare */
-    0,                         /* tp_weaklistoffset */
-    0,                         /* tp_iter */
-    0,                         /* tp_iternext */
-    0,                         /* tp_methods */
-    0,                         /* tp_members */
-    Point_getset,              /* tp_getset */
-    0,                         /* tp_base */
-    0,                         /* tp_dict */
-    0,                         /* tp_descr_get */
-    0,                         /* tp_descr_set */
-    0,                         /* tp_dictoffset */
-    (initproc)Point_init,      /* tp_init */
+    .tp_name = "Point",
+    .tp_basicsize = sizeof(Point),
+    .tp_repr = (reprfunc)Point_repr,
+    .tp_flags = Py_TPFLAGS_DEFAULT,
+    .tp_doc = Point_doc,
+    .tp_getset = Point_getset,
+    .tp_init = (initproc)Point_init,
 };
 
 /* Neighbor */
 
 typedef struct {
     PyObject_HEAD
-    long int index1;
-    long int index2;
+    Py_ssize_t index1;
+    Py_ssize_t index2;
     double radius;
 } Neighbor;
 
@@ -177,7 +150,7 @@ static char Neighbor_index1__doc__[] =
 static PyObject*
 Neighbor_getindex1(Neighbor* self, void* closure)
 {
-    return PyLong_FromLong(self->index1);
+    return PyLong_FromSsize_t(self->index1);
 }
 
 static char Neighbor_index2__doc__[] =
@@ -186,7 +159,7 @@ static char Neighbor_index2__doc__[] =
 static PyObject*
 Neighbor_getindex2(Neighbor* self, void* closure)
 {
-    return PyLong_FromLong(self->index2);
+    return PyLong_FromSsize_t(self->index2);
 }
 
 static char Neighbor_radius__doc__[] = "the radius";
@@ -210,41 +183,13 @@ static char Neighbor_doc[] =
 
 static PyTypeObject NeighborType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "Neighbor",                /* tp_name*/
-    sizeof(Neighbor),          /* tp_basicsize*/
-    0,                         /* tp_itemsize*/
-    0,                         /* tp_dealloc*/
-    0,                         /* tp_print*/
-    0,                         /* tp_getattr*/
-    0,                         /* tp_setattr*/
-    0,                         /* tp_compare*/
-    (reprfunc)Neighbor_repr,   /* tp_repr*/
-    0,                         /* tp_as_number*/
-    0,                         /* tp_as_sequence*/
-    0,                         /* tp_as_mapping*/
-    0,                         /* tp_hash */
-    0,                         /* tp_call*/
-    0,                         /* tp_str*/
-    0,                         /* tp_getattro*/
-    0,                         /* tp_setattro*/
-    0,                         /* tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT,        /* tp_flags*/
-    Neighbor_doc,              /* tp_doc */
-    0,                         /* tp_traverse */
-    0,                         /* tp_clear */
-    0,                         /* tp_richcompare */
-    0,                         /* tp_weaklistoffset */
-    0,                         /* tp_iter */
-    0,                         /* tp_iternext */
-    0,                         /* tp_methods */
-    0,                         /* tp_members */
-    Neighbor_getset,           /* tp_getset */
-    0,                         /* tp_base */
-    0,                         /* tp_dict */
-    0,                         /* tp_descr_get */
-    0,                         /* tp_descr_set */
-    0,                         /* tp_dictoffset */
-    (initproc)Neighbor_init,   /* tp_init */
+    .tp_name = "Neighbor",
+    .tp_basicsize = sizeof(Neighbor),
+    .tp_repr = (reprfunc)Neighbor_repr,
+    .tp_flags = Py_TPFLAGS_DEFAULT,
+    .tp_doc = Neighbor_doc,
+    .tp_getset = Neighbor_getset,
+    .tp_init = (initproc)Neighbor_init,
 };
 
 /* Node */
@@ -255,11 +200,11 @@ typedef struct Node
     struct Node *_right;
     double _cut_value;
     int _cut_dim;
-    long int _start, _end;
+    Py_ssize_t _start, _end;
 } Node;
 
 static Node*
-Node_create(double cut_value, int cut_dim, long int start, long int end)
+Node_create(double cut_value, int cut_dim, Py_ssize_t start, Py_ssize_t end)
 {
     Node* node = PyMem_Malloc(sizeof(Node));
     if (node == NULL) return NULL;
@@ -429,7 +374,7 @@ typedef struct
 typedef struct {
     PyObject_HEAD
     DataPoint* _data_point_list;
-    int _data_point_list_size;
+    Py_ssize_t _data_point_list_size;
     Node *_root;
     int _bucket_size;
     /* The following are temporary variables used during a search only. */
@@ -457,7 +402,7 @@ static int
 KDTree_report_point(KDTree* self, DataPoint* data_point, PyObject* points)
 {
     int ok;
-    long int index = data_point->_index;
+    Py_ssize_t index = data_point->_index;
     double *coord = data_point->_coord;
     const double r = KDTree_dist(self->_center_coord, coord);
     if (r <= self->_radius_sq)
@@ -483,7 +428,7 @@ KDTree_test_neighbors(KDTree* self, DataPoint* p1, DataPoint* p2, PyObject* neig
     {
         /* we found a neighbor pair! */
         Neighbor* neighbor;
-        long int index1, index2;
+        Py_ssize_t index1, index2;
         neighbor = (Neighbor*) NeighborType.tp_alloc(&NeighborType, 0);
         if (!neighbor) return 0;
         index1 = p1->_index;
@@ -508,13 +453,13 @@ KDTree_test_neighbors(KDTree* self, DataPoint* p1, DataPoint* p2, PyObject* neig
 static int
 KDTree_search_neighbors_in_bucket(KDTree* self, Node *node, PyObject* neighbors)
 {
-    long int i;
+    Py_ssize_t i;
     int ok;
 
     for (i = node->_start; i < node->_end; i++)
     {
         DataPoint p1;
-        long int j;
+        Py_ssize_t j;
 
         p1 = self->_data_point_list[i];
 
@@ -529,13 +474,13 @@ KDTree_search_neighbors_in_bucket(KDTree* self, Node *node, PyObject* neighbors)
 
 static int KDTree_search_neighbors_between_buckets(KDTree* self, Node *node1, Node *node2, PyObject* neighbors)
 {
-    long int i;
+    Py_ssize_t i;
     int ok;
 
     for (i = node1->_start; i < node1->_end; i++)
     {
         DataPoint p1;
-        long int j;
+        Py_ssize_t j;
 
         p1 = self->_data_point_list[i];
 
@@ -794,7 +739,7 @@ static int KDTree_neighbor_search(KDTree* self, Node *node, Region *region, int 
 }
 
 static Node *
-KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int depth)
+KDTree_build_tree(KDTree* self, Py_ssize_t offset_begin, Py_ssize_t offset_end, int depth)
 {
     int localdim;
 
@@ -817,10 +762,10 @@ KDTree_build_tree(KDTree* self, long int offset_begin, long int offset_end, int 
     }
     else
     {
-        long int offset_split;
-        long int left_offset_begin, left_offset_end;
-        long int right_offset_begin, right_offset_end;
-        long int d;
+        Py_ssize_t offset_split;
+        Py_ssize_t left_offset_begin, left_offset_end;
+        Py_ssize_t right_offset_begin, right_offset_end;
+        Py_ssize_t d;
         double cut_value;
         DataPoint data_point;
         Node *left_node, *right_node, *new_node;
@@ -866,7 +811,7 @@ static int KDTree_report_subtree(KDTree* self, Node *node, PyObject* points)
     int ok;
     if (Node_is_leaf(node)) {
         /* report point(s) */
-        long int i;
+        Py_ssize_t i;
         for (i = node->_start; i < node->_end; i++) {
             ok = KDTree_report_point(self, &self->_data_point_list[i], points);
             if (!ok) return 0;
@@ -936,7 +881,7 @@ KDTree_search(KDTree* self, Region *region, Node *node, int depth, Region* query
     current_dim = depth % DIM;
 
     if (Node_is_leaf(node)) {
-        long int i;
+        Py_ssize_t i;
         DataPoint* data_point;
         for (i = node->_start; i < node->_end; i++) {
             data_point = &self->_data_point_list[i];
@@ -1282,7 +1227,7 @@ PyKDTree_neighbor_simple_search(KDTree* self, PyObject* args)
 
     for (i = 0; i < self->_data_point_list_size; i++) {
         double x1;
-        long int j;
+        Py_ssize_t j;
         DataPoint p1;
 
         p1 = self->_data_point_list[i];
@@ -1318,7 +1263,7 @@ static PyMethodDef KDTree_methods[] = {
      (PyCFunction)PyKDTree_neighbor_simple_search,
       METH_VARARGS,
       PyKDTree_neighbor_simple_search__doc__},
-    {NULL}  /* Sentinel */
+    {NULL, NULL, 0, NULL}  /* Sentinel */
 };
 
 PyDoc_STRVAR(KDTree_doc,
@@ -1357,43 +1302,13 @@ of each other. As far as I know the algorithm has not been published.");
 
 static PyTypeObject KDTreeType = {
     PyVarObject_HEAD_INIT(NULL, 0)
-    "C KDTree",                  /*tp_name*/
-    sizeof(KDTree),              /*tp_basicsize*/
-    0,                           /*tp_itemsize*/
-    (destructor)KDTree_dealloc,  /*tp_dealloc*/
-    0,                           /*tp_print*/
-    0,                           /*tp_getattr*/
-    0,                           /*tp_setattr*/
-    0,                           /*tp_compare*/
-    0,                           /*tp_repr*/
-    0,                           /*tp_as_number*/
-    0,                           /*tp_as_sequence*/
-    0,                           /*tp_as_mapping*/
-    0,                           /*tp_hash */
-    0,                           /*tp_call*/
-    0,                           /*tp_str*/
-    0,                           /*tp_getattro*/
-    0,                           /*tp_setattro*/
-    0,                           /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,          /*tp_flags*/
-    KDTree_doc,                  /* tp_doc */
-    0,                           /* tp_traverse */
-    0,                           /* tp_clear */
-    0,                           /* tp_richcompare */
-    0,                           /* tp_weaklistoffset */
-    0,                           /* tp_iter */
-    0,                           /* tp_iternext */
-    KDTree_methods,              /* tp_methods */
-    NULL,                        /* tp_members */
-    0,                           /* tp_getset */
-    0,                           /* tp_base */
-    0,                           /* tp_dict */
-    0,                           /* tp_descr_get */
-    0,                           /* tp_descr_set */
-    0,                           /* tp_dictoffset */
-    0,                           /* tp_init */
-    0,                           /* tp_alloc */
-    (newfunc)KDTree_new,         /* tp_new */
+    .tp_name = "C KDTree",
+    .tp_basicsize = sizeof(KDTree),
+    .tp_dealloc = (destructor)KDTree_dealloc,
+    .tp_flags = Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,
+    .tp_doc = KDTree_doc,
+    .tp_methods = KDTree_methods,
+    .tp_new = (newfunc)KDTree_new,
 };
 
 /* ========================================================================== */

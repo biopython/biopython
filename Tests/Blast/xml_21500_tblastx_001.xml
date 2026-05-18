@@ -1,0 +1,340 @@
+<?xml version="1.0"?>
+<!DOCTYPE BlastOutput PUBLIC "-//NCBI//NCBI BlastOutput/EN" "http://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd">
+<BlastOutput>
+  <BlastOutput_program>tblastx</BlastOutput_program>
+  <BlastOutput_version>TBLASTX 2.15.0+</BlastOutput_version>
+  <BlastOutput_reference>Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&amp;auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), &quot;Gapped BLAST and PSI-BLAST: a new generation of protein database search programs&quot;, Nucleic Acids Res. 25:3389-3402.</BlastOutput_reference>
+  <BlastOutput_db>refseq_rna</BlastOutput_db>
+  <BlastOutput_query-ID>Query_949527</BlastOutput_query-ID>
+  <BlastOutput_query-def>NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome</BlastOutput_query-def>
+  <BlastOutput_query-len>804</BlastOutput_query-len>
+  <BlastOutput_param>
+    <Parameters>
+      <Parameters_matrix>BLOSUM62</Parameters_matrix>
+      <Parameters_expect>0.05</Parameters_expect>
+      <Parameters_gap-open>11</Parameters_gap-open>
+      <Parameters_gap-extend>1</Parameters_gap-extend>
+      <Parameters_filter>L;</Parameters_filter>
+    </Parameters>
+  </BlastOutput_param>
+<BlastOutput_iterations>
+<Iteration>
+  <Iteration_iter-num>1</Iteration_iter-num>
+  <Iteration_query-ID>Query_949527</Iteration_query-ID>
+  <Iteration_query-def>NC_000964.3:2518023-2518826 Bacillus subtilis subsp. subtilis str. 168 complete genome</Iteration_query-def>
+  <Iteration_query-len>804</Iteration_query-len>
+<Iteration_hits>
+<Hit>
+  <Hit_num>1</Hit_num>
+  <Hit_id>gi|1048027041|ref|XM_017618728.1|</Hit_id>
+  <Hit_def>PREDICTED: Rhagoletis zephyria response regulator PleD-like (LOC108364862), partial mRNA</Hit_def>
+  <Hit_accession>XM_017618728</Hit_accession>
+  <Hit_len>917</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>71.6314</Hsp_bit-score>
+      <Hsp_score>150</Hsp_score>
+      <Hsp_evalue>5.49617e-09</Hsp_evalue>
+      <Hsp_query-from>436</Hsp_query-from>
+      <Hsp_query-to>702</Hsp_query-to>
+      <Hsp_hit-from>94</Hsp_hit-from>
+      <Hsp_hit-to>360</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>29</Hsp_identity>
+      <Hsp_positive>52</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>89</Hsp_align-len>
+      <Hsp_qseq>AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENLVGHIRQVS</Hsp_qseq>
+      <Hsp_hseq>ACGGQEALNLVVEQQPDIVLLDVMMPGIDGFMVCKEMKDNPMTTHIPVVMVTALHDTEDRVKGINAGADDFLTKPIDETALSARIKSLT</Hsp_hseq>
+      <Hsp_midline>A  GQE L+L  E+ PD+++LD++MP +DG  V + ++++ +     V+M+TA    +   K ++ GA  F+ KP D   L   I+ ++</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>2</Hit_num>
+  <Hit_id>gi|2670929493|ref|XM_062937224.1|</Hit_id>
+  <Hit_def>Kwoniella shivajii uncharacterized protein (IL334_005512), partial mRNA</Hit_def>
+  <Hit_accession>XM_062937224</Hit_accession>
+  <Hit_len>9882</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>69.7986</Hsp_bit-score>
+      <Hsp_score>146</Hsp_score>
+      <Hsp_evalue>1.95794e-08</Hsp_evalue>
+      <Hsp_query-from>457</Hsp_query-from>
+      <Hsp_query-to>738</Hsp_query-to>
+      <Hsp_hit-from>7807</Hsp_hit-from>
+      <Hsp_hit-to>8088</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>32</Hsp_identity>
+      <Hsp_positive>51</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>94</Hsp_align-len>
+      <Hsp_qseq>IEGQEDMEVIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENLV</Hsp_qseq>
+      <Hsp_hseq>VDDSYDMRKVIEAHDGQEALELCSRALPDLIISDIMMPRLDGFGLLQALKSSSNLISVPIILLTARGDQDFKVGGLMSGAEDYLSKPFSTPELL</Hsp_hseq>
+      <Hsp_midline>++   DM  +  A++GQE L L     PD+++ DI+MP LDG  +L+ L+ S       +I+LTA G +D     +  GA  ++ KPF    L+</Hsp_midline>
+    </Hsp>
+    <Hsp>
+      <Hsp_num>2</Hsp_num>
+      <Hsp_bit-score>56.9688</Hsp_bit-score>
+      <Hsp_score>118</Hsp_score>
+      <Hsp_evalue>0.000142549</Hsp_evalue>
+      <Hsp_query-from>499</Hsp_query-from>
+      <Hsp_query-to>702</Hsp_query-to>
+      <Hsp_hit-from>3289</Hsp_hit-from>
+      <Hsp_hit-to>3492</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>25</Hsp_identity>
+      <Hsp_positive>42</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>68</Hsp_align-len>
+      <Hsp_qseq>AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGA</Hsp_qseq>
+      <Hsp_hseq>ARDGQEALALCAQQAPDLIISDVMMPNLDGFGLLRALKQSKKLAIIPIIMLTARGGDEARVDGILAGA</Hsp_hseq>
+      <Hsp_midline>A +GQE L+L  ++ PD+++ D++MP+LDG  +L  L++S       +IMLTA G ++     +  GA</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>3</Hit_num>
+  <Hit_id>gi|2432161024|ref|XM_053088494.1|</Hit_id>
+  <Hit_def>Dioszegia hungarica CnHHK4 (MKK02DRAFT_32386), partial mRNA</Hit_def>
+  <Hit_accession>XM_053088494</Hit_accession>
+  <Hit_len>5601</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>69.7986</Hsp_bit-score>
+      <Hsp_score>146</Hsp_score>
+      <Hsp_evalue>1.95794e-08</Hsp_evalue>
+      <Hsp_query-from>457</Hsp_query-from>
+      <Hsp_query-to>702</Hsp_query-to>
+      <Hsp_hit-from>3412</Hsp_hit-from>
+      <Hsp_hit-to>3657</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>32</Hsp_identity>
+      <Hsp_positive>47</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>82</Hsp_align-len>
+      <Hsp_qseq>AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENLV</Hsp_qseq>
+      <Hsp_hseq>ARDGQEALEMCKKSLPHVVITDVMMPNLDGFGLLAALKEDPKLSMVPVIMLTARGGEEAKVDGLLAGADDYIAKPFNARELI</Hsp_hseq>
+      <Hsp_midline>A +GQE L + K+  P V++ D++MP+LDG  +L  L+E        VIMLTA G E+     +  GA  +I KPF+   L+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>4</Hit_num>
+  <Hit_id>gi|799335188|ref|XM_012195534.1|</Hit_id>
+  <Hit_def>Cryptococcus neoformans var. grubii H99 hypothetical protein (CNAG_03355), mRNA</Hit_def>
+  <Hit_accession>XM_012195534</Hit_accession>
+  <Hit_len>5764</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>69.7986</Hsp_bit-score>
+      <Hsp_score>146</Hsp_score>
+      <Hsp_evalue>1.95794e-08</Hsp_evalue>
+      <Hsp_query-from>457</Hsp_query-from>
+      <Hsp_query-to>702</Hsp_query-to>
+      <Hsp_hit-from>3433</Hsp_hit-from>
+      <Hsp_hit-to>3678</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>31</Hsp_identity>
+      <Hsp_positive>48</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>82</Hsp_align-len>
+      <Hsp_qseq>AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENLV</Hsp_qseq>
+      <Hsp_hseq>ARDGQEALELCQKSVPDLIISDVMMPHLNGFELLVALKRSKDLKMVPVIMLTARGADESKVDGIMAGAEDYLAKPFSAREIV</Hsp_hseq>
+      <Hsp_midline>A +GQE L L ++  PD+++ D++MPHL+G  +L  L+ S   K   VIMLTA G ++     +  GA  ++ KPF    +V</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>5</Hit_num>
+  <Hit_id>gi|1799711371|ref|XM_032001855.1|</Hit_id>
+  <Hit_def>Kwoniella shandongensis uncharacterized protein (CI109_000662), partial mRNA</Hit_def>
+  <Hit_accession>XM_032001855</Hit_accession>
+  <Hit_len>5538</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>69.3404</Hsp_bit-score>
+      <Hsp_score>145</Hsp_score>
+      <Hsp_evalue>2.68988e-08</Hsp_evalue>
+      <Hsp_query-from>457</Hsp_query-from>
+      <Hsp_query-to>702</Hsp_query-to>
+      <Hsp_hit-from>3364</Hsp_hit-from>
+      <Hsp_hit-to>3609</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>31</Hsp_identity>
+      <Hsp_positive>51</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>82</Hsp_align-len>
+      <Hsp_qseq>AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENLV</Hsp_qseq>
+      <Hsp_hseq>ARDGVEALQLCKKQLPNLIITDVMMPNLDGFGLLAALKESRAMKVIPVIMLTARGGDESKVEGILAGADDYLAKPFNAREIV</Hsp_hseq>
+      <Hsp_midline>A +G E L L K++ P++++ D++MP+LDG  +L  L+ES   K   VIMLTA G ++   + +  GA  ++ KPF+   +V</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>6</Hit_num>
+  <Hit_id>gi|1102541390|ref|XM_019193349.1|</Hit_id>
+  <Hit_def>Kwoniella bestiolae CBS 10118 hypothetical protein partial mRNA</Hit_def>
+  <Hit_accession>XM_019193349</Hit_accession>
+  <Hit_len>5319</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.8822</Hsp_bit-score>
+      <Hsp_score>144</Hsp_score>
+      <Hsp_evalue>3.69545e-08</Hsp_evalue>
+      <Hsp_query-from>457</Hsp_query-from>
+      <Hsp_query-to>702</Hsp_query-to>
+      <Hsp_hit-from>3193</Hsp_hit-from>
+      <Hsp_hit-to>3438</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>32</Hsp_identity>
+      <Hsp_positive>49</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>82</Hsp_align-len>
+      <Hsp_qseq>AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENLV</Hsp_qseq>
+      <Hsp_hseq>ARDGQEALEMCGKKMPDLIISDVMMPNLDGFGLLEALKASKELSIIPVIMLTARGGDEAKVDGLLAGADDYLAKPFNSRELV</Hsp_hseq>
+      <Hsp_midline>A +GQE L +  +K PD+++ D++MP+LDG  +LE L+ S       VIMLTA G ++     +  GA  ++ KPF+   LV</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>7</Hit_num>
+  <Hit_id>gi|1799711369|ref|XM_032001854.1|</Hit_id>
+  <Hit_def>Kwoniella shandongensis uncharacterized protein (CI109_000661), partial mRNA</Hit_def>
+  <Hit_accession>XM_032001854</Hit_accession>
+  <Hit_len>3591</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>68.424</Hsp_bit-score>
+      <Hsp_score>143</Hsp_score>
+      <Hsp_evalue>5.07694e-08</Hsp_evalue>
+      <Hsp_query-from>457</Hsp_query-from>
+      <Hsp_query-to>714</Hsp_query-to>
+      <Hsp_hit-from>3169</Hsp_hit-from>
+      <Hsp_hit-to>3426</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>31</Hsp_identity>
+      <Hsp_positive>53</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>86</Hsp_align-len>
+      <Hsp_qseq>VIGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENLV</Hsp_qseq>
+      <Hsp_hseq>VVVEARDGQEALDKCMQIRPDLIITDVMMPVLDGFGLLRALKQSDELKAIPVIMVTAHDGDEAKVEALLGGADDYMVKPFNVRELI</Hsp_hseq>
+      <Hsp_midline>V+  A +GQE L    +  PD+++ D++MP LDG  +L  L++SD  K   VIM+TA   ++   +A+  GA  +++KPF++  L+</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>8</Hit_num>
+  <Hit_id>gi|2592096353|ref|XM_060229193.1|</Hit_id>
+  <Hit_def>PREDICTED: Ylistrum balloti signal transduction histidine-protein kinase BarA-like (LOC132564539), mRNA</Hit_def>
+  <Hit_accession>XM_060229193</Hit_accession>
+  <Hit_len>1374</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.9658</Hsp_bit-score>
+      <Hsp_score>142</Hsp_score>
+      <Hsp_evalue>6.97488e-08</Hsp_evalue>
+      <Hsp_query-from>460</Hsp_query-from>
+      <Hsp_query-to>711</Hsp_query-to>
+      <Hsp_hit-from>1096</Hsp_hit-from>
+      <Hsp_hit-to>1347</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>31</Hsp_identity>
+      <Hsp_positive>51</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>84</Hsp_align-len>
+      <Hsp_qseq>IGVAYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENL</Hsp_qseq>
+      <Hsp_hseq>IHLASNGQEAIQKTKVLDPDLIFLDLHMPDMSGLEVIEILRSITAYRDTPIIILSADAIIEQQEKALAVGASAYLTKPIEIDKL</Hsp_hseq>
+      <Hsp_midline>I +A NGQE +   K  DPD++ LD+ MP + GL V+E LR     +   +I+L+A    +  +KA+ +GAS ++ KP +++ L</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>9</Hit_num>
+  <Hit_id>gi|2044197324|ref|XM_041762518.1|</Hit_id>
+  <Hit_def>PREDICTED: Vulpes lagopus sensory transduction protein RegX3-like (LOC121495284), mRNA</Hit_def>
+  <Hit_accession>XM_041762518</Hit_accession>
+  <Hit_len>681</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.9658</Hsp_bit-score>
+      <Hsp_score>142</Hsp_score>
+      <Hsp_evalue>6.97488e-08</Hsp_evalue>
+      <Hsp_query-from>439</Hsp_query-from>
+      <Hsp_query-to>657</Hsp_query-to>
+      <Hsp_hit-from>130</Hsp_hit-from>
+      <Hsp_hit-to>348</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>30</Hsp_identity>
+      <Hsp_positive>45</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>73</Hsp_align-len>
+      <Hsp_qseq>PDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENLVGHIRQV</Hsp_qseq>
+      <Hsp_hseq>PDLILLDIMLPGSDGLSSLEELRAKKSSESIPVIMATAKGTEFDKVKGLDMGADDYLVKPFGMMEMISRIKAV</Hsp_hseq>
+      <Hsp_midline>PD+++LDI++P  DGL+ LE LR     +   VIM TA G E    K +D+GA  +++KPF M  ++  I+ V</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+<Hit>
+  <Hit_num>10</Hit_num>
+  <Hit_id>gi|1101784196|ref|XM_019135081.1|</Hit_id>
+  <Hit_def>Cryptococcus amylolentus CBS 6039 hypothetical protein (L202_01642), partial mRNA</Hit_def>
+  <Hit_accession>XM_019135081</Hit_accession>
+  <Hit_len>5487</Hit_len>
+  <Hit_hsps>
+    <Hsp>
+      <Hsp_num>1</Hsp_num>
+      <Hsp_bit-score>67.9658</Hsp_bit-score>
+      <Hsp_score>142</Hsp_score>
+      <Hsp_evalue>6.97488e-08</Hsp_evalue>
+      <Hsp_query-from>457</Hsp_query-from>
+      <Hsp_query-to>702</Hsp_query-to>
+      <Hsp_hit-from>3331</Hsp_hit-from>
+      <Hsp_hit-to>3576</Hsp_hit-to>
+      <Hsp_query-frame>-1</Hsp_query-frame>
+      <Hsp_hit-frame>1</Hsp_hit-frame>
+      <Hsp_identity>28</Hsp_identity>
+      <Hsp_positive>50</Hsp_positive>
+      <Hsp_gaps>0</Hsp_gaps>
+      <Hsp_align-len>82</Hsp_align-len>
+      <Hsp_qseq>AYNGQECLSLFKEKDPDVLVLDIIMPHLDGLAVLERLRESDLKKQPNVIMLTAFGQEDVTKKAVDLGASYFILKPFDMENLV</Hsp_qseq>
+      <Hsp_hseq>ARDGREALELCAKQKPNLIISDVMMPHVDGFELLTTLKDSSEFRMIPVIMLTARGADESKVSGIMAGAEDYLAKPFNAREIV</Hsp_hseq>
+      <Hsp_midline>A +G+E L L  ++ P++++ D++MPH+DG  +L  L++S   +   VIMLTA G ++     +  GA  ++ KPF+   +V</Hsp_midline>
+    </Hsp>
+  </Hit_hsps>
+</Hit>
+</Iteration_hits>
+  <Iteration_stat>
+    <Statistics>
+      <Statistics_db-num>60837734</Statistics_db-num>
+      <Statistics_db-len>161330429008</Statistics_db-len>
+      <Statistics_hsp-len>0</Statistics_hsp-len>
+      <Statistics_eff-space>0</Statistics_eff-space>
+      <Statistics_kappa>0.133956144488482</Statistics_kappa>
+      <Statistics_lambda>0.317605957635731</Statistics_lambda>
+      <Statistics_entropy>0.401214524497119</Statistics_entropy>
+    </Statistics>
+  </Iteration_stat>
+</Iteration>
+</BlastOutput_iterations>
+</BlastOutput>

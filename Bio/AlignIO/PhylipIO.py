@@ -34,6 +34,7 @@ because it sometimes is used in different senses in other programs"
 Biopython 1.58 or later treats dots/periods in the sequence as invalid, both
 for reading and writing. Older versions did nothing special with a dot/period.
 """
+
 import string
 
 from Bio.Align import MultipleSeqAlignment
@@ -42,7 +43,6 @@ from Bio.SeqRecord import SeqRecord
 
 from .Interfaces import AlignmentIterator
 from .Interfaces import SequentialAlignmentWriter
-
 
 _PHYLIP_ID_WIDTH = 10
 _NO_DOTS = "PHYLIP format no longer allows dots in sequence"
@@ -126,7 +126,7 @@ class PhylipWriter(SequentialAlignmentWriter):
                     # write indent
                     handle.write(" " * id_width)
                 # Write five chunks of ten letters per line...
-                for chunk in range(0, 5):
+                for chunk in range(5):
                     i = block * 50 + chunk * 10
                     seq_segment = sequence[i : i + 10]
                     # TODO - Force any gaps to be '-' character?

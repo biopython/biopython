@@ -22,13 +22,13 @@ them to a file.
 """
 
 import os
-
 from io import StringIO
 
 from Bio import MissingPythonDependencyError
-
 from Bio.Phylo import CDAO
-from ._cdao_owl import cdao_namespaces, resolve_uri
+
+from ._cdao_owl import cdao_namespaces
+from ._cdao_owl import resolve_uri
 
 # import of cdao_elements from ._cdao_owl removed in Biopython 1.74
 

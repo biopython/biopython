@@ -1,26 +1,24 @@
-<?xml version="1.0"?>
-<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD eSearchResult, 11 May 2002//EN" "http://www.ncbi.nlm.nih.gov/entrez/query/DTD/eSearch_020511.dtd">
-<eSearchResult>
-	<Count>5</Count>
-	<RetMax>5</RetMax>
-	<RetStart>0</RetStart>
-	<IdList>
-		<Id>16403221</Id>
-		<Id>16377612</Id>
-		<Id>14871861</Id>
-		<Id>14630660</Id>
-		<Id>12230038</Id>
-	</IdList>
-	<TranslationSet>
-	</TranslationSet>
-	<TranslationStack>
-		<TermSet>
-			<Term>biopython[All Fields]</Term>
-			<Field>All Fields</Field>
-			<Count>5</Count>
-			<Explode>Y</Explode>
-		</TermSet>
-		<OP>GROUP</OP>
-	</TranslationStack>
-	<QueryTranslation>biopython[All Fields]</QueryTranslation>
-</eSearchResult>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE eSearchResult PUBLIC "-//NLM//DTD esearch 20060628//EN" "https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20060628/esearch.dtd">
+<eSearchResult><Count>63</Count><RetMax>20</RetMax><RetStart>0</RetStart><IdList>
+<Id>41282813</Id>
+<Id>41148224</Id>
+<Id>41011574</Id>
+<Id>40959146</Id>
+<Id>40937394</Id>
+<Id>40657423</Id>
+<Id>40651330</Id>
+<Id>40572159</Id>
+<Id>40160861</Id>
+<Id>39883659</Id>
+<Id>39882099</Id>
+<Id>39717221</Id>
+<Id>39546778</Id>
+<Id>39507944</Id>
+<Id>39445816</Id>
+<Id>38808697</Id>
+<Id>38650605</Id>
+<Id>38365590</Id>
+<Id>38235175</Id>
+<Id>37810457</Id>
+</IdList><TranslationSet/><QueryTranslation>"biopython"[All Fields]</QueryTranslation></eSearchResult>

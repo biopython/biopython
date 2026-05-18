@@ -1,0 +1,4 @@
+Command line: [exonerate --showcigar no --showvulgar yes --showalignment no nuc2.fa pro.fa]
+Hostname: [blackbriar]
+vulgar: dna 0 93 + protein 313 344 . 105 M 93 31
+-- completed exonerate analysis

@@ -11,20 +11,17 @@
 
 """BLAST code for graphical Xbbtools tool."""
 
-
 import glob
 import os
-import sys
 import subprocess
-
+import sys
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import filedialog
 from tkinter import messagebox
 
-
-from xbb_utils import NotePad
 import xbb_blastbg
+from xbb_utils import NotePad
 
 
 class BlastIt:

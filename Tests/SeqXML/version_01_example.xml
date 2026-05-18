@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<seqXML seqXMLversion="0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.seqxml.org/0.1/seqxml.xsd">
+    <entry id="fakeDNA">
+        <dnaSeq>AAAAAACGTAAA</dnaSeq>
+        <alternativeID source="db" id="1"/>
+    </entry>
+    <entry id="fakeRNA">
+        <rnaSeq>AAAUUUUCTGAA</rnaSeq>
+    </entry>
+    <entry id="fakeAA">
+        <aaSeq>GAKKVFIEDVSKEFVEEFIWPAVQSSALYE</aaSeq>
+    </entry>
+</seqXML>

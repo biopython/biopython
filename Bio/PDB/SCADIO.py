@@ -1,4 +1,4 @@
-# Copyright 2019 by Robert T. Miller.  All rights reserved.
+# Copyright 2019-21 by Robert T. Miller.  All rights reserved.
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
@@ -16,23 +16,39 @@ a printable model from the script this software produces.  MeshMixer
 technology available to you provide options for addressing the problems around
 physically rendering the model.
 
+The model generated here consists of OpenSCAD primitives, e.g. spheres and
+cylinders, representing individual atoms and bonds in an explicit model of a
+protein structure.  The benefit is that individual atoms/bonds may be selected
+for specific print customizations relevant to 3D printing (such as rotatable
+bond mechanisms or hydrogen bond magnets).  Alternatively, use e.g. Chimera to
+render a structure as ribbons or similar for printing as a single object.
+
+OpenSCAD does not currently (2024) support multi-color or multi-material
+output for 3D printing.  As a workaround, use the `colorSelect` variable in
+the OpenSCAD output to render each color separately and generate separate STL
+files to combine in the slicer.  See Jeff Bar,
+<https://nextjeff.com/creating-multi-extruder-designs-in-openscad-for-3d-printing-6c43a002ef64>
+for development of this technique.
+
 I suggest generating your initial model using the OpenSCAD script provided
 here, then modifying that script according to your needs.  Changing the
 atomScale and bondRadius values can simplify the model by removing gaps and
-the corresponding need for supports, or you may wish to modify the hedronDispatch()
-routine to select residues or chain sections for printing separately and
-subsequently joining with rotatable bonds.  During this development phase you
-will likely have your version `include` only the data matrices generated here,
-by using the `includeCode-False` option to write_SCAD().  An example project
-with modifications of the script generated here is
-<https://www.thingiverse.com/thing:3957471>.
+the corresponding need for supports, or you may wish to modify the
+hedronDispatch() routine to select residues or chain sections for printing
+separately and subsequently joining with rotatable bonds.  During this
+development phase you will likely have your version include only the data
+matrices generated here, by using the `includeCode=False` option to
+write_SCAD().  An example project using rotatable backbone and magnetic
+hydrogen bonds is at <https://www.thingiverse.com/thing:3957471>.
 """
 # import re
 
-from Bio.File import as_handle
-from Bio.PDB.PDBExceptions import PDBException
+import numpy as np  # type: ignore
 
-from Bio.PDB.internal_coords import IC_Residue, IC_Chain
+from Bio.File import as_handle
+from Bio.PDB.internal_coords import IC_Chain
+from Bio.PDB.internal_coords import IC_Residue
+from Bio.PDB.PDBExceptions import PDBException
 
 # from Bio.PDB.Structure import Structure
 # from Bio.PDB.Residue import Residue
@@ -54,13 +70,16 @@ def write_SCAD(
     backboneOnly=False,
     includeCode=True,
     maxPeptideBond=None,
+    start=None,
+    fin=None,
     handle="protein",
 ):
     """Write hedron assembly to file as OpenSCAD matrices.
 
-    This routine calls both internal_to_atom_coordinates() and
-    atom_to_internal_coordinates() due to requirements for scaling, explicit
-    bonds around rings, and setting the coordinate space of the output model.
+    This routine calls both :meth:`.IC_Chain.internal_to_atom_coordinates` and
+    :meth:`.IC_Chain.atom_to_internal_coordinates` due to requirements for
+    scaling, explicit bonds around rings, and setting the coordinate space of
+    the output model.
 
     Output data format is primarily:
 
@@ -74,26 +93,62 @@ def write_SCAD(
     OpenSCAD software is included in this Python file to process these
     matrices into a model suitable for a 3D printing project.
 
-    :param entity: Biopython PDB structure entity
+    :param entity: Biopython PDB :class:`.Structure` entity
         structure data to export
-    :param file: Bipoython as_handle filename or open file pointer
+    :param file: Bipoython :func:`.as_handle` filename or open file pointer
         file to write data to
-    :param scale: float
+    :param float scale:
         units (usually mm) per angstrom for STL output, written in output
-    :param pdbid: str
+    :param str pdbid:
         PDB idcode, written in output. Defaults to '0PDB' if not supplied
         and no 'idcode' set in entity
-    :param backboneOnly: bool default False
+    :param bool backboneOnly: default False.
         Do not output side chain data past Cbeta if True
-    :param includeCode: bool default True
+    :param bool includeCode: default True.
         Include OpenSCAD software (inline below) so output file can be loaded
         into OpenSCAD; if False, output data matrices only
-    :param maxPeptideBond: Optional[float] default None
+    :param float maxPeptideBond: Optional default None.
         Override the cut-off in IC_Chain class (default 1.4) for detecting
-        chain breaks.  If your target has chain breaks, pass a large number here
-        to create a very long 'bond' spanning the break.
-    :param handle: str, default 'protein'
+        chain breaks.  If your target has chain breaks, pass a large number
+        here to create a very long 'bond' spanning the break.
+    :param int start,fin: default None
+        Parameters for internal_to_atom_coords() to limit chain segment.
+    :param str handle: default 'protein'
         name for top level of generated OpenSCAD matrix structure
+
+    See :meth:`.IC_Residue.set_flexible` to set flags for specific residues to
+    have rotatable bonds, and :meth:`.IC_Residue.set_hbond` to include cavities
+    for small magnets to work as hydrogen bonds.
+    See <https://www.thingiverse.com/thing:3957471> for implementation example.
+
+    The OpenSCAD code explicitly creates spheres and cylinders to
+    represent atoms and bonds in a 3D model.  Options are available
+    to support rotatable bonds and magnetic hydrogen bonds.
+
+    Matrices are written to link, enumerate and describe residues,
+    dihedra, hedra, and chains, mirroring contents of the relevant IC_*
+    data structures.
+
+    The OpenSCAD matrix of hedra has additional information as follows:
+
+    * the atom and bond state (single, double, resonance) are logged
+        so that covalent radii may be used for atom spheres in the 3D models
+
+    * bonds and atoms are tracked so that each is only created once
+
+    * bond options for rotation and magnet holders for hydrogen bonds
+        may be specified (see :meth:`.IC_Residue.set_flexible` and
+        :meth:`.IC_Residue.set_hbond` )
+
+    Note the application of :data:`Bio.PDB.internal_coords.IC_Chain.MaxPeptideBond`
+    :  missing residues may be linked (joining chain segments with arbitrarily
+    long bonds) by setting this to a large value.
+
+    Note this uses the serial assembly per residue, placing each residue at
+    the origin and supplying the coordinate space transform to OpenaSCAD
+
+    All ALTLOC (disordered) residues and atoms are written to the output
+    model.  (see :data:`Bio.PDB.internal_coords.IC_Residue.no_altloc`)
     """
     if maxPeptideBond is not None:
         mpbStash = IC_Chain.MaxPeptideBond
@@ -108,44 +163,36 @@ def write_SCAD(
                 chn.internal_coord = IC_Chain(chn)
                 added_IC_Atoms = True
     elif "C" == entity.level:
-        if not entity.internal_coord:
+        if not entity.internal_coord:  # entity.internal_coord:
             entity.internal_coord = IC_Chain(entity)
             added_IC_Atoms = True
     else:
         raise PDBException("level not S, M or C: " + str(entity.level))
 
-    if not added_IC_Atoms and scale is not None:
+    if added_IC_Atoms:
+        # if loaded pdb, need to scale, and asm, gen atomArray
+        entity.atom_to_internal_coordinates()
+    else:
         # if loaded pic file and need to scale, generate atom coords
-        entity.internal_to_atom_coordinates()
-
-    # need to reset rnext and rprev in case MaxPeptideBond changed
-    if not added_IC_Atoms:
-        if "C" == entity.level:
-            if entity.internal_coord is not None:
-                entity.internal_coord.clear_ic()
-            chnp = entity.internal_coord = IC_Chain(entity)
-            chnp.atom_to_internal_coordinates()
-            # chnp.link_residues()
-            # chnp.init_edra()  # render_dihedra()
-            # chnp.init_atom_coords()
-        else:
-            for chn in entity.get_chains():
-                if chn.internal_coord is not None:
-                    chn.internal_coord.clear_ic()
-                chnp = chn.internal_coord = IC_Chain(chn)
-                chnp.atom_to_internal_coordinates()
-                # chnp.link_residues()
-                # chnp.init_edra()  # render_dihedra()
-                # chnp.init_atom_coords()
+        entity.internal_to_atom_coordinates(None)
 
     if scale is not None:
         scaleMtx = homog_scale_mtx(scale)
-        for res in entity.get_residues():
-            if 2 == res.is_disordered():
-                for r in res.child_dict.values():
-                    _scale_residue(r, scale, scaleMtx)
-            else:
-                _scale_residue(res, scale, scaleMtx)
+
+        if "C" == entity.level:
+            entity.internal_coord.atomArray = np.dot(
+                entity.internal_coord.atomArray[:], scaleMtx
+            )
+            entity.internal_coord.hAtoms_needs_update[:] = True
+            entity.internal_coord.scale = scale
+        else:
+            for chn in entity.get_chains():
+                if hasattr(chn.internal_coord, "atomArray"):
+                    chn.internal_coord.atomArray = np.dot(
+                        chn.internal_coord.atomArray[:], scaleMtx
+                    )
+                    chn.internal_coord.hAtoms_needs_update[:] = True
+                    chn.internal_coord.scale = scale
 
     # generate internal coords for scaled entity
     # (hedron bond lengths have changed if scaled)
@@ -154,21 +201,24 @@ def write_SCAD(
     # AllBonds is a class attribute for IC_Residue.atom_to_internal_coordinates
     # to generate explicit hedra covering all bonds
 
-    allBondsStash = IC_Residue.AllBonds
-    IC_Residue.AllBonds = True
-    entity.atom_to_internal_coordinates()
-    IC_Residue.AllBonds = allBondsStash
-
-    # clear initNCaC - want at origin, not match PDB file
+    allBondsStash = IC_Residue._AllBonds
+    IC_Residue._AllBonds = True
+    # trigger rebuild of hedra for AllBonds
     if "C" == entity.level:
-        entity.internal_coord.initNCaC = {}
+        entity.internal_coord.ordered_aa_ic_list[0].hedra = {}
+        delattr(entity.internal_coord, "hAtoms_needs_update")
+        delattr(entity.internal_coord, "hedraLen")
     else:
         for chn in entity.get_chains():
-            chn.internal_coord.initNCaC = {}
+            chn.internal_coord.ordered_aa_ic_list[0].hedra = {}
+            delattr(chn.internal_coord, "hAtoms_needs_update")
+            delattr(chn.internal_coord, "hedraLen")
+    entity.atom_to_internal_coordinates()
+    IC_Residue._AllBonds = allBondsStash
 
-    # rebuild atom coordinates now starting at origin: in OpenSCAD code, each
-    # residue model is transformed to N-Ca-C start position instead of updating
-    # transform matrix along chain
+    # rebuild atom coordinates now with chain starting at origin: in OpenSCAD
+    # code, each residue model is transformed to N-Ca-C start position instead
+    # of updating transform matrix along chain
     entity.internal_to_atom_coordinates()
 
     with as_handle(file, "w") as fp:
@@ -186,11 +236,15 @@ def write_SCAD(
         if "S" == entity.level or "M" == entity.level:
             for chn in entity.get_chains():
                 fp.write(" [\n")
-                chn.internal_coord.write_SCAD(fp, backboneOnly)
+                chn.internal_coord._write_SCAD(
+                    fp, backboneOnly=backboneOnly, start=start, fin=fin
+                )
                 fp.write(" ]\n")
         elif "C" == entity.level:
             fp.write(" [\n")
-            entity.internal_coord.write_SCAD(fp, backboneOnly)
+            entity.internal_coord._write_SCAD(
+                fp, backboneOnly=backboneOnly, start=start, fin=fin
+            )
             fp.write(" ]\n")
         elif "R" == entity.level:
             raise NotImplementedError("writescad single residue not yet implemented.")
@@ -218,48 +272,61 @@ peptide_scad = """
 // data matrices should be appended below to form a program ready to load into
 // the OpenSCAD application.
 //
-//  The protein_scale value used throughout is the second element of the protein[]
-//    array appended below.
-//    This is the value supplied when generating the data for build units per PDB angstrom.
-//    You may wish to modify it here to adjust the appearance of the model in terms of atom sphere
-//    or bond cylinder diameter, however the bond lengths are fixed with the supplied value when
-//    the data matrices are generated.  Atom sphere and bond cylinder radii may be individually
-//    adjusted below as well.
+//  The protein_scale value used throughout is the second element of the
+//    protein[] array appended below.
+//    This is the value supplied when generating the data for build units per
+//    PDB angstrom.
+//    You may wish to modify it here to adjust the appearance of the model in
+//    terms of atom sphere or bond cylinder diameter, however the bond lengths
+//    are fixed with the supplied value when the data matrices are generated.
+//    Atom sphere and bond cylinder radii may be individually adjusted below as
+//    well.
 //
-//  $fn (fragment number) is an OpenSCAD parameter controlling the smoothness of the model surface.
-//    Smaller values will render faster, but yield more 'blocky' models.
+//  $fn (fragment number) is an OpenSCAD parameter controlling the smoothness
+//    of the model surface.  Smaller values will render faster, but yield more
+//    'blocky' models.
 //
-//  This is intended to be a working example, you are encouraged to modify the OpenSCAD subroutines
-//    below to generate a model to your liking.  For more information, start with
-//    http://www.openscad.org/cheatsheet/index.html
+//  This is intended to be a working example, you are encouraged to modify the
+//    OpenSCAD subroutines below to generate a model to your liking.  For more
+//    information, start with http://www.openscad.org/cheatsheet/index.html
 //
-//  Note especially the hedronDispatch() subroutine below: here you may select hedra based on
-//    residue, sequence position, and class (hedron atoms) for special handling.  Also see the
-//    per hedron render options in the hedra[] array.
+//  Note especially the hedronDispatch() subroutine below: here you may select
+//    hedra based on residue, sequence position, and class (hedron atoms) for
+//    special handling.  Also see the per hedron render options in the hedra[]
+//    array.
 //
-//  If you modify this file, you may find it useful to generate the data matrices without this
-//    OpenSCAD code by calling write_SCAD() with the includeCode=False option, then use the OpenSCAD
-//    'include <>' facility at the end of your modified OpenSCAD program.
+//  Use the colorSel variable to restrict rendered objects by assigned color,
+       and thereby separate STL files for a multi-material printer.
+
+//  If you modify this file, you may find it useful to generate the data
+//    matrices without this OpenSCAD code by calling write_SCAD() with the
+//    includeCode=False option, then use the OpenSCAD 'include <>' facility at
+//    the end of your modified OpenSCAD program.
 */
 
 rotate([-90,0,0])  // convenient for default location (no N-Ca-C start coordinates)
     chain(protein);   // this is the main subroutine call to  build the structure
 
-// top-level OpenSCAD $fn for visible surfaces.  Rotatable bonds use $fn=8 inside, regardless of this setting.
-$fn = 0;  // 0 yields OpenSCAD default of 30.  $n=8 should print with minimal support
+// top-level OpenSCAD $fn for visible surfaces.  Rotatable bonds use $fn=8
+// inside, regardless of this setting.
+
+$fn = 20;  // $fn=8 should print with minimal support
 
 tubes=false;     // style: render atoms and bonds as constant diameter cylinders, preferred for rotatable bonds / h-bonds
 support=false;   // enable print-in-place internal support for rotatable bonds
-// N.B. rotatable bonds must be parallel to build plate for internal support structures to be generated correctly by slicer
+// N.B. rotatable bonds must be parallel to build plate for internal support
+// structures to be generated correctly by slicer
 
-// output parameters
+// output parameters:
+
 atomScale=1.0;  // 0.8 better for rotatable bonds
 defaultAtomRadius = 0.77;  // used if tubes = true
 
 bondRadius = (tubes ? defaultAtomRadius * atomScale : 0.4);
 jBondRadius = defaultAtomRadius * atomScale;  // radius for rotatable bonds
 
-// general printer, slicer, print settings
+// general printer, slicer, print settings:
+
 layerHeight=0.15;  // must match slicer setting for print-in-place support
 clearance=0.3;     // sliding clearance - can be smaller (0.2) if not doing print-in-place
 pClearance=0.2;    // press-fit clearance (magnets for h-bonds)
@@ -267,11 +334,12 @@ shim=0.05;         // extra to make OpenSCAD surfaces distinct in difference()
 nozzleDiameter=0.4;
 
 // need one magnet for each side of hydrogen bond, suggest 3mm x 5mm e.g. from eBay
-// use compass to identify poles if you care, North pointing (red) repels compass North pointing
+// use compass to identify poles if you care, North pointing (red) repels compass North pointer
 magR=3/2;    // magnet radius
 magL=5;      // magnet length
 
-// for $fn=8 which works nice on fdm printer
+// for $fn=8 which works nice on fdm printer:
+
 oRot = 22.5;              // 45/2, rotate to make fn=8 spheres and cylinders flat on build plate
 apmFac = cos(180/8);      // apothem factor - multiply by radius for center to octagon side distance
 octSide = 2* tan(180/8);  // multiply by radius to get length of octagon side
@@ -287,11 +355,29 @@ joinerStep = 1;           // radius difference between rotatable bond axle and e
 
 caTop = false;     // only make top of N_C-alpha_C hedron plus C-beta (see hedron() and hedron_dispatch() examples)
 
+colorSel = "all";  // [all, red, green, blue, gray, yellow, black, white]
+bondColor = "white";  // [black, white, green]
+
+/*
+//
+// Selector to restrict output according to assigned color.
+// See https://nextjeff.com/creating-multi-extruder-designs-in-openscad-for-3d-printing-6c43a002ef64
+//
+*/
+module colorSelect(Color) {
+    color(Color) {
+        if (colorSel == "all" || colorSel == Color) {
+            children();
+        }
+    }
+}
+
 /*
 //
 // Generate a sphere to represent an atom.
-// Colour and size determined for the atom covalent radius specified by the parameter 'a' by lookup
-//   in the atomData table below, then scaled by the supplied parameter 'scal'.
+// Colour and size determined for the atom covalent radius specified by the
+//   parameter 'a' by lookup in the atomData table below, then scaled by the
+//   supplied parameter 'scal'.
 //
 // scal : protein_scale
 // clr : additional radius if used to create clearance for rotatable bonds
@@ -300,14 +386,15 @@ caTop = false;     // only make top of N_C-alpha_C hedron plus C-beta (see hedro
 module atom(a,scal,clr=0)
 {
     ad = atomData[search([a],atomData)[0]];
-    color(ad[1]) {
+    colorSelect(ad[1]) {
         rotate([0,0,fnRot]) sphere(r=((ad[2]*atomScale)*scal)+clr);
     }
 }
 
 /*
 //
-// a hedron (below) may be 'reversed' in terms of the order of its two bonds; this function fixes the ordering
+// a hedron (below) may be 'reversed' in terms of the order of its two bonds;
+// this function fixes the ordering
 //
 */
 function hFlip(h,rev) =
@@ -325,12 +412,12 @@ function hFlip(h,rev) =
 */
 module joinUnit(cOuterLen, cOuterRad, cInnerLen, cInnerRad, male=false) {
     if (male) {
-        rotate([0,0,oRot]) {
+        colorSelect(bondColor) rotate([0,0,oRot]) {
             cylinder(h=cInnerLen, r=cInnerRad, center=false, $fn=8);
             cylinder(h=cOuterLen, r=cOuterRad, center=false, $fn=8);
         }
     } else {
-        rotate([0,0,fnRot]) {
+        colorSelect(bondColor) rotate([0,0,fnRot]) {
             cylinder(h=cInnerLen, r=cInnerRad, center=false, $fn=30);
             cylinder(h=cOuterLen, r=cOuterRad, center=false, $fn=30);
         }
@@ -341,7 +428,8 @@ module joinUnit(cOuterLen, cOuterRad, cInnerLen, cInnerRad, male=false) {
 //
 // create a rotatable bond
 //
-// supportSel : 0 for no support, 1 or 2 for support on top or bottom (needed for reversed hedra)
+// supportSel : 0 for no support, 1 or 2 for support on top or bottom (needed
+// for reversed hedra)
 //
 */
 module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differentiate joiner part lengths to guide assembly, but not used
@@ -369,7 +457,7 @@ module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differe
                 if (supportSelect) {
                     rotate([0,0,i*180]) {
                         translate([0,(cOuterRad*apmFac)-0.5*layerHeight,cOuterLen/2]) {
-                                cube([oside+2*shim,layerHeight+shim,cOuterLen+2*shim],center=true);
+                            cube([oside+2*shim,layerHeight+shim,cOuterLen+2*shim],center=true);
                         }
                     }
                 }
@@ -379,7 +467,7 @@ module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differe
                     translate([0,(cOuterRad*apmFac)-0.5*layerHeight,cOuterLen/2]) {
                         for (j=[0:1]) {
                             rotate([0,(j?60:-60),0])
-                                cube([wid,layerHeight,2*nozzleDiameter],center=true);
+                                colorSelect(bondColor) cube([wid,layerHeight,2*nozzleDiameter],center=true);
                         }
                     }
                 }
@@ -393,7 +481,7 @@ module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differe
                 for(j=[0:1]) {
                     rotate([0,0,j*180]) {
                         translate([0,(cOuterRad*apmFac),cOuterLen/2]) {
-                            cube([oside+2*shim,supHeight+shim,cOuterLen+2*shim],center=true);
+                            colorSelect(bondColor) cube([oside+2*shim,supHeight+shim,cOuterLen+2*shim],center=true);
                         }
                     }
                 }
@@ -405,7 +493,8 @@ module joiner(bondlen, scal, male=0, ver=0, supportSelect=0) {  // ver = differe
 
 /*
 //
-// create bond with different options (regular, skinny, h-bond atom, rotatable male or female
+// create bond with different options (regular, skinny, h-bond atom, rotatable
+// male or female
 //
 //  parameters:
 //  bl : bond length
@@ -436,9 +525,10 @@ module bond(bl, br, scal, key, atm, ver, supportSel=0) {
         rotate([0,0,fnRot]) {
             difference() {
                 union() {
-                    cylinder(h=bl,r=br,center=false);
+                    colorSelect(bondColor) cylinder(h=bl,r=br,center=false);
                     if (key == HBond) {  // make extension collar for h-bond magnet
-                        rotate([0,0,oRot-fnRot]) cylinder(h=bhblen-1,r=(magR + clearance +wall),center=false, $fn=8);
+                        rotate([0,0,oRot-fnRot]) 
+                            colorSelect(bondColor) cylinder(h=bhblen-1,r=(magR + clearance +wall),center=false, $fn=8);
                     }
                 }
                 atom(atm,scal,-clearance);  // remove overlap with atom to clear area for female join
@@ -453,10 +543,12 @@ module bond(bl, br, scal, key, atm, ver, supportSel=0) {
 
 /*
 //
-// Generate a 'hedron', one plane of 3 points, consisting of 3 atoms joined by two bonds.
+// Generate a 'hedron', one plane of 3 points, consisting of 3 atoms joined by
+//   two bonds.
 //   Defined as bond length - bond angle - bond length
 //
-// In some cases the sequence of atoms in the h[] array is reversed (rev flag), as detailed in the comments.
+// In some cases the sequence of atoms in the h[] array is reversed (rev flag),
+// as detailed in the comments.
 //
 // other parameters:
 //
@@ -465,12 +557,14 @@ module bond(bl, br, scal, key, atm, ver, supportSel=0) {
 //    0    1     2     3     4     5     6      7     :     0     1     2     3    4     5      6      7
 //  len1  len3  atom1 atom3  a1    a2   a1-a2  a2-a3      len1  len3  atom1 atom3   a1    a3  a1-a2  a2-a3
 //
-// split: chop half of the hedron - to selectively print parts of a rotating bond to be glued together.
-//   top or bottom half selected by global caTop (C-alpha top) variable, undef by default so bottom half.
+// split: chop half of the hedron - to selectively print parts of a rotating
+//   bond to be glued together.  top or bottom half selected by global caTop
+//   (C-alpha top) variable, undef by default so bottom half.
 //
-// supporSel: enable support structure inside rotatable bond to print in place.  Please note the bond needs to be exactly parallel
-//  to the buildplate and the layerHeight global variable above needs to be set correctly for the structure to be correctly created
-//  by your slicer software.
+// supporSel: enable support structure inside rotatable bond to print in place.
+//  Please note the bond needs to be exactly parallel to the buildplate and the
+//  layerHeight global variable above needs to be set correctly for the
+//  structure to be correctly created by your slicer software.
 //
  */
 
@@ -530,7 +624,7 @@ module hedron(h,rev=0,scal,split=0, supportSel) {
             cside = 7* defaultAtomRadius * atomScale * scal / 12 + (caTop ? pClearance : -pClearance);
             difference() {
                 translate([-Xdim,((rev || caTop) ? 0 : -thick),-Zdim]) {
-                    cube([2*Xdim,thick,2*Zdim]);
+                    colorSelect(bondColor) cube([2*Xdim,thick,2*Zdim]);
                 }
                 if (!caTop) {
                     rotate([0,(rev ? h[1] : 0),0])
@@ -542,7 +636,7 @@ module hedron(h,rev=0,scal,split=0, supportSel) {
                 //translate([tx+cside,0,tx+cside])
                     rotate([0,(rev ? h[1] : 0),0])
                         rotate([45,0,0])
-                        cube([cside, cside, cside], center=true);
+                        colorSelect(bondColor) cube([cside, cside, cside], center=true);
             }
         }
 
@@ -579,19 +673,22 @@ module hedronDispatch(h,rev=0,scal) {
 
     /*
     // Some examples for special handling for specific hedra below:
+    // note use of h_seqpos, h_residue, h_class for selecting hedra
 
-    // caTop needs to be a global variable so hedron() above can see it.
+    // bool flag caTop (for rotatable bond part) needs to be a global variable
+    // so hedron() above can see it.
 
 caBase1 = false;   // only make bottom of N_C-alpha_C hedron
 caBase2 = false;   // same as caBase1 but for case of reversed hedron (for testing, should be identical to caBase1 result)
 amideOnly = false; // make only the first amide
 
     if (caTop) {
+        // these examples select a specific sequence position (h[h_seqpos] == n)
         if (h[h_seqpos] == 1) {
             if (h[h_class] == "NCAC") {
                 hedron(h, rev, scal, 1);
             } else if (h[h_class] == "CBCAC") {
-                color("yellow") {  // ca-cb
+                colorSelect("yellow") {  // ca-cb
                     hedron(h, rev, scal);
                 }
             }
@@ -607,20 +704,20 @@ amideOnly = false; // make only the first amide
     } else if (amideOnly) {
         if (h[h_seqpos] == 1) {
             if (h[h_class] == "CACN") {
-                color("darkgray") {
+                colorSelect("darkgray") {
                     hedron(h, rev, scal);
                 }
             }  else if (h[h_class] == "CACO") {
-                color("red") {   // c=o
+                colorSelect("red") {   // c=o
                     hedron(h, rev, scal);
                 }
             }  else if (h[h_class] == "CNCA") {
-                color("cyan") {  // h=n
+                colorSelect("cyan") {  // h=n
                     hedron(h, rev, scal);
                 }
             }
         } else if ((h[h_seqpos] == 2) && (h[h_class] == "HNCA")) {
-            color("cyan") {  // h=n
+            colorSelect("cyan") {  // h=n
                 hedron(h, rev, scal);
             }
         }
@@ -639,7 +736,7 @@ amideOnly = false; // make only the first amide
                 hedron(h, rev, scal, 0, (support ? 2 : 0));
             }
         } else if (h[h_class] == "CBCAC") {
-            color("yellow") {                     // ca-cb -- color yellow in OpenSCAD renderer
+            colorSelect("yellow") {                     // ca-cb -- color yellow in OpenSCAD renderer
                 if (h[h_seqpos] == 1 ) {         // don't make here for N-term
                 } else if (h[h_seqpos] == 5 ) {  // don't make here for C-term
                 } else {
@@ -647,7 +744,7 @@ amideOnly = false; // make only the first amide
                 }
             }
         } else if (h[h_class] == "HNCA") {
-            color("cyan") { // color h-n in OenSCAD renderer
+            colorSelect("cyan") { // color h-n in OenSCAD renderer
                 if (h[h_seqpos] == 1) {
                     if (NCap) {                      // only make at N term if variable NCap is true
                         hedron(h, rev, scal, 0, (support ? 1 : 0));
@@ -657,11 +754,11 @@ amideOnly = false; // make only the first amide
                 }
             }
         } else if (h[h_residue] == "P") {
-            color("darkgray")   // highlight Prolines in OpenSCAD renderer
+            colorSelect("darkgray")   // highlight Prolines in OpenSCAD renderer
                 hedron(h, rev, scal);
         } else {
             echo("unrecognised hedron", h[h_class]);
-            color("pink")
+            colorSelect("pink")
                 hedron(h, rev, scal, 0, (support ? 1 : 0));
         }
     }
@@ -700,8 +797,8 @@ module dihedron(d,hedra,scal)
 
 /*
 //
-// Generate a residue consisting of the set of dihedra in the parameter 'r', referring to hedra the
-//   table specified in the parameter 'hedra'.
+// Generate a residue consisting of the set of dihedra in the parameter 'r',
+//   referring to hedra the table specified in the parameter 'hedra'.
 //
 */
 module residue(r,hedra, scal)
@@ -715,7 +812,8 @@ module residue(r,hedra, scal)
 
 /*
 //
-// Generate a chain of residues, each positioned by a supplied rotation/translation matrix.
+// Generate a chain of residues, each positioned by a supplied
+// rotation/translation matrix.
 //
 */
 module chain(protein)
@@ -779,7 +877,8 @@ r_resID = 1;
 r_resTransform = 2;
 
 
-// use single default atom radius for all atoms if tubes = true, else use covalent radii from literature
+// use single default atom radius for all atoms if tubes = true, else use
+// covalent radii from literature
 atomData = ( tubes ?
             [   ["Csb","green" , defaultAtomRadius], ["Cres","green" , defaultAtomRadius], ["Cdb","green" , defaultAtomRadius],
                 ["Osb","red" , defaultAtomRadius], ["Ores","red" , defaultAtomRadius], ["Odb","red" , defaultAtomRadius],
@@ -788,8 +887,9 @@ atomData = ( tubes ?
                 ["Ssb","yellow" , defaultAtomRadius] ]
             :
 
-// covalent radii from Heyrovska, Raji : 'Atomic Structures of all the Twenty Essential Amino Acids and a Tripeptide, with Bond Lengths as Sums of Atomic Covalent Radii'
-// https://arxiv.org/pdf/0804.2488.pdf
+// covalent radii from Heyrovska, Raji : 'Atomic Structures of all the Twenty
+// Essential Amino Acids and a Tripeptide, with Bond Lengths as Sums of Atomic
+// Covalent Radii'  https://arxiv.org/pdf/0804.2488.pdf
 
             [   ["Csb","green" , 0.77], ["Cres","green" , 0.72], ["Cdb","green" , 0.67],
                 ["Osb","red" , 0.67], ["Ores","red" , 0.635], ["Odb","red" , 0.60],
@@ -803,4 +903,4 @@ atomData = ( tubes ?
 // include <1rtm.scad>;
 // or paste below
 
-"""
+"""  # noqa

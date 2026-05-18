@@ -466,14 +466,14 @@ def parse_distances(lines, results):
                 if distances.get("raw") is None:
                     distances["raw"] = {}
                 distances["raw"][seq_name] = {}
-                for i in range(0, len(line_floats)):
+                for i in range(len(line_floats)):
                     distances["raw"][seq_name][sequences[i]] = line_floats[i]
                     distances["raw"][sequences[i]][seq_name] = line_floats[i]
             else:
                 if distances.get("ml") is None:
                     distances["ml"] = {}
                 distances["ml"][seq_name] = {}
-                for i in range(0, len(line_floats)):
+                for i in range(len(line_floats)):
                     distances["ml"][seq_name][sequences[i]] = line_floats[i]
                     distances["ml"][sequences[i]][seq_name] = line_floats[i]
     if distances:

@@ -9,24 +9,23 @@
 
 """Tests for the GenBank module."""
 
-
 import os
 import sys
+import tempfile
 import unittest
 import warnings
 from datetime import datetime
-
 from io import StringIO
 
-from Bio import BiopythonWarning
 from Bio import BiopythonParserWarning
-
-from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq, UndefinedSequenceError
+from Bio import BiopythonWarning
 
 # GenBank stuff to test:
 from Bio import GenBank
+from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.Seq import UndefinedSequenceError
+from Bio.SeqRecord import SeqRecord
 
 
 class TestBasics(unittest.TestCase):
@@ -3374,7 +3373,7 @@ class TestFeatureParser(unittest.TestCase):
         self.assertEqual(references_found, references)
         for feature1, (feature2, strand) in zip(record.features, features):
             self.assertEqual(str(feature1), feature2)
-            self.assertEqual(feature1.strand, strand)
+            self.assertEqual(feature1.location.strand, strand)
         self.assertEqual(record.dbxrefs, dbxrefs)
 
     def test_feature_parser_01(self):
@@ -3396,6 +3395,114 @@ PROVISIONAL REFSEQ: This record has not yet been subject to final
 NCBI review. The reference sequence was derived from AF035812.1.""",
             "data_file_division": "PRI",
             "date": "01-NOV-2000",
+            "gi": "5453633",
+            "keywords": [""],
+            "molecule_type": "mRNA",
+            "organism": "Homo sapiens",
+            "sequence_version": 1,
+            "source": "human",
+            "taxonomy": [
+                "Eukaryota",
+                "Metazoa",
+                "Chordata",
+                "Craniata",
+                "Vertebrata",
+                "Euteleostomi",
+                "Mammalia",
+                "Eutheria",
+                "Primates",
+                "Catarrhini",
+                "Hominidae",
+                "Homo",
+            ],
+        }
+        references = []
+        features = (
+            (
+                """\
+type: source
+location: [0:1622](+)
+qualifiers:
+    Key: db_xref, Value: ['taxon:9606']
+    Key: map, Value: ['16']
+    Key: organism, Value: ['Homo sapiens']
+""",
+                1,
+            ),
+            (
+                """\
+type: gene
+location: [0:1622](+)
+qualifiers:
+    Key: db_xref, Value: ['LocusID:1783']
+    Key: gene, Value: ['DNCLI2']
+    Key: note, Value: ['LIC2']
+""",
+                1,
+            ),
+            (
+                """\
+type: CDS
+location: [6:1485](+)
+qualifiers:
+    Key: codon_start, Value: ['1']
+    Key: db_xref, Value: ['LocusID:1783', 'GI:5453634']
+    Key: gene, Value: ['DNCLI2']
+    Key: note, Value: ['similar to R. norvegicus and G. gallus dynein light intermediate chain 2, Swiss-Prot Accession Numbers Q62698 and Q90828, respectively']
+    Key: product, Value: ['dynein, cytoplasmic, light intermediate polypeptide 2']
+    Key: protein_id, Value: ['NP_006132.1']
+    Key: translation, Value: ['MAPVGVEKKLLLGPNGPAVAAAGDLTSEEEEGQSLWSSILSEVSTRARSKLPSGKNILVFGEDGSGKTTLMTKLQGAEHGKKGRGLEYLYLSVHDEDRDDHTRCNVWILDGDLYHKGLLKFAVSAESLPETLVIFVADMSRPWTVMESLQKWASVLREHIDKMKIPPEKMRELERKFVKDFQDYMEPEEGCQGSPQRRGPLTSGSDEENVALPLGDNVLTHNLGIPVLVVCTKCDAVSVLEKEHDYRDEHLDFIQSHLRRFCLQYGAALIYTSVKEEKNLDLLYKYIVHKTYGFHFTTPALVVEKDAVFIPAGWDNEKKIAILHENFTTVKPEDAYEDFIVKPPVRKLVHDKELAAEDEQVFLMKQQSLLAKQPATPTRASESPARGPSGSPRTQGRGGPASVPSSSPGTSVKKPDPNIKNNAASEGVLASFFNSLLSKKTGSPGSPGAGGVQSTAKKSGQKTVLSNVQEELDRMTRKPDSMVTNSSTENEA']
+""",
+                1,
+            ),
+        )
+        dbxrefs = []
+        self.perform_feature_parser_test(
+            record,
+            seq,
+            id,
+            name,
+            description,
+            annotations,
+            references,
+            features,
+            dbxrefs,
+        )
+
+    def test_feature_parser_date_warning(self):
+        path = "GenBank/noref_date_warning.gb"
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            with open(path) as handle:
+                records = GenBank.Iterator(handle, self.feat_parser)
+                record = next(records)
+            self.assertEqual(len(caught), 2)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertEqual(caught[1].category, BiopythonParserWarning)
+            self.assertEqual(
+                str(caught[0].message),
+                "LOCUS line does not contain - at position 65 in date:\n"
+                "LOCUS       NM_006141    1622 bp    mRNA            PRI       yyyy/mon/dd\n",
+            )
+            self.assertEqual(
+                str(caught[1].message),
+                "LOCUS line does not contain - at position 69 in date:\n"
+                "LOCUS       NM_006141    1622 bp    mRNA            PRI       yyyy/mon/dd\n",
+            )
+        seq = "GGCAAGATGGCGCCGGTGGGGGTGGAGAAGAAGCTGCTGCTAGGTCCCAACGGG...AAA"
+        id = "NM_006141.1"
+        name = "NM_006141"
+        description = (
+            "Homo sapiens dynein, cytoplasmic, light intermediate polypeptide 2"
+            " (DNCLI2), mRNA"
+        )
+        annotations = {
+            "accessions": ["NM_006141"],
+            "comment": """\
+PROVISIONAL REFSEQ: This record has not yet been subject to final
+NCBI review. The reference sequence was derived from AF035812.1.""",
+            "data_file_division": "PRI",
+            # "date": "01-NOV-2000", NB: no date
             "gi": "5453633",
             "keywords": [""],
             "molecule_type": "mRNA",
@@ -5981,7 +6088,6 @@ qualifiers:
                 ),
             )
             dbxrefs = []
-            self.maxDiff = None
             self.perform_feature_parser_test(
                 record,
                 seq,
@@ -7376,6 +7482,42 @@ qualifiers:
             dbxrefs,
         )
 
+    def test_features_spanning_origin(self):
+        """Test that features that span the origin on circular DNA are included correctly for different ways of specifying the topology."""
+        # This first one should fail (location of the feature should be set to none), because
+        # the file says the sequence is linear, but there is a feature that spans the origin.
+        file_fails = "GenBank/addgene-plasmid-11664-sequence-180430.gbk"
+
+        # The right warning is raised
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read(file_fails, "gb")
+            self.assertEqual(len(caught), 1)
+            self.assertEqual(caught[0].category, BiopythonParserWarning)
+            self.assertEqual(
+                str(caught[0].message),
+                "it appears that '8569..276' is a feature that spans the origin, but the sequence topology is undefined; setting feature location to None.",
+            )
+
+        # The last feature location is None
+        self.assertIsNone(record.features[-1].location)
+
+        # This one is circular and should include the features that span the origin
+        file_succeeds = "GenBank/addgene-plasmid-39296-sequence-49545.gbk"
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            record = SeqIO.read(file_succeeds, "gb")
+            # This gives the same error for features that span the origin
+            self.assertEqual(len(caught), 2)
+            for c in caught:
+                self.assertEqual(c.category, BiopythonParserWarning)
+                self.assertTrue("unintended behavior" in str(c.message))
+
+        # The last two features should not be none
+        self.assertIsNotNone(record.features[-1].location)
+        self.assertIsNotNone(record.features[-2].location)
+
 
 class GenBankTests(unittest.TestCase):
     """GenBank tests."""
@@ -7434,7 +7576,8 @@ class GenBankTests(unittest.TestCase):
             with self.assertRaises(BiopythonParserWarning) as cm:
                 record = SeqIO.read(path, "genbank")
             self.assertEqual(
-                "Couldn't parse feature location: '-2..492'", str(cm.exception)
+                "negative starting position in feature location '-2..492'; setting feature location to None.",
+                str(cm.exception),
             )
 
     def test_001_genbank_bad_origin_wrapping_location(self):
@@ -7444,8 +7587,8 @@ class GenBankTests(unittest.TestCase):
             warnings.simplefilter("error", BiopythonParserWarning)
             with self.assertRaises(BiopythonParserWarning) as cm:
                 record = SeqIO.read(path, "genbank")
-            self.assertIn(
-                "It appears that '6801..100' is a feature that spans the origin",
+            self.assertEqual(
+                "it appears that '6801..100' is a feature that spans the origin, but the sequence topology is undefined; setting feature location to None.",
                 str(cm.exception),
             )
 
@@ -7491,7 +7634,7 @@ class GenBankTests(unittest.TestCase):
                 "join{[5399:5600](+), [5699:6100](+), [0:100](-), [<6800:7000](-)}",
             )
 
-    def test_implicit_orign_wrap_extract_and_translate(self):
+    def test_implicit_origin_wrap_extract_and_translate(self):
         """Test that features wrapped around origin give expected data."""
         path = "GenBank/bad_origin_wrap_CDS.gb"
         with warnings.catch_warnings():
@@ -7603,6 +7746,32 @@ KEYWORDS    """,
         embl = record.format("embl")
         self.assertIn("XX\nPR   Project:PRJNA57779;\nXX\n", embl)
 
+    def test_dblink_multiline(self):
+        """Parse GenBank record with multiline DBLINK entries."""
+        path = "GenBank/EZ116220.gb"
+        # Silence too long warnings
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            record = SeqIO.read(path, "gb")
+            gb = record.format("gb")
+            embl = record.format("embl")
+        self.assertEqual(
+            record.dbxrefs,
+            [
+                "BioProject:PRJNA39555",
+                "Sequence Read Archive:SRX001885, SRX001121, SRX001531, SRX001530, SRX001529",
+            ],
+        )
+        self.assertTrue(
+            """
+DBLINK      BioProject: PRJNA39555
+            Sequence Read Archive: SRX001885, SRX001121, SRX001531, SRX001530, SRX001529
+KEYWORDS    """
+            in gb,
+            gb,
+        )
+        self.assertIn("XX\nPR   Project:PRJNA39555;\nXX\n", embl)
+
     def test_dbline_gb_embl(self):
         """Parse GenBank/EMBL paired records with PR project entry: GenBank."""
         record = SeqIO.read("GenBank/DS830848.gb", "gb")
@@ -7667,7 +7836,7 @@ KEYWORDS    """,
         self.assertEqual(
             record.annotations["structured_comment"]["FluData"]["LabID"], "2008704957"
         )
-        self.assertEqual(len(record.annotations["structured_comment"]["FluData"]), 5)
+        self.assertEqual(len(record.annotations["structured_comment"]["FluData"]), 6)
         path = "GenBank/EU851978_output.gbk"
         with open(path) as ifile:
             self.assertEqual(record.format("gb"), ifile.read())
@@ -7722,7 +7891,8 @@ KEYWORDS    """,
             record = SeqIO.read(path, "genbank")
             self.assertNotIn("structured_comment", record.annotations)
             self.assertIn(
-                "Structured comment not parsed for AYW00820.", str(caught[0].message)
+                "Structured comment not parsed on malformed header line",
+                str(caught[0].message),
             )
 
     def test_locus_line_topogoly(self):
@@ -7775,15 +7945,17 @@ KEYWORDS    """,
     def test_qualifier_escaping_write(self):
         """Check qualifier escaping is preserved when writing."""
         # Write some properly escaped qualifiers and test
-        genbank_out = "GenBank/qualifier_escaping_write.gb"
-        record = SeqIO.read(genbank_out, "gb")
+        genbank_in = "GenBank/qualifier_escaping_write.gb"
+        record = SeqIO.read(genbank_in, "gb")
         f1 = record.features[0]
         f2 = record.features[1]
         f1.qualifiers["note"][0] = '"Should" now "be" escaped in "file"'
         f2.qualifiers["note"][0] = '"Should also be escaped in file"'
-        SeqIO.write(record, genbank_out, "gb")
-        # Read newly escaped qualifiers and test
-        record = SeqIO.read(genbank_out, "gb")
+        with tempfile.NamedTemporaryFile("w+") as genbank_out:
+            SeqIO.write(record, genbank_out, "gb")
+            genbank_out.seek(0)
+            # Read newly escaped qualifiers and test
+            record = SeqIO.read(genbank_out, "gb")
         f1 = record.features[0]
         f2 = record.features[1]
         self.assertEqual(
@@ -7857,9 +8029,11 @@ KEYWORDS    """,
             annotations={"molecule_type": "DNA"},
         )
         handle = StringIO()
-        SeqIO.write(record, handle, "genbank")
-        handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_correct(self):
@@ -7874,9 +8048,11 @@ KEYWORDS    """,
         )
         record.annotations["date"] = "24-DEC-2015"
         handle = StringIO()
-        SeqIO.write(record, handle, "genbank")
-        handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
 
     def test_genbank_date_list(self):
@@ -7891,11 +8067,12 @@ KEYWORDS    """,
         )
         record.annotations["date"] = ["24-DEC-2015"]
         handle = StringIO()
-        SeqIO.write(record, handle, "genbank")
-        handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "24-DEC-2015")
-
         record = SeqRecord(
             sequence_object,
             id="123456789",
@@ -7905,9 +8082,11 @@ KEYWORDS    """,
         )
         record.annotations["date"] = ["24-DEC-2015", "25-JAN-2016"]
         handle = StringIO()
-        SeqIO.write(record, handle, "genbank")
-        handle.seek(0)
-        gb = SeqIO.read(handle, "gb")
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            gb = SeqIO.read(handle, "gb")
         self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_genbank_date_datetime(self):
@@ -7930,7 +8109,6 @@ KEYWORDS    """,
     def test_genbank_date_invalid(self):
         """Check if invalid dates are treated as default."""
         invalid_dates = ("invalid date", "29-2-1981", "35-1-2018", "1-1-80", "1-9-99")
-
         sequence_object = Seq("ATGC")
         for invalid_date in invalid_dates:
             record = SeqRecord(
@@ -7940,12 +8118,16 @@ KEYWORDS    """,
                 description="Test case for date parsing",
                 annotations={"molecule_type": "DNA"},
             )
-
             record.annotations["date"] = invalid_date
             handle = StringIO()
-            SeqIO.write(record, handle, "genbank")
+            # Silence Invalid dates warnings
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                SeqIO.write(record, handle, "genbank")
             handle.seek(0)
-            gb = SeqIO.read(handle, "gb")
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                gb = SeqIO.read(handle, "genbank")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
     def test_longer_locus_line(self):
@@ -8063,6 +8245,14 @@ class LineOneTests(unittest.TestCase):
                 None,
             ),
             (
+                "LOCUS       AB070938                6497 bp    DNA     linear   BCT"
+                " 1-Oct-2001\n",
+                "linear",
+                "DNA",
+                "BCT",
+                [BiopythonParserWarning, BiopythonParserWarning],
+            ),
+            (
                 "LOCUS       NC_005816               9609 bp    DNA     circular BCT"
                 " 21-JUL-2008",
                 "circular",
@@ -8095,7 +8285,7 @@ class LineOneTests(unittest.TestCase):
                 None,
             ),
         ]
-        for (line, topo, mol_type, div, warning_list) in tests:
+        for line, topo, mol_type, div, warning_list in tests:
             with warnings.catch_warnings(record=True) as caught:
                 warnings.simplefilter("always")
                 scanner = GenBank.Scanner.GenBankScanner()
@@ -8169,7 +8359,7 @@ class LineOneTests(unittest.TestCase):
             ("ID   DI500001       STANDARD;      PRT;   111 AA.", None, None, None),
             ("ID   DI644510   standard; PRT;  1852 AA.", None, None, None),
         ]
-        for (line, topo, mol_type, div) in tests:
+        for line, topo, mol_type, div in tests:
             scanner = GenBank.Scanner.EmblScanner()
             consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
             scanner._feed_first_line(consumer, line)
@@ -8193,7 +8383,7 @@ class LineOneTests(unittest.TestCase):
             ("ID   HLA00001   standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
             ("ID   HLA00001; SV 1; standard; DNA; HUM; 3503 BP.", None, "DNA", "HUM"),
         ]
-        for (line, topo, mol_type, div) in tests:
+        for line, topo, mol_type, div in tests:
             scanner = GenBank.Scanner._ImgtScanner()
             consumer = GenBank._FeatureConsumer(1, GenBank.FeatureValueCleaner)
             scanner._feed_first_line(consumer, line)

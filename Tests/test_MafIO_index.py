@@ -12,17 +12,17 @@ except ImportError:
     sqlite3 = None
 
 import os
-import unittest
-import tempfile
 import shutil
 import sys
-
-from Bio.AlignIO.MafIO import MafIndex
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
+import tempfile
+import unittest
 
 from seq_tests_common import SeqRecordTestBaseClass
+
+from Bio import SeqIO
+from Bio.AlignIO.MafIO import MafIndex
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 
 
 class StaticMethodTest(unittest.TestCase):
@@ -157,10 +157,12 @@ if sqlite3:
         def test_good_small(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10.maf", "mm9.chr10")
             self.assertEqual(len(idx), 48)
+            idx.close()
 
         def test_good_big(self):
             idx = MafIndex(self.tmpfile, "MAF/ucsc_mm9_chr10_big.maf", "mm9.chr10")
             self.assertEqual(len(idx), 983)
+            idx.close()
 
         def test_bundle_without_target(self):
             self.assertRaises(
@@ -188,6 +190,9 @@ if sqlite3:
                 "MAF/ucsc_mm9_chr10.mafindex", "MAF/ucsc_mm9_chr10.maf", "mm9.chr10"
             )
             self.assertEqual(len(self.idx), 48)
+
+        def tearDown(self):
+            self.idx.close()
 
         def test_records_begin(self):
             rec1 = SeqRecord(
@@ -349,7 +354,7 @@ if sqlite3:
 
             self.assertEqual(len(results), 4 + 4)
 
-            self.assertEqual({len(x) for x in results}, {4, 1, 9, 10, 4, 3, 5, 1})
+            self.assertEqual({len(x) for x in results}, {1, 3, 4, 5, 9, 10})
 
             # Code formatting note:
             # Expected start coordinates are grouped by alignment blocks
@@ -570,7 +575,7 @@ if sqlite3:
         def test_correct_spliced_sequences_2(self):
             """Checking that spliced sequences are correct.
 
-            We get spliced alignements from following MAF blocks
+            We get spliced alignments from following MAF blocks
             and check that the sequences are correct:
 
             a score=19159.000000

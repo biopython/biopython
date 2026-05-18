@@ -15,8 +15,9 @@ import subprocess
 import unittest
 import warnings
 
-from Bio.PDB import MMCIFParser, PDBParser, ResidueDepth
-from Bio import MissingExternalDependencyError
+from Bio.PDB import MMCIFParser
+from Bio.PDB import PDBParser
+from Bio.PDB import ResidueDepth
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 from Bio.PDB.ResidueDepth import _get_atom_radius
 
@@ -29,7 +30,7 @@ class MSMS_tests(unittest.TestCase):
         # Check if MSMS is installed
         try:
             v = subprocess.check_output(
-                ["msms", "-h"], universal_newlines=True, stderr=subprocess.STDOUT
+                ["msms", "-h"], text=True, stderr=subprocess.STDOUT
             )
         except OSError:
             raise unittest.SkipTest(

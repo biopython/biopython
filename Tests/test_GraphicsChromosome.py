@@ -12,14 +12,13 @@ Graphics.DisplayRepresentation classes.
 # standard library
 
 import os
-import sys
 import random
-from io import StringIO
+import sys
 import unittest
-
 import warnings
-from Bio import BiopythonWarning
+from io import StringIO
 
+from Bio import BiopythonWarning
 from Bio import MissingPythonDependencyError
 
 try:
@@ -31,10 +30,10 @@ except ImportError:
     ) from None
 
 # local stuff
-from Bio.SeqFeature import SeqFeature, FeatureLocation
 from Bio.Graphics import BasicChromosome
 from Bio.Graphics.DisplayRepresentation import ChromosomeCounts
-
+from Bio.SeqFeature import SeqFeature
+from Bio.SeqFeature import SimpleLocation
 
 # hold the chromosome info for testing
 # the info is structured as (label, color, scale)
@@ -342,7 +341,7 @@ class OrganismSubAnnotationsTest(unittest.TestCase):
                 # Features as SeqFeatures
                 features = [
                     SeqFeature(
-                        FeatureLocation(start, end, strand),
+                        SimpleLocation(start, end, strand),
                         qualifiers={"name": [label], "color": [color]},
                     )
                     for (start, end, strand, label) in features

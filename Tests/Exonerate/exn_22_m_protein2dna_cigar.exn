@@ -1,0 +1,6 @@
+Command line: [exonerate -m protein2dna ../scer_cad1_prot.fa /media/Waterloo/Downloads/genomes/scer_s288c/scer_s288c.fa --bestn 3 --showalignment no --showcigar yes --showvulgar no]
+Hostname: [blackbriar]
+cigar: sp|P24813|YAP2_YEAST 0 409 . gi|330443520|ref|NC_001136.10| 1319275 1318048 - 2105  M 1227
+cigar: sp|P24813|YAP2_YEAST 28 120 . gi|330443688|ref|NC_001145.3| 253991 254270 + 205  M 36 D 3 M 240
+cigar: sp|P24813|YAP2_YEAST 355 408 . gi|330443688|ref|NC_001145.3| 255638 255794 + 116  M 105 I 1 M 51
+-- completed exonerate analysis

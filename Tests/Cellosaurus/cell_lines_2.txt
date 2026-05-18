@@ -1,28 +1,54 @@
 ID   XP3OS
 AC   CVCL_3245
 AS   CVCL_F511
-SY   XP30S; GM04314
+SY   Xeroderma Pigmentosum 3 OSaka; GM04314; GM04314B; GM4314
 DR   CLO; CLO_0019557
 DR   Coriell; GM04314
+DR   GEO; GSM1338611
 DR   JCRB; JCRB0303
 DR   JCRB; KURB1002
 DR   JCRB; KURB1003
 DR   JCRB; KURB1004
+DR   Wikidata; Q54994928
+RX   CelloPub=CLPUB00447;
+RX   PubMed=832273;
 RX   PubMed=1372102;
-ST   Source(s): JCRB
+RX   PubMed=1702221;
+RX   PubMed=2570806;
+RX   PubMed=7000335;
+RX   PubMed=7830260;
+RX   PubMed=9671271;
+RX   PubMed=27197874;
+CC   Population: Japanese.
+CC   Sequence variation: Mutation; HGNC; 12814; XPA; Simple; c.390-1G>C (IVS3-1G>C); ClinVar=VCV000264684; Zygosity=Homozygous; Note=Splice acceptor mutation (PubMed=1702221; PubMed=9671271; PubMed=27197874).
+CC   Omics: Deep exome analysis.
+CC   Misspelling: XP30S; Note=Occasionally.
+CC   Derived from site: In situ; Skin; UBERON=UBERON_0002097.
+CC   Cell type: Fibroblast of skin; CL=CL_0002620.
+ST   Source(s): JCRB; PubMed=27197874
 ST   Amelogenin: X
 ST   CSF1PO: 10,11
 ST   D13S317: 9,11
 ST   D16S539: 9,12
+ST   D18S51: 13
+ST   D21S11: 29,30
+ST   D3S1358: 15,16
 ST   D5S818: 10,11
 ST   D7S820: 11,12
+ST   D8S1179: 13,15
+ST   FGA: 22,23
+ST   Penta D: 9
+ST   Penta E: 14,17
 ST   TH01: 7
 ST   TPOX: 8,11
 ST   vWA: 14,16
 DI   NCIt; C3965; Xeroderma pigmentosum, complementation group A
-OX   NCBI_TaxID=9606; ! Homo sapiens
+DI   ORDO; Orphanet_910; Xeroderma pigmentosum
+OX   NCBI_TaxID=9606; ! Homo sapiens (Human)
 SX   Female
+AG   5Y
 CA   Finite cell line
+DT   Created: 04-04-12; Last updated: 29-06-23; Version: 20
 //
 ID   1-5c-4
 AC   CVCL_2260
@@ -37,12 +63,18 @@ DR   BioSample; SAMN03151673
 DR   ECACC; 88021103
 DR   IZSLER; BS CL 93
 DR   KCLB; 10020.2
+DR   Wikidata; Q54399838
+RX   DOI=10.1007/BF02618370;
 RX   PubMed=566722;
 RX   PubMed=19630270;
 RX   PubMed=20143388;
-WW   http://iclac.org/wp-content/uploads/Cross-Contaminations-v7_2.pdf
-CC   Problematic cell line: Contaminated. Shown to be a HeLa derivative (PubMed 566722, PubMed 20143388).
-CC   Omics: Transcriptome analysis.
+WW   https://iclac.org/wp-content/uploads/Cross-Contaminations_v12_distribution.xlsx
+CC   Problematic cell line: Contaminated. Shown to be a HeLa derivative (PubMed=566722; PubMed=20143388). Originally thought to originate from the conjunctiva of a child.
+CC   Registration: International Cell Line Authentication Committee, Register of Misidentified Cell Lines; ICLAC-00298.
+CC   Population: African American.
+CC   Transformant: NCBI_TaxID; 333761; Human papillomavirus type 18 (HPV18).
+CC   Omics: Transcriptome analysis by microarray.
+CC   Derived from site: In situ; Uterus, cervix; UBERON=UBERON_0000002.
 ST   Source(s): ATCC; KCLB
 ST   Amelogenin: X
 ST   CSF1PO: 9,10
@@ -55,9 +87,11 @@ ST   FGA: 18,21
 ST   TH01: 7
 ST   TPOX: 8,12
 ST   vWA: 16,18
-DI   NCIt; C4029; Cervical adenocarcinoma
-OX   NCBI_TaxID=9606; ! Homo sapiens
+DI   NCIt; C27677; Human papillomavirus-related cervical adenocarcinoma
+OX   NCBI_TaxID=9606; ! Homo sapiens (Human)
 HI   CVCL_0030 ! HeLa
 SX   Female
+AG   30Y6M
 CA   Cancer cell line
+DT   Created: 04-04-12; Last updated: 05-10-23; Version: 25
 //

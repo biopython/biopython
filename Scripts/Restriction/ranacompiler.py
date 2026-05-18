@@ -40,32 +40,90 @@ This Python file is intended to be used via the scripts in
 `Scripts/Restriction/*.py` only.
 """
 
-
-import os
 import itertools
-import time
-import sys
-import shutil
 import optparse
+import os
+import shutil
+import sys
+import time
 
-from Bio.Seq import Seq
-from Bio.Data.IUPACData import ambiguous_dna_values as amb_dna
+from rebase_update import get_files
+from rebase_update import release_number
 
 import Bio.Restriction.Restriction
-from Bio.Restriction.Restriction import AbstractCut, RestrictionType, NoCut
-from Bio.Restriction.Restriction import OneCut, TwoCuts, Meth_Dep, Meth_Undep
-from Bio.Restriction.Restriction import Palindromic, NonPalindromic, Unknown
-from Bio.Restriction.Restriction import Blunt, Ov5, Ov3
-from Bio.Restriction.Restriction import NotDefined, Defined, Ambiguous
-from Bio.Restriction.Restriction import Commercially_available, Not_available
-
-from rebase_update import release_number, get_files
-
+from Bio.Data.IUPACData import ambiguous_dna_values as amb_dna
+from Bio.Restriction.Restriction import AbstractCut
+from Bio.Restriction.Restriction import Ambiguous
+from Bio.Restriction.Restriction import Blunt
+from Bio.Restriction.Restriction import Commercially_available
+from Bio.Restriction.Restriction import Defined
+from Bio.Restriction.Restriction import Meth_Dep
+from Bio.Restriction.Restriction import Meth_Undep
+from Bio.Restriction.Restriction import NoCut
+from Bio.Restriction.Restriction import NonPalindromic
+from Bio.Restriction.Restriction import Not_available
+from Bio.Restriction.Restriction import NotDefined
+from Bio.Restriction.Restriction import OneCut
+from Bio.Restriction.Restriction import Ov3
+from Bio.Restriction.Restriction import Ov5
+from Bio.Restriction.Restriction import Palindromic
+from Bio.Restriction.Restriction import RestrictionType
+from Bio.Restriction.Restriction import TwoCuts
+from Bio.Restriction.Restriction import Unknown
+from Bio.Seq import Seq
 
 enzymedict = {}
 suppliersdict = {}
 classdict = {}
 typedict = {}
+
+
+def parse_enzyme_records(handle):
+    """Parse ENZYME records.
+
+    This function is for parsing ENZYME files containing multiple
+    records.
+
+    Arguments:
+     - handle   - handle to the file.
+
+    """
+    while True:
+        record = read_enzyme_record(handle)
+        if not record:
+            break
+        yield record
+
+
+def read_enzyme_record(handle):
+    """Read a single Enzyme record.
+
+    Enzyme record read format is adapted from Bio.ExPASy.Enzyme, but must be
+    able to read an accession field that is not used by Bio.ExPASy.Enzyme.
+    """
+    record = None
+    for line in handle:
+        key, value = line[:2], line[5:].rstrip()
+        if key == "ID":
+            record = {"ID": value}
+        elif key == "AC":
+            record["AC"] = value
+        elif key == "//":
+            if record:
+                return record
+            else:  # This was the copyright notice
+                continue
+    if record:
+        raise ValueError("Unexpected end of stream")
+
+
+def load_enzyme_ids(file) -> dict[str, int]:
+    """Load enzyme identifiers from bairoch-format file."""
+    with open(file) as in_file:
+        return {
+            record["ID"]: int(record["AC"].removeprefix("RB").removesuffix(";"))
+            for record in parse_enzyme_records(in_file)
+        }
 
 
 def double_quote_repr(value):  # TODO similar not to produce long horizontal lists
@@ -91,8 +149,6 @@ def double_quote_repr(value):  # TODO similar not to produce long horizontal lis
 
 class OverhangError(ValueError):
     """Exception for dealing with overhang."""
-
-    pass
 
 
 def regex(site):
@@ -125,8 +181,13 @@ def is_palindrome(sequence):
 class newenzyme:
     """Construct the attributes of the enzyme corresponding to 'name'."""
 
-    def __init__(cls, name):
+    def __init__(cls, name, id):
         """Set up the enzyme's attributes."""
+        cls.id = id
+        if id:
+            cls.uri = f"https://identifiers.org/rebase:{cls.id}"
+        else:
+            cls.uri = None
         cls.opt_temp = 37
         cls.inact_temp = 65
         cls.substrat = "DNA"
@@ -274,7 +335,6 @@ class TypeCompiler:
 
     def __init__(self):
         """TypeCompiler() -> new TypeCompiler instance."""
-        pass
 
     def buildtype(self):
         """Build new types that will be needed for constructing the enzymes."""
@@ -333,16 +393,16 @@ class TypeCompiler:
                 """Dynamically defined restriction enzyme class."""
 
                 def __new__(cls):
-                    return type.__new__(cls, f"type{n:d}", ty, dct)
+                    return type.__new__(cls, f"type{n:d}", ty, dct)  # noqa: B023
 
                 def __init__(cls):
-                    super().__init__(f"type{n:d}", ty, dct)
+                    super().__init__(f"type{n:d}", ty, dct)  # noqa: B023
 
             yield klass()
             n += 1
 
 
-start = '''#!/usr/bin/env python
+start = f'''#!/usr/bin/env python
 #      Copyright (C) 2004. Frederic Sohm.
 #
 # This code is part of the Biopython distribution and governed by its
@@ -356,12 +416,10 @@ start = '''#!/usr/bin/env python
 
 """Restriction Analysis Libraries.
 
-Used REBASE emboss files version {} ({}).
+Used REBASE emboss files version {release_number} ({time.gmtime().tm_year}).
 """
 
-'''.format(
-    release_number, time.gmtime().tm_year
-)
+'''
 
 
 class DictionaryBuilder:
@@ -376,7 +434,7 @@ class DictionaryBuilder:
         #
         #   first parse the emboss files.
         #
-        emboss_e, emboss_r, emboss_s = self.lastrebasefile()
+        emboss_e, emboss_r, emboss_s, enzyme_id_dict = self.lastrebasefile()
         #
         #   the results will be stored into enzymedict.
         #
@@ -402,7 +460,12 @@ class DictionaryBuilder:
             #
             #   the class attributes first:
             #
-            cls = newenzyme(name)
+            try:
+                enzyme_id = enzyme_id_dict[name]
+            except KeyError:
+                print(f"Could not find REBASE enzyme ID for {name}: omitting")
+                enzyme_id = None
+            cls = newenzyme(name, enzyme_id)
             #
             #   Now select the right type for the enzyme.
             #
@@ -589,11 +652,12 @@ class DictionaryBuilder:
         #   first check if we have the last update:
         #
         emboss_now = [".".join((x, release_number)) for x in embossnames]
+        bairoch_now = f"bairoch.{release_number}"
         update_needed = False
         # dircontent = os.listdir(config.Rebase) #    local database content
         dircontent = os.listdir(os.getcwd())
         base = os.getcwd()  # added for biopython current directory
-        for name in emboss_now:
+        for name in emboss_now + [bairoch_now]:
             if name not in dircontent:
                 update_needed = True
 
@@ -601,8 +665,12 @@ class DictionaryBuilder:
             #
             #   nothing to be done
             #
-            print("\n Using the files : %s" % ", ".join(emboss_now))
-            return tuple(open(os.path.join(base, n)) for n in emboss_now)
+            print("\n Using the bairoch file : %s" % bairoch_now)
+            enzyme_id_dict = load_enzyme_ids(bairoch_now)
+            print("\n Using the emboss files : %s" % ", ".join(emboss_now))
+            return tuple(open(os.path.join(base, n)) for n in emboss_now) + (
+                enzyme_id_dict,
+            )
         else:
             #
             #   may be download the files.
@@ -875,7 +943,7 @@ class DictionaryBuilder:
 
     def removestart(self, file):
         """Remove the header of the file."""
-        return list(itertools.dropwhile(lambda l: l.startswith("#"), file))
+        return list(itertools.dropwhile(lambda line: line.startswith("#"), file))
 
     def getblock(self, file, index):
         """Get a data block from the emboss_r file."""
@@ -883,7 +951,7 @@ class DictionaryBuilder:
         #   emboss_r.txt, separation between blocks is //
         #
         take = itertools.takewhile
-        block = list(take(lambda l: not l.startswith("//"), file[index:]))
+        block = list(take(lambda line: not line.startswith("//"), file[index:]))
         index += len(block) + 1
         return block, index
 

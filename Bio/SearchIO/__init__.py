@@ -24,7 +24,7 @@ the search output file:
 In addition to the four objects above, SearchIO is also tightly integrated with
 the SeqRecord objects (see SeqIO) and MultipleSeqAlignment objects (see
 AlignIO). SeqRecord objects are used to store the actual matching hit and query
-sequences, while MultipleSeqAlignment objects stores the alignment between them.
+sequences, while MultipleSeqAlignment objects store the alignment between them.
 
 A detailed description of these objects' features and their example usages are
 available in their respective documentations.
@@ -50,7 +50,7 @@ that yields one QueryResult object per iteration.
 SearchIO also provides the Bio.SearchIO.read(...) function, which is intended
 for use on search output files containing only one query. ``read`` returns one
 QueryResult object and will raise an exception if the source file contains more
-than one queries:
+than one query:
 
     >>> qresult = SearchIO.read('Blast/xml_2226_blastp_004.xml', 'blast-xml')
     >>> print("%s %s" % (qresult.id, qresult.description))
@@ -70,7 +70,7 @@ of optional, format-specific keyword arguments.
 
 Output
 ======
-SearchIO has writing support for several formats, accessible from the
+SearchIO has write support for several formats, accessible from the
 Bio.SearchIO.write(...) function. This function returns a tuple of four
 numbers: the number of QueryResult, Hit, HSP, and HSPFragment written::
 
@@ -94,7 +94,7 @@ SearchIO provides a shortcut function Bio.SearchIO.convert(...) to convert a
 given file into another format. Under the hood, ``convert`` simply parses a given
 output file and writes it to another using the ``parse`` and ``write`` functions.
 
-Note that the same restrictions found in Bio.SearchIO.write(...) applies to the
+Note that the same restrictions found in Bio.SearchIO.write(...) apply to the
 convert function as well.
 
 
@@ -131,10 +131,8 @@ and 28 again.
 Sequence coordinate order
 -------------------------
 
-Some search output format reverses the start and end coordinate sequences
-according to the sequence's strand. For example, in BLAST plain text
-format if the matching strand lies in the minus orientation, then the
-start coordinate will always be bigger than the end coordinate.
+Some search output formats reverse the start and end coordinate sequences
+according to the sequence's strand.
 
 In SearchIO, start coordinates are always smaller than the end
 coordinates, regardless of their originating strand. This ensures
@@ -184,10 +182,12 @@ Support for parsing and indexing:
                       subprograms are hmmscan, hmmsearch, and phmmer.
  - hmmer2-text      - HMMER2 regular text output format. Supported HMMER2
                       subprograms are hmmpfam, hmmsearch.
+ - infernal-tab     - Infernal tabular output.
+ - infernal-text    - Infernal regular text output. Supported Infernal
+                      subprograms are cmsearch and cmscan.
 
 Support for parsing:
 
- - blast-text       - BLAST+ plain text output.
  - hhsuite2-text    - HHSUITE plain text output.
 
 Each of these formats have different keyword arguments available for use with
@@ -197,9 +197,11 @@ of the format's documentation.
 """
 
 from Bio.File import as_handle
-from Bio.SearchIO._model import QueryResult, Hit, HSP, HSPFragment
+from Bio.SearchIO._model import Hit
+from Bio.SearchIO._model import HSP
+from Bio.SearchIO._model import HSPFragment
+from Bio.SearchIO._model import QueryResult
 from Bio.SearchIO._utils import get_processor
-
 
 __all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
 
@@ -207,7 +209,6 @@ __all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
 # dictionary of supported formats for parse() and read()
 _ITERATOR_MAP = {
     "blast-tab": ("BlastIO", "BlastTabParser"),
-    "blast-text": ("BlastIO", "BlastTextParser"),
     "blast-xml": ("BlastIO", "BlastXmlParser"),
     "blat-psl": ("BlatIO", "BlatPslParser"),
     "exonerate-cigar": ("ExonerateIO", "ExonerateCigarParser"),
@@ -223,6 +224,8 @@ _ITERATOR_MAP = {
     # as we need it distinguish hit / target coordinates
     "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitParser"),
     "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
+    "infernal-tab": ("InfernalIO", "InfernalTabParser"),
+    "infernal-text": ("InfernalIO", "InfernalTextParser"),
     "interproscan-xml": ("InterproscanIO", "InterproscanXmlParser"),
     "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryParser"),
 }
@@ -241,6 +244,8 @@ _INDEXER_MAP = {
     "hmmer3-tab": ("HmmerIO", "Hmmer3TabIndexer"),
     "hmmscan3-domtab": ("HmmerIO", "Hmmer3DomtabHmmhitIndexer"),
     "hmmsearch3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
+    "infernal-tab": ("InfernalIO", "InfernalTabIndexer"),
+    "infernal-text": ("InfernalIO", "InfernalTextIndexer"),
     "phmmer3-domtab": ("HmmerIO", "Hmmer3DomtabHmmqueryIndexer"),
 }
 
@@ -329,14 +334,14 @@ def read(handle, format=None, **kwargs):
     ...
     ValueError: No query results found in handle
 
-    Similarly, if the given handle has more than one results, an exception will
-    also be raised:
+    Similarly, if the given handle has more than one result, an exception will
+    be raised:
 
     >>> from Bio import SearchIO
     >>> qresult = SearchIO.read('Blast/tab_2226_tblastn_001.txt', 'blast-tab')
     Traceback (most recent call last):
     ...
-    ValueError: More than one query results found in handle
+    ValueError: More than one query result found in handle
 
     Like ``parse``, ``read`` may also accept keyword argument(s) depending on the
     search output file format.
@@ -350,7 +355,7 @@ def read(handle, format=None, **kwargs):
         raise ValueError("No query results found in handle") from None
     try:
         next(query_results)
-        raise ValueError("More than one query results found in handle")
+        raise ValueError("More than one query result found in handle")
     except StopIteration:
         pass
 
@@ -433,7 +438,7 @@ def index(filename, format=None, key_function=None, **kwargs):
     given QueryResult object much faster than using parse or read.
 
     Index works by storing in-memory the start locations of all queries in a
-    file. When a user requested access to the query, this function will jump
+    file. When a user requests access to the query, this function will jump
     to its start position, parse the whole query, and return it as a
     QueryResult object:
 

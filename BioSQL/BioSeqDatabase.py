@@ -15,12 +15,10 @@
 This provides interfaces for loading biological objects from a relational
 database, and is compatible with the BioSQL standards.
 """
-import os
 
 from . import BioSeq
-from . import Loader
 from . import DBUtils
-
+from . import Loader
 
 _POSTGRES_RULES_PRESENT = False  # Hack for BioSQL Bug 2839
 
@@ -49,25 +47,12 @@ def open_database(driver="MySQLdb", **kwargs):
             "Using BioSQL with psycopg (version one) is no "
             "longer supported. Use psycopg2 instead."
         )
-
-    if os.name == "java":
-        from com.ziclix.python.sql import zxJDBC
-
-        module = zxJDBC
-        if driver in ["MySQLdb"]:
-            jdbc_driver = "com.mysql.jdbc.Driver"
-            url_pref = "jdbc:mysql://" + kwargs["host"] + "/"
-        elif driver in ["psycopg2"]:
-            jdbc_driver = "org.postgresql.Driver"
-            url_pref = "jdbc:postgresql://" + kwargs["host"] + "/"
-
-    else:
-        module = __import__(driver, fromlist=["connect"])
+    module = __import__(driver, fromlist=["connect"])
     connect = module.connect
 
     # Different drivers use different keywords...
     kw = kwargs.copy()
-    if driver in ["MySQLdb", "mysql.connector"] and os.name != "java":
+    if driver in ["MySQLdb", "mysql.connector"]:
         if "database" in kw:
             kw["db"] = kw["database"]
             del kw["database"]
@@ -87,30 +72,12 @@ def open_database(driver="MySQLdb", **kwargs):
     if driver in ["psycopg2", "pgdb"] and not kw.get("database"):
         kw["database"] = "template1"
     # SQLite connect takes the database name as input
-    if os.name == "java":
-        if driver in ["MySQLdb"]:
-            conn = connect(
-                url_pref + kw.get("database", "mysql"),
-                kw["user"],
-                kw["password"],
-                jdbc_driver,
-            )
-        elif driver in ["psycopg2"]:
-            conn = connect(
-                url_pref + kw.get("database", "postgresql") + "?stringtype=unspecified",
-                kw["user"],
-                kw["password"],
-                jdbc_driver,
-            )
-    elif driver in ["sqlite3"]:
+    if driver in ["sqlite3"]:
         conn = connect(kw["database"])
     else:
         conn = connect(**kw)
 
-    if os.name == "java":
-        server = DBServer(conn, module, driver)
-    else:
-        server = DBServer(conn, module)
+    server = DBServer(conn, module)
 
     # Sets MySQL to allow double quotes, rather than only backticks
     if driver in ["MySQLdb", "mysql.connector"]:
@@ -126,6 +93,7 @@ def open_database(driver="MySQLdb", **kwargs):
         )
         if server.adaptor.execute_and_fetchall(sql):
             import warnings
+
             from Bio import BiopythonWarning
 
             warnings.warn(
@@ -237,8 +205,7 @@ class DBServer:
         """Add a new database to the server and return it."""
         # make the database
         sql = (
-            "INSERT INTO biodatabase (name, authority, description)"
-            " VALUES (%s, %s, %s)"
+            "INSERT INTO biodatabase (name, authority, description) VALUES (%s, %s, %s)"
         )
         self.adaptor.execute(sql, (db_name, authority, description))
         return BioSeqDatabase(self.adaptor, db_name)
@@ -312,7 +279,7 @@ class _CursorWrapper:
         """Decode any bytestrings present in the row (PRIVATE)."""
         tuple_list = list(tuple_)
         for i, elem in enumerate(tuple_list):
-            if type(elem) is bytes:
+            if isinstance(elem, bytes):
                 tuple_list[i] = elem.decode("utf-8")
         return tuple(tuple_list)
 
@@ -536,19 +503,16 @@ class Adaptor:
         """Execute sql that returns 1 record, and return the record."""
         self.execute(sql, args or ())
         rv = self.cursor.fetchall()
-        assert len(rv) == 1, "Expected 1 response, got %d" % len(rv)
+        if len(rv) != 1:
+            raise ValueError(f"Expected 1 response, got {len(rv)}.")
         return rv[0]
 
     def execute(self, sql, args=None):
         """Just execute an sql command."""
-        if os.name == "java":
-            sql = sql.replace("%s", "?")
         self.dbutils.execute(self.cursor, sql, args)
 
     def executemany(self, sql, args):
         """Execute many sql commands."""
-        if os.name == "java":
-            sql = sql.replace("%s", "?")
         self.dbutils.executemany(self.cursor, sql, args)
 
     def get_subseq_as_string(self, seqid, start, end):
@@ -806,7 +770,6 @@ class BioSeqDatabase:
         """
         db_loader = Loader.DatabaseLoader(self.adaptor, self.dbid, fetch_NCBI_taxonomy)
         num_records = 0
-        global _POSTGRES_RULES_PRESENT
         for cur_record in record_iterator:
             num_records += 1
             # Hack to work around BioSQL Bug 2839 - If using PostgreSQL and

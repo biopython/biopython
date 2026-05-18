@@ -5,10 +5,8 @@
 
 """Generate output for PAML tests."""
 
-
 import os.path
 import sys
-
 
 VERSIONS = ["4_1", "4_3", "4_4", "4_4c", "4_5", "4_6", "4_7", "4_8", "4_9a", "4_9i"]
 
@@ -65,7 +63,7 @@ def baseml(vers=None, verbose=False):
     else:
         versions = VERSIONS
     tests = [
-        ("model", list(range(0, 9))),
+        ("model", list(range(9))),
         ("nhomo", [1, 3, 4]),
         ("nparK", list(range(1, 5))),
         ("alpha1rho1", None),

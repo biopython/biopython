@@ -5,23 +5,15 @@
 
 """Output of PDB files."""
 
-
+import os
 import warnings
 
-# Exceptions and Warnings
-from Bio import BiopythonWarning
-from Bio.PDB.PDBExceptions import PDBIOException
-
-# To allow saving of chains, residues, etc..
+from Bio.Data.IUPACData import atom_weights
+from Bio.PDB.PDBExceptions import PDBIOException, PDBIOWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
 
-# Allowed Elements
-from Bio.Data.IUPACData import atom_weights
+_ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%s      %4s%2s%2s\n"
 
-
-_ATOM_FORMAT_STRING = (
-    "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%6.2f      %4s%2s%2s\n"
-)
 _PQR_ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
 )
@@ -29,6 +21,42 @@ _PQR_ATOM_FORMAT_STRING = (
 _TER_FORMAT_STRING = (
     "TER   %5i      %3s %c%4i%c                                                      \n"
 )
+
+_MAX_B_FACTOR_2DP = 1_000
+_MAX_B_FACTOR_1DP = 10_000
+_MAX_B_FACTOR = 999_999
+
+
+def _format_b_factor(value: float) -> str:
+    """Returns the b-factor value as a formatted string
+
+    Formats the b-factor value to fit the wwPDB specification of 6 characters
+    maximum, otherwise truncating to 6 characters if necessary.
+    """
+    _bfactor_str = ""
+    if value < _MAX_B_FACTOR_2DP:
+        if len(f"{value:.2f}") > 6:
+            _bfactor_str = f"{value:6.1f}"
+        else:
+            _bfactor_str = f"{value:6.2f}"
+    elif value < _MAX_B_FACTOR_1DP:
+        if len(f"{value:.1f}") > 6:
+            _bfactor_str = f"{value:6.0f}"
+        else:
+            _bfactor_str = f"{value:6.1f}"
+    elif value < _MAX_B_FACTOR:
+        _bfactor_str = f"{int(value):6d}"
+    else:
+        warnings.warn(
+            f"Truncated bfactor {value!r} to {_MAX_B_FACTOR} to fit wwPDB spec."
+            " Consider using mmCIF instead!",
+            PDBIOWarning,
+        )
+        _bfactor_str = f"{_MAX_B_FACTOR:6d}"
+
+    assert len(_bfactor_str) <= 6
+
+    return _bfactor_str
 
 
 class Select:
@@ -67,7 +95,6 @@ class StructureIO:
 
     def __init__(self):
         """Initialise."""
-        pass
 
     def set_structure(self, pdb_object):
         """Check what the user is providing and build a structure."""
@@ -169,10 +196,6 @@ class PDBIO(StructureIO):
         else:
             record_type = "ATOM  "
 
-        # Ensure chain id isn't longer than 1 character
-        if len(chain_id) > 1:
-            raise ValueError(f"Chain ID must be of length 1: {chain_id!r} > 1")
-
         # Atom properties
 
         # Check if the atom serial number is an integer
@@ -187,6 +210,11 @@ class PDBIO(StructureIO):
                 " If you are converting from an mmCIF"
                 " structure, try using"
                 " preserve_atom_numbering=False"
+            )
+
+        if atom_number > 99999:
+            raise ValueError(
+                f"Atom serial number ('{atom_number}') exceeds PDB format limit."
             )
 
         # Check if the element is valid, unknown (X), or blank
@@ -220,12 +248,14 @@ class PDBIO(StructureIO):
                     occupancy = " " * 6
                     warnings.warn(
                         f"Missing occupancy in atom {atom.full_id!r} written as blank",
-                        BiopythonWarning,
+                        PDBIOWarning,
                     )
                 else:
                     raise ValueError(
                         f"Invalid occupancy value: {atom.occupancy!r}"
                     ) from None
+
+            bfactor = _format_b_factor(bfactor)
 
             args = (
                 record_type,
@@ -245,6 +275,7 @@ class PDBIO(StructureIO):
                 element,
                 charge,
             )
+
             return _ATOM_FORMAT_STRING % args
 
         # Write PQR format line
@@ -256,7 +287,7 @@ class PDBIO(StructureIO):
                     pqr_charge = " " * 7
                     warnings.warn(
                         f"Missing PQR charge in atom {atom.full_id} written as blank",
-                        BiopythonWarning,
+                        PDBIOWarning,
                     )
                 else:
                     raise ValueError(
@@ -270,7 +301,7 @@ class PDBIO(StructureIO):
                     radius = " " * 6
                     warnings.warn(
                         f"Missing radius in atom {atom.full_id} written as blank",
-                        BiopythonWarning,
+                        PDBIOWarning,
                     )
                 else:
                     raise ValueError(f"Invalid radius value: {atom.radius}") from None
@@ -294,8 +325,33 @@ class PDBIO(StructureIO):
 
             return _PQR_ATOM_FORMAT_STRING % args
 
-    # Public methods
+    @staticmethod
+    def _revert_write(handle, truncate_to=None, delete_file=False):
+        """Revert data written to file by removing the file or truncating it.
 
+        This method is used when the writer throws an exception, to avoid
+        writing incomplete files that might confuse users or workflows.
+        """
+        if delete_file:
+            try:
+                handle.close()
+                os.remove(handle.name)
+            except OSError as err:
+                # Windows can be finnicky with closing
+                # file and deleting them, raising PermissionError
+                pass
+        elif truncate_to is not None:
+            # If the user gave a file handle, seek back to the
+            # starting position and truncate the file from there
+            # on. Note that the truncation depends on how we
+            # opened the file, but we assume the file was opened
+            # for writing/appending anyway.
+            handle.seek(truncate_to)
+            handle.truncate()
+        else:
+            raise Exception("One of 'truncate_to' or 'delete_file' must be provided")
+
+    # Public methods
     def save(self, file, select=_select, write_end=True, preserve_atom_numbering=False):
         """Save structure to a file.
 
@@ -322,80 +378,108 @@ class PDBIO(StructureIO):
             fhandle = open(file, "w")
         else:
             # filehandle, I hope :-)
+            fd_position = file.tell()
             fhandle = file
 
-        with fhandle:
-            get_atom_line = self._get_atom_line
+        get_atom_line = self._get_atom_line
 
-            # multiple models?
-            if len(self.structure) > 1 or self.use_model_flag:
-                model_flag = 1
-            else:
-                model_flag = 0
+        # multiple models?
+        if len(self.structure) > 1 or self.use_model_flag:
+            model_flag = 1
+        else:
+            model_flag = 0
 
-            for model in self.structure.get_list():
-                if not select.accept_model(model):
+        for model in self.structure.get_list():
+            if not select.accept_model(model):
+                continue
+            # necessary for ENDMDL
+            # do not write ENDMDL if no residues were written
+            # for this model
+            model_residues_written = 0
+            if not preserve_atom_numbering:
+                atom_number = 1
+            if model_flag:
+                fhandle.write(f"MODEL      {model.serial_num}\n")
+
+            for chain in model.get_list():
+                if not select.accept_chain(chain):
                     continue
-                # necessary for ENDMDL
-                # do not write ENDMDL if no residues were written
-                # for this model
-                model_residues_written = 0
-                if not preserve_atom_numbering:
-                    atom_number = 1
-                if model_flag:
-                    fhandle.write(f"MODEL      {model.serial_num}\n")
+                chain_id = chain.id
+                if len(chain_id) > 1:
+                    if isinstance(file, str):
+                        self._revert_write(fhandle, delete_file=True)
+                    else:
+                        self._revert_write(fhandle, truncate_to=fd_position)
+                    raise PDBIOException(
+                        f"Chain id ('{chain_id}') exceeds PDB format limit."
+                    )
 
-                for chain in model.get_list():
-                    if not select.accept_chain(chain):
+                # necessary for TER
+                # do not write TER if no residues were written
+                # for this chain
+                chain_residues_written = 0
+
+                for residue in chain.get_unpacked_list():
+                    if not select.accept_residue(residue):
                         continue
-                    chain_id = chain.id
+                    hetfield, resseq, icode = residue.id
+                    resname = residue.resname
+                    segid = residue.segid
+                    resid = residue.id[1]
+                    if resid > 9999:
+                        if isinstance(file, str):
+                            self._revert_write(fhandle, delete_file=True)
+                        else:
+                            self._revert_write(fhandle, truncate_to=fd_position)
 
-                    # necessary for TER
-                    # do not write TER if no residues were written
-                    # for this chain
-                    chain_residues_written = 0
-
-                    for residue in chain.get_unpacked_list():
-                        if not select.accept_residue(residue):
-                            continue
-                        hetfield, resseq, icode = residue.id
-                        resname = residue.resname
-                        segid = residue.segid
-                        for atom in residue.get_unpacked_list():
-                            if select.accept_atom(atom):
-                                chain_residues_written = 1
-                                model_residues_written = 1
-                                if preserve_atom_numbering:
-                                    atom_number = atom.serial_number
-
-                                try:
-                                    s = get_atom_line(
-                                        atom,
-                                        hetfield,
-                                        segid,
-                                        atom_number,
-                                        resname,
-                                        resseq,
-                                        icode,
-                                        chain_id,
-                                    )
-                                except Exception as err:
-                                    # catch and re-raise with more information
-                                    raise PDBIOException(
-                                        f"Error when writing atom {atom.full_id}"
-                                    ) from err
-                                else:
-                                    fhandle.write(s)
-                                    # inconsequential if preserve_atom_numbering is True
-                                    atom_number += 1
-
-                    if chain_residues_written:
-                        fhandle.write(
-                            _TER_FORMAT_STRING
-                            % (atom_number, resname, chain_id, resseq, icode)
+                        raise PDBIOException(
+                            f"Residue number ('{resid}') exceeds PDB format limit."
                         )
 
-                if model_flag and model_residues_written:
-                    fhandle.write("ENDMDL\n")
-            if write_end:
-                fhandle.write("END   \n")
+                    for atom in residue.get_unpacked_list():
+                        if not select.accept_atom(atom):
+                            continue
+                        chain_residues_written = 1
+                        model_residues_written = 1
+                        if preserve_atom_numbering:
+                            atom_number = atom.serial_number
+
+                        try:
+                            s = get_atom_line(
+                                atom,
+                                hetfield,
+                                segid,
+                                atom_number,
+                                resname,
+                                resseq,
+                                icode,
+                                chain_id,
+                            )
+                        except Exception as err:
+                            if isinstance(file, str):
+                                self._revert_write(fhandle, delete_file=True)
+                            else:
+                                self._revert_write(fhandle, truncate_to=fd_position)
+
+                            # catch and re-raise with more information
+                            raise PDBIOException(
+                                f"Error when writing atom {atom.full_id}: {err}"
+                            ) from err
+                        else:
+                            fhandle.write(s)
+                            # inconsequential if preserve_atom_numbering is True
+                            atom_number += 1
+
+                if chain_residues_written:
+                    fhandle.write(
+                        _TER_FORMAT_STRING
+                        % (atom_number, resname, chain_id, resseq, icode)
+                    )
+
+            if model_flag and model_residues_written:
+                fhandle.write("ENDMDL\n")
+        if write_end:
+            fhandle.write("END   \n")
+
+        if isinstance(file, str):
+            fhandle.close()

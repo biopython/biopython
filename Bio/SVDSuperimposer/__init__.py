@@ -12,10 +12,12 @@ eg. useful to superimpose crystal structures. SVD stands for singular
 value decomposition, which is used in the algorithm.
 """
 
-
 try:
-    from numpy import dot, transpose, sqrt
-    from numpy.linalg import svd, det
+    from numpy import dot
+    from numpy import sqrt
+    from numpy import transpose
+    from numpy.linalg import det
+    from numpy.linalg import svd
 except ImportError:
     from Bio import MissingPythonDependencyError
 
@@ -84,15 +86,15 @@ class SVDSuperimposer:
 
     >>> set_printoptions(precision=2)
     >>> print(y_on_x1)
-    [[  5.17e+01  -1.90e+00   5.01e+01]
-     [  5.04e+01  -1.23e+00   5.06e+01]
-     [  5.07e+01  -4.16e-02   5.15e+01]
-     [  5.02e+01  -1.94e-02   5.29e+01]]
+    [[ 5.17e+01 -1.90e+00  5.01e+01]
+     [ 5.04e+01 -1.23e+00  5.06e+01]
+     [ 5.07e+01 -4.16e-02  5.15e+01]
+     [ 5.02e+01 -1.94e-02  5.29e+01]]
     >>> print(y_on_x2)
-    [[  5.17e+01  -1.90e+00   5.01e+01]
-     [  5.04e+01  -1.23e+00   5.06e+01]
-     [  5.07e+01  -4.16e-02   5.15e+01]
-     [  5.02e+01  -1.94e-02   5.29e+01]]
+    [[ 5.17e+01 -1.90e+00  5.01e+01]
+     [ 5.04e+01 -1.23e+00  5.06e+01]
+     [ 5.07e+01 -4.16e-02  5.15e+01]
+     [ 5.02e+01 -1.94e-02  5.29e+01]]
     >>> print("%.2f" % rms)
     0.00
 

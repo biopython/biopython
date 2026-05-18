@@ -6,6 +6,7 @@
 """Tests for Chi2 module."""
 
 import unittest
+
 from Bio.Phylo.PAML import chi2
 
 

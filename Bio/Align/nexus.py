@@ -13,12 +13,16 @@ See also the Bio.Nexus module (which this code calls internally),
 as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
-import Bio
+
+from io import StringIO
+
+import numpy as np
+
 from Bio.Align import Alignment
 from Bio.Align import interfaces
+from Bio.Nexus import Nexus
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio.Nexus import Nexus
 
 
 class AlignmentWriter(interfaces.AlignmentWriter):
@@ -30,26 +34,55 @@ class AlignmentWriter(interfaces.AlignmentWriter):
     You are expected to call this class via Bio.Align.write().
     """
 
-    def write_file(self, alignments):
+    fmt = "Nexus"
+
+    def __init__(self, target, interleave=None):
+        """Create an AlignmentWriter object.
+
+        Arguments:
+         - target     - output stream or file name
+         - interleave - if None (default): interleave if columns > 1000
+                        if True: use interleaved format
+                        if False: do not use interleaved format
+
+        """
+        super().__init__(target)
+        self.interleave = interleave
+
+    def write_file(self, stream, alignments):
         """Write a file with the alignments, and return the number of alignments.
 
         alignments - A list or iterator returning Alignment objects
         """
-        count = super().write_file(alignments, mincount=1, maxcount=1)
+        count = super().write_file(stream, alignments)
+        if count != 1:
+            raise ValueError("Expected to write 1 alignment; wrote %d" % count)
         return count
 
-    def write_header(self, alignments):
-        """Use this to write the file header."""
-        stream = self.stream
-        stream.write("#NEXUS\n")
-
-    def write_alignment(self, alignment, interleave=None):
-        """Write an alignment to file.
+    def format_alignment(self, alignment, interleave=None):
+        """Return a string with a single alignment in the Nexus format.
 
         Creates an empty Nexus object, adds the sequences
         and then gets Nexus to prepare the output.
-        Default interleave behavior: Interleave if columns > 1000
-        --> Override with interleave=[True/False]
+
+         - alignment  - An Alignment object
+         - interleave - if None (default): interleave if columns > 1000
+                        if True: use interleaved format
+                        if False: do not use interleaved format
+        """
+        stream = StringIO()
+        self.write_alignment(alignment, stream, interleave)
+        stream.seek(0)
+        return stream.read()
+
+    def write_alignment(self, alignment, stream, interleave=None):
+        """Write a single alignment to the output file.
+
+        - alignment  - An Alignment object
+        - stream     - output stream
+        - interleave - if None (default): interleave if columns > 1000
+                       if True: use interleaved format
+                       if False: do not use interleaved format
         """
         nseqs, length = alignment.shape
         if nseqs == 0:
@@ -57,7 +90,6 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if length == 0:
             raise ValueError("Non-empty sequences are required")
 
-        stream = self.stream
         rows, columns = alignment.shape
         if rows == 0:
             raise ValueError("Must have at least one sequence")
@@ -80,6 +112,18 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if interleave is None:
             interleave = columns > 1000
         n.write_nexus_data(stream, interleave=interleave)
+
+    def write_alignments(self, stream, alignments):
+        """Write alignments to the output file, and return the number of alignments.
+
+        alignments - A list or iterator returning Alignment objects
+        """
+        count = 0
+        interleave = self.interleave
+        for alignment in alignments:
+            self.write_alignment(alignment, stream, interleave=interleave)
+            count += 1
+        return count
 
     def _classify_mol_type_for_nexus(self, alignment):
         """Return 'protein', 'dna', or 'rna' based on records' molecule type (PRIVATE).
@@ -106,34 +150,18 @@ class AlignmentWriter(interfaces.AlignmentWriter):
 class AlignmentIterator(interfaces.AlignmentIterator):
     """Nexus alignment iterator."""
 
-    def __init__(self, source):
-        """Create an AlignmentIterator object.
+    fmt = "Nexus"
 
-        Arguments:
-         - source   - input data or file name
-
-        """
-        super().__init__(source, mode="t", fmt="Nexus")
-        stream = self.stream
-        try:
-            line = next(stream)
-        except StopIteration:
+    def _read_header(self, stream):
+        line = stream.readline()
+        if not line:
             raise ValueError("Empty file.") from None
 
         if line.strip() != "#NEXUS":
             raise ValueError("File does not start with NEXUS header.")
 
-    def parse(self, stream):
-        """Parse the next alignment from the stream.
-
-        This uses the Bio.Nexus module to do the hard work.
-
-        You are expected to call this function via Bio.Align
-        (and not use it directly).
-
-        NOTE - We only expect ONE alignment matrix per Nexus file,
-        meaning this iterator will only yield one Alignment.
-        """
+    def _read_next_alignment(self, stream):
+        # NOTE - We only expect ONE alignment matrix per Nexus file.
         n = Nexus.Nexus(stream)
         if not n.matrix:
             # No alignment found
@@ -152,15 +180,15 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             annotations = {"molecule_type": "protein"}
         else:
             annotations = None
-        aligned_seqs = [str(n.matrix[new_name]) for new_name in n.taxlabels]
+        aligned_seqs = [bytes(n.matrix[name]) for name in n.taxlabels]
+        seqs, coordinates = Alignment.parse_printed_alignment(aligned_seqs)
         records = [
-            SeqRecord(
-                n.matrix[new_name].replace("-", ""),
-                id=old_name,
-                annotations=annotations,
-            )
-            for old_name, new_name in zip(n.unaltered_taxlabels, n.taxlabels)
+            SeqRecord(Seq(seq), id=name, annotations=annotations)
+            for seq, name in zip(seqs, n.unaltered_taxlabels)
         ]
-        coordinates = Alignment.infer_coordinates(aligned_seqs)
+        # Remove columns consisting of gaps only
+        steps = np.diff(coordinates, 1).max(0)
+        indices = np.nonzero(steps == 0)[0] + 1
+        coordinates = np.delete(coordinates, indices, 1)
         alignment = Alignment(records, coordinates)
-        yield alignment
+        return alignment

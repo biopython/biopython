@@ -19,6 +19,7 @@ developed as an input format to the FASTA tools.  The Bio.AlignIO and
 Bio.SeqIO both use the Bio.SeqIO.FastaIO module to deal with these files,
 which can also be used to store a multiple sequence alignments.
 """
+
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -304,6 +305,7 @@ handle.name: {handle.name}
                 key, value = (s.strip() for s in line[2:].split(": ", 1))
             else:
                 import warnings
+
                 from Bio import BiopythonParserWarning
 
                 # Seen in lalign36, specifically version 36.3.4 Apr, 2011

@@ -12,6 +12,7 @@ multiple sequence alignment format.
 
 You are expected to use this module via the Bio.SeqIO functions.
 """
+
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
@@ -20,6 +21,8 @@ from .Interfaces import SequenceIterator
 
 class IgIterator(SequenceIterator):
     """Parser for IntelliGenetics files."""
+
+    modes = "t"
 
     def __init__(self, source):
         """Iterate over IntelliGenetics records (as SeqRecord objects).
@@ -36,9 +39,9 @@ class IgIterator(SequenceIterator):
 
         Examples
         --------
-        >>> with open("IntelliGenetics/TAT_mase_nuc.txt") as handle:
-        ...     for record in IgIterator(handle):
-        ...         print("%s length %i" % (record.id, len(record)))
+        >>> with open("IntelliGenetics/TAT_mase_nuc.txt") as stream:
+        ...     for record in IgIterator(stream):
+        ...         print(f"{record.id} length {len(record)}")
         ...
         A_U455 length 303
         B_HXB2R length 306
@@ -59,67 +62,60 @@ class IgIterator(SequenceIterator):
         SYK_SYK length 330
 
         """
-        super().__init__(source, mode="t", fmt="IntelliGenetics")
-
-    def parse(self, handle):
-        """Start parsing the file, and return a SeqRecord generator."""
-        records = self.iterate(handle)
-        return records
-
-    def iterate(self, handle):
-        """Iterate over the records in the IntelliGenetics file."""
-        # Skip any file header text before the first record (;; lines)
-        for line in handle:
+        super().__init__(source, fmt="IntelliGenetics")
+        for line in self.stream:
             if not line.startswith(";;"):
                 break
         else:
             # Empty file, or header only
-            return
+            line = None
+        self._line = line
 
+    def __next__(self):
+        """Iterate over the records in the IntelliGenetics file."""
+        line = self._line
+        if line is None:
+            raise StopIteration
         if line[0] != ";":
             raise ValueError(f"Records should start with ';' and not:\n{line!r}")
-        while line:
-            # Now iterate over the records
 
-            # Try and agree with SeqRecord convention from the GenBank parser,
-            # (and followed in the SwissProt parser) which stores the comments
-            # as a long string with newlines under annotations key 'comment'.
+        stream = self.stream
+        # Try and agree with SeqRecord convention from the GenBank parser,
+        # (and followed in the SwissProt parser) which stores the comments
+        # as a long string with newlines under annotations key 'comment'.
 
-            # Note some examples use "; ..." and others ";..."
-            comment_lines = []
-            while line.startswith(";"):
-                # TODO - Extract identifier from lines like "LOCUS\tB_SF2"?
-                comment_lines.append(line[1:].strip())
-                line = next(handle)
-            title = line.rstrip()
+        # Note some examples use "; ..." and others ";..."
+        comment_lines = []
+        while line.startswith(";"):
+            # TODO - Extract identifier from lines like "LOCUS\tB_SF2"?
+            comment_lines.append(line[1:].strip())
+            line = next(stream)
+        title = line.rstrip()
 
-            seq_lines = []
-            for line in handle:
-                if line[0] == ";":
-                    break
-                # Remove trailing whitespace, and any internal spaces
-                seq_lines.append(line.rstrip().replace(" ", ""))
-            else:
-                line = None
-            seq_str = "".join(seq_lines)
-            if seq_str.endswith("1"):
-                # Remove the optional terminator (digit one)
-                seq_str = seq_str[:-1]
-            if "1" in seq_str:
-                raise ValueError(
-                    "Potential terminator digit one found within sequence."
-                )
+        seq_lines = []
+        for line in stream:
+            if line[0] == ";":
+                break
+            # Remove trailing whitespace, and any internal spaces
+            seq_lines.append(line.rstrip().replace(" ", ""))
+        else:
+            line = None
+        seq_str = "".join(seq_lines)
+        if seq_str.endswith("1"):
+            # Remove the optional terminator (digit one)
+            seq_str = seq_str[:-1]
+        if "1" in seq_str:
+            raise ValueError("Potential terminator digit one found within sequence.")
 
-            # Return the record and then continue...
-            yield SeqRecord(
-                Seq(seq_str),
-                id=title,
-                name=title,
-                annotations={"comment": "\n".join(comment_lines)},
-            )
+        self._line = line
 
-        # We should be at the end of the file now
-        assert not line
+        # Return the record and then continue...
+        return SeqRecord(
+            Seq(seq_str),
+            id=title,
+            name=title,
+            annotations={"comment": "\n".join(comment_lines)},
+        )
 
 
 if __name__ == "__main__":

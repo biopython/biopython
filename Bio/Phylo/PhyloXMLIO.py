@@ -23,24 +23,11 @@ from xml.etree import ElementTree
 
 from Bio.Phylo import PhyloXML as PX
 
-
 # Recognize the phyloXML namespace when parsing
 # See http://effbot.org/zone/element-namespaces.htm
 NAMESPACES = {"phy": "http://www.phyloxml.org"}
 
-try:
-    register_namespace = ElementTree.register_namespace
-except AttributeError:
-    if not hasattr(ElementTree, "_namespace_map"):
-        # cElementTree needs the pure-Python xml.etree.ElementTree
-        from xml.etree import ElementTree as ET_py
-
-        ElementTree._namespace_map = ET_py._namespace_map
-
-    def register_namespace(prefix, uri):
-        """Set the namespace for ElementTree."""
-        ElementTree._namespace_map[uri] = prefix
-
+register_namespace = ElementTree.register_namespace
 
 for prefix, uri in NAMESPACES.items():
     register_namespace(prefix, uri)
@@ -56,8 +43,6 @@ class PhyloXMLError(Exception):
     module; this exception is for valid XML that breaks the phyloXML
     specification.
     """
-
-    pass
 
 
 # ---------------------------------------------------------

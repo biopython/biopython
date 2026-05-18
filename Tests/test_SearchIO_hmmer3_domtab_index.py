@@ -8,11 +8,11 @@
 import os
 import unittest
 
-from search_tests_common import CheckRaw, CheckIndex
+from search_tests_common import CheckIndex
+from search_tests_common import CheckRaw
 
 
 class HmmerDomtabRawCases(CheckRaw):
-
     fmt = "hmmscan3-domtab"
 
     def test_hmmerdomtab_30_multiple_first(self):

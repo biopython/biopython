@@ -1,11 +1,9 @@
 """Tests for SeqIO NibIO module."""
-import unittest
 
+import unittest
 from io import BytesIO
 
 from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
 
 
 class TestNibReaderWriter(unittest.TestCase):

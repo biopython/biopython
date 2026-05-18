@@ -247,10 +247,10 @@ If your data is in UTF-8 or any other incompatible encoding, you must use
 binary mode, and decode the appropriate fragments yourself.
 """
 
+import io
 import struct
 import sys
 import zlib
-
 from builtins import open as _open
 
 _bgzf_magic = b"\x1f\x8b\x08\x04"
@@ -442,8 +442,7 @@ def _load_bgzf_block(handle, text_mode=False):
         raise StopIteration
     if magic != _bgzf_magic:
         raise ValueError(
-            r"A BGZF (e.g. a BAM file) block should start with "
-            r"%r, not %r; handle.tell() now says %r"
+            r"A BGZF block should start with %r, not %r; handle.tell() now says %r"
             % (_bgzf_magic, magic, handle.tell())
         )
     gzip_mod_time, gzip_extra_flags, gzip_os, extra_len = struct.unpack(
@@ -494,7 +493,7 @@ def _load_bgzf_block(handle, text_mode=False):
 class BgzfReader:
     r"""BGZF reader, acts like a read only handle but seek/tell differ.
 
-    Let's use the BgzfBlocks function to have a peak at the BGZF blocks
+    Let's use the BgzfBlocks function to have a peek at the BGZF blocks
     in an example BAM file,
 
     >>> from builtins import open
@@ -597,8 +596,9 @@ class BgzfReader:
             raise ValueError(
                 "Must use a read mode like 'r' (default), 'rt', or 'rb' for binary"
             )
+        # If an open file was passed, make sure it was opened in binary mode.
         if fileobj:
-            if "b" not in fileobj.mode.lower():
+            if fileobj.read(0) != b"":
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
@@ -795,11 +795,16 @@ class BgzfWriter:
     """Define a BGZFWriter object."""
 
     def __init__(self, filename=None, mode="w", fileobj=None, compresslevel=6):
-        """Initilize the class."""
+        """Initialize the class."""
         if filename and fileobj:
             raise ValueError("Supply either filename or fileobj, not both")
         if fileobj:
-            if "b" not in fileobj.mode.lower():
+            # If an open file was passed, make sure it was opened in binary mode.
+            # This is a courtesy -- we can't detect mode for all file-like objects.
+            # Notably, `StringIO` does not have a `mode` attribute but plain files *do*.
+            if isinstance(fileobj, io.StringIO) or "b" not in getattr(
+                fileobj, "mode", "wb"
+            ):
                 raise ValueError("fileobj not opened in binary mode")
             handle = fileobj
         else:
@@ -817,7 +822,6 @@ class BgzfWriter:
     def _write_block(self, block):
         """Write provided data to file as a single BGZF compressed block (PRIVATE)."""
         # print("Saving %i bytes" % len(block))
-        start_offset = self._handle.tell()
         if len(block) > 65536:
             raise ValueError(f"{len(block)} Block length > 65536")
         # Giving a negative window bits means no gzip/zlib headers,

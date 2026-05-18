@@ -11,20 +11,17 @@
 
 """BLAST code for graphical Xbbtools tool."""
 
-
 import os
 import tempfile
 import threading
+from tkinter import messagebox
+from tkinter import Tk
 
-from tkinter import Tk, messagebox
-
-from Bio.Blast.Applications import (
-    NcbiblastnCommandline,
-    NcbiblastpCommandline,
-    NcbiblastxCommandline,
-    NcbitblastnCommandline,
-    NcbitblastxCommandline,
-)
+from Bio.Blast.Applications import NcbiblastnCommandline
+from Bio.Blast.Applications import NcbiblastpCommandline
+from Bio.Blast.Applications import NcbiblastxCommandline
+from Bio.Blast.Applications import NcbitblastnCommandline
+from Bio.Blast.Applications import NcbitblastxCommandline
 
 
 class BlastDisplayer:

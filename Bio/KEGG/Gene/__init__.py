@@ -15,9 +15,9 @@ Classes:
 
 """
 
-
-from Bio.KEGG import _default_wrap, _wrap_kegg, _write_kegg
-
+from Bio.KEGG import _default_wrap
+from Bio.KEGG import _wrap_kegg
+from Bio.KEGG import _write_kegg
 
 # Set up line wrapping rules (see Bio.KEGG._wrap_kegg)
 name_wrap = [0, "", (" ", "$", 1, 1), ("-", "$", 1, 1)]
@@ -59,7 +59,7 @@ class Record:
 
     def _name(self):
         return _write_kegg(
-            "NAME", [_wrap_kegg(l, wrap_rule=name_wrap) for l in self.name]
+            "NAME", [_wrap_kegg(line, wrap_rule=name_wrap) for line in self.name]
         )
 
     def _definition(self):
@@ -69,7 +69,9 @@ class Record:
         s = []
         for entry in self.dblinks:
             s.append(entry[0] + ": " + " ".join(entry[1]))
-        return _write_kegg("DBLINKS", [_wrap_kegg(l, wrap_rule=id_wrap(9)) for l in s])
+        return _write_kegg(
+            "DBLINKS", [_wrap_kegg(line, wrap_rule=id_wrap(9)) for line in s]
+        )
 
 
 def parse(handle):

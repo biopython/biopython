@@ -6,12 +6,11 @@
 """Unit tests for Bio.Phylo functions with external dependencies."""
 
 import unittest
-
 from io import StringIO
-from Bio import Phylo
 
 # Check for any missing dependencies at the top level so we can skip
 from Bio import MissingExternalDependencyError
+from Bio import Phylo
 
 try:
     import matplotlib
@@ -52,7 +51,9 @@ class UtilTests(unittest.TestCase):
         # Fancier options
         Phylo.draw(apaf, do_show=False, branch_labels={apaf.root: "Root"})
         Phylo.draw(
-            apaf, do_show=False, branch_labels=lambda c: c.branch_length  # noqa: E731
+            apaf,
+            do_show=False,
+            branch_labels=lambda c: c.branch_length,  # noqa: E731
         )
 
     def test_draw_with_label_colors_dict(self):

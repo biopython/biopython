@@ -5,12 +5,16 @@
 
 """Code for calling and parsing ScanProsite from ExPASy."""
 
-# Importing these functions with leading underscore as not intended for reuse
-from urllib.request import urlopen
 from urllib.parse import urlencode
-
+from urllib.request import urlopen
 from xml.sax import handler
 from xml.sax.expatreader import ExpatParser
+
+# October 28th 2020 it was recognised that between October 10th 2020 and October
+# 28th the main url of prosite changed from https://www.expasy.org to
+# https://prosite.expasy.org. Thus a change in the mirror was issued from
+# https://www.expasy.org to https://prosite.expasy.org.
+PROSITE_URL = "https://prosite.expasy.org"
 
 
 class Record(list):
@@ -29,12 +33,12 @@ class Record(list):
         self.warning = None
 
 
-def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
+def scan(seq="", mirror=PROSITE_URL, output="xml", **keywords):
     """Execute a ScanProsite search.
 
     Arguments:
      - mirror:   The ScanProsite mirror to be used
-                 (default: https://www.expasy.org).
+                 (default: PROSITE_URL).
      - seq:      The query sequence, or UniProtKB (Swiss-Prot,
                  TrEMBL) accession
      - output:   Format of the search results
@@ -42,7 +46,7 @@ def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
 
     Further search parameters can be passed as keywords; see the
     documentation for programmatic access to ScanProsite at
-    https://www.expasy.org/tools/scanprosite/ScanPrositeREST.html
+    https://prosite.expasy.org/scanprosite/scanprosite_doc.html
     for a description of such parameters.
 
     This function returns a handle to the search results returned by
@@ -50,12 +54,14 @@ def scan(seq="", mirror="https://www.expasy.org", output="xml", **keywords):
     Python object, by using the Bio.ExPASy.ScanProsite.read function.
 
     """
+    if output != "xml":
+        raise NotImplementedError("Only output='xml' is supported currently.")
     parameters = {"seq": seq, "output": output}
     for key, value in keywords.items():
         if value is not None:
             parameters[key] = value
     command = urlencode(parameters)
-    url = f"{mirror}/cgi-bin/prosite/PSScan.cgi?{command}"
+    url = f"{mirror}/cgi-bin/prosite/scanprosite/PSScan.cgi?{command}"
     handle = urlopen(url)
     return handle
 
@@ -92,7 +98,7 @@ class Parser(ExpatParser):
         # The error message is (hopefully) contained in the data that was just
         # fed to the parser.
         if self.firsttime:
-            if data[:5].decode("utf-8") != "<?xml":
+            if data[:22].decode("utf-8") != "<scanprosite_response>":
                 raise ValueError(data)
         self.firsttime = False
         return ExpatParser.feed(self, data, isFinal)
@@ -119,18 +125,18 @@ class ContentHandler(handler.ContentHandler):
         """Define the beginning of a record and stores the search record."""
         self.element.append(name)
         self.content = ""
-        if self.element == ["matchset"]:
+        if self.element == ["scanprosite_response", "matchset"]:
             self.record = Record()
             self.record.n_match = int(attrs["n_match"])
             self.record.n_seq = int(attrs["n_seq"])
-        elif self.element == ["matchset", "match"]:
+        elif self.element == ["scanprosite_response", "matchset", "match"]:
             match = {}
             self.record.append(match)
 
     def endElement(self, name):
         """Define the end of the search record."""
         assert name == self.element.pop()
-        if self.element == ["matchset", "match"]:
+        if self.element == ["scanprosite_response", "matchset", "match"]:
             match = self.record[-1]
             if name in ContentHandler.integers:
                 match[name] = int(self.content)

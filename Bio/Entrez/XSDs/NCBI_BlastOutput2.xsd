@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!-- ============================================
+     ::DATATOOL:: Generated from "blastxml2.asn"
+     ::DATATOOL:: by application DATATOOL version 2.4.4
+     ::DATATOOL:: on 04/22/2015 11:04:30
+     ============================================ -->
+
+<xs:schema
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:ncbi="http://www.ncbi.nlm.nih.gov"
+  xmlns="http://www.ncbi.nlm.nih.gov"
+  targetNamespace="http://www.ncbi.nlm.nih.gov"
+  elementFormDefault="qualified"
+  attributeFormDefault="unqualified">
+
+<!-- NCBI_BlastOutput2.xsd
+  This file is built from a series of basic modules.
+  The actual declarations are in the modules.
+  This file is used to put them together.
+-->
+<xs:include schemaLocation="NCBI_BlastOutput2.mod.xsd"/>
+</xs:schema>
