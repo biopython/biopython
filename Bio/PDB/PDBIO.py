@@ -28,7 +28,7 @@ _MAX_B_FACTOR = 999_999
 
 
 def _format_b_factor(value: float) -> str:
-    """Returns the b-factor value as a formatted string
+    """Return b-factor value as a formatted string.
 
     Formats the b-factor value to fit the wwPDB specification of 6 characters
     maximum, otherwise truncating to 6 characters if necessary.

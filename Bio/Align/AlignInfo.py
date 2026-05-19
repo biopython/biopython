@@ -17,7 +17,7 @@ from Bio import BiopythonDeprecationWarning
 
 
 class SummaryInfo:
-    """Calculate summary info about the alignment.  (DEPRECATED)
+    """Calculate summary info about the alignment (DEPRECATED).
 
     This class should be used to calculate information summarizing the
     results of an alignment. This may either be straight consensus info

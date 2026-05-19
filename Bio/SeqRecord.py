@@ -369,7 +369,10 @@ class SeqRecord:
         annotations: dict[str, str | int] | None = None,
         letter_annotations: dict[str, Sequence] | None = None,
     ) -> "SeqRecord":
-        """Faster constructor for post-validated data like copies or validated parsed data"""
+        """Faster constructor for post-validated data (PRIVATE).
+
+        For use with copies or validated parsed data.
+        """
 
         if cls is not SeqRecord:
             # If we subclassed, we'll default to that class's initializer just to be careful

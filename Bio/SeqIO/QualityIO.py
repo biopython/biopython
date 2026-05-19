@@ -2481,8 +2481,10 @@ def _fastq_illumina_convert_qual(
 
 @dataclass
 class InvalidCharError(ValueError):
-    """
-    Custom error for strings that have a character that is invalid for whatever reason (eg: non-ascii, invalid range)
+    """Error for strings that have an invalid character.
+
+    This can be invalid for whatever reason by being non-ASCII or outside the
+    valid ASCII range.
 
     Main attributes:
      - full_string    - the string which contains the invalid character (str)

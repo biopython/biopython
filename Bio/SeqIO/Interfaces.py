@@ -44,7 +44,7 @@ class SequenceIterator(ABC, Generic[AnyStr]):
     @property
     @abstractmethod
     def modes(self):
-        """File modes (binary or text) that the parser can handle.
+        """Can the parser handle binary and/or text modes.
 
         This property must be "t" (for text mode only), "b" (for binary mode
         only), "tb" (if both text and binary mode are accepted, but text mode
@@ -167,7 +167,7 @@ class SequenceWriter(ABC, Generic[AnyStr]):
     @property
     @abstractmethod
     def modes(self):
-        """File modes (binary or text) that the writer can handle.
+        """Can the parser handle binary and/or text modes.
 
         This property must be "t" (for text mode only), "b" (for binary mode
         only), "tb" (if both text and binary mode are accepted, but text mode
