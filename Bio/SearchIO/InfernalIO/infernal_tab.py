@@ -209,7 +209,7 @@ _COLUMN_FRAG = {
 
 
 def _infer_tabular_format(handle, is_byte=False):
-    """Infer tabular format from the tabular file header. (PRIVATE)"""
+    """Infer tabular format from the tabular file header (PRIVATE)."""
     # infernal tabular output columns are space separated files with spaces in
     # column names, ex:
     # #target name         accession
