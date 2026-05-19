@@ -472,7 +472,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
         for i, name in enumerate(names):
             if name != fields[i].name:
                 raise ValueError(
-                    "Expected field name '%s'; found '%s'" % (name, fields[i].name)
+                    f"Expected field name '{name}'; found '{fields[i].name}'"
                 )
 
     def _create_alignment(self, chromId, tStart, tEnd, rest, dataStart, dataEnd):

@@ -211,7 +211,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
         if self.reference is None:
             self.reference = self._read_reference(stream)
             self._index = 0
-        self.targets[0].id = "%s.%s" % (self.reference, self.targets[0].id)
+        self.targets[0].id = f"{self.reference}.{self.targets[0].id}"
 
     def _create_alignment(
         self, chromId, chromStart, chromEnd, data, dataStart, dataEnd
