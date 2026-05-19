@@ -1178,7 +1178,7 @@ class XMLHandler:
         method = self._start_methods.get(name)
         if method is None:
             raise ValueError(
-                "Failed to find method for %s (%s)" % (name, self._start_methods.keys())
+                f"Failed to find method for {name} ({self._start_methods.keys()})"
             )
         method(self, name, attributes)
 

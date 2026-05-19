@@ -771,9 +771,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         for i in range(self.bedN):
             name = fields[i].name
             if name != names[i]:
-                raise ValueError(
-                    "Expected field name '%s'; found '%s'" % (names[i], name)
-                )
+                raise ValueError(f"Expected field name '{names[i]}'; found '{name}'")
         if fieldCount > definedFieldCount:
             self._custom_fields = []
         for i in range(definedFieldCount, fieldCount):

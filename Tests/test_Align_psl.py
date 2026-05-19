@@ -1549,7 +1549,7 @@ class TestAlign_dna(unittest.TestCase):
 
     def check_reading_psl_34_001(self, fmt):
         """Check parsing psl_34_001.psl or pslx_34_001.pslx."""
-        path = "Blat/%s_34_001.%s" % (fmt, fmt)
+        path = f"Blat/{fmt}_34_001.{fmt}"
         alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
@@ -4971,7 +4971,7 @@ AlignmentCounts object with
 
     def check_reading_psl_34_003(self, fmt):
         """Check parsing psl_34_003.psl or pslx_34_003.pslx."""
-        path = "Blat/%s_34_003.%s" % (fmt, fmt)
+        path = f"Blat/{fmt}_34_003.{fmt}"
         alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
@@ -5451,7 +5451,7 @@ AlignmentCounts object with
 
     def check_reading_psl_34_004(self, fmt):
         """Check parsing psl_34_004.psl or pslx_34_004.pslx."""
-        path = "Blat/%s_34_004.%s" % (fmt, fmt)
+        path = f"Blat/{fmt}_34_004.{fmt}"
         alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
@@ -8392,7 +8392,7 @@ AlignmentCounts object with
 
     def check_reading_psl_34_005(self, fmt):
         """Check parsing psl_34_005.psl or pslx_34_005.pslx."""
-        path = "Blat/%s_34_005.%s" % (fmt, fmt)
+        path = f"Blat/{fmt}_34_005.{fmt}"
         alignments = Align.parse(path, "psl")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
@@ -11806,7 +11806,7 @@ class TestAlign_dnax_prot(unittest.TestCase):
 
     def check_reading_psl_35_001(self, fmt):
         """Check parsing psl_35_001.psl or pslx_35_001.pslx."""
-        path = "Blat/%s_35_001.%s" % (fmt, fmt)
+        path = f"Blat/{fmt}_35_001.{fmt}"
         alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
@@ -13089,7 +13089,7 @@ CAG33136.        60 YEL 63
 
     def check_reading_psl_35_002(self, fmt):
         """Check parsing psl_35_002.psl or pslx_35_002.pslx."""
-        path = "Blat/%s_35_002.%s" % (fmt, fmt)
+        path = f"Blat/{fmt}_35_002.{fmt}"
         alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)

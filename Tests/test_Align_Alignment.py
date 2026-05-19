@@ -52,7 +52,7 @@ class TestPairwiseAlignment(unittest.TestCase):
     )
 
     def check_indexing_slicing(self, alignment, cls, strand):
-        msg = "%s, %s strand" % (cls.__name__, strand)
+        msg = f"{cls.__name__}, {strand} strand"
         self.assertEqual(
             repr(alignment),
             "<Alignment object (2 rows x 12 columns) at 0x%x>" % id(alignment),
@@ -3617,7 +3617,7 @@ class TestAlign_mapall(unittest.TestCase):
             data = {start: str(record.seq)}
             length = len(alignment.query)
             seq = Seq(data, length=length)
-            name = "%s.%s" % (new_assembly, chromosome)
+            name = f"{new_assembly}.{chromosome}"
             record = SeqRecord(seq, id=name)
             records.append(record)
         path = os.path.join("Blat", "panTro5.maf")
