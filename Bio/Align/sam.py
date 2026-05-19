@@ -69,7 +69,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             for key, value in values.items():
                 if key == "VN":
                     continue
-                fields.append("%s:%s" % (key, value))
+                fields.append(f"{key}:{value}")
             line = "\t".join(fields) + "\n"
             stream.write(line)
         for record in targets:
@@ -94,7 +94,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 elif key == "URI":
                     fields.append("UR:%s" % value)
                 else:
-                    fields.append("%s:%s" % (key[:2], value))
+                    fields.append(f"{key[:2]}:{value}")
             try:
                 description = record.description
             except AttributeError:
@@ -110,7 +110,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             for row in rows:
                 fields = ["@" + tag]
                 for key, value in row.items():
-                    fields.append("%s:%s" % (key, value))
+                    fields.append(f"{key}:{value}")
                 line = "\t".join(fields) + "\n"
                 stream.write(line)
 

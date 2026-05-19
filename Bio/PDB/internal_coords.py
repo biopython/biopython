@@ -4242,7 +4242,7 @@ class Hedron(Edron):
         elif all(ak in self.atomkeys[1:] for ak in ak_tpl):
             self.cic.hedraL23[self.ndx] = newLength
         else:
-            raise TypeError("%s not found in %s" % (str(ak_tpl), self))
+            raise TypeError(f"{str(ak_tpl)} not found in {self}")
         self._invalidate_atoms()
 
 
