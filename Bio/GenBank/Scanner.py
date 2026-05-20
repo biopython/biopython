@@ -1405,14 +1405,14 @@ class GenBankScanner(InsdcScanner):
                     "expected position:\n" + line
                 )
             if line[44:47] not in ["   ", "ss-", "ds-", "ms-"]:
-                warnings.warn(
-                    "LOCUS line does not have valid strand type "
-                    "(Single stranded, ...) - falling back to minimal "
-                    "parsing of name and size only:\n" + line,
-                    BiopythonParserWarning,
-                )
                 parts = line[self.GENBANK_INDENT :].split()
                 if len(parts) >= 2:
+                    warnings.warn(
+                        "LOCUS line does not have valid strand type "
+                        "(Single stranded, ...) - falling back to minimal "
+                        "parsing of name and size only:\n" + line,
+                        BiopythonParserWarning,
+                    )
                     consumer.locus(parts[0])
                     consumer.size(parts[1])
                     return
