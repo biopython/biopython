@@ -18,6 +18,7 @@ Feature Table Documentation:
 - http://www.ncbi.nlm.nih.gov/projects/collab/FT/index.html
 - ftp://ftp.ncbi.nih.gov/genbank/docs/
 """
+
 # 17-MAR-2009: added wgs, wgs_scafld for GenBank whole genome shotgun master records.
 # These are GenBank files that summarize the content of a project, and provide lists of
 # scaffold and contig files in the project. These will be in annotations['wgs'] and
@@ -1404,9 +1405,20 @@ class GenBankScanner(InsdcScanner):
                     "expected position:\n" + line
                 )
             if line[44:47] not in ["   ", "ss-", "ds-", "ms-"]:
+                parts = line[self.GENBANK_INDENT :].split()
+                if len(parts) >= 2:
+                    warnings.warn(
+                        "LOCUS line does not have valid strand type "
+                        "(Single stranded, ...) - falling back to minimal "
+                        "parsing of name and size only:\n" + line,
+                        BiopythonParserWarning,
+                    )
+                    consumer.locus(parts[0])
+                    consumer.size(parts[1])
+                    return
                 raise ValueError(
-                    "LOCUS line does not have valid strand "
-                    "type (Single stranded, ...):\n" + line
+                    "LOCUS line does not have valid strand type "
+                    "and minimal fallback parsing failed:\n" + line
                 )
 
             if not (
