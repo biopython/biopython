@@ -207,8 +207,10 @@ class Motif:
             # Catches case-mismatches (e.g. lowercase sequences with an
             # uppercase alphabet) and other wrong-alphabet bugs at
             # construction rather than letting downstream callers hit
-            # all-zero count columns. See issue #5000.
-            extraneous = set(frequencies) - set(alphabet)
+            # all-zero count columns. Gap characters ('-', '.') are
+            # tolerated since they are a standard alignment artifact
+            # and not part of any biological alphabet. See issue #5000.
+            extraneous = set(frequencies) - set(alphabet) - {"-", "."}
             if extraneous:
                 raise ValueError(
                     "Alignment contains letters not in alphabet %r: %r. "
