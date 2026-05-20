@@ -342,7 +342,7 @@ pdbl.retrieve\_pdb\_file('1FAT')
 The \texttt{PDBList} class can also be used as a command-line tool:
 
 \begin{lyxcode}
-python~PDBList.py~1fat
+python~PDBList.py~fetch~1fat
 \end{lyxcode}
 The downloaded file will be called \texttt{pdb1fat.ent} and stored
 in the current working directory. Note that the \texttt{retrieve\_pdb\_file}
@@ -364,12 +364,12 @@ The following commands will store all PDB files in the \texttt{/data/pdb}
 directory:
 
 \begin{lyxcode}
-python~PDBList.py~all~/data/pdb~
+python~PDBList.py~all~-{}-pdb-path~/data/pdb~
 
-python~PDBList.py~all~/data/pdb~-d~
+python~PDBList.py~all~-{}-pdb-path~/data/pdb~-{}-flat~
 \end{lyxcode}
 \noindent The API method for this is called \texttt{download\_entire\_pdb}.
-Adding the \texttt{-d} option will store all files in the same directory.
+Adding the \texttt{-{}-flat} option will store all files in the same directory.
 Otherwise, they are sorted into PDB-style subdirectories according
 to their PDB ID's. Depending on the traffic, a complete download will
 take 2-4 days.
