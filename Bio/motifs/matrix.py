@@ -43,7 +43,7 @@ class GenericPositionMatrix(dict):
         lines = [line]
         for letter in self.alphabet:
             words = [f"{value:6.2f}" for value in self[letter]]
-            line = f"{letter:c}: " + " ".join(words)
+            line = "%c: " % letter + " ".join(words)
             lines.append(line)
         text = "\n".join(lines) + "\n"
         return text
