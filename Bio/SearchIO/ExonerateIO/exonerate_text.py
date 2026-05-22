@@ -246,7 +246,7 @@ def _comp_intron_lens(seq_type, inter_blocks, raw_inter_lens):
             elif parsed_len[2]:
                 intron_len = int(parsed_len[2])
             else:
-                raise ValueError("Unexpected intron parsing result: %r" % parsed_len)
+                raise ValueError(f"Unexpected intron parsing result: {parsed_len!r}")
         else:
             intron_len = 0
 
@@ -259,8 +259,8 @@ def _comp_coords(hsp, seq_type, inter_lens):
     """Fill the block coordinates of the given hsp dictionary (PRIVATE)."""
     assert seq_type in ("hit", "query")
     # manually fill the first coord
-    seq_step = 1 if hsp["%s_strand" % seq_type] >= 0 else -1
-    fstart = hsp["%s_start" % seq_type]
+    seq_step = 1 if hsp[f"{seq_type}_strand"] >= 0 else -1
+    fstart = hsp[f"{seq_type}_start"]
     # fend is fstart + number of residues in the sequence, minus gaps
     fend = (
         fstart
@@ -294,8 +294,8 @@ def _comp_split_codons(hsp, seq_type, scodon_moves):
         else:
             assert not all(pair)
         a, b = pair
-        anchor_pair = hsp["%s_ranges" % seq_type][idx // 2]
-        strand = 1 if hsp["%s_strand" % seq_type] >= 0 else -1
+        anchor_pair = hsp[f"{seq_type}_ranges"][idx // 2]
+        strand = 1 if hsp[f"{seq_type}_strand"] >= 0 else -1
 
         if a:
             func = max if strand == 1 else min
@@ -417,21 +417,21 @@ class ExonerateTextParser(_BaseExonerateParser):
                     % (len(inter_lens), len(hsp[opp_type]) - 1)
                 )
             # fill the hsp query and hit coordinates
-            hsp["%s_ranges" % opp_type] = _comp_coords(hsp, opp_type, inter_lens)
+            hsp[f"{opp_type}_ranges"] = _comp_coords(hsp, opp_type, inter_lens)
             # and fill the split codon coordinates, if model != ner
             # can't do this in the if-else clause above since we need to
             # compute the ranges first
             if not has_ner:
-                hsp["%s_split_codons" % opp_type] = _comp_split_codons(
+                hsp[f"{opp_type}_split_codons"] = _comp_split_codons(
                     hsp, opp_type, scodon_moves
                 )
 
         # now that we've finished parsing coords, we can set the hit and start
         # coord according to Biopython's convention (start <= end)
         for seq_type in ("query", "hit"):
-            if hsp["%s_strand" % seq_type] == -1:
-                n_start = "%s_start" % seq_type
-                n_end = "%s_end" % seq_type
+            if hsp[f"{seq_type}_strand"] == -1:
+                n_start = f"{seq_type}_start"
+                n_end = f"{seq_type}_end"
                 hsp[n_start], hsp[n_end] = hsp[n_end], hsp[n_start]
 
         return {"qresult": qresult, "hit": hit, "hsp": hsp}

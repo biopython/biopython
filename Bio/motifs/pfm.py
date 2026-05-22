@@ -37,7 +37,7 @@ def read(handle, pfm_format):
         record = _read_pfm_four_rows(handle)
         return record
     else:
-        raise ValueError("Unknown Position Frequency matrix format '%s'" % pfm_format)
+        raise ValueError(f"Unknown Position Frequency matrix format '{pfm_format}'")
 
 
 def _read_pfm_four_columns(handle):

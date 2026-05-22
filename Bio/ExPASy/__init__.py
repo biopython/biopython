@@ -89,7 +89,7 @@ def get_prosite_raw(id, cgi=None):
         handle = _open(f"https://prosite.expasy.org/{id}.txt")
     except HTTPError as exception:
         if exception.code == 404:
-            raise ValueError("Failed to find entry '%s' on ExPASy" % id) from None
+            raise ValueError(f"Failed to find entry '{id}' on ExPASy") from None
         else:
             raise
     # This has happened historically, redirected to main page:

@@ -133,7 +133,7 @@ class Hit(_BaseSearchObject):
             # however, since all its cascading properties are empty.
             if len({getattr(hsp, attr) for hsp in hsps}) > 1:
                 raise ValueError(
-                    "Hit object can not contain HSPs with more than one %s." % attr
+                    f"Hit object can not contain HSPs with more than one {attr}."
                 )
 
         self._items = []
@@ -168,15 +168,15 @@ class Hit(_BaseSearchObject):
         lines = []
 
         # set query id line
-        qid_line = "Query: %s" % self.query_id
+        qid_line = f"Query: {self.query_id}"
         lines.append(qid_line)
         if self.query_description:
-            line = "       %s" % self.query_description
+            line = f"       {self.query_description}"
             line = line[:77] + "..." if len(line) > 80 else line
             lines.append(line)
 
         # set hit id line
-        hid_line = "  Hit: %s" % self.id
+        hid_line = f"  Hit: {self.id}"
         try:
             seq_len = self.seq_len
         except AttributeError:
@@ -185,7 +185,7 @@ class Hit(_BaseSearchObject):
             hid_line += " (%i)" % seq_len
         lines.append(hid_line)
         if self.description:
-            line = "       %s" % self.description
+            line = f"       {self.description}"
             line = line[:77] + "..." if len(line) > 80 else line
             lines.append(line)
 

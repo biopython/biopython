@@ -105,7 +105,7 @@ class Record(dict):
             "CF: " + self["CF"],
             "CC: " + repr(self["CC"]),
             "PR: " + repr(self["PR"]),
-            "DR: %d Records" % len(self["DR"]),
+            f"DR: {len(self['DR'])} Records",
         ]
         return "\n".join(output)
 

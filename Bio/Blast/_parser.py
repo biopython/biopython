@@ -208,7 +208,7 @@ class XMLHandler:
         uri, localname = name.split(" ")
         assert uri == "http://www.ncbi.nlm.nih.gov"
         assert localname in ("BlastXML2", "BlastOutput2")
-        key = "%s schemaLocation" % XMLHandler.schema_namespace
+        key = f"{XMLHandler.schema_namespace} schemaLocation"
         domain, url = attributes[key].split()
         assert domain == "http://www.ncbi.nlm.nih.gov"
         if XMLHandler._schema_methods is None:
@@ -1047,7 +1047,7 @@ class XMLHandler:
                 target.features.append(feature)
                 target.seq = Seq(target_seq_data, target_length)
             else:
-                raise RuntimeError("Unexpected program name '%s'" % program)
+                raise RuntimeError(f"Unexpected program name '{program}'")
         query.seq = Seq(query_seq_data, query_length)
         sequences = [target, query]
         alignment = HSP(sequences, coordinates)
@@ -1191,7 +1191,7 @@ class XMLHandler:
         """
         method = self._end_methods.get(name)
         if method is None:
-            raise ValueError("Failed to find method for %s" % name)
+            raise ValueError(f"Failed to find method for {name}")
         method(self, name)
 
     def _characterDataHandler(self, characters):

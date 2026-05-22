@@ -88,9 +88,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 return
             except ValueError:
                 pass
-        raise ValueError(
-            "Expected two integers in the first line, received '%s'" % line
-        )
+        raise ValueError(f"Expected two integers in the first line, received '{line}'")
 
     def _parse_interleaved_first_block(self, lines, seqs, names):
         for line in lines:

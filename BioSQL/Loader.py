@@ -220,9 +220,7 @@ class DatabaseLoader:
             # Its natural that several distinct taxa will have the same common
             # name - in which case we can't resolve the taxon uniquely.
             if len(taxa) > 1:
-                raise ValueError(
-                    "Taxa: %d species have name %r" % (len(taxa), common_name)
-                )
+                raise ValueError(f"Taxa: {len(taxa)} species have name {common_name!r}")
             if taxa:
                 # Good, mapped the common name to a taxon table entry
                 return taxa[0]

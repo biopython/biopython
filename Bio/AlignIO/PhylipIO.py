@@ -114,7 +114,7 @@ class PhylipWriter(SequentialAlignmentWriter):
         # defined in the PHYLIP documentation, simply "These are in free
         # format, separated by blanks".  We'll use spaces to keep EMBOSS
         # happy.
-        handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
+        handle.write(f" {len(alignment)} {length_of_seqs}\n")
         block = 0
         while True:
             for name, sequence in zip(names, seqs):
@@ -338,7 +338,7 @@ class SequentialPhylipWriter(SequentialAlignmentWriter):
         # defined in the PHYLIP documentation, simply "These are in free
         # format, separated by blanks".  We'll use spaces to keep EMBOSS
         # happy.
-        handle.write(" %i %s\n" % (len(alignment), length_of_seqs))
+        handle.write(f" {len(alignment)} {length_of_seqs}\n")
         for name, record in zip(names, alignment):
             sequence = str(record.seq)
             if "." in sequence:

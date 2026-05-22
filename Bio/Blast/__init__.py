@@ -257,7 +257,7 @@ class Hit(Alignments):
 
         # set query id line
         query = self[0].query
-        qid_line = "Query: %s" % query.id
+        qid_line = f"Query: {query.id}"
         lines.append(qid_line)
         indent = " " * 7
         description_lines = textwrap.wrap(
@@ -270,7 +270,7 @@ class Hit(Alignments):
 
         # set hit id line
         target = self.target
-        hid_line = "  Hit: %s (length=%i)" % (target.id, len(target))
+        hid_line = f"  Hit: {target.id} (length={len(target)})"
         lines.append(hid_line)
         description_lines = textwrap.wrap(
             target.description,
@@ -282,8 +282,7 @@ class Hit(Alignments):
 
         # set hsp line and table
         lines.append(
-            " HSPs: %s  %s  %s  %s  %s  %s"
-            % ("-" * 4, "-" * 8, "-" * 9, "-" * 6, "-" * 15, "-" * 21)
+            f" HSPs: {'-' * 4}  {'-' * 8}  {'-' * 9}  {'-' * 6}  {'-' * 15}  {'-' * 21}"
         )
         pattern = "%11s  %8s  %9s  %6s  %15s  %21s"
         lines.append(
@@ -472,7 +471,7 @@ class Record(list):
             lines.append(f"     db: {db}")
         if self.query is not None:
             # self.query may be None with legacy Blast if there are no hits
-            lines.append("  Query: %s (length=%d)" % (self.query.id, len(self.query)))
+            lines.append(f"  Query: {self.query.id} (length={len(self.query)})")
             indent = " " * 9
             description_lines = textwrap.wrap(
                 self.query.description,
@@ -484,19 +483,19 @@ class Record(list):
         if len(self) == 0:
             lines.append("   Hits: No hits found")
         else:
-            lines.append("   Hits: %s  %s  %s" % ("-" * 4, "-" * 5, "-" * 58))
+            lines.append(f"   Hits: {'-' * 4}  {'-' * 5}  {'-' * 58}")
             pattern = "%13s  %5s  %s"
             lines.append(pattern % ("#", "# HSP", "ID + description"))
             lines.append(pattern % ("-" * 4, "-" * 5, "-" * 58))
             for idx, hit in enumerate(self):
                 n = len(hit)  # Number of HSPs
                 if idx < 30:
-                    hid_line = "%s  %s" % (hit.target.id, hit.target.description)
+                    hid_line = f"{hit.target.id}  {hit.target.description}"
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
                     lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx > len(self) - 4:
-                    hid_line = "%s  %s" % (hit.target.id, hit.target.description)
+                    hid_line = f"{hit.target.id}  {hit.target.description}"
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
                     lines.append(pattern % (idx, len(hit), hid_line))
@@ -872,12 +871,8 @@ class Records(UserList):
         return f"<Bio.Blast.Records source={self.source!r} program={self.program!r} version={self.version!r} db={self.db!r}>"
 
     def __str__(self):
-        text = """\
-Program: %s
-     db: %s""" % (
-            self.version,
-            self.db,
-        )
+        text = f"""Program: {self.version}
+     db: {self.db}"""
         records = self[:]  # to ensure that the records are read in
         for record in self._records:
             text += "\n\n" + str(record)

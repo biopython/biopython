@@ -43,9 +43,9 @@ rec_iterator = SeqIO.parse("ls_orchid.fasta", "fasta")
 orchid_dict = SeqIO.to_dict(rec_iterator, get_accession_num)
 
 for id_num in orchid_dict:
-    print("id number: %s" % id_num)
-    print("description: %s" % orchid_dict[id_num].description)
-    print("sequence: %s" % orchid_dict[id_num].seq)
+    print(f"id number: {id_num}")
+    print(f"description: {orchid_dict[id_num].description}")
+    print(f"sequence: {orchid_dict[id_num].seq}")
 
 
 # Indexed
@@ -58,6 +58,6 @@ for id_num in orchid_dict:
 orchid_dict = SeqIO.index("ls_orchid.fasta", "fasta")
 
 for id_num in orchid_dict:
-    print("id number: %s" % id_num)
-    print("description: %s" % orchid_dict[id_num].description)
-    print("sequence: %s" % orchid_dict[id_num].seq)
+    print(f"id number: {id_num}")
+    print(f"description: {orchid_dict[id_num].description}")
+    print(f"sequence: {orchid_dict[id_num].seq}")

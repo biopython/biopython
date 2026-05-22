@@ -418,7 +418,7 @@ def to_dict(qresults, key_function=None):
     for qresult in qresults:
         key = key_function(qresult)
         if key in qdict:
-            raise ValueError("Duplicate key %r" % key)
+            raise ValueError(f"Duplicate key {key!r}")
         qdict[key] = qresult
     return qdict
 

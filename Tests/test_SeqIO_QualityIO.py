@@ -363,11 +363,7 @@ class TestReadWrite(unittest.TestCase):
 
     def test_fastq_1000(self):
         """Read and write back simple example with mixed case 1000bp read."""
-        data = "@%s\n%s\n+\n%s\n" % (
-            "id descr goes here",
-            "ACGTNncgta" * 100,
-            "abcd!!efgh" * 100,
-        )
+        data = f"@id descr goes here\n{'ACGTNncgta' * 100}\n+\n{'abcd!!efgh' * 100}\n"
         handle = StringIO()
         self.assertEqual(
             1, SeqIO.write(SeqIO.parse(StringIO(data), "fastq"), handle, "fastq")

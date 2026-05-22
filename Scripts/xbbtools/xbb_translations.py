@@ -83,11 +83,11 @@ class xbb_translations:
                 res += "%d/%d\n" % (i + 1, p + 1)
                 res += " " * (frame - 1) + protein[i : i + 60] + "\n"
                 # seq
-                res += subseq.lower() + "%5d %%\n" % int(self.gc(subseq)) + "\n"
+                res += subseq.lower() + f"{int(self.gc(subseq)):5} %\n" + "\n"
             else:
                 res += "%d/%d\n" % (i + 1, protein_length - len(protein[:i].split()))
                 # seq
-                res += subseq.lower() + "%5d %%\n" % int(self.gc(subseq))
+                res += subseq.lower() + f"{int(self.gc(subseq)):5} %\n"
                 res += protein[i : i + 60] + "\n\n"
         return res
 
@@ -119,7 +119,7 @@ class xbb_translations:
                 res += " " + "  ".join(frames[2][p : p + 20]) + "\n"
                 res += "  ".join(frames[1][p : p + 20]) + "\n"
             # seq
-            res += subseq.lower() + "%5d %%\n" % int(self.gc(subseq))
+            res += subseq.lower() + f"{int(self.gc(subseq)):5} %\n"
             res += csubseq.lower() + "\n"
             if direction == "plus":
                 res += "\n"

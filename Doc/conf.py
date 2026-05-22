@@ -326,7 +326,7 @@ def insert_github_link(filename):
         source = filename[4:-4].replace(".", "/") + ".py"
     if not os.path.isfile(os.path.join("../", source)):
         sys.stderr.write(
-            "WARNING: Could not map %s to a Python file, e.g. %s\n" % (filename, source)
+            f"WARNING: Could not map {filename} to a Python file, e.g. {source}\n"
         )
         return
 

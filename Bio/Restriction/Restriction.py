@@ -1880,8 +1880,7 @@ class NotDefined(AbstractCut):
         #
         # return False
         raise ValueError(
-            "%s.mod2(%s), %s : NotDefined. pas glop pas glop!"
-            % (str(cls), str(other), str(cls))
+            f"{cls!s}.mod2({other!s}), {cls!s} : NotDefined. pas glop pas glop!"
         )
 
     @classmethod

@@ -154,7 +154,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # We expect there to be two fields, there can be an optional
                 # "sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
-                    raise ValueError("Could not parse line:\n%s" % line)
+                    raise ValueError(f"Could not parse line:\n{line}")
 
                 seqid, aligned_seq = fields[:2]
                 ids.append(seqid)
@@ -170,11 +170,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         count = int(fields[2])
                     except ValueError:
                         raise ValueError(
-                            "Could not parse line, bad sequence count:\n%s" % line
+                            f"Could not parse line, bad sequence count:\n{line}"
                         ) from None
                     if len(aligned_seq) - aligned_seq.count("-") != count:
                         raise ValueError(
-                            "Could not parse line, incorrect sequence count:\n%s" % line
+                            f"Could not parse line, incorrect sequence count:\n{line}"
                         ) from None
             else:
                 # no consensus line
@@ -210,7 +210,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 # We expect there to be two fields, there can be an optional
                 # "sequence number" field containing the letter count.
                 if len(fields) < 2 or len(fields) > 3:
-                    raise ValueError("Could not parse line:\n%s" % line)
+                    raise ValueError(f"Could not parse line:\n{line}")
 
                 assert seqid == fields[0]
                 aligned_seq = fields[1]
@@ -222,11 +222,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         count = int(fields[2])
                     except ValueError:
                         raise ValueError(
-                            "Could not parse line, bad sequence number:\n%s" % line
+                            f"Could not parse line, bad sequence number:\n{line}"
                         ) from None
                     if len(aligned_seqs[i]) - aligned_seqs[i].count("-") != count:
                         raise ValueError(
-                            "Could not parse line, incorrect sequence count:\n%s" % line
+                            f"Could not parse line, incorrect sequence count:\n{line}"
                         ) from None
                 i += 1
                 if i == n:

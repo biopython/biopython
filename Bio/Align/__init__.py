@@ -245,20 +245,12 @@ class MultipleSeqAlignment:
             if len(record.seq) <= length:
                 return f"{record.seq} {record.id}"
             else:
-                return "%s...%s %s" % (
-                    record.seq[: length - 3],
-                    record.seq[-3:],
-                    record.id,
-                )
+                return f"{record.seq[:length - 3]}...{record.seq[-3:]} {record.id}"
         else:
             if len(record.seq) <= length:
                 return f"{record.seq} {record.id}"
             else:
-                return "%s...%s %s" % (
-                    record.seq[: length - 6],
-                    record.seq[-3:],
-                    record.id,
-                )
+                return f"{record.seq[:length - 6]}...{record.seq[-3:]} {record.id}"
 
     def __str__(self):
         """Return a multi-line string summary of the alignment.
@@ -2874,10 +2866,7 @@ class Alignment:
         <Alignment object (2 rows x 5 columns) at 0x...>
         """
         if self.coordinates is None:
-            return "<%s object at 0x%x>" % (
-                self.__class__.__name__,
-                id(self),
-            )
+            return f"<{self.__class__.__name__} object at 0x{id(self):x}>"
         n, m = self.shape
         return "<%s object (%i rows x %i columns) at 0x%x>" % (
             self.__class__.__name__,
@@ -4343,7 +4332,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
             self.open_gap_score = -12.0
             self.extend_gap_score = -1.0
         else:
-            raise ValueError("Unknown scoring scheme '%s'" % scoring)
+            raise ValueError(f"Unknown scoring scheme '{scoring}'")
         for name, value in kwargs.items():
             setattr(self, name, value)
 
@@ -4407,7 +4396,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                 # On CPython, __slots__ can be used for this, but currently
                 # __slots__ does not behave the same way on PyPy at least.
                 raise AttributeError(
-                    "'PairwiseAligner' object has no attribute '%s'" % key
+                    f"'PairwiseAligner' object has no attribute '{key}'"
                 )
         else:
             warnings.warn(
@@ -4844,7 +4833,7 @@ def _load(fmt: str) -> types.ModuleType:
     except KeyError:
         pass
     if fmt not in formats:
-        raise ValueError("Unknown file format %s" % fmt)
+        raise ValueError(f"Unknown file format {fmt}")
     module = importlib.import_module(f"Bio.Align.{fmt}")
     _modules[fmt] = module
     return module

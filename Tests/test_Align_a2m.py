@@ -63,7 +63,7 @@ class TestA2MReadingWriting(unittest.TestCase):
     def check_clustalw(self, alignment):
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (2 rows x 601 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (2 rows x 601 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.sequences[0].id, "gi|4959044|gb|AAD34209.1|AF069")
@@ -213,7 +213,7 @@ AlignmentCounts object with
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (8 rows x 298 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (8 rows x 298 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 8)
         self.assertEqual(alignment.shape, (8, 298))
@@ -438,7 +438,7 @@ AlignmentCounts object with
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (3 rows x 687 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (3 rows x 687 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 3)
         self.assertEqual(alignment.sequences[0].id, "Test1seq")
@@ -598,7 +598,7 @@ AlignmentCounts object with
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (2 rows x 27 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (2 rows x 27 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.sequences[0].id, "Test1seq")
@@ -705,7 +705,7 @@ AlignmentCounts object with
                 next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (5 rows x 101 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (5 rows x 101 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 5)
         self.assertEqual(alignment.sequences[0].id, "plas_horvu")
