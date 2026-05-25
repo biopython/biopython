@@ -67,6 +67,9 @@ from .PDBIO import Select
 
 # Download from the PDB
 from .PDBList import PDBList
+
+# Download from the AlphaFold database
+from .alphafold_db import AFDBList
 from .PDBMLParser import PDBMLParser
 from .PDBParser import PDBParser
 from .Polypeptide import CaPPBuilder
