@@ -8284,6 +8284,16 @@ class LineOneTests(unittest.TestCase):
                 "PRI",
                 None,
             ),
+            # SnapGene-style LOCUS line with invalid strand type spacing
+            # (issue #4846). Only name and size are recovered, with a warning.
+            (
+                "LOCUS       pAV-CAG-GFP-corr        2394 bp DNA"
+                "                     01-JAN-1980",
+                None,
+                None,
+                None,
+                [BiopythonParserWarning],
+            ),
         ]
         for line, topo, mol_type, div, warning_list in tests:
             with warnings.catch_warnings(record=True) as caught:
