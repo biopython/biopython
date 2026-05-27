@@ -3,15 +3,13 @@
 See the `database website <https://alphafold.com/>`_ and the `API docs <https://alphafold.com/api-docs/>`_.
 """
 
-from functools import lru_cache
+import gzip
 import json
 import os
-import gzip
 import tarfile
-from os import PathLike
 from collections.abc import Iterator
-#from typing import Optional
-#from typing import Union
+from functools import lru_cache
+from os import PathLike
 from urllib.request import urlopen
 
 from Bio.PDB.MMCIFParser import MMCIFParser
@@ -29,7 +27,7 @@ def get_predictions(qualifier: str) -> Iterator[dict]:
     url = f"https://alphafold.com/api/prediction/{qualifier}"
     # Retrieve the AlphaFold predictions with urllib
     with urlopen(url) as response:
-            yield from json.loads(response.read().decode())
+        yield from json.loads(response.read().decode())
 
 
 def _get_mmcif_file_path_for(
@@ -118,6 +116,7 @@ def get_structural_models_for(
 
         yield mmcif_parser.get_structure(qualifier, mmcif_path)
 
+
 @lru_cache(maxsize=1)
 def list_proteomes() -> list[dict]:
     """List all available proteomes in the AlphaFold Database.
@@ -133,11 +132,12 @@ def list_proteomes() -> list[dict]:
     url = "https://ftp.ebi.ac.uk/pub/databases/alphafold/download_metadata.json"
     with urlopen(url) as response:
         return json.loads(response.read().decode())
-    
-    
 
-def download_proteome(species: str, directory: str | bytes| PathLike | None = None,
-    ) -> str: 
+
+def download_proteome(
+    species: str,
+    directory: str | bytes | PathLike | None = None,
+) -> str:
     """Download all AlphaFold predictions for a reference proteome.
 
     Downloads the proteome archive (.tar) from the EMBL-EBI FTP server.
@@ -160,17 +160,16 @@ def download_proteome(species: str, directory: str | bytes| PathLike | None = No
     :rtype: str
     :raises ValueError: If the species cannot be found in the AlphaFold database
     """
-
     if directory is None:
         directory = os.getcwd()
 
-    #find the matching proteome entry
+    # Find the matching proteome entry
     proteomes = list_proteomes()
     match = None
     species_lower = species.lower()
     for proteome in proteomes:
         if proteome.get("type") not in ("proteome", "global_health"):
-            continue # this skips Swiss-Prot and other non species entries
+            continue  # skip Swiss-Prot and other non-species entries
         if species_lower in (
             proteome["species"].lower(),
             proteome["common_name"].lower(),
@@ -178,20 +177,26 @@ def download_proteome(species: str, directory: str | bytes| PathLike | None = No
         ):
             match = proteome
             break
-    if match is None:
-        raise ValueError(f"Could not find proteome for '{species}'." f"Use list_proteomes() to see available species.")
 
-    #warn user about download size 
+    if match is None:
+        raise ValueError(
+            f"Could not find proteome for '{species}'. "
+            "Use list_proteomes() to see available species."
+        )
+
+    # Warn user about download size
     size_gb = match["size_bytes"] / 1e9
-    print(f"Downloading {match['num_predicted_structures']} structures "
-        f"for {match['species']} ({size_gb:.1f} GB)...")
+    print(
+        f"Downloading {match['num_predicted_structures']} structures "
+        f"for {match['species']} ({size_gb:.1f} GB)..."
+    )
 
     os.makedirs(directory, exist_ok=True)
     archive_name = match["archive_name"]
     file_path = os.path.join(directory, archive_name)
 
     if os.path.exists(file_path):
-        print(f"Archive {file_path} already exists, skipping download.")
+        print(f"Archive {str(file_path)} already exists, skipping download.")
         return str(file_path)
 
     url = f"https://ftp.ebi.ac.uk/pub/databases/alphafold/latest/{archive_name}"
@@ -205,7 +210,7 @@ def download_proteome(species: str, directory: str | bytes| PathLike | None = No
             os.remove(file_path)
         raise
 
-    print(f"Downloaded to {file_path}")
+    print(f"Downloaded to {str(file_path)}")
     return str(file_path)
 
 
@@ -239,24 +244,26 @@ def extract_proteome(
 
     if directory is None:
         directory = os.path.dirname(archive_path)
-    os.makedirs(directory, exist_ok=True)
+    os.makedirs(str(directory), exist_ok=True)
 
-    extracted_paths = []
+    extracted_paths: list[str] = []
     with tarfile.open(archive_path) as tar:
         members = [m for m in tar.getmembers() if m.name.endswith(extension)]
         print(f"Extracting {len(members)} {file_format} files...")
         for member in members:
             # Decompress and write without the .gz extension
             out_name = member.name.replace(".gz", "")
-            out_path = os.path.join(directory, out_name)
+            out_path = os.path.join(str(directory), out_name)
             os.makedirs(os.path.dirname(out_path), exist_ok=True)
-            with tar.extractfile(member) as gz_file:
-                with gzip.open(gz_file) as decompressed:
-                    with open(out_path, "wb") as out_file:
-                        out_file.write(decompressed.read())
+            extracted = tar.extractfile(member)
+            if extracted is None:
+                continue
+            with gzip.open(extracted) as decompressed:
+                with open(out_path, "wb") as out_file:
+                    out_file.write(decompressed.read())
             extracted_paths.append(str(out_path))
 
-    print(f"Extracted {len(extracted_paths)} files to {directory}")
+    print(f"Extracted {len(extracted_paths)} files to {str(directory)}")
     return extracted_paths
 
 
@@ -346,4 +353,3 @@ class AlphaFoldDB:
             mmcif_parser=parser,
             directory=dir_str,
         )
-    

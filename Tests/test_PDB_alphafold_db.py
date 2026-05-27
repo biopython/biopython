@@ -30,7 +30,9 @@ class AlphafoldDBTests(unittest.TestCase):
 
         self.assertIsInstance(proteomes, list)
         self.assertGreater(len(proteomes), 0)
-        species_proteomes = [p for p in proteomes if p.get("type") in ("proteome", "global_health")]
+        species_proteomes = [
+            p for p in proteomes if p.get("type") in ("proteome", "global_health")
+        ]
         self.assertGreater(len(species_proteomes), 0)
 
         for proteome in species_proteomes:
@@ -66,4 +68,3 @@ class AlphafoldDBTests(unittest.TestCase):
                 break
         self.assertIsNotNone(match)
         self.assertEqual(match["reference_proteome"], smallest["reference_proteome"])
-
