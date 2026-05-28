@@ -23,5 +23,4 @@ class AlphafoldDBTests(unittest.TestCase):
             "cifUrl": "https://alphafold.ebi.ac.uk/files/AF-P00520-F1-model_v4.cif",
         }
         file_path = alphafold_db._get_mmcif_file_path_for(prediction, "test")
-        expected = os.path.join("test", "AF-P00520-F1-model_v4.cif")
-        self.assertEqual(file_path, expected)
+        self.assertEqual(file_path, os.path.join("test", "AF-P00520-F1-model_v4.cif"))
