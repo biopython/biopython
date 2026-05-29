@@ -31,26 +31,9 @@ build_script:
         Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
         throw "There are newer queued builds for this pull request, failing early." }
   - ps: |
-      $ErrorActionPreference = "Stop"
       $url = "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge$env:PY_MAJOR_VER-Windows-$env:PYTHON_ARCH.exe"
-      $destination = "C:\Miniconda.exe"
-      $maxAttempts = 3
-      for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
-          try {
-              if (Test-Path $destination) {
-                  Remove-Item $destination -Force
-              }
-              Start-FileDownload $url $destination
-              Write-Host "Finished downloading miniconda"
-              break
-          } catch {
-              Write-Host "Miniconda download attempt $attempt of $maxAttempts failed: $($_.Exception.Message)"
-              if ($attempt -eq $maxAttempts) {
-                  throw
-              }
-              Start-Sleep -Seconds (15 * $attempt) 
-          }
-      }
+      curl.exe -fsSL --retry 2 --retry-delay 15 --retry-all-errors -o C:\Miniconda.exe $url
+      if ($LASTEXITCODE -ne 0) { throw "curl download failed with exit code $LASTEXITCODE" }
   - ps: start -Wait -FilePath C:\Miniconda.exe -ArgumentList "/S /D=C:\Py"
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
   - conda config --set always_yes yes
