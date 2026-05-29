@@ -32,7 +32,7 @@ build_script:
         throw "There are newer queued builds for this pull request, failing early." }
   - ps: |
       $url = "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge$env:PY_MAJOR_VER-Windows-$env:PYTHON_ARCH.exe"
-      curl.exe -fsSL --retry 2 --retry-delay 15 --retry-all-errors -o C:\Miniconda.exe $url
+      curl.exe -fsSL --retry 2 --retry-delay 15 -o C:\Miniconda.exe $url
       if ($LASTEXITCODE -ne 0) { throw "curl download failed with exit code $LASTEXITCODE" }
   - ps: start -Wait -FilePath C:\Miniconda.exe -ArgumentList "/S /D=C:\Py"
   - SET PATH=C:\Py;C:\Py\Scripts;C:\Py\Library\bin;%PATH%
