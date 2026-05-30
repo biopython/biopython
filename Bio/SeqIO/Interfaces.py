@@ -122,9 +122,11 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         return self
 
     def __enter__(self):
+        """Enter runtime context and return self."""
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
+        """Exit runtime context and clean up the underlying stream."""
         try:
             stream = self.stream
         except AttributeError:

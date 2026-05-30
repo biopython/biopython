@@ -396,6 +396,7 @@ class PlateRecord:
             yield self._wells[well]
 
     def __contains__(self, wellid):
+        """Return whether item is in container"""
         if wellid in self._wells:
             return True
         return False
@@ -405,6 +406,7 @@ class PlateRecord:
         return len(self._wells)
 
     def __eq__(self, other):
+        """Return whether objects are equal"""
         if isinstance(other, self.__class__):
             return self._wells == other._wells
         else:

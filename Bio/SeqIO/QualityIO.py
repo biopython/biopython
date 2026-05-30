@@ -2499,6 +2499,7 @@ class InvalidCharError(ValueError):
     r: int = 3
 
     def __str__(self) -> str:
+        """Return a detailed error message describing the invalid quality string character."""
         char = self.full_string[self.index]
 
         surrounding_characters = self.full_string[
