@@ -103,9 +103,11 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
         return length
 
     def __enter__(self):
+        """Enter runtime context and return the iterator."""
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
+        """Exit runtime context and close the underlying stream if needed."""   
         try:
             stream = self._stream
         except AttributeError:

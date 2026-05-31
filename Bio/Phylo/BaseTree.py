@@ -252,6 +252,7 @@ class TreeElement:
         )
 
     def __str__(self) -> str:
+        """Returns a definition of The Tree Element"""
         return self.__repr__()
 
 
