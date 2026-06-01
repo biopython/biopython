@@ -126,7 +126,7 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        """Close the stream when exiting context manager""" 
+        """Close the stream when exiting context manager"""
         try:
             stream = self.stream
         except AttributeError:
