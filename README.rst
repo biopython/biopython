@@ -291,3 +291,5 @@ Distribution Structure
 - ``Doc/``        -- Documentation.
 - ``Scripts/``    -- Miscellaneous, possibly useful, standalone scripts.
 - ``Tests/``      -- Regression testing code including sample data files.
+
+'--extend-ignore=E501,F401,F841,D2,D4',
