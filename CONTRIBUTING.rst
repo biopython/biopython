@@ -19,7 +19,7 @@ details).
 Tagged issues
 -------------
 
-Is general, unless there is an open pull request associated with an issue,
+In general, unless there is an open pull request associated with an issue,
 or the issue discussion makes it clear that someone is working on it, any
 issue can be worked on.
 
