@@ -719,6 +719,7 @@ class CodonAdaptationIndex(dict):
         return Seq(optimized)
 
     def __str__(self):
+        """Return a string representation of the object."""
         lines = []
         for codon, value in self.items():
             line = f"{codon}\t{value:.3f}"

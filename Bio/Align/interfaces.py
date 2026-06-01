@@ -103,9 +103,11 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
         return length
 
     def __enter__(self):
+        """Enter the context manager."""
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
+        """Exit the context manager."""
         try:
             stream = self._stream
         except AttributeError:

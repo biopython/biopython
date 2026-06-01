@@ -68,6 +68,7 @@ class Motif(motifs.Motif, dict):
     # These keys occur for references
 
     def __getitem__(self, key):
+        """Get an item by index or key."""
         try:
             value = super().__getitem__(key)  # motifs.Motif
         except TypeError:

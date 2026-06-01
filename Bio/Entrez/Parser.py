@@ -72,6 +72,7 @@ class NoneElement:
         return "NoneElement(attributes=%r)" % attributes
 
     def __eq__(self, other):
+        """Check equality with another object."""
         if isinstance(other, NoneElement):
             return True
         return False

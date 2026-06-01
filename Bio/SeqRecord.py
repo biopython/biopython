@@ -692,6 +692,7 @@ class SeqRecord:
         return char in self._seq
 
     def __bytes__(self) -> bytes:
+        """Return the bytes representation."""
         if self._seq is None:
             raise ValueError("Seq in SeqRecord is None, can't convert to bytes")
         return bytes(self._seq)

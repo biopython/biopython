@@ -122,6 +122,7 @@ class Array(_arraycore.Array):
         return obj
 
     def __array_finalize__(self, obj):
+        """Perform __array_finalize__ operation."""
         try:
             alphabet = obj.alphabet
         except AttributeError:
@@ -150,6 +151,7 @@ class Array(_arraycore.Array):
         return key
 
     def __getitem__(self, key):
+        """Get an item by index or key."""
         key = self._convert_key(key)
         value = np.ndarray.__getitem__(self, key)
         if value.ndim == 2:
@@ -172,14 +174,17 @@ class Array(_arraycore.Array):
         return value.view(Array)
 
     def __setitem__(self, key, value):
+        """Set an item by index or key."""
         key = self._convert_key(key)
         np.ndarray.__setitem__(self, key, value)
 
     def __contains__(self, key):
+        """Check if an item is contained."""
         # Follow dict definition of __contains__
         return key in self.keys()
 
     def __array_prepare__(self, out_arr, context=None):
+        """Perform __array_prepare__ operation."""
         # needed for numpy older than 1.13.0
         ufunc, inputs, i = context
         alphabet = self.alphabet
@@ -190,11 +195,13 @@ class Array(_arraycore.Array):
         return np.ndarray.__array_prepare__(self, out_arr, context)
 
     def __array_wrap__(self, out_arr, context=None):
+        """Perform __array_wrap__ operation."""
         if len(out_arr) == 1:
             return out_arr[0]
         return np.ndarray.__array_wrap__(self, out_arr, context)
 
     def __array_ufunc__(self, ufunc, method, *inputs, **kwargs):
+        """Perform __array_ufunc__ operation."""
         args = []
         alphabet = self.alphabet
         for arg in inputs:
@@ -243,6 +250,7 @@ class Array(_arraycore.Array):
         return results[0] if len(results) == 1 else results
 
     def __reduce__(self):
+        """Return the pickling state."""
         import pickle
 
         values = np.array(self)
@@ -254,6 +262,7 @@ class Array(_arraycore.Array):
         return (Array.__new__, arguments, state)
 
     def __setstate__(self, state):
+        """Perform __setstate__ operation."""
         import pickle
 
         self[:, :] = pickle.loads(state)
@@ -411,6 +420,7 @@ class Array(_arraycore.Array):
         return text
 
     def __format__(self, fmt):
+        """Return a formatted string."""
         return self.format(fmt)
 
     def format(self, fmt=""):
@@ -435,9 +445,11 @@ class Array(_arraycore.Array):
             raise RuntimeError("Array has unexpected rank %d" % n)
 
     def __str__(self):
+        """Return a string representation of the object."""
         return self.format()
 
     def __repr__(self):
+        """Return a string representation for debugging."""
         text = np.ndarray.__repr__(self)
         alphabet = self.alphabet
         if isinstance(alphabet, str):

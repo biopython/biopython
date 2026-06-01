@@ -131,6 +131,7 @@ class AutoSQLTable(list):
         return cls.from_bytes(data.encode() + b"\0")
 
     def __str__(self):
+        """Return a string representation of the object."""
         type_width = max(len(str(field.as_type)) for field in self)
         name_width = max(len(field.name) for field in self) + 1
         lines = []
@@ -151,9 +152,11 @@ class AutoSQLTable(list):
         return "".join(lines)
 
     def __bytes__(self):
+        """Return the bytes representation."""
         return str(self).encode() + b"\0"
 
     def __getitem__(self, i):
+        """Get an item by index or key."""
         if isinstance(i, slice):
             fields = super().__getitem__(i)
             return AutoSQLTable(self.name, self.comment, fields)
@@ -1037,6 +1040,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         return alignment
 
     def __len__(self):
+        """Return the number of items."""
         return self._length
 
     def search(self, chromosome=None, start=None, end=None):

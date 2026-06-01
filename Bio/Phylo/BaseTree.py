@@ -252,6 +252,7 @@ class TreeElement:
         )
 
     def __str__(self) -> str:
+        """Return a string representation of the object."""
         return self.__repr__()
 
 

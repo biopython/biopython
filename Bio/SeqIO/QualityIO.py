@@ -2499,6 +2499,7 @@ class InvalidCharError(ValueError):
     r: int = 3
 
     def __str__(self) -> str:
+        """Return a string representation of the object."""
         char = self.full_string[self.index]
 
         surrounding_characters = self.full_string[

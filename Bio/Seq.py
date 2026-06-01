@@ -102,34 +102,44 @@ class SequenceDataAbstractBaseClass(ABC):
 
     @abstractmethod
     def __len__(self):
+        """Return the number of items."""
         pass
 
     @abstractmethod
     def __getitem__(self, key):
+        """Get an item by index or key."""
         pass
 
     def __bytes__(self):
+        """Return the bytes representation."""
         return self[:]
 
     def __hash__(self):
+        """Return the hash value."""
         return hash(bytes(self))
 
     def __eq__(self, other):
+        """Check equality with another object."""
         return bytes(self) == other
 
     def __lt__(self, other):
+        """Check if less than another object."""
         return bytes(self) < other
 
     def __le__(self, other):
+        """Check if less than or equal to another object."""
         return bytes(self) <= other
 
     def __gt__(self, other):
+        """Check if greater than another object."""
         return bytes(self) > other
 
     def __ge__(self, other):
+        """Check if greater than or equal to another object."""
         return bytes(self) >= other
 
     def __add__(self, other):
+        """Return the sum with another object."""
         try:
             return bytes(self) + bytes(other)
         except UndefinedSequenceError:
@@ -138,12 +148,15 @@ class SequenceDataAbstractBaseClass(ABC):
             # by _PartiallyDefinedSequenceData.__radd__
 
     def __radd__(self, other):
+        """Return the right sum with another object."""
         return other + bytes(self)
 
     def __mul__(self, other):
+        """Return the product with another object."""
         return other * bytes(self)
 
     def __contains__(self, item):
+        """Check if an item is contained."""
         return bytes(self).__contains__(item)
 
     def decode(self, encoding="utf-8"):

@@ -115,12 +115,14 @@ class HSP(Alignment):
     """
 
     def __repr__(self):
+        """Return a string representation for debugging."""
         query = self.query
         target = self.target
         n, m = self.shape
         return f"<Bio.Blast.HSP target.id={target.id!r} query.id={query.id!r}; {n} rows x {m} columns>"
 
     def __str__(self):
+        """Return a string representation of the object."""
         alignment_text = super().__str__()
         query = self.query
         target = self.target
@@ -226,6 +228,7 @@ class Hit(Alignments):
     """
 
     def __getitem__(self, key):
+        """Get an item by index or key."""
         try:
             value = super().__getitem__(key)
         except IndexError:
@@ -238,6 +241,7 @@ class Hit(Alignments):
             return value
 
     def __repr__(self):
+        """Return a string representation for debugging."""
         target = self.target
         try:
             alignment = self[0]
@@ -443,6 +447,7 @@ class Record(list):
         self.query = None
 
     def __repr__(self):
+        """Return a string representation for debugging."""
         query = self.query
         try:
             query_id = query.id
@@ -457,6 +462,7 @@ class Record(list):
             return f"<Bio.Blast.Record query.id={query_id!r}; {nhits} hits>"
 
     def __str__(self):
+        """Return a string representation of the object."""
         lines = []
         try:
             version = self.version
@@ -505,6 +511,7 @@ class Record(list):
         return "\n".join(lines)
 
     def __getitem__(self, key):
+        """Get an item by index or key."""
         try:
             value = super().__getitem__(key)
         except IndexError:
@@ -554,6 +561,7 @@ class Record(list):
         return [hit.target.id for hit in self]
 
     def __contains__(self, key):
+        """Check if an item is contained."""
         for hit in self:
             if hit.target.id == key:
                 return True
@@ -767,9 +775,11 @@ class Records(UserList):
         self._index = 0
 
     def __enter__(self):
+        """Enter the context manager."""
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
+        """Exit the context manager."""
         try:
             self._parser.Parse(b"", True)
             del self._parser
@@ -790,9 +800,11 @@ class Records(UserList):
         del self._stream
 
     def __iter__(self):
+        """Iterate over the items."""
         return self
 
     def __next__(self):
+        """Return the next item."""
         if self._loaded is True:
             try:
                 record = self._records[self._index]
@@ -836,6 +848,7 @@ class Records(UserList):
                 raise CorruptedXMLError(e) from None
 
     def __getitem__(self, index):
+        """Get an item by index or key."""
         item = super().__getitem__(index)
         if index == slice(None, None, None):
             for key, value in self.__dict__.items():
@@ -869,9 +882,11 @@ class Records(UserList):
         return self._records
 
     def __repr__(self):
+        """Return a string representation for debugging."""
         return f"<Bio.Blast.Records source={self.source!r} program={self.program!r} version={self.version!r} db={self.db!r}>"
 
     def __str__(self):
+        """Return a string representation of the records."""
         text = """\
 Program: %s
      db: %s""" % (

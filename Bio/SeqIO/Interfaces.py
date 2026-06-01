@@ -122,9 +122,11 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         return self
 
     def __enter__(self):
+        """Enter the context manager."""
         return self
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
+        """Exit the context manager."""
         try:
             stream = self.stream
         except AttributeError:

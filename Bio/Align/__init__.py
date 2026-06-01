@@ -1285,6 +1285,7 @@ class Alignment:
         self.coordinates = coordinates
 
     def __array__(self, dtype=None, copy=None):
+        """Return a numpy array representation."""
         if copy is False:
             raise ValueError(
                 "As calling array on an alignment must return a new array, the copy argument cannot be False"
@@ -4059,6 +4060,7 @@ class Alignments(AlignmentsAbstractBaseClass, list):  # noqa: D101
         self._index = -1
 
     def __next__(self):
+        """Return the next item."""
         index = self._index + 1
         try:
             item = self[index]
@@ -4071,6 +4073,7 @@ class Alignments(AlignmentsAbstractBaseClass, list):  # noqa: D101
         self._index = -1
 
     def __len__(self):
+        """Return the number of items."""
         return list.__len__(self)
 
 
@@ -4107,9 +4110,11 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
         self._index = -1
 
     def __len__(self):
+        """Return the number of items."""
         return len(self._paths)
 
     def __repr__(self):
+        """Return a string representation for debugging."""
         try:
             length = len(self._paths)
         except OverflowError:
@@ -4124,6 +4129,7 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
         return f"<PairwiseAlignments object ({length}; score={score}) at {pointer}>"
 
     def __getitem__(self, index):
+        """Get an item by index or key."""
         if not isinstance(index, int):
             raise TypeError(f"index must be an integer, not {index.__class__.__name__}")
         if index < 0:
@@ -4143,6 +4149,7 @@ class PairwiseAlignments(AlignmentsAbstractBaseClass):
         return alignment
 
     def __next__(self):
+        """Return the next item."""
         path = next(self._paths)
         self._index += 1
         coordinates = np.array(path, dtype=np.intp)
@@ -4391,6 +4398,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
     }
 
     def __setattr__(self, key, value):
+        """Perform __setattr__ operation."""
         try:
             new_key = self._new_keys[key]
         except KeyError:
@@ -4421,6 +4429,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         _pairwisealigner.PairwiseAligner.__setattr__(self, key, value)
 
     def __getattr__(self, key):
+        """Perform __getattr__ operation."""
         try:
             new_key = self._new_keys[key]
         except KeyError:
@@ -4554,6 +4563,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         return super().score(seqA, seqB, strand)
 
     def __getstate__(self):
+        """Perform __getstate__ operation."""
         state = {
             "wildcard": self.wildcard,
             "open_internal_insertion_score": self.open_internal_insertion_score,
@@ -4579,6 +4589,7 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
         return state
 
     def __setstate__(self, state):
+        """Perform __setstate__ operation."""
         self.wildcard = state["wildcard"]
         self.open_internal_insertion_score = state["open_internal_insertion_score"]
         self.extend_internal_insertion_score = state["extend_internal_insertion_score"]

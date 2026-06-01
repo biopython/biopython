@@ -233,4 +233,5 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         return alignment
 
     def __len__(self):
+        """Return the number of items."""
         return self._length
