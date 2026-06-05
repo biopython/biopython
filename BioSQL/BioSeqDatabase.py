@@ -52,7 +52,7 @@ def open_database(driver="MySQLdb", **kwargs):
 
     # Different drivers use different keywords...
     kw = kwargs.copy()
-    if driver in ["MySQLdb", "mysql.connector"]:
+    if driver in ["MySQLdb", "mysql.connector", "pymysql"]:
         if "database" in kw:
             kw["db"] = kw["database"]
             del kw["database"]
@@ -80,7 +80,7 @@ def open_database(driver="MySQLdb", **kwargs):
     server = DBServer(conn, module)
 
     # Sets MySQL to allow double quotes, rather than only backticks
-    if driver in ["MySQLdb", "mysql.connector"]:
+    if driver in ["MySQLdb", "mysql.connector", "pymysql"]:
         server.adaptor.execute("SET sql_mode='ANSI_QUOTES';")
 
     # TODO - Remove the following once BioSQL Bug 2839 is fixed.
@@ -240,7 +240,7 @@ class DBServer:
             self.adaptor.cursor.execute(sql)
         # 2. MySQL needs the database loading split up into single lines of
         # SQL executed one at a time
-        elif self.module_name in ["mysql.connector", "MySQLdb", "sqlite3"]:
+        elif self.module_name in ["mysql.connector", "MySQLdb", "pymysql", "sqlite3"]:
             sql_parts = sql.split(";")  # one line per sql command
             # don't use the last item, it's blank
             for sql_line in sql_parts[:-1]:
@@ -585,6 +585,7 @@ _interface_specific_adaptors = {
     # If SQL interfaces require a specific adaptor, use this to map the adaptor
     "mysql.connector": MysqlConnectorAdaptor,
     "MySQLdb": MysqlConnectorAdaptor,
+    "pymysql": MysqlConnectorAdaptor,
 }
 
 _allowed_lookups = {
