@@ -25,7 +25,7 @@ issue can be worked on.
 
 We have been using the `good first issue
 <https://github.com/biopython/biopython/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22>`_
-label specifically for beginners. These are minor issues where the team know
+label specifically for beginners. These are minor issues where the team knows
 what is needed, and could easily do it themselves (albeit some are tedious),
 but we have chosen instead to use these as teachable moments to help potential
 new contributors get involved with a little mentoring as needed. This is with
