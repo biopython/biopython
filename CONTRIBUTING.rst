@@ -16,6 +16,33 @@ and the more widely used "3-Clause BSD License" (see our LICENSE file for more
 details).
 
 
+Tagged issues
+-------------
+
+In general, unless there is an open pull request associated with an issue,
+or the issue discussion makes it clear that someone is working on it, any
+issue can be worked on.
+
+We have been using the `good first issue
+<https://github.com/biopython/biopython/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22>`_
+label specifically for beginners. These are minor issues where the team knows
+what is needed, and could easily do it themselves (albeit some are tedious),
+but we have chosen instead to use these as teachable moments to help potential
+new contributors get involved with a little mentoring as needed. This is with
+the hope they become long term open source contributors (ideally to Biopython).
+Tackling these with AI tools defeats that purpose, and such PRs will be rejected,
+and we will likely block repeat offenders.
+
+The `help wanted
+<https://github.com/biopython/biopython/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22help%20wanted%22)>`_
+label is typically used for issues where none of the regular contributors have the
+expertise or setup to work on an issue (eg specific platforms, or restricted datasets).
+The `needs info
+<https://github.com/biopython/biopython/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22Needs%20info%22>`_
+label is for unresloved issues where we lack actionable information. In some cases
+these may be best closed, but perhaps another person will run into the same problem
+and can help solve it.
+
 Git Usage
 ---------
 
