@@ -252,9 +252,12 @@ class TestCalculateConsensus(unittest.TestCase):
         )
         with self.assertRaises(ValueError) as cm:
             motifs.Motif("ACGT", alignment)
-        msg = str(cm.exception)
-        self.assertIn("not in alphabet", msg)
-        self.assertIn("'a'", msg)
+        self.assertEqual(
+            str(cm.exception),
+            "Alignment contains letters not in alphabet 'ACGT': "
+            "['a', 'c', 'g', 't']. Check for case mismatches (e.g. lowercase "
+            "sequences with an uppercase alphabet) or a wrong alphabet.",
+        )
 
     def test_motif_init_rejects_partial_alphabet_mismatch(self):
         """Test that Motif rejects alignments containing any extraneous letter.
@@ -269,7 +272,18 @@ class TestCalculateConsensus(unittest.TestCase):
         )
         with self.assertRaises(ValueError) as cm:
             motifs.Motif("ACGT", alignment)
-        self.assertIn("'N'", str(cm.exception))
+        self.assertEqual(
+            str(cm.exception),
+            "Alignment contains letters not in alphabet 'ACGT': ['N']. "
+            "Check for case mismatches (e.g. lowercase sequences with an "
+            "uppercase alphabet) or a wrong alphabet.",
+        )
+
+    def test_normal_consensus_unchanged(self):
+        """Test normal consensus behavior."""
+        motif = motifs.create([Seq("AAGC"), Seq("AAGC")])
+        result = motif.counts.calculate_consensus()
+        self.assertEqual(result, "AAGC")
 
     def test_zero_counts_via_counts_mode_returns_undefined(self):
         """Test that calculate_consensus handles all-zero columns gracefully.
@@ -279,35 +293,17 @@ class TestCalculateConsensus(unittest.TestCase):
         That path can still reach an all-zero column (e.g. after
         manual trimming or filtering), so calculate_consensus must
         defensively return the undefined character instead of raising
-        UnboundLocalError.
+        UnboundLocalError.  The identity parameter follows the same path.
         """
         zero_counts = {
-            "A": [0, 0, 0, 0],
-            "C": [0, 0, 0, 0],
-            "G": [0, 0, 0, 0],
-            "T": [0, 0, 0, 0],
+            "A": [0, 0, 0],
+            "C": [0, 0, 0],
+            "G": [0, 0, 0],
+            "T": [0, 0, 0],
         }
         motif = motifs.Motif("ACGT", counts=zero_counts)
-        result = motif.counts.calculate_consensus()
-        self.assertEqual(result, "NNNN")
-
-    def test_zero_counts_with_identity(self):
-        """Test that all-zero counts with identity parameter also works."""
-        zero_counts = {
-            "A": [0, 0, 0, 0],
-            "C": [0, 0, 0, 0],
-            "G": [0, 0, 0, 0],
-            "T": [0, 0, 0, 0],
-        }
-        motif = motifs.Motif("ACGT", counts=zero_counts)
-        result = motif.counts.calculate_consensus(identity=0.5)
-        self.assertEqual(result, "NNNN")
-
-    def test_normal_consensus_unchanged(self):
-        """Test that normal consensus behavior is not affected by the fix."""
-        motif = motifs.create([Seq("AAGC"), Seq("AAGC")])
-        result = motif.counts.calculate_consensus()
-        self.assertEqual(result, "AAGC")
+        self.assertEqual(motif.counts.calculate_consensus(), "NNN")
+        self.assertEqual(motif.counts.calculate_consensus(identity=0.5), "NNN")
 
 
 class TestAlignAce(unittest.TestCase):
