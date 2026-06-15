@@ -9,6 +9,7 @@ from os import PathLike
 from collections.abc import Iterator
 from typing import Optional
 from typing import Union
+from urllib.error import HTTPError
 from urllib.request import urlopen
 
 from Bio.PDB.MMCIFParser import MMCIFParser
@@ -22,11 +23,40 @@ def get_predictions(qualifier: str) -> Iterator[dict]:
     :type qualifier: str
     :return: The AlphaFold predictions
     :rtype: Iterator[dict]
+    :raises ValueError: If no predictions are available for the accession
     """
     url = f"https://alphafold.com/api/prediction/{qualifier}"
-    # Retrieve the AlphaFold predictions with urllib
-    with urlopen(url) as response:
-        yield from json.loads(response.read().decode())
+    try:
+        with urlopen(url) as response:
+            predictions = json.loads(response.read().decode())
+    except HTTPError as error:
+        raise ValueError(
+            f"No AlphaFold predictions found for accession {qualifier!r}"
+        ) from error
+    yield from predictions
+
+
+def _get_file_path_for(
+    prediction: dict,
+    url_key: str,
+    directory: str | bytes | PathLike | None = None,
+) -> str:
+    """Get the local path for one of an AlphaFold prediction's files.
+
+    :param prediction: An AlphaFold prediction
+    :type prediction: dict
+    :param url_key: The prediction key holding the file URL, e.g. ``"cifUrl"``
+    :type url_key: str
+    :param directory: The directory that stores the file, defaults to the current working directory
+    :type directory: Union[str, bytes, PathLike], optional
+    :return: The path to the file
+    :rtype: str
+    """
+    if directory is None:
+        directory = os.getcwd()
+
+    file_name = prediction[url_key].split("/")[-1]
+    return str(os.path.join(directory, file_name))
 
 
 def _get_mmcif_file_path_for(
@@ -37,17 +67,47 @@ def _get_mmcif_file_path_for(
     :param prediction: An AlphaFold prediction
     :type prediction: dict
     :param directory: The directory that stores the mmCIF file, defaults to the current working directory
-    :type directory: Union[int, str, bytes, PathLike], optional
+    :type directory: Union[str, bytes, PathLike], optional
     :return: The path to the mmCIF file
+    :rtype: str
+    """
+    return _get_file_path_for(prediction, "cifUrl", directory)
+
+
+def _download_url_for(
+    prediction: dict,
+    url_key: str,
+    directory: str | bytes | PathLike | None = None,
+) -> str:
+    """Download one of an AlphaFold prediction's files.
+
+    Downloads the file to the current working directory if no destination is specified.
+
+    :param prediction: An AlphaFold prediction
+    :type prediction: dict
+    :param url_key: The prediction key holding the file URL, e.g. ``"cifUrl"``
+    :type url_key: str
+    :param directory: The directory to write the file to, defaults to the current working directory
+    :type directory: Union[str, bytes, PathLike], optional
+    :return: The path to the downloaded file
     :rtype: str
     """
     if directory is None:
         directory = os.getcwd()
 
-    cif_url = prediction["cifUrl"]
-    # Get the file name from the URL
-    file_name = cif_url.split("/")[-1]
-    return str(os.path.join(directory, file_name))
+    os.makedirs(directory, exist_ok=True)
+    file_path = _get_file_path_for(prediction, url_key, directory)
+
+    if os.path.exists(file_path):
+        print(f"File {file_path} already exists, skipping download.")
+        return file_path
+
+    with urlopen(prediction[url_key]) as response:
+        data = response.read()
+    with open(file_path, "wb") as file:
+        file.write(data)
+
+    return file_path
 
 
 def download_cif_for(
@@ -60,28 +120,45 @@ def download_cif_for(
     :param prediction: An AlphaFold prediction
     :type prediction: dict
     :param directory: The directory to write the mmCIF data to, defaults to the current working directory
-    :type directory: Union[int, str, bytes, PathLike], optional
+    :type directory: Union[str, bytes, PathLike], optional
     :return: The path to the mmCIF file
     :rtype: str
     """
-    if directory is None:
-        directory = os.getcwd()
+    return _download_url_for(prediction, "cifUrl", directory)
 
-    cif_url = prediction["cifUrl"]
-    # Create the directory in case it does not exist
-    os.makedirs(directory, exist_ok=True)
-    file_path = _get_mmcif_file_path_for(prediction, directory)
 
-    if os.path.exists(file_path):
-        print(f"File {file_path} already exists, skipping download.")
-    else:
-        with urlopen(cif_url) as response:
-            data = response.read()
-        # Write the data to destination
-        with open(file_path, "wb") as file:
-            file.write(data)
+def download_pdb_for(
+    prediction: dict, directory: str | bytes | PathLike | None = None
+) -> str:
+    """Download the PDB file for an AlphaFold prediction.
 
-    return file_path
+    Downloads the file to the current working directory if no destination is specified.
+
+    :param prediction: An AlphaFold prediction
+    :type prediction: dict
+    :param directory: The directory to write the PDB data to, defaults to the current working directory
+    :type directory: Union[str, bytes, PathLike], optional
+    :return: The path to the PDB file
+    :rtype: str
+    """
+    return _download_url_for(prediction, "pdbUrl", directory)
+
+
+def download_pae_for(
+    prediction: dict, directory: str | bytes | PathLike | None = None
+) -> str:
+    """Download the predicted aligned error (PAE) file for an AlphaFold prediction.
+
+    Downloads the file to the current working directory if no destination is specified.
+
+    :param prediction: An AlphaFold prediction
+    :type prediction: dict
+    :param directory: The directory to write the PAE data to, defaults to the current working directory
+    :type directory: Union[str, bytes, PathLike], optional
+    :return: The path to the PAE file
+    :rtype: str
+    """
+    return _download_url_for(prediction, "paeDocUrl", directory)
 
 
 def get_structural_models_for(
@@ -98,7 +175,7 @@ def get_structural_models_for(
     :param mmcif_parser: The mmCIF parser to use, defaults to ``MMCIFParser()``
     :type mmcif_parser: MMCIFParser, optional
     :param directory: The directory to store the mmCIF data, defaults to the current working directory
-    :type directory: Union[int, str, bytes, PathLike], optional
+    :type directory: Union[str, bytes, PathLike], optional
     :return: An iterator over the PDB structures
     :rtype: Iterator[PDBStructure]
     """
