@@ -102,34 +102,42 @@ class SequenceDataAbstractBaseClass(ABC):
 
     @abstractmethod
     def __len__(self):
-        pass
+        """Return the length of the sequence data."""
 
     @abstractmethod
     def __getitem__(self, key):
-        pass
+        """Return the sequence data item or slice at the requested index."""
 
     def __bytes__(self):
+        """Return the sequence data as a bytes object."""
         return self[:]
 
     def __hash__(self):
+        """Return a hash of the sequence data."""
         return hash(bytes(self))
 
     def __eq__(self, other):
+        """Return True if the sequence data equals other, False otherwise."""
         return bytes(self) == other
 
     def __lt__(self, other):
+        """Return True if the sequence data is less than other, False otherwise."""
         return bytes(self) < other
 
     def __le__(self, other):
+        """Return True if the sequence data is less than or equal to other."""
         return bytes(self) <= other
 
     def __gt__(self, other):
+        """Return True if the sequence data is greater than other, False otherwise."""
         return bytes(self) > other
 
     def __ge__(self, other):
+        """Return True if the sequence data is greater than or equal to other."""
         return bytes(self) >= other
 
     def __add__(self, other):
+        """Return the concatenation of the sequence data and other as bytes."""
         try:
             return bytes(self) + bytes(other)
         except UndefinedSequenceError:
@@ -138,12 +146,15 @@ class SequenceDataAbstractBaseClass(ABC):
             # by _PartiallyDefinedSequenceData.__radd__
 
     def __radd__(self, other):
+        """Return the concatenation of other and the sequence data as bytes."""
         return other + bytes(self)
 
     def __mul__(self, other):
+        """Return the sequence data repeated other times as bytes."""
         return other * bytes(self)
 
     def __contains__(self, item):
+        """Return True if item is contained in the sequence data, False otherwise."""
         return bytes(self).__contains__(item)
 
     def decode(self, encoding="utf-8"):
