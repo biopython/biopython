@@ -16,6 +16,23 @@ and the more widely used "3-Clause BSD License" (see our LICENSE file for more
 details).
 
 
+AI tools
+--------
+
+Please do not use any Large Language Models (LLM) or generative artificial
+intelligence tools for contributing to Biopython, or communicating with the
+Biopython community - with the limited exception of translation from your
+native language into English for discussion where this should be disclosed
+and the original text included.
+
+We have concerns about both the ethics and legality of the output of such
+tools, including the international copyright status of the output and it if
+can legitimately be included in Biopython under our open source licensing.
+We are also concerned by the review and maintenance burden.
+
+Accounts making such pull requests may be banned without warning.
+
+
 Tagged issues
 -------------
 
