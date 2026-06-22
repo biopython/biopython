@@ -278,7 +278,7 @@ class Writer:
         ladderize=None,
         max_confidence=1.0,
         format_confidence="%1.2f",
-        format_branch_length="%1.5f",
+        format_branch_length="%1.8g",
     ):
         """Return an iterable of PAUP-compatible tree lines."""
         # If there's a conflict in the arguments, we override plain=True
