@@ -26,7 +26,7 @@ native language into English for discussion where this should be disclosed
 and the original text included.
 
 We have concerns about both the ethics and legality of the output of such
-tools, including the international copyright status of the output and it if
+tools, including the international copyright status of the output and if it
 can legitimately be included in Biopython under our open source licensing.
 We are also concerned by the review and maintenance burden.
 
