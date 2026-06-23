@@ -245,6 +245,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Marie Crane <https://github.com/mariecrane>
 - Mark Amery <https://github.com/ExplodingCabbage>
 - Markus Piotrowski <https://github.com/MarkusPiotrowski>
+- Martin Mokrejs <https://github.com/mmokrejs>
 - Martin Thoma <https://martin-thoma.com/author/martin-thoma/>
 - Marton Langa <https://github.com/martonlanga>
 - Mateusz Korycinski <https://github.com/mkorycinski>
