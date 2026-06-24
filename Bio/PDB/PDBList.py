@@ -385,32 +385,34 @@ class PDBList:
                 # something has gone wrong.
 
         # Move the obsolete files to a special folder
-        # NOTE: This should be updated to handle multiple file types and
-        # assemblies. As of now, it only looks for PDB-formatted files.
-        # Using pathlib will be probably the best approach here, to build
-        # and index of which files we have efficiently (or glob them).
+        # NOTE: This handles multiple file types (pdb, mmCif, xml, mmtf, bundle).
         for pdb_code in obsolete:
-            if self.flat_tree:
-                old_file = os.path.join(self.local_pdb, f"pdb{pdb_code}.{file_format}")
-                new_dir = self.obsolete_pdb
-            else:
-                old_file = os.path.join(
-                    self.local_pdb, pdb_code[1:3], f"pdb{pdb_code}.{file_format}"
-                )
-                new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
-            new_file = os.path.join(new_dir, f"pdb{pdb_code}.{file_format}")
-            if os.path.isfile(old_file):
-                os.makedirs(new_dir, exist_ok=True)
-                try:
-                    shutil.move(old_file, new_file)
-                except Exception:
-                    print(f"Could not move {old_file} to obsolete folder")
-            elif os.path.isfile(new_file):
-                if self._verbose:
-                    print(f"Obsolete file {old_file} already moved")
-            else:
-                if self._verbose:
-                    print(f"Obsolete file {old_file} is missing")
+            for fmt in ("pdb", "mmCif", "xml"):
+                if self.flat_tree:
+                    old_file = os.path.join(
+                        self.local_pdb, f"pdb{pdb_code}.{fmt}"
+                    )
+                    new_dir = self.obsolete_pdb
+                else:
+                    old_file = os.path.join(
+                        self.local_pdb, pdb_code[1:3], f"pdb{pdb_code}.{fmt}"
+                    )
+                    new_dir = os.path.join(
+                        self.obsolete_pdb, pdb_code[1:3]
+                    )
+                new_file = os.path.join(new_dir, f"pdb{pdb_code}.{fmt}")
+                if os.path.isfile(old_file):
+                    os.makedirs(new_dir, exist_ok=True)
+                    try:
+                        shutil.move(old_file, new_file)
+                    except Exception:
+                        if self._verbose:
+                            print(
+                                f"Could not move {old_file} to obsolete folder"
+                            )
+                elif os.path.isfile(new_file):
+                    if self._verbose:
+                        print(f"Obsolete file {old_file} already moved")
 
     def download_pdb_files(
         self,
