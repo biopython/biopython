@@ -92,9 +92,9 @@ class Atom:
         self.full_id = None  # (structure id, model id, chain id, residue id, atom id)
         self.id = name  # id of atom is the atom name (e.g. "CA")
         self.disordered_flag = 0
-        self.anisou_array = None
-        self.siguij_array = None
-        self.sigatm_array = None
+        self.anisou_array: np.ndarray | None = None
+        self.siguij_array: np.ndarray | None = None
+        self.sigatm_array: np.ndarray | None = None
         self.serial_number = serial_number
         # Dictionary that keeps additional properties
         self.xtra: dict = {}
