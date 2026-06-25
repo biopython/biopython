@@ -23,11 +23,34 @@ requires_internet.check()
 class TestPBDListGetList(unittest.TestCase):
     """Test methods responsible for getting lists of entries."""
 
+    def test_default_server_includes_pdb_path_prefix(self):
+        """The default server should point at the wwPDB data root."""
+        pdblist = PDBList(obsolete_pdb="unimportant")
+        self.assertEqual(pdblist.pdb_server, PDBList.DEFAULT_SERVER)
+
+    def test_mirror_server_urls(self):
+        """Custom servers should only need the mirror-specific data root."""
+        ebi = PDBList(server="https://ftp.ebi.ac.uk/pub/databases/pdb")
+        status_url = ebi.pdb_server + "/data/status/latest/added.pdb"
+        self.assertEqual(
+            status_url,
+            "https://ftp.ebi.ac.uk/pub/databases/pdb/data/status/latest/added.pdb",
+        )
+
+        pdbj = PDBList(server="https://ftp.pdbj.org/pub/pdb")
+        structure_url = (
+            pdbj.pdb_server + "/data/structures/divided/pdb/27/pdb127d.ent.gz"
+        )
+        self.assertEqual(
+            structure_url,
+            "https://ftp.pdbj.org/pub/pdb/data/structures/divided/pdb/27/pdb127d.ent.gz",
+        )
+
     def test_get_recent_changes(self):
         """Tests the Bio.PDB.PDBList.get_recent_changes method."""
         # obsolete_pdb declared to prevent from creating the "obsolete" directory
         pdblist = PDBList(obsolete_pdb="unimportant")
-        url = pdblist.pdb_server + "/pub/pdb/data/status/latest/added.pdb"
+        url = pdblist.pdb_server + "/data/status/latest/added.pdb"
         entries = pdblist.get_status_list(url)
         self.assertIsNotNone(entries)
 

@@ -86,9 +86,12 @@ class PDBList:
     http://www.pdb.org/.
     """
 
+    # Default wwPDB mirror; EBI uses https://ftp.ebi.ac.uk/pub/databases/pdb instead.
+    DEFAULT_SERVER = "https://files.wwpdb.org/pub/pdb"
+
     def __init__(
         self,
-        server="https://files.wwpdb.org",
+        server=None,
         pdb=None,
         obsolete_pdb=None,
         verbose=True,
@@ -97,9 +100,15 @@ class PDBList:
 
         Argument pdb is the local path to use, defaulting to the current
         directory at the moment of initialisation.
+
+        The server argument should be the PDB data root URL, including any
+        mirror-specific path prefix (for example the wwPDB default ends in
+        ``/pub/pdb``, while the EBI mirror ends in ``/pub/databases/pdb``).
         """
         self.assemblies = None
-        self.pdb_server = server  # remote pdb server
+        if server is None:
+            server = self.DEFAULT_SERVER
+        self.pdb_server = server.rstrip("/")  # remote pdb server
         if pdb:
             self.local_pdb = pdb  # local pdb file tree
         else:
@@ -161,7 +170,7 @@ class PDBList:
             drwxrwxr-x   2 1002     sysadmin     512 Oct 14 02:14 20031013
             -rw-r--r--   1 1002     sysadmin    1327 Mar 12  2001 README
         """
-        path = self.pdb_server + "/pub/pdb/data/status/latest/"
+        path = self.pdb_server + "/data/status/latest/"
 
         # Retrieve the lists
         added = self.get_status_list(path + "added.pdb")
@@ -174,7 +183,7 @@ class PDBList:
 
         Returns a list of PDB codes in the index file.
         """
-        url = self.pdb_server + "/pub/pdb/derived_data/index/entries.idx"
+        url = self.pdb_server + "/derived_data/index/entries.idx"
         if self._verbose:
             print("Retrieving index file. Takes about 27 MB.")
         with contextlib.closing(urlopen(url)) as handle:
@@ -206,7 +215,7 @@ class PDBList:
             ...
 
         """
-        url = self.pdb_server + "/pub/pdb/data/status/obsolete.dat"
+        url = self.pdb_server + "/data/status/obsolete.dat"
         with contextlib.closing(urlopen(url)) as handle:
             # Extract pdb codes. Could use a list comprehension, but I want
             # to include an assert to check for mis-reading the data.
@@ -294,12 +303,12 @@ class PDBList:
             )
             url = (
                 self.pdb_server
-                + f"/pub/pdb/data/structures/{pdb_dir}/{file_type}/{pdb_code[1:3]}/{archive}"
+                + f"/data/structures/{pdb_dir}/{file_type}/{pdb_code[1:3]}/{archive}"
             )
         elif file_format == "bundle":
             url = (
                 self.pdb_server
-                + f"/pub/pdb/compatible/pdb_bundle/{pdb_code[1:3]}/{pdb_code}/{archive}"
+                + f"/compatible/pdb_bundle/{pdb_code[1:3]}/{pdb_code}/{archive}"
             )
         else:
             url = f"http://mmtf.rcsb.org/v1.0/full/{pdb_code}"
@@ -534,9 +543,9 @@ class PDBList:
         archive_fn = archive[file_format]
 
         if file_format == "mmcif":
-            url = self.pdb_server + f"/pub/pdb/data/assemblies/mmCIF/all/{archive_fn}"
+            url = self.pdb_server + f"/data/assemblies/mmCIF/all/{archive_fn}"
         elif file_format == "pdb":
-            url = self.pdb_server + f"/pub/pdb/data/biounit/PDB/all/{archive_fn}"
+            url = self.pdb_server + f"/data/biounit/PDB/all/{archive_fn}"
         else:  # better safe than sorry
             raise ValueError(f"file_format '{file_format}' not supported")
 
@@ -683,7 +692,7 @@ class PDBList:
         """Retrieve and save a (big) file containing all the sequences of PDB entries."""
         if self._verbose:
             print("Retrieving sequence file (takes over 110 MB).")
-        url = self.pdb_server + "/pub/pdb/derived_data/pdb_seqres.txt"
+        url = self.pdb_server + "/derived_data/pdb_seqres.txt"
         urlretrieve(url, savefile)
 
 
