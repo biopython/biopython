@@ -11,6 +11,7 @@ import os
 import shutil
 import tempfile
 import unittest
+from unittest import mock
 
 import requires_internet
 
@@ -46,6 +47,12 @@ class TestPBDListGetList(unittest.TestCase):
             "https://ftp.pdbj.org/pub/pdb/data/structures/divided/pdb/27/pdb127d.ent.gz",
         )
 
+    def test_server_trailing_slash_is_stripped(self):
+        pdblist = PDBList(
+            server="https://ftp.ebi.ac.uk/pub/databases/pdb/", obsolete_pdb="unimportant"
+        )
+        self.assertEqual(pdblist.pdb_server, "https://ftp.ebi.ac.uk/pub/databases/pdb")
+
     def test_get_recent_changes(self):
         """Tests the Bio.PDB.PDBList.get_recent_changes method."""
         # obsolete_pdb declared to prevent from creating the "obsolete" directory
@@ -80,6 +87,91 @@ class TestPBDListGetList(unittest.TestCase):
         # As number of obsolete entries constantly grow, test checks if a certain number
         # was exceeded
         self.assertGreater(len(entries), 100000)
+
+
+class TestPDBListURLConstruction(unittest.TestCase):
+    """Check download URLs without hitting the network."""
+
+    @staticmethod
+    def _fake_urlretrieve(_url, filename):
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, "wb") as handle:
+            handle.write(b"")
+        return filename, {}
+
+    def test_retrieve_pdb_file_builds_rcsb_structure_url(self):
+        pdblist = PDBList(pdb=".", obsolete_pdb="unimportant", verbose=False)
+        with tempfile.TemporaryDirectory() as tmp:
+            pdblist.local_pdb = tmp
+            with mock.patch(
+                "Bio.PDB.PDBList.urlretrieve", side_effect=self._fake_urlretrieve
+            ) as urlretrieve:
+                with mock.patch("Bio.PDB.PDBList.gzip.open") as gzip_open:
+                    gzip_open.return_value.__enter__.return_value = iter([b""])
+                    pdblist.retrieve_pdb_file("127d", file_format="pdb")
+            url = urlretrieve.call_args[0][0]
+        self.assertEqual(
+            url,
+            "https://files.wwpdb.org/pub/pdb/data/structures/divided/pdb/27/pdb127d.ent.gz",
+        )
+
+    def test_retrieve_pdb_file_builds_ebi_structure_url(self):
+        pdblist = PDBList(
+            server="https://ftp.ebi.ac.uk/pub/databases/pdb",
+            pdb=".",
+            obsolete_pdb="unimportant",
+            verbose=False,
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            pdblist.local_pdb = tmp
+            with mock.patch(
+                "Bio.PDB.PDBList.urlretrieve", side_effect=self._fake_urlretrieve
+            ) as urlretrieve:
+                with mock.patch("Bio.PDB.PDBList.gzip.open") as gzip_open:
+                    gzip_open.return_value.__enter__.return_value = iter([b""])
+                    pdblist.retrieve_pdb_file("127d", file_format="mmCif")
+            url = urlretrieve.call_args[0][0]
+        self.assertEqual(
+            url,
+            "https://ftp.ebi.ac.uk/pub/databases/pdb/data/structures/divided/mmCIF/27/127d.cif.gz",
+        )
+
+    def test_get_all_entries_uses_data_root(self):
+        pdblist = PDBList(
+            server="https://ftp.pdbj.org/pub/pdb", obsolete_pdb="unimportant", verbose=False
+        )
+        with mock.patch("Bio.PDB.PDBList.urlopen") as urlopen:
+            urlopen.return_value.__enter__.return_value.readlines.return_value = [
+                b"HEADER\n",
+                b"----\n",
+            ]
+            pdblist.get_all_entries()
+        url = urlopen.call_args[0][0]
+        self.assertEqual(
+            url, "https://ftp.pdbj.org/pub/pdb/derived_data/index/entries.idx"
+        )
+
+    def test_get_recent_changes_uses_data_root(self):
+        pdblist = PDBList(
+            server="https://ftp.ebi.ac.uk/pub/databases/pdb",
+            obsolete_pdb="unimportant",
+            verbose=False,
+        )
+        with mock.patch.object(PDBList, "get_status_list", return_value=["1abc"]) as get_list:
+            pdblist.get_recent_changes()
+        urls = [call.args[0] for call in get_list.call_args_list]
+        self.assertEqual(
+            urls[0],
+            "https://ftp.ebi.ac.uk/pub/databases/pdb/data/status/latest/added.pdb",
+        )
+        self.assertEqual(
+            urls[1],
+            "https://ftp.ebi.ac.uk/pub/databases/pdb/data/status/latest/modified.pdb",
+        )
+        self.assertEqual(
+            urls[2],
+            "https://ftp.ebi.ac.uk/pub/databases/pdb/data/status/latest/obsolete.pdb",
+        )
 
 
 class TestPDBListGetStructure(unittest.TestCase):
