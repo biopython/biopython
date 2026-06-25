@@ -235,6 +235,77 @@ U:   0.50   0.17   0.50   0.17   0.50
         self.assertEqual(str(m_rna.reverse_complement().pwm), expected_reverse_rna_pwm)
 
 
+class TestCalculateConsensus(unittest.TestCase):
+    """Tests for calculate_consensus edge cases and Motif alphabet validation."""
+
+    def test_motif_init_rejects_mismatched_alphabet(self):
+        """Test that Motif raises when alignment letters are not in alphabet.
+
+        Catches the original bug #5000 at construction time: lowercase
+        sequences with an uppercase alphabet now produce a clear ValueError
+        instead of silently building an all-zero motif.
+        """
+        from Bio.Align import Alignment
+
+        alignment = Alignment(
+            [Seq("acgt"), Seq("acgt")],
+        )
+        with self.assertRaises(ValueError) as cm:
+            motifs.Motif("ACGT", alignment)
+        self.assertEqual(
+            str(cm.exception),
+            "Alignment contains letters not in alphabet 'ACGT': "
+            "['a', 'c', 'g', 't']. Check for case mismatches (e.g. lowercase "
+            "sequences with an uppercase alphabet) or a wrong alphabet.",
+        )
+
+    def test_motif_init_rejects_partial_alphabet_mismatch(self):
+        """Test that Motif rejects alignments containing any extraneous letter.
+
+        Even if some letters match, an out-of-alphabet letter should error
+        rather than silently producing zero counts for the wrong letter.
+        """
+        from Bio.Align import Alignment
+
+        alignment = Alignment(
+            [Seq("ACGTN"), Seq("ACGTN")],
+        )
+        with self.assertRaises(ValueError) as cm:
+            motifs.Motif("ACGT", alignment)
+        self.assertEqual(
+            str(cm.exception),
+            "Alignment contains letters not in alphabet 'ACGT': ['N']. "
+            "Check for case mismatches (e.g. lowercase sequences with an "
+            "uppercase alphabet) or a wrong alphabet.",
+        )
+
+    def test_normal_consensus_unchanged(self):
+        """Test normal consensus behavior."""
+        motif = motifs.create([Seq("AAGC"), Seq("AAGC")])
+        result = motif.counts.calculate_consensus()
+        self.assertEqual(result, "AAGC")
+
+    def test_zero_counts_via_counts_mode_returns_undefined(self):
+        """Test that calculate_consensus handles all-zero columns gracefully.
+
+        The Motif(counts=...) constructor does not perform alphabet
+        validation since the caller passes the count matrix directly.
+        That path can still reach an all-zero column (e.g. after
+        manual trimming or filtering), so calculate_consensus must
+        defensively return the undefined character instead of raising
+        UnboundLocalError.  The identity parameter follows the same path.
+        """
+        zero_counts = {
+            "A": [0, 0, 0],
+            "C": [0, 0, 0],
+            "G": [0, 0, 0],
+            "T": [0, 0, 0],
+        }
+        motif = motifs.Motif("ACGT", counts=zero_counts)
+        self.assertEqual(motif.counts.calculate_consensus(), "NNN")
+        self.assertEqual(motif.counts.calculate_consensus(identity=0.5), "NNN")
+
+
 class TestAlignAce(unittest.TestCase):
     """Testing parsing AlignAce output files."""
 
