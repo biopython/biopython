@@ -13,6 +13,11 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.88
 ===============================================
 
+The ``Bio.PDB.alphafold_db`` module can now download PDB format and predicted
+aligned error (PAE) files via the new ``download_pdb_for`` and
+``download_pae_for`` functions, and ``get_predictions`` raises a clearer
+``ValueError`` when no prediction is available for an accession.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite and type annotations.
 
@@ -21,6 +26,7 @@ possible, especially the following contributors:
 
 - Peter Cock
 - Al Fattah Suyadi (first contribution)
+- Jae Min Yoon (first contribution)
 - Laura Piñero Roig (first contribution)
 
 30 March 2026: Biopython 1.87
