@@ -293,9 +293,9 @@ class Atom:
             and self.altloc == other.altloc
             and self.fullname == other.fullname
             and (np.allclose(self.coord, other.coord) if compare_coordinates else True)
-            and getattr(self, "element", None) == getattr(self, "element", None)
-            and getattr(self, "pqr_charge", None) == getattr(self, "pqr_charge", None)
-            and getattr(self, "radius", None) == getattr(self, "radius", None)
+            and getattr(self, "element", None) == getattr(other, "element", None)
+            and getattr(self, "pqr_charge", None) == getattr(other, "pqr_charge", None)
+            and getattr(self, "radius", None) == getattr(other, "radius", None)
         )
 
     # set methods
