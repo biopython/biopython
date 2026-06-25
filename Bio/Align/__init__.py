@@ -1250,8 +1250,7 @@ class Alignment:
             # Append the current positions to msa_coordinates
             msa_coordinates.append([reference_position] + list(positions[:, 1]))
 
-        msa_coordinates = np.array(msa_coordinates).transpose()
-        return cls(sequences, msa_coordinates)
+        return cls(sequences, np.array(msa_coordinates).transpose())
 
     def __init__(self, sequences, coordinates=None):
         """Initialize a new Alignment object.
