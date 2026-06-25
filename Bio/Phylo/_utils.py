@@ -286,6 +286,7 @@ def draw(
     show_confidence=True,
     # For power users
     axes=None,
+    title=None,
     branch_labels=None,
     label_colors=None,
     *args,
@@ -331,6 +332,8 @@ def draw(
         axes : matplotlib/pylab axes
             If a valid matplotlib.axes.Axes instance, the phylogram is plotted
             in that Axes. By default (None), a new figure is created.
+        title : str
+            A string specifying an optional title for the plot.
         branch_labels : dict or callable
             A mapping of each clade to the label that will be shown along the
             branch leading to it. By default this is the confidence value(s) of
@@ -356,6 +359,10 @@ def draw(
             ) from None
 
     import matplotlib.collections as mpcollections
+
+    # Optional title
+    if title:
+        plt.title(title)
 
     # Arrays that store lines for the plot of clades
     horizontal_linecollections = []
