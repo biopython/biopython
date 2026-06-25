@@ -481,6 +481,12 @@ class MixinTests(unittest.TestCase):
         for clade in d2:
             self.assertAlmostEqual(d1[clade], d2[clade])
 
+    def test_collapse_without_branch_lengths(self):
+        tree = Phylo.read(StringIO("(((A,B),C),D);"), "newick")
+        tree.collapse_all()
+        self.assertEqual(len(tree.get_terminals()), 4)
+        self.assertEqual(len(tree.get_nonterminals()), 1)
+
     def test_ladderize(self):
         """TreeMixin: ladderize() method."""
 
