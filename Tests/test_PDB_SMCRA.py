@@ -16,6 +16,7 @@
 import unittest
 import warnings
 from copy import deepcopy
+from itertools import combinations
 
 try:
     import numpy as np
@@ -39,6 +40,125 @@ from Bio.PDB import PDBParser
 from Bio.PDB import rotmat
 from Bio.PDB import Vector
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
+
+
+class AtomComparision(unittest.TestCase):
+    """Atom comparison tests."""
+
+    def test_equal(self):
+        for a, b in (
+            (
+                Atom.Atom(
+                    "CA",
+                    [0.9, 0.95, 0.85],
+                    0.75,
+                    0.6,
+                    None,
+                    " CA ",
+                    None,
+                    "C",
+                ),
+                Atom.Atom(
+                    name="CA",
+                    coord=[0.9, 0.95, 0.85],
+                    bfactor=0.75,
+                    occupancy=0.6,
+                    altloc=None,
+                    fullname=" CA ",
+                    serial_number=None,
+                    element="C",
+                ),
+            ),
+            (
+                Atom.Atom(
+                    "CA",
+                    None,
+                    None,
+                    None,
+                    None,
+                    " CA ",
+                    None,
+                    "C",
+                ),
+                Atom.Atom(
+                    name="CA",
+                    coord=None,
+                    bfactor=None,
+                    occupancy=None,
+                    altloc=None,
+                    fullname=" CA ",
+                    serial_number=None,
+                    element="C",
+                ),
+            ),
+        ):
+            # Plain __init__ does not currently set .full_id, should it?
+            a.full_id = a.get_full_id()
+            b.full_id = b.get_full_id()
+            self.assertEqual(a, b)
+            if a.bfactor is not None:  # should cope with either being none!
+                self.assertTrue(a.strictly_equals(b))
+                self.assertTrue(b.strictly_equals(a))
+
+    def test_not_strictly_equal(self):
+        for a, b in combinations(
+            (
+                Atom.Atom(
+                    name="CA",
+                    coord=[0.9, 0.95, 0.85],
+                    bfactor=0.75,
+                    occupancy=0.6,
+                    altloc=None,
+                    fullname=" CA ",
+                    serial_number=None,
+                    element="C",
+                    radius=1.0,
+                ),
+                # Differs on element:
+                Atom.Atom(
+                    name="CA",
+                    coord=[0.9, 0.95, 0.85],
+                    bfactor=0.75,
+                    occupancy=0.6,
+                    altloc=None,
+                    fullname=" CA ",
+                    serial_number=None,
+                    element="D",
+                    radius=1.0,
+                ),
+                # Differs on occupancy:
+                Atom.Atom(
+                    name="CA",
+                    coord=[0.9, 0.95, 0.85],
+                    bfactor=0.75,
+                    occupancy=0.65,
+                    altloc=None,
+                    fullname=" CA ",
+                    serial_number=None,
+                    element="C",
+                    radius=1.0,
+                ),
+                # Differs on radius:
+                Atom.Atom(
+                    name="CA",
+                    coord=[0.9, 0.95, 0.85],
+                    bfactor=0.75,
+                    occupancy=0.6,
+                    altloc=None,
+                    fullname=" CA ",
+                    serial_number=None,
+                    element="C",
+                    radius=1.05,
+                ),
+            ),
+            2,
+        ):
+            # Plain __init__ does not currently set .full_id, should it?
+            a.full_id = a.get_full_id()
+            b.full_id = b.get_full_id()
+            self.assertEqual(a, b)
+            self.assertFalse(a.strictly_equals(b))
+            self.assertFalse(b.strictly_equals(a))
 
 
 class Atom_Element(unittest.TestCase):
