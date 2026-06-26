@@ -286,9 +286,9 @@ def draw(
     show_confidence=True,
     # For power users
     axes=None,
-    title=None,
     branch_labels=None,
     label_colors=None,
+    title=None,
     *args,
     **kwargs,
 ):
@@ -332,8 +332,6 @@ def draw(
         axes : matplotlib/pylab axes
             If a valid matplotlib.axes.Axes instance, the phylogram is plotted
             in that Axes. By default (None), a new figure is created.
-        title : str
-            A string specifying an optional title for the plot.
         branch_labels : dict or callable
             A mapping of each clade to the label that will be shown along the
             branch leading to it. By default this is the confidence value(s) of
@@ -346,6 +344,8 @@ def draw(
             A function or a dictionary specifying the color of the tip label.
             If the tip label can't be found in the dict or label_colors is
             None, the label will be shown in black.
+        title : str
+            A string specifying an optional title for the plot.
 
     """
     try:
