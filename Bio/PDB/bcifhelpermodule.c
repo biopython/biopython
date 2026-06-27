@@ -2,6 +2,7 @@
 #include <Python.h>
 #include <math.h>
 #include <stdint.h>
+#include <string.h>
 
 static void
 integer_unpack_u8(Py_buffer *in_view, Py_buffer *out_view)
@@ -153,7 +154,8 @@ integer_unpack(PyObject *self, PyObject *args)
         goto exit;
     }
 
-    const char format = in_view.format[0];
+    const size_t l = strlen(in_view.format);
+    const char format = in_view.format[l - 1];
 
     if (format == 'B') {
         integer_unpack_u8(&in_view, &out_view);
