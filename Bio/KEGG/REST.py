@@ -87,9 +87,10 @@ def kegg_info(database):
     #
     # https://rest.kegg.jp/info/<database>
     #
-    # <database> = pathway | brite | module | disease | drug | environ |
-    #              ko | genome |<org> | compound | glycan | reaction |
-    #              rpair | rclass | enzyme | genomes | genes | ligand | kegg
+    # <database> = kegg | pathway | brite | module | ko | genes | <org> | ag |
+    #              vg | vp | genome | vtax | vgenome | compound | glycan |
+    #              reaction | rclass | rmodule | enzyme | network | ntmap |
+    #              variant | disease | drug | dgroup
     # <org> = KEGG organism code or T number
     return _q("info", database)
 
