@@ -13,6 +13,11 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.88
 ===============================================
 
+Biopython has adopted an explicit **No AI** policy, rejecting changes written
+using large language models (LLM) or generative artificial intelligence
+(GenAI) like Claude, OpenAI or ChatGPT. Please see our ``CONTRIBUTING.rst``
+file for full details.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite and type annotations.
 
