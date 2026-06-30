@@ -818,7 +818,7 @@ specific subsections below.
      :math:`N` represents the total number of sequences used to
      construct the matrix. To apply this same pseudocount formula, set
      the motif ``pseudocounts`` attribute using the
-     ``jaspar.calculate\_pseudcounts()`` function:
+     ``jaspar.calculate_pseudocounts()`` function:
 
    .. code:: pycon
 
