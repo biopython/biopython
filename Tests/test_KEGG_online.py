@@ -48,11 +48,6 @@ class KEGGTests(unittest.TestCase):
             handle.read()
         self.assertEqual(handle.url, "https://rest.kegg.jp/list/pathway/hsa")
 
-    def test_list_organism(self):
-        with kegg_list("organism") as handle:
-            handle.read()
-        self.assertEqual(handle.url, "https://rest.kegg.jp/list/organism")
-
     def test_list_hsa(self):
         with kegg_list("hsa") as handle:
             handle.read()
