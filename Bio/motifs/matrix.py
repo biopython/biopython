@@ -42,7 +42,7 @@ class GenericPositionMatrix(dict):
         line = "   " + " ".join(words)
         lines = [line]
         for letter in self.alphabet:
-            words = ["%6.2f" % value for value in self[letter]]
+            words = [f"{value:6.2f}" for value in self[letter]]
             line = "%c: " % letter + " ".join(words)
             lines.append(line)
         text = "\n".join(lines) + "\n"
@@ -71,7 +71,7 @@ class GenericPositionMatrix(dict):
                     else:
                         raise KeyError(key1)
                 else:
-                    raise KeyError("Cannot understand key %s" % key1)
+                    raise KeyError(f"Cannot understand key {key1}")
                 if isinstance(key2, slice):
                     start2, stop2, stride2 = key2.indices(self.length)
                     indices2 = range(start2, stop2, stride2)
@@ -80,7 +80,7 @@ class GenericPositionMatrix(dict):
                     index2 = key2
                     dim2 = 1
                 else:
-                    raise KeyError("Cannot understand key %s" % key2)
+                    raise KeyError(f"Cannot understand key {key2}")
                 if dim1 == 1 and dim2 == 1:
                     return dict.__getitem__(self, letter1)[index2]
                 elif dim1 == 1 and dim2 == 2:
@@ -122,7 +122,7 @@ class GenericPositionMatrix(dict):
             else:
                 raise KeyError(key)
         else:
-            raise KeyError("Cannot understand key %s" % key)
+            raise KeyError(f"Cannot understand key {key}")
         if dim == 1:
             return dict.__getitem__(self, letter)
         elif dim == 2:
@@ -413,7 +413,7 @@ class PositionSpecificScoringMatrix(GenericPositionMatrix):
         # TODO - Code itself tolerates ambiguous bases (as NaN).
         if sorted(self.alphabet) != ["A", "C", "G", "T"]:
             raise ValueError(
-                "PSSM has wrong alphabet: %s - Use only with DNA motifs" % self.alphabet
+                f"PSSM has wrong alphabet: {self.alphabet} - Use only with DNA motifs"
             )
 
         # NOTE: The C code handles mixed case input as this could be large

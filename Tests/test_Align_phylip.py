@@ -77,7 +77,7 @@ class TestPhylipReading(unittest.TestCase):
             next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (8 rows x 286 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (8 rows x 286 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 8)
         self.assertEqual(alignment.sequences[0].id, "V_Harveyi_")
@@ -330,7 +330,7 @@ AlignmentCounts object with
                     next(alignments)
             self.assertEqual(
                 repr(alignment),
-                "<Alignment object (5 rows x 60 columns) at 0x%x>" % id(alignment),
+                f"<Alignment object (5 rows x 60 columns) at 0x{id(alignment):x}>",
             )
             self.assertEqual(len(alignment), 5)
             self.assertEqual(alignment.sequences[0].id, "Tax1")
@@ -504,7 +504,7 @@ np.array([['A', 'A', 'G', 'C', 'T', 'N', 'G', 'G', 'G', 'C', 'A', 'T', 'T',
         )
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (5 rows x 42 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (5 rows x 42 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 5)
         self.assertEqual(alignment.sequences[0].id, "Turkey")
@@ -624,7 +624,7 @@ AlignmentCounts object with
                     next(alignments)
             self.assertEqual(
                 repr(alignment),
-                "<Alignment object (5 rows x 42 columns) at 0x%x>" % id(alignment),
+                f"<Alignment object (5 rows x 42 columns) at 0x{id(alignment):x}>",
             )
             self.assertEqual(len(alignment), 5)
             self.assertEqual(alignment.sequences[0].id, "Turkey")
@@ -773,7 +773,7 @@ AlignmentCounts object with
             next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (3 rows x 384 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (3 rows x 384 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 3)
         self.assertEqual(alignment.sequences[0].id, "CYS1_DICDI")
@@ -957,7 +957,7 @@ AlignmentCounts object with
             next(alignments)
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (4 rows x 131 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (4 rows x 131 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 4)
         self.assertEqual(alignment.sequences[0].id, "IXI_234")

@@ -48,7 +48,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif key == "Command":
                 metadata["Command line"] = value
             else:
-                raise ValueError("Unknown key '%s'" % key)
+                raise ValueError(f"Unknown key '{key}'")
         self.metadata = metadata
         line = stream.readline()
         if not line:
@@ -224,7 +224,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     target_start = start
                 target_sequence += sequence
             else:
-                raise ValueError("Failed to parse line '%s...'" % line[:30])
+                raise ValueError(f"Failed to parse line '{line[:30]}...'")
         alignment = create_alignment()
         length = self._length
         counter = self._counter

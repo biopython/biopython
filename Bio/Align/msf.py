@@ -191,7 +191,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             seq = "".join(words[1:])
             length = remaining[index] - (len(seq) - seq.count("-"))
             if length < 0:
-                raise ValueError("Received longer sequence than expected for %s" % name)
+                raise ValueError(f"Received longer sequence than expected for {name}")
             seqs[index] += seq
             remaining[index] = length
             if all(length == 0 for length in remaining):

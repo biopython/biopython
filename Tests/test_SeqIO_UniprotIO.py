@@ -571,7 +571,7 @@ class ParserTests(SeqRecordTestBaseClass):
         self.assertEqual(
             len(old.features),
             len(new.features),
-            "Features in %s, %i vs %i" % (old.id, len(old.features), len(new.features)),
+            f"Features in {old.id}, {len(old.features)} vs {len(new.features)}",
         )
         for f1, f2 in zip(old.features, new.features):
             self.assertEqual(

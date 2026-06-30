@@ -572,7 +572,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single collection - typical usage
-                clause = "m.COLLECTION = '%s'" % collection
+                clause = f"m.COLLECTION = '{collection}'"
 
             where_clauses.append(clause)
 
@@ -585,7 +585,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single name
-                clause = "m.NAME = '%s'" % tf_name
+                clause = f"m.NAME = '{tf_name}'"
 
             where_clauses.append(clause)
 
@@ -605,7 +605,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single tax ID
-                clause = "ms.TAX_ID = '%s'" % species
+                clause = f"ms.TAX_ID = '{species}'"
 
             where_clauses.append(clause)
 
@@ -644,7 +644,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single TF class
-                clause = "".join([clause, " and ma1.VAL = '%s' " % tf_class])
+                clause = "".join([clause, f" and ma1.VAL = '{tf_class}' "])
 
             where_clauses.append(clause)
 
@@ -661,7 +661,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single TF family
-                clause = "".join([clause, " and ma2.VAL = '%s' " % tf_family])
+                clause = "".join([clause, f" and ma2.VAL = '{tf_family}' "])
 
             where_clauses.append(clause)
 
@@ -678,7 +678,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single PAZAR ID
-                clause = "".join([" and ma3.VAL = '%s' " % pazar_id])
+                clause = "".join([f" and ma3.VAL = '{pazar_id}' "])
 
             where_clauses.append(clause)
 
@@ -695,7 +695,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single PubMed ID
-                clause = "".join([" and ma4.VAL = '%s' " % medline])
+                clause = "".join([f" and ma4.VAL = '{medline}' "])
 
             where_clauses.append(clause)
 
@@ -713,7 +713,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single data type
-                clause = "".join([" and ma5.VAL = '%s' " % data_type])
+                clause = "".join([f" and ma5.VAL = '{data_type}' "])
 
             where_clauses.append(clause)
 
@@ -730,7 +730,7 @@ class JASPAR5:
                 clause = "".join([clause, "')"])
             else:
                 # A single tax ID
-                clause = "".join([clause, " and ma6.VAL = '%s' " % tax_group])
+                clause = "".join([clause, f" and ma6.VAL = '{tax_group}' "])
 
             where_clauses.append(clause)
 

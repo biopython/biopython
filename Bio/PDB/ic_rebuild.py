@@ -489,9 +489,7 @@ def write_PDB(
 
                 if hdr:
                     fp.write(
-                        ("HEADER    {:40}{:8}   {:4}\n").format(
-                            hdr.upper(), (dd or ""), (pdbid or "")
-                        )
+                        f"HEADER    {hdr.upper():40}{dd or '':8}   {pdbid or '':4}\n"
                     )
                 name = entity.header.get("name", None)
                 if name:

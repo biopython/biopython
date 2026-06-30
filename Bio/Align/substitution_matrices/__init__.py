@@ -90,7 +90,7 @@ class Array(_arraycore.Array):
                 if dims is None:
                     dims = 1
                 elif dims not in (1, 2):
-                    raise ValueError("dims should be 1 or 2 (found %s)" % dims)
+                    raise ValueError(f"dims should be 1 or 2 (found {dims})")
                 shape = (n,) * dims
             else:
                 if dims is None:
@@ -139,14 +139,14 @@ class Array(_arraycore.Array):
                     try:
                         index = self.alphabet.index(index)
                     except ValueError:
-                        raise IndexError("'%s'" % index) from None
+                        raise IndexError(f"'{index}'") from None
                 indices.append(index)
             key = tuple(indices)
         elif isinstance(key, str):
             try:
                 key = self.alphabet.index(key)
             except ValueError:
-                raise IndexError("'%s'" % key) from None
+                raise IndexError(f"'{key}'") from None
         return key
 
     def __getitem__(self, key):
@@ -279,7 +279,7 @@ class Array(_arraycore.Array):
                     value = np.ndarray.__getitem__(self, (i1, i2))
                     yield key, value
         else:
-            raise RuntimeError("array has unexpected shape %s" % self.shape)
+            raise RuntimeError(f"array has unexpected shape {self.shape}")
 
     def keys(self):
         """Return a tuple with the keys associated with the array."""
@@ -290,7 +290,7 @@ class Array(_arraycore.Array):
         elif dims == 2:
             return tuple((c1, c2) for c2 in alphabet for c1 in alphabet)
         else:
-            raise RuntimeError("array has unexpected shape %s" % self.shape)
+            raise RuntimeError(f"array has unexpected shape {self.shape}")
 
     def values(self):
         """Return a tuple with the values stored in the array."""
@@ -306,7 +306,7 @@ class Array(_arraycore.Array):
                 for i1 in range(n1)
             )
         else:
-            raise RuntimeError("array has unexpected shape %s" % self.shape)
+            raise RuntimeError(f"array has unexpected shape {self.shape}")
 
     def update(self, E=None, **F):
         """Update the array from dict/iterable E and F."""
@@ -351,7 +351,7 @@ class Array(_arraycore.Array):
             pass
         else:
             for line in header:
-                line = "#  %s\n" % line
+                line = f"#  {line}\n"
                 lines.append(line)
         maxwidth = 0
         for i, key in enumerate(alphabet):
@@ -380,7 +380,7 @@ class Array(_arraycore.Array):
             pass
         else:
             for line in header:
-                line = "#  %s\n" % line
+                line = f"#  {line}\n"
                 lines.append(line)
         keywidth = max(len(c) for c in alphabet)
         keyfmt = "%" + str(keywidth) + "s"
@@ -442,7 +442,7 @@ class Array(_arraycore.Array):
         alphabet = self.alphabet
         if isinstance(alphabet, str):
             assert text.endswith(")")
-            text = text[:-1] + ",\n         alphabet='%s')" % self.alphabet
+            text = text[:-1] + f",\n         alphabet='{self.alphabet}')"
         return text
 
 

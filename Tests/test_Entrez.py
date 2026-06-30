@@ -111,7 +111,7 @@ def deconstruct_request(request, testcase=None):
 
     else:
         raise ValueError(
-            "Expected method to be either GET or POST, got %r" % request.method
+            f"Expected method to be either GET or POST, got {request.method!r}"
         )
 
     return get_base_url(parsed), params

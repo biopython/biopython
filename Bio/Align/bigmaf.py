@@ -250,7 +250,7 @@ class AlignmentIterator(bigbed.AlignmentIterator, maf.AlignmentIterator):
                         annotations["pass"] = value
                     else:
                         raise ValueError(
-                            "Unknown annotation variable '%s'" % key.decode()
+                            f"Unknown annotation variable '{key.decode()}'"
                         )
             elif prefix == b"s":
                 m = re.match(rb"^s\s*\S*\s*\d*\s*\d*\s*[+-]\s*\d*\s*", buffer[i:])

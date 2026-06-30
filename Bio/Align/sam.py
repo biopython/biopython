@@ -65,7 +65,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         values = metadata.get("HD")
         if values is not None:
             # if HD is present, then VN is required and must come first
-            fields = ["@HD", "VN:%s" % values["VN"]]
+            fields = ["@HD", f"VN:{values['VN']}"]
             for key, value in values.items():
                 if key == "VN":
                     continue
@@ -74,25 +74,25 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             stream.write(line)
         for record in targets:
             fields = ["@SQ"]
-            fields.append("SN:%s" % record.id)
+            fields.append(f"SN:{record.id}")
             length = len(record.seq)
             fields.append("LN:%d" % length)
             for key, value in record.annotations.items():
                 if key == "alternate_locus":
-                    fields.append("AH:%s" % value)
+                    fields.append(f"AH:{value}")
                 elif key == "names":
-                    fields.append("AN:%s" % ",".join(value))
+                    fields.append(f"AN:{','.join(value)}")
                 elif key == "assembly":
-                    fields.append("AS:%s" % value)
+                    fields.append(f"AS:{value}")
                 elif key == "MD5":
-                    fields.append("M5:%s" % value)
+                    fields.append(f"M5:{value}")
                 elif key == "species":
-                    fields.append("SP:%s" % value)
+                    fields.append(f"SP:{value}")
                 elif key == "topology":
                     assert value in ("linear", "circular")
-                    fields.append("PP:%s" % value)
+                    fields.append(f"PP:{value}")
                 elif key == "URI":
-                    fields.append("UR:%s" % value)
+                    fields.append(f"UR:{value}")
                 else:
                     fields.append(f"{key[:2]}:{value}")
             try:
@@ -101,7 +101,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 pass
             else:
                 if description != "<unknown description>":
-                    fields.append("DS:%s" % description)
+                    fields.append(f"DS:{description}")
             line = "\t".join(fields) + "\n"
             stream.write(line)
         for tag, rows in metadata.items():
@@ -323,14 +323,14 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                         qStart = qEnd
                 if number:
                     md += str(number)
-            field = "MD:Z:%s" % md
+            field = f"MD:Z:{md}"
             fields.append(field)
         try:
             score = alignment.score
         except AttributeError:
             pass
         else:
-            field = "AS:i:%.0f" % score
+            field = f"AS:i:{score:.0f}"
             fields.append(field)
         try:
             annotations = alignment.annotations
@@ -470,7 +470,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             fields = line.split()
             if len(fields) < 11:
                 raise ValueError(
-                    "line has %d columns; expected at least 11" % len(fields)
+                    f"line has {len(fields)} columns; expected at least 11"
                 )
             qname = fields[0]
             flag = int(fields[1])

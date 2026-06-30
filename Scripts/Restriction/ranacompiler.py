@@ -139,11 +139,11 @@ def double_quote_repr(value):  # TODO similar not to produce long horizontal lis
     elif isinstance(value, tuple):
         if len(value) == 1:
             # Need trailing comma
-            return "(%s,)" % double_quote_repr(list(value)[0])
+            return f"({double_quote_repr(list(value)[0])},)"
         else:
-            return "(%s)" % ", ".join(double_quote_repr(_) for _ in value)
+            return f"({', '.join(double_quote_repr(_) for _ in value)})"
     elif isinstance(value, list):
-        return "[%s]" % ", ".join(double_quote_repr(_) for _ in value)
+        return f"[{', '.join(double_quote_repr(_) for _ in value)}]"
     return repr(value)
 
 
@@ -519,7 +519,7 @@ class DictionaryBuilder:
         #
         #   How many enzymes this time?
         #
-        print("\nThe new database contains %i enzymes.\n" % len(classdict))
+        print(f"\nThe new database contains {len(classdict)} enzymes.\n")
         #
         #   the dictionaries are done. Build the file
         #
@@ -535,8 +535,7 @@ class DictionaryBuilder:
                 results.write("rest_dict[%s] = {\n" % double_quote_repr(name))
                 for key, value in sorted(classdict[name].items()):
                     results.write(
-                        "    %s: %s,\n"
-                        % (double_quote_repr(key), double_quote_repr(value))
+                        f"    {double_quote_repr(key)}: {double_quote_repr(value)},\n"
                     )
                 results.write("}\n\n")
             print("OK.\n")
@@ -547,9 +546,9 @@ class DictionaryBuilder:
             results.write("suppliers = {}\n")
             results.write("\n")
             for name in sorted(suppliersdict):
-                results.write("suppliers[%s] = (\n" % double_quote_repr(name))
+                results.write(f"suppliers[{double_quote_repr(name)}] = (\n")
                 for value in suppliersdict[name]:
-                    results.write("    %s,\n" % double_quote_repr(value))
+                    results.write(f"    {double_quote_repr(value)},\n")
                 results.write(")\n\n")
             print("OK.\n")
             print("Writing the dictionary containing the Restriction types...")
@@ -557,9 +556,9 @@ class DictionaryBuilder:
             results.write("typedict = {}\n")
             results.write("\n")
             for name in sorted(typedict):
-                results.write("typedict[%s] = (\n" % double_quote_repr(name))
+                results.write(f"typedict[{double_quote_repr(name)}] = (\n")
                 for value in typedict[name]:
-                    results.write("    %s,\n" % double_quote_repr(value))
+                    results.write(f"    {double_quote_repr(value)},\n")
                 results.write(")\n\n")
             results.write("# Turn black code style on\n# fmt: on\n")
             print("OK.\n")
@@ -665,9 +664,9 @@ class DictionaryBuilder:
             #
             #   nothing to be done
             #
-            print("\n Using the bairoch file : %s" % bairoch_now)
+            print(f"\n Using the bairoch file : {bairoch_now}")
             enzyme_id_dict = load_enzyme_ids(bairoch_now)
-            print("\n Using the emboss files : %s" % ", ".join(emboss_now))
+            print(f"\n Using the emboss files : {', '.join(emboss_now)}")
             return tuple(open(os.path.join(base, n)) for n in emboss_now) + (
                 enzyme_id_dict,
             )
@@ -683,7 +682,7 @@ class DictionaryBuilder:
             if r in ["y", "yes", "Y", "Yes"]:
                 get_files()
                 print("\n Update complete. Creating the dictionaries.\n")
-                print("\n Using the files : %s" % ", ".join(emboss_now))
+                print(f"\n Using the files : {', '.join(emboss_now)}")
                 return tuple(open(os.path.join(base, n)) for n in emboss_now)
             else:
                 #

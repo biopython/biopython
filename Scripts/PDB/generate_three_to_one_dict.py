@@ -71,7 +71,7 @@ while line:
         one = line.strip().split()[-1]
         found_one = True
     if line.startswith("_chem_comp.three_letter_code"):
-        three = "%-3s" % (line.strip().split()[-1],)  # make it three-letter
+        three = f"{line.strip().split()[-1]:3}"  # make it three-letter
         found_three = True
 
     if found_one and found_three:

@@ -479,9 +479,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
         assert rest[dataEnd - 1] == 0
         words = rest[dataStart : dataEnd - 1].decode().split("\t")
         if len(words) != 22:
-            raise ValueError(
-                "Unexpected number of fields (%d, expected 22)" % len(words)
-            )
+            raise ValueError(f"Unexpected number of fields ({len(words)}, expected 22)")
         target_record = self.targets[chromId]
         tSize = int(words[16])
         if len(target_record) != tSize:
@@ -540,7 +538,7 @@ class AlignmentIterator(bigbed.AlignmentIterator):
             query_record.annotations["molecule_type"] = "protein"
             qBlockSizes = tBlockSizes // 3
         else:
-            raise ValueError("Unexpected sequence type '%s'" % seqType)
+            raise ValueError(f"Unexpected sequence type '{seqType}'")
         tStarts += tStart
         qStrand = words[11]
         if qStrand == "-" and strand == "-":

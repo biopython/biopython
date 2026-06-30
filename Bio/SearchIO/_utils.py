@@ -51,7 +51,7 @@ def get_processor(format, mapping):
         elif not isinstance(format, str):
             raise TypeError("Need a string for the file format (lower case)") from None
         elif format != format.lower():
-            raise ValueError("Format string %r should be lower case" % format) from None
+            raise ValueError(f"Format string {format!r} should be lower case") from None
         else:
             raise ValueError(
                 "Unknown format %r. Supported formats are %r"
@@ -59,7 +59,7 @@ def get_processor(format, mapping):
             ) from None
 
     mod_name, obj_name = obj_info
-    mod = __import__("Bio.SearchIO.%s" % mod_name, fromlist=[""])
+    mod = __import__(f"Bio.SearchIO.{mod_name}", fromlist=[""])
 
     return getattr(mod, obj_name)
 

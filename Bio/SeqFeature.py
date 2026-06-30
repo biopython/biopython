@@ -127,15 +127,12 @@ _pair_location = r"[<>]?-?\d+\.\.[<>]?-?\d+"
 _between_location = r"\d+\^\d+"
 
 _within_position = r"\(\d+\.\d+\)"
-_within_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (
-    _within_position,
-    _within_position,
-)
+_within_location = rf"([<>]?\d+|{_within_position})\.\.([<>]?\d+|{_within_position})"
 _within_position = r"\((\d+)\.(\d+)\)"
 _re_within_position = re.compile(_within_position)
 assert _re_within_position.match("(3.9)")
 
-_oneof_location = r"([<>]?\d+|%s)\.\.([<>]?\d+|%s)" % (_oneof_position, _oneof_position)
+_oneof_location = rf"([<>]?\d+|{_oneof_position})\.\.([<>]?\d+|{_oneof_position})"
 _oneof_position = r"one\-of\((\d+[,\d+]+)\)"
 _re_oneof_position = re.compile(_oneof_position)
 assert _re_oneof_position.match("one-of(6,9)")
@@ -144,7 +141,7 @@ assert _re_oneof_position.match("one-of(3,6)")
 assert _re_oneof_position.match("one-of(3,6,9)")
 
 _solo_location = r"[<>]?\d+"
-_solo_bond = r"bond\(%s\)" % _solo_location
+_solo_bond = rf"bond\({_solo_location}\)"
 
 _re_location_category = re.compile(
     r"^(?P<pair>%s)|(?P<between>%s)|(?P<within>%s)|(?P<oneof>%s)|(?P<bond>%s)|(?P<solo>%s)$"
@@ -1861,7 +1858,7 @@ class ExactPosition(int, Position):
 
     def __repr__(self):
         """Represent the ExactPosition object as a string for debugging."""
-        return "%s(%i)" % (self.__class__.__name__, int(self))
+        return f"{self.__class__.__name__}({int(self)})"
 
     def __add__(self, offset):
         """Return a copy of the position object with its location shifted (PRIVATE)."""
@@ -2162,7 +2159,7 @@ class BeforePosition(int, Position):
 
     def __repr__(self):
         """Represent the location as a string for debugging."""
-        return "%s(%i)" % (self.__class__.__name__, int(self))
+        return f"{self.__class__.__name__}({int(self)})"
 
     def __str__(self):
         """Return a representation of the BeforePosition object (with python counting)."""
@@ -2226,7 +2223,7 @@ class AfterPosition(int, Position):
 
     def __repr__(self):
         """Represent the location as a string for debugging."""
-        return "%s(%i)" % (self.__class__.__name__, int(self))
+        return f"{self.__class__.__name__}({int(self)})"
 
     def __str__(self):
         """Return a representation of the AfterPosition object (with python counting)."""

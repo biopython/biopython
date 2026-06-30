@@ -32,7 +32,7 @@ class TestAlignment(unittest.TestCase):
         alignment = Align.Alignment([])
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (0 rows x 0 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (0 rows x 0 columns) at 0x{id(alignment):x}>",
         )
         self.assertEqual(len(alignment), 0)
         self.assertEqual(len(alignment.sequences), 0)
@@ -55,7 +55,7 @@ class TestPairwiseAlignment(unittest.TestCase):
         msg = f"{cls.__name__}, {strand} strand"
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (2 rows x 12 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (2 rows x 12 columns) at 0x{id(alignment):x}>",
         )
         if strand == "forward":
             self.assertEqual(
@@ -1454,10 +1454,10 @@ class TestMultipleAlignment(unittest.TestCase):
         self.assertGreaterEqual(other, alignment)
 
     def check_indexing_slicing(self, alignment, strand):
-        msg = "%s strand" % strand
+        msg = f"{strand} strand"
         self.assertEqual(
             repr(alignment),
-            "<Alignment object (7 rows x 156 columns) at 0x%x>" % id(alignment),
+            f"<Alignment object (7 rows x 156 columns) at 0x{id(alignment):x}>",
         )
         if strand == "forward":
             self.assertEqual(
@@ -3607,7 +3607,7 @@ class TestAlign_mapall(unittest.TestCase):
             path = os.path.join("Blat", filename)
             alignment = Align.read(path, "chain")
             alignments.append(alignment)
-            filename = "%s.fa" % new_assembly
+            filename = f"{new_assembly}.fa"
             path = os.path.join("Align", filename)
             record = SeqIO.read(path, "fasta")
             chromosome, location = record.id.split(":")

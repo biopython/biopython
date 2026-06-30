@@ -97,7 +97,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             raise ValueError("Non-empty sequences are required")
         datatype = self._classify_mol_type_for_nexus(alignment)
         minimal_record = (
-            "begin data; dimensions ntax=0 nchar=0; format datatype=%s; end;" % datatype
+            f"begin data; dimensions ntax=0 nchar=0; format datatype={datatype}; end;"
         )
         n = Nexus.Nexus(minimal_record)
         for record, aligned_sequence in zip(alignment.sequences, alignment):

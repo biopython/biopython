@@ -186,7 +186,7 @@ class FeatureSet:
             return f"{self}"
         else:  # Long account desired
             outstr = [f"\n<{self.__class__}: {self.name}>"]
-            outstr.append("%d features" % len(self.features))
+            outstr.append(f"{len(self.features)} features")
             for key in self.features:
                 outstr.append(f"feature: {self.features[key]}")
             return "\n".join(outstr)
@@ -201,7 +201,5 @@ class FeatureSet:
 
     def __str__(self):
         """Return a formatted string with information about the feature set."""
-        outstr = [
-            "\n<%s: %s %d features>" % (self.__class__, self.name, len(self.features))
-        ]
+        outstr = [f"\n<{self.__class__}: {self.name} {len(self.features)} features>"]
         return "\n".join(outstr)

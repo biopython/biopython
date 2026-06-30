@@ -101,7 +101,7 @@ class InterproscanXmlParser:
 
         for hit_elem in root_hit_elem:
             # store the match/location type
-            hit_type = re.sub(r"%s(\w+)-match" % self.NS, r"\1", hit_elem.find(".").tag)
+            hit_type = re.sub(rf"{self.NS}(\w+)-match", r"\1", hit_elem.find(".").tag)
             # store the hit id
             signature = hit_elem.find(self.NS + "signature")
             hit_id = signature.attrib["ac"]

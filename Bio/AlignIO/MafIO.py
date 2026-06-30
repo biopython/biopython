@@ -72,7 +72,7 @@ class MafWriter(SequentialAlignmentWriter):
         fields = [
             "s",
             # In the MAF file format, spaces are not allowed in the id
-            "%-40s" % record.id.replace(" ", "_"),
+            f"{record.id.replace(' ', '_'):40}",
             "%15s" % record.annotations.get("start", 0),
             "%5s"
             % record.annotations.get("size", len(str(record.seq).replace("-", ""))),
