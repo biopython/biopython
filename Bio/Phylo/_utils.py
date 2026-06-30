@@ -288,6 +288,7 @@ def draw(
     axes=None,
     branch_labels=None,
     label_colors=None,
+    title=None,
     *args,
     **kwargs,
 ):
@@ -343,6 +344,8 @@ def draw(
             A function or a dictionary specifying the color of the tip label.
             If the tip label can't be found in the dict or label_colors is
             None, the label will be shown in black.
+        title : str
+            A string specifying an optional title for the plot.
 
     """
     try:
@@ -356,6 +359,10 @@ def draw(
             ) from None
 
     import matplotlib.collections as mpcollections
+
+    # Optional title
+    if title:
+        plt.title(title)
 
     # Arrays that store lines for the plot of clades
     horizontal_linecollections = []

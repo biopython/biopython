@@ -36,6 +36,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andres Colubri <andres dot colubri at gmail dot com>
 - Andrew Dalke <dalke at domain dalke scientific dot com>
 - Andrew Guy <https://github.com/andrewguy>
+- Andrew Hennis <https://github.com/dawnandrew100>
 - Andrew Sczesnak <https://github.com/polyatail>
 - Andrey Raspopov <https://github.com/Andrey-Raspopov>
 - Andrius Merkys <https://github.com/merkys>
