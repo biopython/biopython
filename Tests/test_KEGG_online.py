@@ -48,6 +48,31 @@ class KEGGTests(unittest.TestCase):
             handle.read()
         self.assertEqual(handle.url, "https://rest.kegg.jp/list/pathway/hsa")
 
+    def test_list_brite(self):
+        with kegg_list("brite") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "https://rest.kegg.jp/list/brite")
+
+    def test_brite_jp(self):
+        with kegg_list("brite", option="jp") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "https://rest.kegg.jp/list/brite/jp")
+
+    def test_list_genome(self):
+        with kegg_list("genome") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "https://rest.kegg.jp/list/genome")
+
+    def test_genome_animals(self):
+        with kegg_list("genome", option="animals") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "https://rest.kegg.jp/list/genome/animals")
+
+    def test_genome_562(self):
+        with kegg_list("genome", option="562") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "https://rest.kegg.jp/list/genome/562")
+
     def test_list_hsa(self):
         with kegg_list("hsa") as handle:
             handle.read()

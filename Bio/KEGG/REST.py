@@ -94,52 +94,64 @@ def kegg_info(database):
     return _q("info", database)
 
 
-def kegg_list(database, org=None):
+def kegg_list(database, org=None, option=None):
     """KEGG list - Entry list for database, or specified database entries.
 
     db - database or organism (string)
     org - optional organism (string), see below.
+    option - optional brite or genome (string), see below.
 
-    For the pathway and module databases the optional organism can be
-    used to restrict the results.
+    For the pathway databases the optional organism can be used to
+    restrict the results by setting `org`.
+    For the brite and genome databases also can be used to restrict
+    the results by setting `option`.
 
     """
     # TODO - split into two functions (dbentries seems separate)?
     #
-    #  https://rest.kegg.jp/list/<database>/<org>
+    #  https://rest.kegg.jp/list/pathway/<org>
     #
-    #  <database> = pathway | module
     #  <org> = KEGG organism code
-    if database in ("pathway", "module") and org:
-        resp = _q("list", database, org)
-    elif isinstance(database, str) and database and org:
-        raise ValueError("Invalid database arg for kegg list request.")
+    if database == "pathway" and org and not option:
+        return _q("list", database, org)
+
+    # https://rest.kegg.jp/list/brite/<option>
+    #
+    # <option> = br | jp | ko | <org>
+    #
+    # https://rest.kegg.jp/list/genome/<option>
+    #
+    # <option> = <group_name> | <rank_id>
+    # <group_name> = KEGG organism group name
+    # <rank_id> = Taxonomy ID for phylum, class, order, family, genus and species
+    if database in ("brite", "genome") and not org and option:
+        return _q("list", database, option)
 
     # https://rest.kegg.jp/list/<database>
     #
-    # <database> = pathway | brite | module | disease | drug | environ |
-    #              ko | genome | <org> | compound | glycan | reaction |
-    #              rpair | rclass | enzyme | organism
+    # <database> = pathway | brite | module | ko | <org> | ag | vg | vp |
+    #              genome | vtax | vgenome |compound | glycan | reaction |
+    #              rclass | rmodule | enzyme | network | ntmap | variant |
+    #              disease | drug | dgroup
     # <org> = KEGG organism code or T number
-    #
-    #
+    if isinstance(database, str) and not org and not option:
+        return _q("list", database)
+
     # https://rest.kegg.jp/list/<dbentries>
     #
     # <dbentries> = KEGG database entries involving the following <database>
-    # <database> = pathway | brite | module | disease | drug | environ |
-    #              ko | genome | <org> | compound | glycan | reaction |
-    #              rpair | rclass | enzyme
+    # <database> = pathway | brite | module | ko | <org> | ag | vg | vp |
+    #              genome | vtax | vgenome |compound | glycan | reaction |
+    #              rclass | rmodule | enzyme | network | ntmap | variant |
+    #              disease | drug | dgroup
     # <org> = KEGG organism code or T number
-    else:
-        if isinstance(database, list):
-            if len(database) > 100:
-                raise ValueError(
-                    "Maximum number of databases is 100 for kegg list query"
-                )
-            database = ("+").join(database)
-        resp = _q("list", database)
+    if isinstance(database, list) and not org and not option:
+        if len(database) > 10:
+            raise ValueError("Maximum number of databases is 10 for kegg list query")
+        database = ("+").join(database)
+        return _q("list", database)
 
-    return resp
+    raise ValueError("Invalid database arg for kegg list request.")
 
 
 def kegg_find(database, query, option=None):
