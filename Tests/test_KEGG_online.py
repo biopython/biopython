@@ -237,18 +237,18 @@ class KEGGTests(unittest.TestCase):
             handle.read()
         self.assertEqual(handle.url, "https://rest.kegg.jp/conv/ncbi-geneid/eco")
 
-    def test_conv_ncbi_gi_hsa_10458_plus_ece_Z5100(self):
-        with kegg_conv("ncbi-gi", "hsa:10458+ece:Z5100") as handle:
+    def test_conv_ncbi_proteinid_hsa_10458_plus_ece_Z5100(self):
+        with kegg_conv("ncbi-proteinid", "hsa:10458+ece:Z5100") as handle:
             handle.read()
         self.assertEqual(
-            handle.url, "https://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100"
+            handle.url, "https://rest.kegg.jp/conv/ncbi-proteinid/hsa:10458+ece:Z5100"
         )
 
-    def test_conv_ncbi_gi_hsa_10458_list_ece_Z5100(self):
-        with kegg_conv("ncbi-gi", ["hsa:10458", "ece:Z5100"]) as handle:
+    def test_conv_ncbi_proteinid_hsa_10458_list_ece_Z5100(self):
+        with kegg_conv("ncbi-proteinid", ["hsa:10458", "ece:Z5100"]) as handle:
             handle.read()
         self.assertEqual(
-            handle.url, "https://rest.kegg.jp/conv/ncbi-gi/hsa:10458+ece:Z5100"
+            handle.url, "https://rest.kegg.jp/conv/ncbi-proteinid/hsa:10458+ece:Z5100"
         )
 
     def test_link_pathway_hsa(self):

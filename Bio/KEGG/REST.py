@@ -250,10 +250,10 @@ def kegg_conv(target_db, source_db, option=None):
     Arguments:
      - target_db - Target database
      - source_db_or_dbentries - source database or database entries
-     - option - Can be "turtle" or "n-triple" (string).
+     - option - depricated
 
     """
-    # https://rest.kegg.jp/conv/<target_db>/<source_db>[/<option>]
+    # https://rest.kegg.jp/conv/<target_db>/<source_db>
     #
     # (<target_db> <source_db>) = (<kegg_db> <outside_db>) |
     #                             (<outside_db> <kegg_db>)
@@ -261,35 +261,30 @@ def kegg_conv(target_db, source_db, option=None):
     # For gene identifiers:
     # <kegg_db> = <org>
     # <org> = KEGG organism code or T number
-    # <outside_db> = ncbi-gi | ncbi-geneid | uniprot
+    # <outside_db> = ncbi-proteinid | ncbi-geneid | uniprot
     #
     # For chemical substance identifiers:
     # <kegg_db> = drug | compound | glycan
     # <outside_db> = pubchem | chebi
     #
-    # <option> = turtle | n-triple
-    #
-    # https://rest.kegg.jp/conv/<target_db>/<dbentries>[/<option>]
+    # https://rest.kegg.jp/conv/<target_db>/<dbentries>
     #
     # For gene identifiers:
     # <dbentries> = database entries involving the following <database>
-    # <database> = <org> | ncbi-gi | ncbi-geneid | uniprot
+    # <database> = <org> | ncbi-proteinid | ncbi-geneid | uniprot
     # <org> = KEGG organism code or T number
     #
     # For chemical substance identifiers:
     # <dbentries> = database entries involving the following <database>
     # <database> = drug | compound | glycan | pubchem | chebi
-    #
-    # <option> = turtle | n-triple
-    if option and option not in ["turtle", "n-triple"]:
-        raise ValueError("Invalid option arg for kegg conv request.")
+    _ = option
 
     if isinstance(source_db, list):
         source_db = "+".join(source_db)
 
     if (
-        target_db in ["ncbi-gi", "ncbi-geneid", "uniprot"]
-        or source_db in ["ncbi-gi", "ncbi-geneid", "uniprot"]
+        target_db in ["ncbi-proteinid", "ncbi-geneid", "uniprot"]
+        or source_db in ["ncbi-proteinid", "ncbi-geneid", "uniprot"]
         or (
             target_db in ["drug", "compound", "glycan"]
             and source_db in ["pubchem", "glycan"]
@@ -299,12 +294,7 @@ def kegg_conv(target_db, source_db, option=None):
             and source_db in ["drug", "compound", "glycan"]
         )
     ):
-        if option:
-            resp = _q("conv", target_db, source_db, option)
-        else:
-            resp = _q("conv", target_db, source_db)
-
-        return resp
+        return _q("conv", target_db, source_db)
     else:
         raise ValueError("Bad argument target_db or source_db for kegg conv request.")
 
