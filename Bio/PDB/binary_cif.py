@@ -117,6 +117,9 @@ def _integer_packing_decoder(column):
         dtype = np.dtype("<i4")
 
     data = column["data"]["data"]
+    # Convert to native endianness
+    data = data.astype(data.dtype.newbyteorder("="))
+
     assert byte_count == data.dtype.itemsize
     assert np.issubdtype(data.dtype, np.unsignedinteger) == is_unsigned
     decoded_data = np.empty((src_size,), dtype)
