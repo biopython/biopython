@@ -149,6 +149,11 @@ class KEGGTests(unittest.TestCase):
             handle.url, "https://rest.kegg.jp/find/compound/300-310/mol_weight"
         )
 
+    def test_find_compound_nop(self):
+        with kegg_find("compound", "(+)", "nop") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "https://rest.kegg.jp/find/compound/(+)/nop")
+
     def test_get_br_ko00002(self):
         with kegg_get("br:ko00002", "json") as handle:
             handle.read()

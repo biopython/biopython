@@ -166,7 +166,7 @@ def kegg_find(database, query, option=None):
     option - search option (string), see below.
 
     For the compound and drug database, set option to the string 'formula',
-    'exact_mass' or 'mol_weight' to search on that field only. The
+    'exact_mass', 'mol_weight' or 'nop' to search on that field only. The
     chemical formula search is a partial match irrespective of the order
     of atoms given. The exact mass (or molecular weight) is checked by
     rounding off to the same decimal place as the query data. A range of
@@ -178,11 +178,12 @@ def kegg_find(database, query, option=None):
     # https://rest.kegg.jp/find/<database>/<query>/<option>
     #
     # <database> = compound | drug
-    # <option> = formula | exact_mass | mol_weight
+    # <option> = formula | exact_mass | mol_weight | nop
     if database in ["compound", "drug"] and option in [
         "formula",
         "exact_mass",
         "mol_weight",
+        "nop",
     ]:
         resp = _q("find", database, query, option)
     elif option:
@@ -190,9 +191,11 @@ def kegg_find(database, query, option=None):
 
     # https://rest.kegg.jp/find/<database>/<query>
     #
-    # <database> = pathway | module | disease | drug | environ | ko |
-    #              genome | <org> | compound | glycan | reaction | rpair |
-    #              rclass | enzyme | genes | ligand
+    #
+    # <database> = pathway | brite | module | ko | genes | <org> | ag | vg |
+    #              vp | genome | vtax | vgenome | compound | glycan | reaction |
+    #              rclass | enzyme | network | ntmap | variant | disease |
+    #              drug | dgroup
     # <org> = KEGG organism code or T number
     else:
         if isinstance(query, list):
