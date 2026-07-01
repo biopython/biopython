@@ -250,7 +250,7 @@ class QueryResult(_BaseSearchObject):
 
     def __repr__(self):
         """Return string representation of the QueryResult object."""
-        return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
+        return f"QueryResult(id={self.id!r}, {len(self)!r} hits)"
 
     def __str__(self):
         """Return a human readable summary of the QueryResult object."""
