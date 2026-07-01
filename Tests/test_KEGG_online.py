@@ -275,6 +275,28 @@ class KEGGTests(unittest.TestCase):
             handle.url, "https://rest.kegg.jp/link/pathway/hsa:10458+ece:Z5100"
         )
 
+    def test_taxonomy_genome_family(self):
+        with kegg_link("taxonomy", "genome", "family") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "https://rest.kegg.jp/link/taxonomy/genome/family")
+
+    def test_genome_taxid_562_species(self):
+        with kegg_link("genome", "taxid:562", "species") as handle:
+            handle.read()
+        self.assertEqual(
+            handle.url, "https://rest.kegg.jp/link/genome/taxid:562/species"
+        )
+
+    def test_atc_D01441_n_triple(self):
+        with kegg_link("atc", "D01441", "n-triple") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "https://rest.kegg.jp/link/atc/D01441/n-triple")
+
+    def test_jtc_D01441_turtle(self):
+        with kegg_link("jtc", "D01441", "turtle") as handle:
+            handle.read()
+        self.assertEqual(handle.url, "https://rest.kegg.jp/link/jtc/D01441/turtle")
+
 
 class KGMLPathwayTests(unittest.TestCase):
     """Tests with metabolic maps."""

@@ -304,36 +304,53 @@ def kegg_link(target_db, source_db, option=None):
 
     target_db - Target database
     source_db_or_dbentries - source database
-    option - Can be "turtle" or "n-triple" (string).
+    option - Can be "species", "genus", "family", "order", "class", "phylum".
+    If getting data with RDF, can be "turtle" or "n-triple" (string).
     """
+    if isinstance(source_db, list):
+        source_db = "+".join(source_db)
+
     # https://rest.kegg.jp/link/<target_db>/<source_db>[/<option>]
     #
     # <target_db> = <database>
     # <source_db> = <database>
     #
-    # <database> = pathway | brite | module | ko | genome | <org> | compound |
-    #              glycan | reaction | rpair | rclass | enzyme | disease |
-    #              drug | dgroup | environ
+    # <database> = drug | atc | jtc
     #
     # <option> = turtle | n-triple
     # https://rest.kegg.jp/link/<target_db>/<dbentries>[/<option>]
     #
-    # <dbentries> = KEGG database entries involving the following <database>
-    # <database> = pathway | brite | module | ko | genome | <org> | compound |
-    #              glycan | reaction | rpair | rclass | enzyme | disease |
-    #              drug | dgroup | environ | genes
+    # <dbentries> = KEGG database entries of the following <database>
+    # <database> = drug | atc | jtc
     #
     # <option> = turtle | n-triple
+    if option in ["turtle", "n-triple"] and target_db in ["drug", "atc", "jtc"]:
+        return _q("link", target_db, source_db, option)
 
-    if option and option not in ["turtle", "n-triple"]:
-        raise ValueError("Invalid option arg for kegg conv request.")
+    # https://rest.kegg.jp/link/<target_db>/<source_db>[/<option>]
+    #
+    # <target_db> = <database>
+    # <source_db> = <database>
+    #
+    # <database> = pathway | brite | module | ko | <org> | ag | vg | vp |
+    #              genome | vtax | vgenome | compound | glycan | reaction |
+    #              rclass | rmodule | enzyme | network | ntmap | variant |
+    #              disease | drug | dgroup | <outside_db>
+    # <outside_db> = pubmed | taxonomy | atc | jtc | ndc | yk
+    #
+    # <option> = species | genus | family | order | class | phylum
+    # https://rest.kegg.jp/link/<target_db>/<dbentries>[/<option>]
+    # <database> = pathway | brite | module | ko | <org> | ag | vg | vp |
+    #              genome | vtax | vgenome | compound | glycan | reaction |
+    #              rclass | rmodule | enzyme | network | ntmap | variant |
+    #              disease | drug | dgroup | <outside_db>
+    # <outside_db> = pubmed | taxonomy | atc | jtc | ndc | yk
+    #
+    # <option> = species | genus | family | order | class | phylum
+    if option in ["species", "genus", "family", "order", "class", "phylum"]:
+        return _q("link", target_db, source_db, option)
 
-    if isinstance(source_db, list):
-        source_db = "+".join(source_db)
+    if not option:
+        return _q("link", target_db, source_db)
 
-    if option:
-        resp = _q("link", target_db, source_db, option)
-    else:
-        resp = _q("link", target_db, source_db)
-
-    return resp
+    raise ValueError("Invalid option arg for kegg conv request.")
