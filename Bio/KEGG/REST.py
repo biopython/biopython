@@ -209,7 +209,8 @@ def kegg_get(dbentries, option=None):
     """KEGG get - Data retrieval.
 
     dbentries - Identifiers (single string, or list of strings), see below.
-    option - One of "aaseq", "ntseq", "mol", "kcf", "image", "kgml" (string)
+    option - One of "aaseq", "ntseq", "mol", "kcf", "image", "conf",
+    "kgml", "json" (string)
 
     The input is limited up to 10 entries.
     The input is limited to one pathway entry with the image or kgml option.
@@ -225,13 +226,15 @@ def kegg_get(dbentries, option=None):
     # https://rest.kegg.jp/get/<dbentries>[/<option>]
     #
     # <dbentries> = KEGG database entries involving the following <database>
-    # <database> = pathway | brite | module | disease | drug | environ |
-    #              ko | genome | <org> | compound | glycan | reaction |
-    #              rpair | rclass | enzyme
+    # <database> = pathway | brite | module | ko | <org> | ag | vg | vp |
+    #              genome | vtax | vgenome | compound | glycan | reaction |
+    #              rclass | rmodule | enzyme | network | ntmap | variant |
+    #              disease | drug | dgroup | disease_ja | drug_ja | dgroup_ja |
+    #              compound_ja
     # <org> = KEGG organism code or T number
     #
-    # <option> = aaseq | ntseq | mol | kcf | image
-    if option in ["aaseq", "ntseq", "mol", "kcf", "image", "kgml", "json"]:
+    # <option> = aaseq | ntseq | mol | kcf | image | conf | kgml | json
+    if option in ["aaseq", "ntseq", "mol", "kcf", "image", "conf", "kgml", "json"]:
         resp = _q("get", dbentries, option)
     elif option:
         raise ValueError("Invalid option arg for kegg get request.")
