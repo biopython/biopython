@@ -189,44 +189,6 @@ class KEGGTests(unittest.TestCase):
             handle.read()
         self.assertEqual(handle.url, "https://rest.kegg.jp/get/hsa:10458+ece:Z5100")
 
-    def test_get_hsa_10458_plus_ece_Z5100_as_aaseq(self):
-        with kegg_get("hsa:10458+ece:Z5100", "aaseq") as handle:
-            data = SeqIO.parse(handle, "fasta")
-            self.assertEqual(len(list(data)), 2)
-        self.assertEqual(
-            handle.url, "https://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq"
-        )
-
-    def test_get_hsa_10458_list_ece_Z5100_as_aaseq(self):
-        with kegg_get(["hsa:10458", "ece:Z5100"], "aaseq") as handle:
-            data = SeqIO.parse(handle, "fasta")
-            self.assertEqual(len(list(data)), 2)
-        self.assertEqual(
-            handle.url, "https://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq"
-        )
-
-    def test_get_hsa_10458_plus_ece_Z5100_as_ntseq(self):
-        with kegg_get("hsa:10458+ece:Z5100", "ntseq") as handle:
-            data = SeqIO.parse(handle, "fasta")
-            self.assertEqual(len(list(data)), 2)
-        self.assertEqual(
-            handle.url, "https://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq"
-        )
-
-    def test_get_hsa_10458_list_ece_Z5100_as_ntseq(self):
-        with kegg_get(["hsa:10458", "ece:Z5100"], "ntseq") as handle:
-            data = SeqIO.parse(handle, "fasta")
-            self.assertEqual(len(list(data)), 2)
-        self.assertEqual(
-            handle.url, "https://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq"
-        )
-
-    def test_get_hsa05130_image(self):
-        with kegg_get("hsa05130", "image") as handle:
-            data = handle.read()
-        self.assertEqual(data[:4], b"\x89PNG")
-        self.assertEqual(handle.url, "https://rest.kegg.jp/get/hsa05130/image")
-
     def test_conv_eco_ncbi_geneid(self):
         with kegg_conv("eco", "ncbi-geneid") as handle:
             handle.read()
@@ -296,6 +258,46 @@ class KEGGTests(unittest.TestCase):
         with kegg_link("jtc", "D01441", "turtle") as handle:
             handle.read()
         self.assertEqual(handle.url, "https://rest.kegg.jp/link/jtc/D01441/turtle")
+
+
+class KEGGContentsTests(unittest.TestCase):
+    def test_get_hsa_10458_plus_ece_Z5100_as_aaseq(self):
+        with kegg_get("hsa:10458+ece:Z5100", "aaseq") as handle:
+            data = SeqIO.parse(handle, "fasta")
+            self.assertEqual(len(list(data)), 2)
+        self.assertEqual(
+            handle.url, "https://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq"
+        )
+
+    def test_get_hsa_10458_list_ece_Z5100_as_aaseq(self):
+        with kegg_get(["hsa:10458", "ece:Z5100"], "aaseq") as handle:
+            data = SeqIO.parse(handle, "fasta")
+            self.assertEqual(len(list(data)), 2)
+        self.assertEqual(
+            handle.url, "https://rest.kegg.jp/get/hsa:10458+ece:Z5100/aaseq"
+        )
+
+    def test_get_hsa_10458_plus_ece_Z5100_as_ntseq(self):
+        with kegg_get("hsa:10458+ece:Z5100", "ntseq") as handle:
+            data = SeqIO.parse(handle, "fasta")
+            self.assertEqual(len(list(data)), 2)
+        self.assertEqual(
+            handle.url, "https://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq"
+        )
+
+    def test_get_hsa_10458_list_ece_Z5100_as_ntseq(self):
+        with kegg_get(["hsa:10458", "ece:Z5100"], "ntseq") as handle:
+            data = SeqIO.parse(handle, "fasta")
+            self.assertEqual(len(list(data)), 2)
+        self.assertEqual(
+            handle.url, "https://rest.kegg.jp/get/hsa:10458+ece:Z5100/ntseq"
+        )
+
+    def test_get_hsa05130_image(self):
+        with kegg_get("hsa05130", "image") as handle:
+            data = handle.read()
+        self.assertEqual(data[:4], b"\x89PNG")
+        self.assertEqual(handle.url, "https://rest.kegg.jp/get/hsa05130/image")
 
 
 class KGMLPathwayTests(unittest.TestCase):
