@@ -282,7 +282,9 @@ class TestPDBListUpdateObsoleteHandling(unittest.TestCase):
                 pdblist.update_pdb(file_format="mmCif")
 
             self.assertFalse(os.path.exists(source_file))
-            self.assertTrue(os.path.exists(os.path.join(obsolete_dir, f"{pdb_code}.cif")))
+            self.assertTrue(
+                os.path.exists(os.path.join(obsolete_dir, f"{pdb_code}.cif"))
+            )
 
     def test_update_pdb_moves_obsolete_mmcif_assemblies(self):
         pdb_code = "127d"
@@ -305,7 +307,9 @@ class TestPDBListUpdateObsoleteHandling(unittest.TestCase):
 
             self.assertFalse(os.path.exists(source_file))
             self.assertFalse(os.path.exists(source_assembly))
-            self.assertTrue(os.path.exists(os.path.join(obsolete_dir, f"{pdb_code}.cif")))
+            self.assertTrue(
+                os.path.exists(os.path.join(obsolete_dir, f"{pdb_code}.cif"))
+            )
             self.assertTrue(
                 os.path.exists(os.path.join(obsolete_dir, f"{pdb_code}-assembly1.cif"))
             )

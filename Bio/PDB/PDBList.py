@@ -445,9 +445,7 @@ class PDBList:
                     try:
                         shutil.move(old_assembly_file, new_assembly_file)
                     except Exception:
-                        print(
-                            f"Could not move {old_assembly_file} to obsolete folder"
-                        )
+                        print(f"Could not move {old_assembly_file} to obsolete folder")
 
     def download_pdb_files(
         self,
