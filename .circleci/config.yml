@@ -54,3 +54,4 @@ jobs:
           upload_name: CircleCI
           disable_search: true
           files: biopython-*/Tests/coverage.xml
+          fail_ci_if_error: false
