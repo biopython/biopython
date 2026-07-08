@@ -5,10 +5,10 @@
 the _Biopython License Agreement_ **AND** the _BSD 3-Clause License_.
 
 - [ ] I have read the ``CONTRIBUTING.rst`` file, have *not* used Large
-Language Models (LLM) or generative artificial intelligence (GenAI) tools,
-have run ``pre-commit`` locally, and understand that continuous integration
-checks will be used to confirm the Biopython unit tests and style checks pass
-with these changes.
+Language Models (LLM) or generative artificial intelligence (GenAI) tools to
+write these changes, have run ``pre-commit`` locally, and understand that
+continuous integration checks will be used to confirm the Biopython unit tests
+and style checks pass with these changes.
 
 - [ ] I have added my name to the alphabetical contributors listings in the files
 ``NEWS.rst`` and ``CONTRIB.rst`` as part of this pull request, am listed
