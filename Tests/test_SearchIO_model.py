@@ -18,6 +18,7 @@ from io import BytesIO
 
 from search_tests_common import SearchTestBaseClass
 
+from Bio import BiopythonWarning
 from Bio.Align import MultipleSeqAlignment
 from Bio.SearchIO._model import Hit
 from Bio.SearchIO._model import HSP
@@ -1276,6 +1277,28 @@ class HSPMultipleFragmentCases(SearchTestBaseClass):
         self.assertRaises(AttributeError, setattr, self.hsp, "aln_all", None)
         self.assertRaises(AttributeError, setattr, self.hsp, "hit_all", None)
         self.assertRaises(AttributeError, setattr, self.hsp, "query_all", None)
+
+    def test_range_with_none_coordinate(self):
+        """Test HSP range properties when one fragment has None coordinates."""
+        self.frag2.query_start = None
+        self.frag2.query_end = None
+        with self.assertWarns(BiopythonWarning):
+            query_start = self.hsp.query_start
+        with self.assertWarns(BiopythonWarning):
+            query_end = self.hsp.query_end
+        # the None coordinates from frag2 should be ignored, as advertised
+        # by the warning, not propagated into the min()/max() call
+        self.assertEqual(0, query_start)
+        self.assertEqual(6, query_end)
+
+    def test_range_with_all_none_coordinates(self):
+        """Test HSP range properties when all fragments have None coordinates."""
+        self.frag1.query_start = None
+        self.frag1.query_end = None
+        self.frag2.query_start = None
+        self.frag2.query_end = None
+        with self.assertWarns(BiopythonWarning):
+            self.assertRaises(ValueError, lambda: self.hsp.query_start)
 
 
 class HSPFragmentWithoutSeqCases(unittest.TestCase):

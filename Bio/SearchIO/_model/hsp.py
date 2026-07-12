@@ -438,6 +438,7 @@ class HSP(_BaseHSP):
                 "'None' exist in %s coordinates; ignored" % (coord_name),
                 BiopythonWarning,
             )
+            coords = [x for x in coords if x is not None]
         return coords
 
     def _hit_start_get(self):
