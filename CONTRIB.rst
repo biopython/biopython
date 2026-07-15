@@ -28,6 +28,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Alexander Decurnou <https://github.com/adcrn>
 - Allis Tauri <https://github.com/allista>
 - Alona Levy-Jurgenson <https://github.com/alonalj>
+- AlsoTheZv3n <https://github.com/AlsoTheZv3n>
 - Anders Pitman <https://github.com/anderspitman>
 - Andrea Pierleoni <andrea at the Italian domain biocomp dot unibo>
 - Andrea Rizzi <https://github.com/andrrizzi>

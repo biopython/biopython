@@ -10,6 +10,7 @@ See https://pdbml.wwpdb.org/.
 """
 
 from os import PathLike
+from typing import cast
 from typing import TextIO
 from typing import Union
 from xml.etree import ElementTree
@@ -17,12 +18,34 @@ from xml.etree.ElementTree import Element
 
 import numpy as np
 
+from Bio.PDB.PDBExceptions import PDBConstructionException
 from Bio.PDB.Structure import Structure
 from Bio.PDB.StructureBuilder import StructureBuilder
 
 
+def _find(
+    parent: "ElementTree.ElementTree[Element] | Element",
+    path: str,
+    namespaces: dict[str, str],
+) -> Element:
+    """Return the first matching sub-element, raising if it is absent."""
+    element = parent.find(path, namespaces)
+    if element is None:
+        raise PDBConstructionException(f"Required PDBML element not found: {path!r}")
+    return element
+
+
+def _text(element: Element) -> str:
+    """Return an element's text content, raising if it is empty."""
+    if element.text is None:
+        raise PDBConstructionException(
+            f"PDBML element {element.tag!r} has no text content"
+        )
+    return element.text
+
+
 def _parse_resolution_from(
-    tree: ElementTree, namespaces: dict[str, str]
+    tree: "ElementTree.ElementTree[Element]", namespaces: dict[str, str]
 ) -> float | None:
     for candidate in [
         "PDBx:refineCategory/PDBx:refine/PDBx:ls_d_res_high",
@@ -30,7 +53,7 @@ def _parse_resolution_from(
         "PDBx:em_3d_reconstructionCategory/PDBx:em_3d_reconstruction/PDBx:resolution",
     ]:
         element = tree.find(candidate, namespaces)
-        if element:
+        if element is not None:
             text = element.text
             if text:
                 return float(text)
@@ -38,45 +61,48 @@ def _parse_resolution_from(
 
 
 def _parse_header_from(
-    tree: ElementTree, namespaces: dict[str, str]
-) -> dict[str, str | float]:
+    tree: "ElementTree.ElementTree[Element]", namespaces: dict[str, str]
+) -> dict[str, str | float | None]:
+    # The element must be present, but its text may be absent (an xsi:nil
+    # element parses to text=None); mirror the original None-tolerant behaviour
+    # for these optional header fields rather than raising via _text.
     return {
-        "name": tree.find(
-            "PDBx:structCategory/PDBx:struct/PDBx:title", namespaces
+        "name": _find(
+            tree, "PDBx:structCategory/PDBx:struct/PDBx:title", namespaces
         ).text,
-        "head": tree.find(
-            "PDBx:struct_keywordsCategory/PDBx:struct_keywords/PDBx:text", namespaces
-        ).text,
-        "idcode": tree.find(
-            "PDBx:entryCategory/PDBx:entry",
+        "head": _find(
+            tree,
+            "PDBx:struct_keywordsCategory/PDBx:struct_keywords/PDBx:text",
             namespaces,
-        ).attrib["id"],
-        "deposition_date": tree.find(
+        ).text,
+        "idcode": _find(tree, "PDBx:entryCategory/PDBx:entry", namespaces).attrib["id"],
+        "deposition_date": _find(
+            tree,
             "PDBx:pdbx_database_statusCategory/PDBx:pdbx_database_status/PDBx:recvd_initial_deposition_date",
             namespaces,
         ).text,
-        "structure_method": tree.find(
-            "PDBx:exptlCategory/PDBx:exptl", namespaces
+        "structure_method": _find(
+            tree, "PDBx:exptlCategory/PDBx:exptl", namespaces
         ).attrib["method"],
         "resolution": _parse_resolution_from(tree, namespaces),
     }
 
 
 def _parse_atom_from(element: Element, namespaces: dict[str, str]):
-    name = element.find("PDBx:label_atom_id", namespaces).text
-    x = float(element.find("PDBx:Cartn_x", namespaces).text)
-    y = float(element.find("PDBx:Cartn_y", namespaces).text)
-    z = float(element.find("PDBx:Cartn_z", namespaces).text)
+    name = _text(_find(element, "PDBx:label_atom_id", namespaces))
+    x = float(_text(_find(element, "PDBx:Cartn_x", namespaces)))
+    y = float(_text(_find(element, "PDBx:Cartn_y", namespaces)))
+    z = float(_text(_find(element, "PDBx:Cartn_z", namespaces)))
 
     return {
         "name": name,
         "coord": np.array((x, y, z), float),
-        "b_factor": float(element.find("PDBx:B_iso_or_equiv", namespaces).text),
-        "occupancy": float(element.find("PDBx:occupancy", namespaces).text),
-        "altloc": element.find("PDBx:label_alt_id", namespaces).text or " ",
+        "b_factor": float(_text(_find(element, "PDBx:B_iso_or_equiv", namespaces))),
+        "occupancy": float(_text(_find(element, "PDBx:occupancy", namespaces))),
+        "altloc": _find(element, "PDBx:label_alt_id", namespaces).text or " ",
         "fullname": name,
         "serial_number": int(element.attrib["id"]),
-        "element": element.find("PDBx:type_symbol", namespaces).text,
+        "element": _text(_find(element, "PDBx:type_symbol", namespaces)),
     }
 
 
@@ -84,8 +110,8 @@ def _parse_residue_id_from(
     element: Element, namespaces: dict[str, str]
 ) -> tuple[str, int, str]:
     assert element.tag == f"{{{namespaces['PDBx']}}}atom_site"
-    atom_group = element.find("PDBx:group_PDB", namespaces).text
-    component_id = element.find("PDBx:label_comp_id", namespaces).text
+    atom_group = _text(_find(element, "PDBx:group_PDB", namespaces))
+    component_id = _text(_find(element, "PDBx:label_comp_id", namespaces))
     ins_code_element = element.find("PDBx:pdbx_PDB_ins_code", namespaces)
 
     if atom_group == "HETATM":
@@ -96,8 +122,12 @@ def _parse_residue_id_from(
     else:
         hetero_field = " "
 
-    sequence_id = int(element.find("PDBx:auth_seq_id", namespaces).text)
-    insertion_code = ins_code_element.text if ins_code_element is not None else " "
+    sequence_id = int(_text(_find(element, "PDBx:auth_seq_id", namespaces)))
+    insertion_code = (
+        ins_code_element.text
+        if ins_code_element is not None and ins_code_element.text is not None
+        else " "
+    )
     return hetero_field, sequence_id, insertion_code
 
 
@@ -119,8 +149,9 @@ class PDBMLParser:
         :return: the PDB structure
         :rtype: Bio.PDB.Structure.Structure
         """
-        namespaces = dict(
-            [node for _, node in ElementTree.iterparse(source, ["start-ns"])]
+        namespaces: dict[str, str] = dict(
+            cast(tuple[str, str], node)
+            for _, node in ElementTree.iterparse(source, ["start-ns"])
         )
 
         if hasattr(source, "seek"):
@@ -129,9 +160,9 @@ class PDBMLParser:
 
         tree = ElementTree.parse(source)
         header = _parse_header_from(tree, namespaces)
-        self.structure_builder.init_structure(structure_id=header["idcode"])
+        self.structure_builder.init_structure(structure_id=cast(str, header["idcode"]))
         self.structure_builder.set_header(header)
-        atom_elements = tree.find("PDBx:atom_siteCategory", namespaces)
+        atom_elements = _find(tree, "PDBx:atom_siteCategory", namespaces)
 
         builder_model_count = 0
         builder_model_number = None
@@ -141,9 +172,11 @@ class PDBMLParser:
         for element in atom_elements:
             # See https://mmcif.wwpdb.org/dictionaries/mmcif_pdbx_v50.dic/Categories/atom_site.html
             # for definitions of the different elements.
-            model_number = int(element.find("PDBx:pdbx_PDB_model_num", namespaces).text)
-            chain_id = element.find("PDBx:auth_asym_id", namespaces).text
-            component_id = element.find("PDBx:label_comp_id", namespaces).text
+            model_number = int(
+                _text(_find(element, "PDBx:pdbx_PDB_model_num", namespaces))
+            )
+            chain_id = _text(_find(element, "PDBx:auth_asym_id", namespaces))
+            component_id = _text(_find(element, "PDBx:label_comp_id", namespaces))
             residue_id = _parse_residue_id_from(element, namespaces)
 
             if not builder_model_number or model_number != builder_model_number:
