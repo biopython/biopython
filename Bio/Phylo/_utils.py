@@ -284,6 +284,7 @@ def draw(
     label_func=str,
     do_show=True,
     show_confidence=True,
+    title=None,
     # For power users
     axes=None,
     branch_labels=None,
@@ -343,6 +344,9 @@ def draw(
             A function or a dictionary specifying the color of the tip label.
             If the tip label can't be found in the dict or label_colors is
             None, the label will be shown in black.
+        title : str or None
+            An optional title for the plot. If not provided, the tree name
+            attribute is used as the title (if available).
 
     """
     try:
@@ -582,14 +586,16 @@ def draw(
         axes.add_collection(i)
 
     # Aesthetics
-
-    try:
-        name = tree.name
-    except AttributeError:
-        pass
+    if title is not None:
+        axes.set_title(title)
     else:
-        if name:
-            axes.set_title(name)
+        try:
+            name = tree.name
+        except AttributeError:
+            pass
+        else:
+            if name:
+                axes.set_title(name)
     axes.set_xlabel("branch length")
     axes.set_ylabel("taxa")
     # Add margins around the tree to prevent overlapping the axes
