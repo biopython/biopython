@@ -263,14 +263,9 @@ def _read_v4(f):
         record.npix[i] = npix
 
     # reshape without copying.
-    def reshape(array):
-        view = array.view()
-        view.shape = (record.nrows, record.ncols)
-        return view
-
-    record.intensities = reshape(record.intensities)
-    record.stdevs = reshape(record.stdevs)
-    record.npix = reshape(record.npix)
+    record.intensities = record.intensities.reshape((record.nrows, record.ncols))
+    record.stdevs = record.stdevs.reshape((record.nrows, record.ncols))
+    record.npix = record.npix.reshape((record.nrows, record.ncols))
 
     return record
 
