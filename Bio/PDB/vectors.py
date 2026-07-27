@@ -171,8 +171,7 @@ def refmat(p, q):
         return np.identity(3)
     pq = p - q
     pq.normalize()
-    b = pq.get_array()
-    b.shape = (3, 1)
+    b = pq.get_array().reshape((3, 1))
     i = np.identity(3)
     ref = i - 2 * np.dot(b, np.transpose(b))
     return ref
