@@ -26,17 +26,23 @@ correct position.
 """
 
 import unittest
+import warnings
 from io import BytesIO
 from unittest import mock
 from urllib.error import HTTPError
 
 import requires_internet
 
+from Bio import BiopythonDeprecationWarning
 from Bio import MissingExternalDependencyError
 
 # We want to test these:
 from Bio.Blast import NCBIWWW
 from Bio.Blast import NCBIXML
+
+# This module deliberately exercises the deprecated Bio.Blast.NCBIWWW.qblast;
+# ignore its deprecation warning here (test_deprecation below checks it fires).
+warnings.filterwarnings("ignore", category=BiopythonDeprecationWarning)
 
 NCBIWWW.email = "biopython@biopython.org"
 
@@ -96,6 +102,21 @@ if not requires_internet.check.available:
 
 
 class TestQblast(unittest.TestCase):
+    def test_deprecation(self):
+        """Bio.Blast.NCBIWWW.qblast is deprecated in favour of Bio.Blast.qblast."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", BiopythonDeprecationWarning)
+            # The deprecation warning is raised before the program name is
+            # validated, so an invalid program still triggers it without any
+            # network access.
+            self.assertRaises(
+                BiopythonDeprecationWarning,
+                NCBIWWW.qblast,
+                "not_a_real_program",
+                "nr",
+                "ACGT",
+            )
+
     def test_blastp_nr_actin(self):
         # Simple protein blast filtered for rat only, using protein
         # GI:160837788 aka NP_075631.2

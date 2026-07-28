@@ -13,6 +13,12 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.88
 ===============================================
 
+``Bio.Blast.qblast`` gained an ``api_key`` argument, matching the NCBI's move to
+API keys for higher request-rate limits. Its ``username`` and ``password``
+arguments are now deprecated, as the NCBI no longer supports HTTP Basic
+authentication for QBLAST. The older ``Bio.Blast.NCBIWWW.qblast`` function is now
+deprecated in favour of ``Bio.Blast.qblast``.
+
 Additionally, a number of small bugs and typos have been fixed with additions
 to the test suite and type annotations.
 

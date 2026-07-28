@@ -38,6 +38,7 @@ from xml.parsers import expat
 
 import numpy as np
 
+from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio import StreamModeError
 from Bio._utils import function_with_previous
@@ -1060,6 +1061,7 @@ def qblast(
     template_length=None,
     username="blast",
     password=None,
+    api_key=None,
 ):
     """BLAST search using NCBI's QBLAST server.
 
@@ -1092,6 +1094,12 @@ def qblast(
                       manually set parameters like word size and e value. Turns
                       off when sequence length is > 30 residues. Default: None.
      - service        plain, psi, phi, rpsblast, megablast (lower case)
+     - api_key        NCBI API key for higher request-rate limits (see
+                      https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/).
+
+    The ``username`` and ``password`` parameters are deprecated: the NCBI no
+    longer supports HTTP Basic authentication for QBLAST. Use ``api_key``
+    instead. They will be removed in a future release.
 
     This function does no checking of the validity of the parameters
     and passes the values to the server as is.  More help is available at:
@@ -1173,6 +1181,15 @@ def qblast(
         "CMD": "Put",
     }
 
+    if password is not None or username != "blast":
+        warnings.warn(
+            "The username and password parameters are deprecated. The NCBI no "
+            "longer supports HTTP Basic authentication for QBLAST; use the "
+            "api_key parameter instead. These parameters will be removed in a "
+            "future release.",
+            BiopythonDeprecationWarning,
+        )
+
     if password is not None:
         # handle authentication for BLAST cloud
         password_mgr = HTTPPasswordMgrWithDefaultRealm()
@@ -1183,6 +1200,8 @@ def qblast(
 
     if url_base == NCBI_BLAST_URL:
         parameters.update({"email": email, "tool": tool})
+        if api_key is not None:
+            parameters["api_key"] = api_key
     parameters = {key: value for key, value in parameters.items() if value is not None}
     message = urlencode(parameters).encode()
     request = Request(url_base, message, {"User-Agent": "BiopythonClient"})

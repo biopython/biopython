@@ -31,6 +31,7 @@ from urllib.request import install_opener
 from urllib.request import Request
 from urllib.request import urlopen
 
+from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
 from Bio._utils import function_with_previous
 
@@ -130,6 +131,15 @@ def qblast(
     https://blast.ncbi.nlm.nih.gov/doc/blast-help/urlapi.html
 
     """
+    warnings.warn(
+        "Bio.Blast.NCBIWWW.qblast is deprecated; use Bio.Blast.qblast instead. "
+        "Note that Bio.Blast.qblast returns a bytes stream to be parsed with "
+        "Bio.Blast.parse, rather than the text handle returned here, so calling "
+        "code will need updating. The username and password parameters are also "
+        "no longer supported by the NCBI. This function will be removed in a "
+        "future release.",
+        BiopythonDeprecationWarning,
+    )
     programs = ["blastn", "blastp", "blastx", "tblastn", "tblastx"]
     if program not in programs:
         raise ValueError(

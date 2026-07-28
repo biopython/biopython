@@ -83,6 +83,16 @@ From now on one should use the following commands:
 Biopython modules, methods, functions
 =====================================
 
+Bio.Blast.NCBIWWW
+-----------------
+The function ``qblast`` in ``Bio.Blast.NCBIWWW`` was deprecated in release 1.88.
+Please use ``Bio.Blast.qblast`` instead, which has been available since release
+1.84. Note that ``Bio.Blast.qblast`` returns a bytes stream to be parsed with
+``Bio.Blast.parse``, rather than the text handle returned by
+``Bio.Blast.NCBIWWW.qblast``, so calling code will need updating. The NCBI no
+longer supports the ``username`` and ``password`` (HTTP Basic authentication)
+parameters; use the new ``api_key`` parameter of ``Bio.Blast.qblast`` instead.
+
 Bio.SeqIO.FastaIO
 -----------------
 Parsing a FASTA file using Bio.SeqIO.parse with ``format='fasta'`` interprets
