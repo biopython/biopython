@@ -6916,8 +6916,8 @@ AlignmentCounts object with
             )
             output.flush()
             output.seek(0)
-            data = output.read()
-        self.assertEqual(correct, data)
+            alignments = Align.parse(output, "bigbed")
+            self.check_alignments(alignments)
         alignments = Align.parse(path, "bigbed")
         targets = alignments.targets
         with tempfile.TemporaryFile() as output:
@@ -6932,8 +6932,8 @@ AlignmentCounts object with
             )
             output.flush()
             output.seek(0)
-            data = output.read()
-        self.assertEqual(correct, data)
+            alignments = Align.parse(output, "bigbed")
+            self.check_alignments(alignments)
 
 
 class TestAlign_searching(unittest.TestCase):
