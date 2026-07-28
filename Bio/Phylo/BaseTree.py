@@ -252,6 +252,7 @@ class TreeElement:
         )
 
     def __str__(self) -> str:
+        """Return the object's constructor representation, as given by __repr__."""
         return self.__repr__()
 
 
