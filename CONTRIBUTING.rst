@@ -20,10 +20,9 @@ AI tools
 --------
 
 Please do not use any Large Language Models (LLM) or generative artificial
-intelligence tools for contributing to Biopython, or communicating with the
-Biopython community - with the limited exception of translation from your
-native language into English for discussion where this should be disclosed
-and the original text included.
+intelligence (AI) tools for changes contributed to Biopython, or communicating
+with the Biopython community - with the limited exception of translation from
+your native language into English where this should be disclosed.
 
 We have concerns about both the ethics and legality of the output of such
 tools, including the international copyright status of the output and if it
@@ -32,6 +31,11 @@ We are also concerned by the review and maintenance burden.
 
 Accounts making such pull requests may be banned without warning.
 
+Some of the acceptable uses of generative AI include:
+
+* Assistance with writing comments, especially in a non-native language
+* Gaining understanding of existing code
+* Supplementing contributor knowledge for code, tests, and documentation
 
 Tagged issues
 -------------
