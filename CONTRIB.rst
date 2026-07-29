@@ -370,6 +370,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Will Tyler <https://github.com/Will-Tyler>
 - Wolfgang Schueler <wolfgang at domain proceryon.at>
 - Xiaoyu Zhuo <https://github.com/xzhuo>
+- Xinxiang Wang <https://github.com/yiyabo>
 - Yair Benita <Y.Benita at domain pharm.uu.nl>
 - Yanbo Ye <https://github.com/lijax>
 - Yasar L. Ahmed <https://github.com/pyahmed>

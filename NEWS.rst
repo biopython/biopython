@@ -22,6 +22,7 @@ possible, especially the following contributors:
 - Peter Cock
 - Al Fattah Suyadi (first contribution)
 - Laura Piñero Roig (first contribution)
+- Xinxiang Wang (first contribution)
 
 30 March 2026: Biopython 1.87
 =============================

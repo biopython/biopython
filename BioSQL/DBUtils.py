@@ -94,6 +94,7 @@ class Mysql_dbutils(Generic_dbutils):
 
 
 _dbutils["MySQLdb"] = Mysql_dbutils
+_dbutils["pymysql"] = Mysql_dbutils
 
 
 class _PostgreSQL_dbutils(Generic_dbutils):
