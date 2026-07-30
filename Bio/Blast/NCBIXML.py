@@ -34,7 +34,7 @@ import warnings
 import xml.sax
 from xml.sax.handler import ContentHandler
 
-from Bio import BiopythonParserWarning
+from Bio import BiopythonDeprecationWarning, BiopythonParserWarning
 
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
@@ -58,11 +58,11 @@ class Header:
     reference           Reference for blast.
 
     query               Name of query sequence.
-    query_letters       Number of letters in the query sequence.  (int)
+    query_letters       Number of letters in the query sequence.  (int)  (deprecated, use query_length)
 
     database            Name of the database.
     database_sequences  Number of sequences in the database.  (int)
-    database_letters    Number of letters in the database.  (int)
+    database_letters    Number of letters in the database.  (int)  (deprecated, use database_length)
 
     """
 
@@ -74,11 +74,37 @@ class Header:
         self.reference = ""
 
         self.query = ""
-        self.query_letters = None
+        self._query_letters = None
 
         self.database = ""
         self.database_sequences = None
-        self.database_letters = None
+        self._database_letters = None
+
+    @property
+    def query_letters(self):
+        """Number of letters in the query sequence (int), use query_length instead."""
+        warnings.warn(
+            "Header.query_letters is deprecated; use Header.query_length instead.",
+            BiopythonDeprecationWarning,
+        )
+        return self._query_letters
+
+    @query_letters.setter
+    def query_letters(self, value):
+        self._query_letters = value
+
+    @property
+    def database_letters(self):
+        """Number of letters in the database (int), use database_length instead."""
+        warnings.warn(
+            "Header.database_letters is deprecated; use Header.database_length instead.",
+            BiopythonDeprecationWarning,
+        )
+        return self._database_letters
+
+    @database_letters.setter
+    def database_letters(self, value):
+        self._database_letters = value
 
 
 class Description:
@@ -774,13 +800,13 @@ class BlastParser(_XMLparser):
             self._blast.query = self._header.query
         if not hasattr(self._blast, "query_id") or not self._blast.query_id:
             self._blast.query_id = self._header.query_id
-        if not hasattr(self._blast, "query_letters") or not self._blast.query_letters:
+        if not hasattr(self._blast, "_query_letters") or not self._blast._query_letters:
             self._blast.query_letters = self._header.query_letters
 
         # Hack to record the query length as both the query_letters and
         # query_length properties (as in the plain text parser, see
         # Bug 2176 comment 12):
-        self._blast.query_length = self._blast.query_letters
+        self._blast.query_length = self._blast._query_letters
         # Perhaps in the long term we should deprecate one, but I would
         # prefer to drop query_letters - so we need a transition period
         # with both.
@@ -788,7 +814,7 @@ class BlastParser(_XMLparser):
         # Hack to record the claimed database size as database_length
         # (as well as in num_letters_in_database, see Bug 2176 comment 13):
         self._blast.database_length = self._blast.num_letters_in_database
-        # TODO? Deprecate database_letters next?
+        # database_letters has been deprecated (use database_length instead)
 
         # Hack to record the claimed database sequence count as database_sequences
         self._blast.database_sequences = self._blast.num_sequences_in_database
