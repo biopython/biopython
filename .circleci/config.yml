@@ -50,7 +50,10 @@ jobs:
             coverage run --source Bio,BioSQL --source Bio,BioSQL run_tests.py --offline
             echo "Tests run"
             coverage xml
-      - codecov/upload:
-          upload_name: CircleCI
-          disable_search: true
-          files: biopython-*/Tests/coverage.xml
+      - run:
+          name: Upload coverage to Codecov
+          command: |
+            bash <(curl -s https://codecov.io/bash) -n \
+              -F CircleCI \
+              -f biopython-*/Tests/coverage.xml
+
