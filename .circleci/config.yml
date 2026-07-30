@@ -53,7 +53,9 @@ jobs:
       - run:
           name: Upload coverage to Codecov
           command: |
-            bash <(curl -s https://codecov.io/bash) -n \
+            curl -Os https://mirror.ghproxy.com/https://cli.codecov.io/latest/linux/codecov
+            chmod +x codecov
+            ./codecov \
               -F CircleCI \
               -f biopython-*/Tests/coverage.xml
 
