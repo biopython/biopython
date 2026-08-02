@@ -28,6 +28,7 @@ possible, especially the following contributors:
 - Marcus Campbell (first contribution)
 - Michiel de Hoon
 - Peter Cock
+- Stanley C. (first contribution)
 
 30 March 2026: Biopython 1.87
 =============================

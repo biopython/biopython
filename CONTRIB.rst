@@ -332,6 +332,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Soroush Saffari <https://github.com/sorsaffari>
 - Sourav Singh <https://github.com/souravsingh>
 - Spencer Bliven <https://github.com/sbliven>
+- Stanley C. <https://github.com/stanbot8>
 - Stefans Mezulis <https://github.com/StefansM>
 - Steve Bond <https://github.com/biologyguy>
 - Steve Marshall <https://github.com/hungryhoser>
