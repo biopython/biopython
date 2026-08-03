@@ -735,7 +735,8 @@ The ``draw_graphviz`` function was removed in Release 1.79.
 
 Bio.pairwise2
 -------------
-The ``Bio.pairwise2`` module was deprecated in Release 1.80.
+The ``Bio.pairwise2`` module was deprecated in Release 1.80, and removed in
+Release 1.89.
 
 Bio.Wise
 --------
