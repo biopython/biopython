@@ -10,7 +10,7 @@
 
 """Restriction Enzyme classes.
 
-Notes about the diverses class of the restriction enzyme implementation::
+Notes about the diverse class of the restriction enzyme implementation::
 
             RestrictionType is the type of all restriction enzymes.
         -----------------------------------------------------------------------
@@ -540,7 +540,7 @@ class AbstractCut(RestrictionType):
 
     @classmethod
     def _drop(cls):
-        """Remove cuts that are outsite of the sequence (PRIVATE).
+        """Remove cuts that are outside of the sequence (PRIVATE).
 
         For internal use only.
 
@@ -1991,7 +1991,7 @@ class RestrictionBatch(set):
     def __init__(self, first=(), suppliers=()):
         """Initialize empty RB or pre-fill with enzymes (from supplier)."""
         first = [self.format(x) for x in first]
-        first += [eval(x) for n in suppliers for x in suppliers_dict[n][1]]
+        first += [globals()[x] for n in suppliers for x in suppliers_dict[n][1]]
         set.__init__(self, first)
         self.mapping = dict.fromkeys(self)
         self.already_mapped = None
@@ -2079,7 +2079,9 @@ class RestrictionBatch(set):
         supplier = suppliers_dict[letter]
         self.suppliers.append(letter)
         for x in supplier[1]:
-            self.add_nocheck(eval(x))
+            enzyme = globals()[x]
+            assert isinstance(enzyme, RestrictionType)
+            self.add_nocheck(enzyme)
 
     def current_suppliers(self):
         """List the current suppliers for the restriction batch.
@@ -2134,25 +2136,25 @@ class RestrictionBatch(set):
         """Evaluate enzyme (name) and return it (as RestrictionType).
 
         If y is a RestrictionType return y.
-        If y can be evaluated to a RestrictionType return eval(y).
+        If y can be evaluated to a RestrictionType return the class.
         Raise a ValueError in all other case.
         """
         try:
             if isinstance(y, RestrictionType):
                 return y
-            elif isinstance(eval(str(y)), RestrictionType):
-                return eval(y)
-        except (NameError, SyntaxError):
+            elif isinstance(globals()[str(y)], RestrictionType):
+                return globals()[str(y)]
+        except (NameError, KeyError):
             pass
         raise ValueError(f"{y.__class__} is not a RestrictionType")
 
     def is_restriction(self, y):
         """Return if enzyme (name) is a known enzyme.
 
-        True if y or eval(y) is a RestrictionType.
+        True if y is a RestrictionType class, or a string which is.
         """
-        return isinstance(y, RestrictionType) or isinstance(
-            eval(str(y)), RestrictionType
+        return isinstance(y, RestrictionType) or (
+            str(y) in globals() and isinstance(globals()[str(y)], RestrictionType)
         )
 
     def split(self, *classes, **bool):
@@ -2595,7 +2597,7 @@ for TYPE, (bases, enzymes) in typedict.items():
     #
     #   First eval the bases.
     #
-    bases2 = tuple(eval(x) for x in bases)
+    bases2 = tuple(globals()[x] for x in bases)
     #
     #   now create the particular value of RestrictionType for the classes
     #   in enzymes.

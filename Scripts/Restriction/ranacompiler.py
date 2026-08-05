@@ -470,7 +470,7 @@ class DictionaryBuilder:
             #   Now select the right type for the enzyme.
             #
             bases = cls.bases
-            clsbases = tuple(eval(x) for x in bases)
+            clsbases = tuple(globals()[x] for x in bases)
             typestuff = ""
             for t in tdct.values():
                 #
