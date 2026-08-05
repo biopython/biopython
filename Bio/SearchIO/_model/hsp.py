@@ -771,11 +771,8 @@ class HSPFragment(_BaseHSP):
             # query or hit attributes whose default attribute is None
             for attr in ("strand", "frame", "start", "end"):
                 setattr(self, "%s_%s" % (seq_type, attr), None)
-            # self.query or self.hit
-            if eval(seq_type):
-                setattr(self, seq_type, eval(seq_type))
-            else:
-                setattr(self, seq_type, None)
+        self.query = query if query else None
+        self.hit = hit if hit else None
 
     def __repr__(self):
         """Return HSPFragment info; hit id, query id, number of columns."""
