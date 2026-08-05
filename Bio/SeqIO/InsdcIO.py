@@ -1051,10 +1051,7 @@ class GenBankWriter(_InsdcWriter):
         acc_with_version = accession
         if record.id.startswith(accession + "."):
             try:
-                acc_with_version = "%s.%i" % (
-                    accession,
-                    int(record.id.split(".", 1)[1]),
-                )
+                acc_with_version = f"{accession}.{int(record.id.split('.', 1)[1])}"
             except ValueError:
                 pass
         gi = self._get_annotation_str(record, "gi", just_first=True)

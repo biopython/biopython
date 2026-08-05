@@ -248,7 +248,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif field == "sbjct frame":
                 target_annotations["frame"] = column
             else:
-                raise ValueError("Unexpected field '%s'" % field)
+                raise ValueError(f"Unexpected field '{field}'")
         program = self.metadata["Program"]
         if coordinates is None:
             if alignment_length is not None:
@@ -297,7 +297,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 query_annotations["end"] = query_end
                 query_seq = Seq(query_sequence)
             else:
-                raise Exception("Unknown program %s" % program)
+                raise Exception(f"Unknown program {program}")
         query = SeqRecord(query_seq, id=query_id)
         if self._query_description is not None:
             query.description = self._query_description

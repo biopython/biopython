@@ -134,8 +134,8 @@ class AutoSQLTable(list):
         type_width = max(len(str(field.as_type)) for field in self)
         name_width = max(len(field.name) for field in self) + 1
         lines = []
-        lines.append("table %s\n" % self.name)
-        lines.append('"%s"\n' % self.comment)
+        lines.append(f"table {self.name}\n")
+        lines.append(f'"{self.comment}"\n')
         lines.append("(\n")
         for field in self:
             name = field.name + ";"
@@ -792,7 +792,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif field_type in ("float", "char", "string", "lstring"):
                 converter = str
             else:
-                raise Exception("Unknown field type %s" % field_type)
+                raise Exception(f"Unknown field type {field_type}")
             if make_array:
                 item_converter = converter
 
@@ -1066,7 +1066,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 if target.id == chromosome:
                     break
             else:
-                raise ValueError("Failed to find %s in alignments" % chromosome)
+                raise ValueError(f"Failed to find {chromosome} in alignments")
             if start is None:
                 if end is None:
                     start = 0

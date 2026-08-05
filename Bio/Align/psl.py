@@ -322,7 +322,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         if line.startswith("psLayout "):
             words = line.split()
             if words[1] != "version":
-                raise ValueError("Unexpected word '%s' in header line" % words[1])
+                raise ValueError(f"Unexpected word '{words[1]}' in header line")
             self.metadata = {"psLayout version": words[2]}
             line = stream.readline()
             line = stream.readline()
@@ -348,7 +348,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif len(words) == 21:
                 pslx = False
             else:
-                raise ValueError("line has %d columns; expected 21 or 23" % len(words))
+                raise ValueError(f"line has {len(words)} columns; expected 21 or 23")
             strand = words[8]
             qName = words[9]
             qSize = int(words[10])

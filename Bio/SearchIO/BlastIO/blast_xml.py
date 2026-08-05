@@ -606,8 +606,8 @@ class BlastXmlIndexer(SearchIndexer):
                     block.append(line)
                 assert line.rstrip().endswith(qend_mark), line
                 block = b"".join(block)
-            assert block.count(qstart_mark) == 1, "XML without line breaks? %r" % block
-            assert block.count(qend_mark) == 1, "XML without line breaks? %r" % block
+            assert block.count(qstart_mark) == 1, f"XML without line breaks? {block!r}"
+            assert block.count(qend_mark) == 1, f"XML without line breaks? {block!r}"
             # Now we have a full <Iteration>...</Iteration> block, find the ID
             regx = re.search(re_desc, block)
             try:

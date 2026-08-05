@@ -390,7 +390,7 @@ class _SeqAbstractBaseClass(ABC):
                 else:
                     seq = seq.decode("ASCII")
                 d[position] = seq
-            return "Seq(%r, length=%d)" % (d, len(self))
+            return f"Seq({d!r}, length={len(self)})"
         if len(data) > 60:
             # Shows the last three letters as it is often useful to see if
             # there is a stop codon at the end of a sequence.

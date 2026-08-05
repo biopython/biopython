@@ -149,13 +149,13 @@ class Pathway:
             f"KEGG ID: {self.name}",
             f"Image file: {self.image}",
             f"Organism: {self.org}",
-            "Entries: %d" % len(self.entries),
+            f"Entries: {len(self.entries)}",
             "Entry types:",
         ]
         for t in ["ortholog", "enzyme", "reaction", "gene", "group", "compound", "map"]:
             etype = [e for e in self.entries.values() if e.type == t]
             if len(etype):
-                outstr.append("\t%s: %d" % (t, len(etype)))
+                outstr.append(f"\t{t}: {len(etype)}")
         return "\n".join(outstr) + "\n"
 
     # Assert correct formatting of the pathway name, and other attributes
@@ -300,7 +300,7 @@ class Entry:
             f"Type: {self.type}",
             f"Components: {self.components}",
             f"Reactions: {self.reaction}",
-            "Graphics elements: %d %s" % (len(self.graphics), self.graphics),
+            f"Graphics elements: {len(self.graphics)} {self.graphics}",
         ]
         return "\n".join(outstr) + "\n"
 
@@ -690,8 +690,7 @@ class Reaction:
         if self._pathway is not None:
             if int(substrate_id) not in self._pathway.entries:
                 raise ValueError(
-                    "Couldn't add substrate, no node ID %d in Pathway"
-                    % int(substrate_id)
+                    f"Couldn't add substrate, no node ID {int(substrate_id)} in Pathway"
                 )
         self._substrates.add(substrate_id)
 
@@ -803,7 +802,7 @@ class Relation:
     def __str__(self):
         """Return a useful human-readable string."""
         outstr = [
-            "Relation (subtypes: %d):" % len(self.subtypes),
+            f"Relation (subtypes: {len(self.subtypes)}):",
             "Entry1:",
             str(self.entry1),
             "Entry2:",

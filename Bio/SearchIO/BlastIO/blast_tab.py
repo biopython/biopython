@@ -330,9 +330,7 @@ class BlastTabParser:
         fields = self.fields
         columns = self.line.strip().split("\t")
         if len(fields) != len(columns):
-            raise ValueError(
-                "Expected %i columns, found: %i" % (len(fields), len(columns))
-            )
+            raise ValueError(f"Expected {len(fields)} columns, found: {len(columns)}")
 
         qresult, hit, hsp, frag = {}, {}, {}, {}
         for idx, value in enumerate(columns):
@@ -446,10 +444,10 @@ class BlastTabParser:
                 for seq_type in ("hit", "query"):
                     # try to set hit and query frame
                     frame = self._get_frag_frame(frag, seq_type, prev["frag"])
-                    setattr(frag, "%s_frame" % seq_type, frame)
+                    setattr(frag, f"{seq_type}_frame", frame)
                     # try to set hit and query strand
                     strand = self._get_frag_strand(frag, seq_type, prev["frag"])
-                    setattr(frag, "%s_strand" % seq_type, strand)
+                    setattr(frag, f"{seq_type}_strand", strand)
 
                 hsp = HSP([frag])
                 for attr, value in prev["hsp"].items():
@@ -489,7 +487,7 @@ class BlastTabParser:
         and its parsed dictionary values.
         """
         assert seq_type in ("query", "hit")
-        frame = getattr(frag, "%s_frame" % seq_type, None)
+        frame = getattr(frag, f"{seq_type}_frame", None)
         if frame is not None:
             return frame
         else:
@@ -509,14 +507,14 @@ class BlastTabParser:
         # queries / hits, since we can't detect the blast flavors
         # from the columns alone.
         assert seq_type in ("query", "hit")
-        strand = getattr(frag, "%s_strand" % seq_type, None)
+        strand = getattr(frag, f"{seq_type}_strand", None)
         if strand is not None:
             return strand
         else:
             # using parsedict instead of the fragment object since
             # we need the unadjusted coordinated values
-            start = parsedict.get("%s_start" % seq_type)
-            end = parsedict.get("%s_end" % seq_type)
+            start = parsedict.get(f"{seq_type}_start")
+            end = parsedict.get(f"{seq_type}_end")
             if start is not None and end is not None:
                 return 1 if start <= end else -1
             # else implicit None return
@@ -768,7 +766,7 @@ class BlastTabWriter:
         # determine sequence type to operate on based on field's first letter
         seq_type = "query" if field.startswith("q") else "hit"
 
-        strand = getattr(hsp, "%s_strand" % seq_type, None)
+        strand = getattr(hsp, f"{seq_type}_strand", None)
         if strand is None:
             raise ValueError(
                 "Required attribute %r not found." % ("%s_strand" % (seq_type))
@@ -776,9 +774,9 @@ class BlastTabWriter:
         # switch start <--> end coordinates if strand is -1
         if strand < 0:
             if field.endswith("start"):
-                value = getattr(hsp, "%s_end" % seq_type)
+                value = getattr(hsp, f"{seq_type}_end")
             elif field.endswith("end"):
-                value = getattr(hsp, "%s_start" % seq_type) + 1
+                value = getattr(hsp, f"{seq_type}_start") + 1
         elif field.endswith("start"):
             # adjust start coordinate for positive strand
             value += 1
@@ -797,36 +795,36 @@ class BlastTabWriter:
             if value < 1.0e-180:
                 value = "0.0"
             elif value < 1.0e-99:
-                value = "%2.0e" % value
+                value = f"{value:2.0e}"
             elif value < 0.0009:
-                value = "%3.0e" % value
+                value = f"{value:3.0e}"
             elif value < 0.1:
-                value = "%4.3f" % value
+                value = f"{value:4.3f}"
             elif value < 1.0:
-                value = "%3.2f" % value
+                value = f"{value:3.2f}"
             elif value < 10.0:
-                value = "%2.1f" % value
+                value = f"{value:2.1f}"
             else:
-                value = "%5.0f" % value
+                value = f"{value:5.0f}"
 
         # pident and ppos formatting
         elif field in ("pident", "ppos"):
-            value = "%.2f" % value
+            value = f"{value:.2f}"
 
         # evalue formatting, adapted from BLAST+ source:
         # src/objtools/align_format/align_format_util.cpp#L723
         elif field == "bitscore":
             if value > 9999:
-                value = "%4.3e" % value
+                value = f"{value:4.3e}"
             elif value > 99.9:
                 value = "%4.0d" % value
             else:
-                value = "%4.1f" % value
+                value = f"{value:4.1f}"
 
         # coverages have no comma (using floats still ~ a more proper
         # representation)
         elif field in ("qcovhsp", "qcovs"):
-            value = "%.0f" % value
+            value = f"{value:.0f}"
 
         # list into '<>'-delimited string
         elif field == "salltitles":
@@ -862,28 +860,28 @@ class BlastTabWriter:
         try:
             version = qres.version
         except AttributeError:
-            program_line = "# %s" % program
+            program_line = f"# {program}"
         else:
             program_line = f"# {program} {version}"
         comments.append(program_line)
         # description may or may not be None
         if qres.description is None:
-            comments.append("# Query: %s" % qres.id)
+            comments.append(f"# Query: {qres.id}")
         else:
             comments.append(f"# Query: {qres.id} {qres.description}")
         # try appending RID line, if present
         try:
-            comments.append("# RID: %s" % qres.rid)
+            comments.append(f"# RID: {qres.rid}")
         except AttributeError:
             pass
-        comments.append("# Database: %s" % qres.target)
+        comments.append(f"# Database: {qres.target}")
         # qresults without hits don't show the Fields comment
         if qres:
             comments.append(
                 "# Fields: %s"
                 % ", ".join(inv_field_map[field] for field in self.fields)
             )
-        comments.append("# %i hits found" % len(qres))
+        comments.append(f"# {len(qres)} hits found")
 
         return "\n".join(comments) + "\n"
 

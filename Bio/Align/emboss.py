@@ -77,7 +77,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 sequences = None
                 break
             else:
-                raise ValueError("Unexpected line: %s" % line)
+                raise ValueError(f"Unexpected line: {line}")
         for line in stream:
             line = line.rstrip("\r\n")
             if line == "#=======================================":
@@ -137,7 +137,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif key == "Shortest_Similarity":
                 annotations[key] = value.strip()
             else:
-                raise ValueError("Failed to parse line '%s'" % line)
+                raise ValueError(f"Failed to parse line '{line}'")
         else:
             return
         if len(identifiers) == 0:

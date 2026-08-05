@@ -11783,7 +11783,7 @@ AlignmentCounts object with
 class TestAlign_dnax_prot(unittest.TestCase):
     @classmethod
     def read_dna(cls, assembly, sequence):
-        path = "Blat/%s.fa" % assembly
+        path = f"Blat/{assembly}.fa"
         records = SeqIO.parse(path, "fasta")
         for record in records:
             name, start_end = record.id.split(":")

@@ -50,7 +50,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             elif key == "mafDot":
                 if value not in ("on", "off"):
                     raise ValueError(
-                        "mafDot value must be 'on' or 'off' (received '%s')" % value
+                        f"mafDot value must be 'on' or 'off' (received '{value}')"
                     )
             elif key == "visibility":
                 if value not in ("dense", "pack", "full"):
@@ -63,7 +63,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             else:
                 continue
             if " " in value:
-                value = '"%s"' % value
+                value = f'"{value}"'
             stream.write(f" {key}={value}")
         stream.write("\n")
 
@@ -100,7 +100,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             elif key == "Program":
                 key = "program"
             else:
-                raise ValueError("Unexpected key '%s' for header" % key)
+                raise ValueError(f"Unexpected key '{key}' for header")
             stream.write(f" {key}={value}")
         stream.write("\n")
         comments = metadata.get("Comments")
@@ -298,7 +298,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 elif key == "speciesOrder":
                     value = value.split()
                 else:
-                    raise ValueError("Unexpected variable '%s' in track line" % key)
+                    raise ValueError(f"Unexpected variable '{key}' in track line")
                 metadata[key] = value
             line = stream.readline()
         words = line.split()
@@ -313,7 +313,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif key == "program":
                 key = "Program"
             else:
-                raise ValueError("Unexpected variable '%s' in header line" % key)
+                raise ValueError(f"Unexpected variable '{key}' in header line")
             metadata[key] = value
         if metadata.get("MAF Version") != "1":
             raise ValueError("MAF version must be 1")
@@ -354,7 +354,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     raise ValueError("pass value must be positive (found %d)" % value)
                 annotations["pass"] = value
             else:
-                raise ValueError("Unknown annotation variable '%s'" % key)
+                raise ValueError(f"Unknown annotation variable '{key}'")
 
         for line in stream:
             if line.startswith("#"):

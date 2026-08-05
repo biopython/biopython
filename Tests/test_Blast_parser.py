@@ -14805,7 +14805,7 @@ class TestPSIBlast(unittest.TestCase):
         self.assertEqual(record.num, 1)
         self.assertEqual(
             repr(record),
-            "<Bio.Blast.Record query.id='%s'; 2 hits>" % record.query.id,
+            f"<Bio.Blast.Record query.id='{record.query.id}'; 2 hits>",
         )
         self.assertIsInstance(record.query, SeqRecord)
         if xml2:

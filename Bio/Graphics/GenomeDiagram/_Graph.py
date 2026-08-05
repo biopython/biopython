@@ -180,7 +180,7 @@ class GraphData:
     def __str__(self):
         """Return a string describing the graph data."""
         outstr = [f"\nGraphData: {self.name}, ID: {self.id}"]
-        outstr.append("Number of points: %d" % len(self.data))
+        outstr.append(f"Number of points: {len(self.data)}")
         outstr.append(f"Mean data value: {self.mean()}")
         outstr.append(f"Sample SD: {self.stdev():.3f}")
         outstr.append(

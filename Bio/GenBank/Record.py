@@ -246,7 +246,7 @@ class Record:
         """Provide the output string for the LOCUS line (PRIVATE)."""
         output = "LOCUS"
         output += " " * 7  # 6-12 spaces
-        output += "%-9s" % self.locus
+        output += f"{self.locus:9}"
         output += " "  # 22 space
         output += "%7s" % self.size
         if "PROTEIN" in self.residue_type:
@@ -264,7 +264,7 @@ class Record:
             output += " " * 10  # spaces for circular
         else:
             output += " " * 3  # spaces for stuff like ss-
-            output += "%-4s" % self.residue_type
+            output += f"{self.residue_type:4}"
             output += " " * 10  # spaces for circular
 
         output += " " * 2
@@ -541,7 +541,7 @@ class Reference:
         output = Record.BASE_FORMAT % "REFERENCE"
         if self.number:
             if self.bases:
-                output += "%-3s" % self.number
+                output += f"{self.number:3}"
                 output += f"{self.bases}"
             else:
                 output += f"{self.number}"

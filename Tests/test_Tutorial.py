@@ -265,7 +265,7 @@ class TutorialTestCase(unittest.TestCase):
                     failures.append(name[30:])
         if failures:
             raise ValueError(
-                "%i Tutorial doctests failed: %s" % (len(failures), ", ".join(failures))
+                f"{len(failures)} Tutorial doctests failed: {', '.join(failures)}"
             )
 
     def tearDown(self):

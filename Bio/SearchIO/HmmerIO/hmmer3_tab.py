@@ -38,7 +38,7 @@ class Hmmer3TabParser:
         """Return a dictionary of parsed row values (PRIVATE)."""
         cols = [x for x in self.line.strip().split(" ") if x]
         if len(cols) < 18:
-            raise ValueError("Less columns than expected, only %i" % len(cols))
+            raise ValueError(f"Less columns than expected, only {len(cols)}")
         # if len(cols) > 19, we have extra description columns
         # combine them all into one string in the 19th column
         cols[18] = " ".join(cols[18:])

@@ -44,9 +44,9 @@ for alignment in b_record.alignments:
     for hsp in alignment.hsps:
         if hsp.expect < E_VALUE_THRESH:
             print("****Alignment****")
-            print("sequence: %s" % alignment.title)
+            print(f"sequence: {alignment.title}")
             print("length: %i" % alignment.length)
-            print("e value: %f" % hsp.expect)
+            print(f"e value: {hsp.expect:f}")
             print(hsp.query[0:75] + "...")
             print(hsp.match[0:75] + "...")
             print(hsp.sbjct[0:75] + "...")

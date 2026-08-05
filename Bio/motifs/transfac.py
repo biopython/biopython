@@ -234,14 +234,10 @@ def write(motifs):
         pass
     else:
         if version is not None:
-            block = (
-                """\
-VV  %s
+            block = f"""VV  {version}
 XX
 //
 """
-                % version
-            )
             blocks.append(block)
     multiple_value_keys = Motif.multiple_value_keys
     sections = (

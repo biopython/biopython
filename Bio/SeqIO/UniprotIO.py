@@ -327,7 +327,7 @@ class UniprotIterator(SequenceIterator):
                 )
         elif element.attrib["type"] == "alternative products":
             for alt_element in element.iter(NS + "isoform"):
-                ann_key = "comment_%s_isoform" % element.attrib["type"].replace(" ", "")
+                ann_key = f"comment_{element.attrib['type'].replace(' ', '')}_isoform"
                 for id_element in alt_element.iter(NS + "id"):
                     self._append_to_annotations(ann_key, id_element.text)
         elif element.attrib["type"] == "mass spectrometry":

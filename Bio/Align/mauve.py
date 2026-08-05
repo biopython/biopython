@@ -157,7 +157,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     if key.endswith(suffix):
                         break
                 else:
-                    raise ValueError("Unexpected keyword '%s'" % key)
+                    raise ValueError(f"Unexpected keyword '{key}'")
                 if suffix == "Entry":
                     value = int(value) - 1  # Switch to 0-based counting
                 seq_num = int(key[len(prefix) : -len(suffix)])
@@ -227,7 +227,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     elif strand == "-":
                         coordinates[index, :] = len(seq) - coordinates[index, :]
                     else:
-                        raise ValueError("Unexpected strand '%s'" % strand)
+                        raise ValueError(f"Unexpected strand '{strand}'")
                     coordinates[index] += start
                     if start == 0:
                         seq = Seq(seq)

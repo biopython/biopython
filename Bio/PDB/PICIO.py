@@ -1094,9 +1094,7 @@ def write_PIC(
                 dd = pdb_date(entity.header.get("deposition_date", None))
                 if hdr:
                     fp.write(
-                        ("HEADER    {:40}{:8}   {:4}\n").format(
-                            hdr.upper(), (dd or ""), (pdbid or "")
-                        )
+                        f"HEADER    {hdr.upper():40}{dd or '':8}   {pdbid or '':4}\n"
                     )
                 name = entity.header.get("name", None)
                 if name:

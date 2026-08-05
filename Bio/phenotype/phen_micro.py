@@ -569,11 +569,11 @@ class PlateRecord:
         lines = []
         if self.id:
             lines.append(f"Plate ID: {self.id}")
-        lines.append("Well: %i" % len(self))
+        lines.append(f"Well: {len(self)}")
         # Here we assume that all well ID start with a char
-        lines.append("Rows: %d" % len({x.id[0] for x in self}))
+        lines.append(f"Rows: {len({x.id[0] for x in self})}")
         # Here we assume that well number is a two-digit number
-        lines.append("Columns: %d" % len({x.id[1:3] for x in self}))
+        lines.append(f"Columns: {len({x.id[1:3] for x in self})}")
         lines.append(repr(self))
         return "\n".join(lines)
 
@@ -824,7 +824,7 @@ class WellRecord:
             lines.append(f"Plate ID: {self.plate.id}")
         if self.id:
             lines.append(f"Well ID: {self.id}")
-        lines.append("Time points: %i" % len(self))
+        lines.append(f"Time points: {len(self)}")
         lines.append("Minum signal %.2f at time %.2f" % min(self, key=lambda x: x[1]))
         lines.append("Maximum signal %.2f at time %.2f" % max(self, key=lambda x: x[1]))
         lines.append(repr(self))
@@ -966,9 +966,9 @@ def JsonIterator(handle):
                 plateID = _platesPrefix + str(abs(int(pID)))
             else:
                 if plateID.startswith(_platesPrefixMammalian):
-                    plateID = _platesPrefixMammalian + "%02d" % int(pID)
+                    plateID = _platesPrefixMammalian + f"{int(pID):02}"
                 else:
-                    plateID = _platesPrefix + "%02d" % int(pID)
+                    plateID = _platesPrefix + f"{int(pID):02}"
 
         try:
             times = pobj[_measurements][_hour]
@@ -1068,9 +1068,9 @@ def CsvIterator(handle):
                     plateID = _platesPrefix + str(abs(int(pID)))
                 else:
                     if plateID.startswith(_platesPrefixMammalian):
-                        plateID = _platesPrefixMammalian + "%02d" % int(pID)
+                        plateID = _platesPrefixMammalian + f"{int(pID):02}"
                     else:
-                        plateID = _platesPrefix + "%02d" % int(pID)
+                        plateID = _platesPrefix + f"{int(pID):02}"
 
             plate.id = plateID
 

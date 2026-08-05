@@ -523,7 +523,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         key = "comment"
         value = alignment_annotations.get(key)
         if value is not None:
-            prefix = "#=GF %s   " % self.gf_mapping[key]
+            prefix = f"#=GF {self.gf_mapping[key]}   "
             lines.append(AlignmentWriter._format_long_text(prefix, value))
         for key in alignment_annotations:
             if key in self.gf_mapping:
@@ -534,9 +534,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 continue
             if key == "database references":
                 continue
-            raise ValueError(
-                "Unknown annotation %s found in alignment.annotations" % key
-            )
+            raise ValueError(f"Unknown annotation {key} found in alignment.annotations")
         lines.append("#=GF SQ   %i\n" % rows)
         # #=GS Above the alignment or just below the corresponding sequence;
         #    record.annotations

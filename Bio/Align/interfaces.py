@@ -254,7 +254,7 @@ class AlignmentWriter(ABC):  # noqa: B024
                 else:
                     stream = target
             else:
-                raise RuntimeError("Unknown mode '%s'" % self.mode)
+                raise RuntimeError(f"Unknown mode '{self.mode}'")
             self._stream = stream
         self._target = target
 

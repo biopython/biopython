@@ -147,7 +147,7 @@ def _read_alphabet(record, handle):
             "Unexpected end of stream: Expected to find line starting with 'ALPHABET'"
         )
     if not line.startswith("ALPHABET= "):
-        raise ValueError("Line does not start with 'ALPHABET':\n%s" % line)
+        raise ValueError(f"Line does not start with 'ALPHABET':\n{line}")
     line = line.strip().replace("ALPHABET= ", "")
     if line == "ACGT":
         al = "ACGT"

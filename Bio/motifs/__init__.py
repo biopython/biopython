@@ -123,7 +123,7 @@ def parse(handle, fmt, strict=True):
 
         return jaspar.read(handle, fmt)
     else:
-        raise ValueError("Unknown format %s" % fmt)
+        raise ValueError(f"Unknown format {fmt}")
 
 
 def read(handle, fmt, strict=True):
@@ -240,7 +240,7 @@ class Motif:
                     self.__mask.append(0)
                 else:
                     raise ValueError(
-                        "Mask should contain only '*' or ' ' and not a '%s'" % char
+                        f"Mask should contain only '*' or ' ' and not a '{char}'"
                     )
             self.__mask = tuple(self.__mask)
         else:
@@ -597,7 +597,7 @@ class Motif:
             # Follow python convention and default to using __str__
             return str(self)
         else:
-            raise ValueError("Unknown format type %s" % format_spec)
+            raise ValueError(f"Unknown format type {format_spec}")
 
     def format(self, format_spec):
         """Return a string representation of the Motif in the given format.
@@ -636,7 +636,7 @@ def write(motifs, fmt, **kwargs):
 
         return clusterbuster.write(motifs, **kwargs)
     else:
-        raise ValueError("Unknown format type %s" % fmt)
+        raise ValueError(f"Unknown format type {fmt}")
 
 
 if __name__ == "__main__":

@@ -112,8 +112,7 @@ class CheckIndex(SearchTestBaseClass):
         self.assertEqual(
             len(parsed),
             len(indexed),
-            "Should be %i records in %s, index says %i"
-            % (len(parsed), filename, len(indexed)),
+            f"Should be {len(parsed)} records in {filename}, index says {len(indexed)}",
         )
         # compare values by index_db, only if sqlite3 is present
         if sqlite3 is not None:

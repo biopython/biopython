@@ -268,7 +268,7 @@ class Track:
             return f"{self}"  # Use __str__ method instead
         else:  # Return the long description
             outstr = [f"\n<{self.__class__}: {self.name}>"]
-            outstr.append("%d sets" % len(self._sets))
+            outstr.append(f"{len(self._sets)} sets")
             for key in self._sets:
                 outstr.append(f"set: {self._sets[key]}")
             return "\n".join(outstr)
@@ -280,5 +280,5 @@ class Track:
     def __str__(self):
         """Return a formatted string with information about the Track."""
         outstr = [f"\n<{self.__class__}: {self.name}>"]
-        outstr.append("%d sets" % len(self._sets))
+        outstr.append(f"{len(self._sets)} sets")
         return "\n".join(outstr)

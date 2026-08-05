@@ -166,7 +166,7 @@ def read(handle, format):
         record = _read_jaspar(handle)
         return record
     else:
-        raise ValueError("Unknown JASPAR format %s" % format)
+        raise ValueError(f"Unknown JASPAR format {format}")
 
 
 def write(motifs, format):
@@ -194,7 +194,7 @@ def write(motifs, format):
                 line = f"{letter} [{' '.join(terms)}]\n"
                 lines.append(line)
     else:
-        raise ValueError("Unknown JASPAR format %s" % format)
+        raise ValueError(f"Unknown JASPAR format {format}")
 
     # Finished; glue the lines together
     text = "".join(lines)

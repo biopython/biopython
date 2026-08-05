@@ -9293,9 +9293,8 @@ class TestPairwiseMatchDictionary(unittest.TestCase):
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at 0x%x>
+            f"""Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x{id(substitution_matrix):x}>
   open_internal_insertion_score: -0.500000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -0.500000
@@ -9309,8 +9308,7 @@ Pairwise sequence aligner with parameters
   open_right_deletion_score: -0.500000
   extend_right_deletion_score: 0.000000
   mode: local
-"""
-            % id(substitution_matrix),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -9913,9 +9911,8 @@ AlignmentCounts object with
         aligner.extend_gap_score = 0.0
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at 0x%x>
+            f"""Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x{id(substitution_matrix):x}>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -9929,8 +9926,7 @@ Pairwise sequence aligner with parameters
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-"""
-            % id(substitution_matrix),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -10244,9 +10240,8 @@ AlignmentCounts object with
         aligner.extend_gap_score = 0.0
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at 0x%x>
+            f"""Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x{id(substitution_matrix):x}>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -10260,8 +10255,7 @@ Pairwise sequence aligner with parameters
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-"""
-            % id(substitution_matrix),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -10578,9 +10572,8 @@ AlignmentCounts object with
         self.assertEqual(aligner.algorithm, "Gotoh local alignment algorithm")
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at 0x%x>
+            f"""Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x{id(substitution_matrix):x}>
   open_internal_insertion_score: -0.500000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -0.500000
@@ -10594,8 +10587,7 @@ Pairwise sequence aligner with parameters
   open_right_deletion_score: -0.500000
   extend_right_deletion_score: 0.000000
   mode: local
-"""
-            % id(substitution_matrix),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -11193,9 +11185,8 @@ AlignmentCounts object with
         aligner.extend_gap_score = 0.0
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at 0x%x>
+            f"""Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x{id(substitution_matrix):x}>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -11209,8 +11200,7 @@ Pairwise sequence aligner with parameters
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-"""
-            % id(substitution_matrix),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)
@@ -11526,9 +11516,8 @@ AlignmentCounts object with
         aligner.extend_gap_score = 0.0
         self.assertEqual(
             str(aligner),
-            """\
-Pairwise sequence aligner with parameters
-  substitution_matrix: <Array object at 0x%x>
+            f"""Pairwise sequence aligner with parameters
+  substitution_matrix: <Array object at 0x{id(substitution_matrix):x}>
   open_internal_insertion_score: -1.000000
   extend_internal_insertion_score: 0.000000
   open_left_insertion_score: -1.000000
@@ -11542,8 +11531,7 @@ Pairwise sequence aligner with parameters
   open_right_deletion_score: -1.000000
   extend_right_deletion_score: 0.000000
   mode: local
-"""
-            % id(substitution_matrix),
+""",
         )
         score = aligner.score(seq1, seq2)
         self.assertAlmostEqual(score, 3.0)

@@ -231,7 +231,7 @@ class StepMatrix:
 
     def smprint(self, name="your_name_here"):
         """Print a stepmatrix."""
-        matrix = "usertype %s stepmatrix=%d\n" % (name, len(self.symbols))
+        matrix = f"usertype {name} stepmatrix={len(self.symbols)}\n"
         matrix += f"        {'        '.join(self.symbols)}\n"
         for x in self.symbols:
             matrix += "[%s]".ljust(8) % x

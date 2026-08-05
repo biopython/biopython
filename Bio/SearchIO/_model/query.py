@@ -250,17 +250,17 @@ class QueryResult(_BaseSearchObject):
 
     def __repr__(self):
         """Return string representation of the QueryResult object."""
-        return "QueryResult(id=%r, %r hits)" % (self.id, len(self))
+        return f"QueryResult(id={self.id!r}, {len(self)!r} hits)"
 
     def __str__(self):
         """Return a human readable summary of the QueryResult object."""
         lines = []
 
         # set program and version line
-        lines.append("Program: %s (%s)" % (self.program, self.version))
+        lines.append(f"Program: {self.program} ({self.version})")
 
         # set query id line
-        qid_line = "  Query: %s" % self.id
+        qid_line = f"  Query: {self.id}"
         try:
             seq_len = self.seq_len
         except AttributeError:
@@ -269,29 +269,29 @@ class QueryResult(_BaseSearchObject):
             qid_line += " (%i)" % seq_len
         lines.append(qid_line)
         if self.description:
-            line = "         %s" % self.description
+            line = f"         {self.description}"
             line = line[:77] + "..." if len(line) > 80 else line
             lines.append(line)
 
         # set target line
-        lines.append(" Target: %s" % self.target)
+        lines.append(f" Target: {self.target}")
 
         # set hit lines
         if not self.hits:
             lines.append("   Hits: 0")
         else:
-            lines.append("   Hits: %s  %s  %s" % ("-" * 4, "-" * 5, "-" * 58))
+            lines.append(f"   Hits: {'-' * 4}  {'-' * 5}  {'-' * 58}")
             pattern = "%13s  %5s  %s"
             lines.append(pattern % ("#", "# HSP", "ID + description"))
             lines.append(pattern % ("-" * 4, "-" * 5, "-" * 58))
             for idx, hit in enumerate(self.hits):
                 if idx < 30:
-                    hid_line = "%s  %s" % (hit.id, hit.description)
+                    hid_line = f"{hit.id}  {hit.description}"
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
                     lines.append(pattern % (idx, len(hit), hid_line))
                 elif idx > len(self.hits) - 4:
-                    hid_line = "%s  %s" % (hit.id, hit.description)
+                    hid_line = f"{hit.id}  {hit.description}"
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
                     lines.append(pattern % (idx, len(hit), hid_line))
@@ -347,7 +347,7 @@ class QueryResult(_BaseSearchObject):
         if qid is not None:
             if hqid != qid:
                 raise ValueError(
-                    "Expected Hit with query ID %r, found %r instead." % (qid, hqid)
+                    f"Expected Hit with query ID {qid!r}, found {hqid!r} instead."
                 )
         else:
             self.id = hqid

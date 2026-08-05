@@ -150,7 +150,7 @@ class GraphSet:
             return f"{self}"
         else:
             outstr = [f"\n<{self.__class__}: {self.name}>"]
-            outstr.append("%d graphs" % len(self._graphs))
+            outstr.append(f"{len(self._graphs)} graphs")
             for key in self._graphs:
                 outstr.append(f"{self._graphs[key]}")
             return "\n".join(outstr)
@@ -166,6 +166,6 @@ class GraphSet:
     def __str__(self):
         """Return a formatted string with information about the feature set."""
         outstr = [f"\n<{self.__class__}: {self.name}>"]
-        outstr.append("%d graphs" % len(self._graphs))
+        outstr.append(f"{len(self._graphs)} graphs")
         outstr = "\n".join(outstr)
         return outstr

@@ -508,7 +508,7 @@ class FastaM10Parser:
                         parsed_hsp["hit"][name] = value
                 # for values in the hit block
                 else:
-                    raise ValueError("Unexpected line: %r" % line)
+                    raise ValueError(f"Unexpected line: {line!r}")
             # otherwise, it must be lines containing the sequences
             else:
                 assert ">" not in line
@@ -521,7 +521,7 @@ class FastaM10Parser:
                     hsp.fragment.aln_annotation["similarity"] += line.strip("\r\n")
                 # we should not get here!
                 else:
-                    raise ValueError("Unexpected line: %r" % line)
+                    raise ValueError(f"Unexpected line: {line!r}")
             line = self.line
 
 

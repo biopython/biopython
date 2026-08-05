@@ -123,7 +123,7 @@ class IOTests(unittest.TestCase):
         value = mem_file.getvalue().strip()
         self.assertTrue(value.startswith("A:"))
         self.assertTrue(value.endswith(";"))
-        self.assertEqual(value[2:-1], "%.0e" % 0.1)
+        self.assertEqual(value[2:-1], f"{0.1:.0e}")
 
     def test_newick_writer_preserves_small_branch_lengths(self):
         """Small nonzero branch lengths should not be rounded to zero."""

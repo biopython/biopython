@@ -349,7 +349,7 @@ class MMCIFParser:
         This method catches an exception that occurs in the StructureBuilder
         object (if PERMISSIVE), or raises it again.
         """
-        message = "%s" % (message)
+        message = f"{message}"
         if self.PERMISSIVE:
             # just print a warning - some residues/atoms may be missing
             warnings.warn(

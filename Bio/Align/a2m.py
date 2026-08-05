@@ -98,7 +98,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif c == "." or c.islower():
                 state += "I"  # Insertion state
             else:
-                raise Exception("Unexpected letter '%s' in alignment" % c)
+                raise Exception(f"Unexpected letter '{c}' in alignment")
         for line in lines[1:]:
             for c, m in zip(line, state):
                 if m == "D":  # Match/deletion state
@@ -106,7 +106,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 elif m == "I":  # Insertion state
                     assert c == "." or c.islower()
                 else:
-                    raise Exception("Unexpected letter '%s' in alignment" % c)
+                    raise Exception(f"Unexpected letter '{c}' in alignment")
         for i, line in enumerate(lines):
             lines[i] = line.upper().replace(".", "-").encode()
         seqdata, coordinates = Alignment.parse_printed_alignment(lines)

@@ -33,8 +33,8 @@ alignment = Align.read("test.aln", "clustal")
 
 print(alignment)
 
-print("first description: %s" % alignment.sequences[0].description)
-print("first sequence: %s" % alignment.sequences[0].seq)
+print(f"first description: {alignment.sequences[0].description}")
+print(f"first sequence: {alignment.sequences[0].seq}")
 
 # get the length of the alignment
 print("length %i" % alignment.length)
@@ -44,8 +44,8 @@ counts = motif.counts
 
 # print out interesting information about the alignment
 consensus = motif.counts.calculate_consensus(identity=0.7)
-print("consensus %s" % consensus)
+print(f"consensus {consensus}")
 
 motif.background = {"A": 0.3, "G": 0.2, "T": 0.3, "C": 0.2}
 relative_entropy = motif.relative_entropy
-print("relative entropy for columns [5:30]: %f" % sum(relative_entropy[5:30]))
+print(f"relative entropy for columns [5:30]: {sum(relative_entropy[5:30]):f}")

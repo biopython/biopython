@@ -59,7 +59,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             self.format_alignment = self._format_alignment_cigar
         else:
             raise ValueError(
-                "argument fmt should be 'vulgar' or 'cigar' (received %s)" % fmt
+                f"argument fmt should be 'vulgar' or 'cigar' (received {fmt})"
             )
 
     def write_header(self, stream, alignments):
@@ -265,7 +265,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     else:
                         raise ValueError("Expected target step or query step to be 0")
                 else:
-                    raise ValueError("Unknown operation %s" % operation)
+                    raise ValueError(f"Unknown operation {operation}")
                 words.append(operation)
                 words.append(str(step))
         line = " ".join(words) + "\n"
@@ -408,7 +408,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 elif operation == "F":  # Frame shift
                     step = target_step
                 else:
-                    raise ValueError("Unknown operation %s" % operation)
+                    raise ValueError(f"Unknown operation {operation}")
                 words.append(operation)
                 words.append(str(query_step))
                 words.append(str(target_step))
@@ -478,7 +478,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 else:
                     ts += step
             else:
-                raise ValueError("Unknown operation %s in cigar string" % operation)
+                raise ValueError(f"Unknown operation {operation} in cigar string")
             coordinates[0, i + 1] = ts
             coordinates[1, i + 1] = qs
         if target_strand == "+":
@@ -589,7 +589,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif operation == "F":  # Frame shift
                 pass
             else:
-                raise ValueError("Unknown operation %s in vulgar string" % operation)
+                raise ValueError(f"Unknown operation {operation} in vulgar string")
             ts += target_step
             qs += query_step
             coordinates[0, i + 1] = ts

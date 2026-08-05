@@ -57,7 +57,7 @@ def write_format(file):
     """Write a GenBank record from a Genbank file and compare them."""
     record_parser = GenBank.RecordParser(debug_level=2)
 
-    print("Testing GenBank writing for %s..." % os.path.basename(file))
+    print(f"Testing GenBank writing for {os.path.basename(file)}...")
     # be able to handle gzipped files
     if ".gz" in file:
         cur_handle = gzip.open(file, "rb")
