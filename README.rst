@@ -89,7 +89,8 @@ We currently recommend using Python 3.13 from https://www.python.org
 Biopython is currently supported and tested on the following Python
 implementations:
 
-- Python 3.10, 3.11, 3.12, 3.13 and 3.14 -- see https://www.python.org
+- Python 3.10, 3.11, 3.12, 3.13, 3.14 and the release candidate for 3.15. See
+  https://www.python.org
 
 - PyPy3.10 v7.3.17 -- or later, see https://www.pypy.org
 
