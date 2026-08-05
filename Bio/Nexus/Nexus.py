@@ -130,10 +130,16 @@ class CharBuffer:
         """Return a word stored in the buffer."""
         return "".join(self.buffer[: len(word)]) == word
 
-    def next_word(self):
+    def next_word(self, extra_chars=""):
         """Return the next NEXUS word from a string.
 
         This deals with single and double quotes, whitespace and punctuation.
+
+        ``extra_chars`` is an optional string of punctuation characters that
+        should be treated as ordinary word constituents instead of terminating
+        the word.  This is used to read unquoted taxon labels that legitimately
+        contain a hyphen (see issue #1022), without changing the meaning of the
+        hyphen elsewhere (e.g. ranges such as ``4-8`` parsed by ``_parse_list``).
         """
         word = []
         quoted = False
@@ -147,7 +153,7 @@ class CharBuffer:
             quoted = "'"
         elif first == '"':
             quoted = '"'
-        elif first in PUNCTUATION:
+        elif first in PUNCTUATION and first not in extra_chars:
             # if it's non-quote punctuation, return immediately
             return first
         while True:
@@ -161,7 +167,7 @@ class CharBuffer:
             elif quoted:
                 # if quoted, then add anything
                 word.append(next(self))
-            elif not c or c in PUNCTUATION or c in WHITESPACE:
+            elif not c or (c in PUNCTUATION and c not in extra_chars) or c in WHITESPACE:
                 # if not quoted and special character, stop
                 break
             else:
@@ -1111,7 +1117,7 @@ class Nexus:
             try:
                 # get id and state
                 identifier = int(opts.next_word())
-                label = quotestrip(opts.next_word())
+                label = quotestrip(opts.next_word("-"))  # hyphen allowed in unquoted labels (#1022)
                 self.translate[identifier] = label
                 # check for comma or end of command
                 c = opts.next_nonwhitespace()
