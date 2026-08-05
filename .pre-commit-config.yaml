@@ -21,7 +21,7 @@ repos:
     -   id: ruff-check
         args: [
             '--fix',
-            '--extend-select=B,C4,D,ISC,UP',
+            '--extend-select=B,C4,D,ISC,UP,S307',
             '--extend-ignore=E501,F401,F841,D105,D2,D4',
             '--extend-ignore=B007,B009,B010,B018,B028,B904,B905,UP031',
             '--extend-per-file-ignores=Tests/*.py:D101,Tests/*.py:D102,Tests/*.py:D103',
