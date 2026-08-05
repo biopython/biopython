@@ -933,8 +933,7 @@ def consensus(trees, threshold=0.5, outgroup=None):
             raise TreeError("Trees for consensus must contain the same taxa")
         t.root_with_outgroup(outgroup=outgroup)
         for st_node in t._walk(t.root):
-            subclade_taxa = sorted(t.get_taxa(st_node))
-            subclade_taxa = str(subclade_taxa)  # lists are not hashable
+            subclade_taxa = tuple(sorted(t.get_taxa(st_node)))  # lists are not hashable
             if subclade_taxa in clades:
                 clades[subclade_taxa] += t.weight / total
             else:
@@ -955,7 +954,7 @@ def consensus(trees, threshold=0.5, outgroup=None):
     for c, s in clades.items():
         node = Nodes.Node(data=dataclass())
         node.data.support = s
-        node.data.taxon = set(eval(c))
+        node.data.taxon = set(c)  # tuple to set
         consensus.add(node)
     # set root node data
     consensus.node(consensus.root).data.support = None
