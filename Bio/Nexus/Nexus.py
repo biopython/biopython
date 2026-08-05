@@ -620,9 +620,7 @@ class Nexus:
         """Initialize the class."""
         self.ntax = 0  # number of taxa
         self.nchar = 0  # number of characters
-        self.unaltered_taxlabels = (
-            []
-        )  # taxlabels as the appear in the input file (incl. duplicates, etc.)
+        self.unaltered_taxlabels = []  # as in input file (incl. duplicates, etc.)
         self.taxlabels = []  # labels for taxa, ordered by their id
         self.charlabels = None  # ... and for characters
         self.statelabels = None  # ... and for states
@@ -749,9 +747,9 @@ class Nexus:
 
     def _dimensions(self, options):
         if "ntax" in options:
-            self.ntax = eval(options["ntax"])
+            self.ntax = int(options["ntax"], 10)
         if "nchar" in options:
-            self.nchar = eval(options["nchar"])
+            self.nchar = int(options["nchar"], 10)
 
     def _format(self, options):
         # print options
