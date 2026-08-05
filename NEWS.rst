@@ -25,6 +25,7 @@ possible, especially the following contributors:
 
 - Al Fattah Suyadi (first contribution)
 - Laura Piñero Roig (first contribution)
+- Marcus Campbell (first contribution)
 - Michiel de Hoon
 - Peter Cock
 
