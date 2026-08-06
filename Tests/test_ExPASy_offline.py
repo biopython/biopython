@@ -20,3 +20,16 @@ class ExPASyOfflineTests(unittest.TestCase):
             handle = io.BytesIO(example_xml)
             sequences = ScanProsite.read(handle)
             assert len(sequences) == 1081
+
+    def test_scanprosite_mismatched_end_element(self):
+        """Raise ValueError when an end element does not match its start.
+
+        The check guards a defensive invariant in the SAX content handler;
+        well-formed XML can never trip it via the parser, so we drive the
+        handler directly with a mismatched end-element name.
+        """
+        content_handler = ScanProsite.ContentHandler()
+        content_handler.startElement("scanprosite_response", {})
+        content_handler.startElement("matchset", {"n_match": "0", "n_seq": "0"})
+        with self.assertRaisesRegex(ValueError, "Unexpected XML end element"):
+            content_handler.endElement("not_matchset")
