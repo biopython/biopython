@@ -34,12 +34,10 @@ class MMTFParser:
     def get_structure_from_url(pdb_id):
         """Get a structure from a URL - given a PDB id.
 
-        :param pdb_id: the input PDB id
-        :return: the structure
+        Depreciated as RCSB no longer serves MMTF files.
 
         """
-        decoder = fetch(pdb_id)
-        return get_from_decoded(decoder)
+        raise NotImplementedError("RCSB no longer serves MMTF files.")
 
     @staticmethod
     def get_structure(file_path):
