@@ -1086,7 +1086,11 @@ class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
             self.line = None
 
         descr = title_line
-        id = descr.split()[0]
+        try:
+            id = descr.split(None, 1)[0]
+        except IndexError:
+            # Empty title line (a bare ">"), matching FastaIO behaviour.
+            id = ""
         name = id
 
         if not quality_string.isascii():
@@ -1538,7 +1542,11 @@ class QualPhredIterator(SequenceIterator):
             raise StopIteration
         while True:
             descr = line[1:].rstrip()
-            id = descr.split()[0]
+            try:
+                id = descr.split(None, 1)[0]
+            except IndexError:
+                # Empty title line (a bare ">"), matching FastaIO behaviour.
+                id = ""
             name = id
 
             qualities: list[int] = []
