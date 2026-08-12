@@ -117,10 +117,24 @@ class TestPDBListGetStructure(unittest.TestCase):
             obsolete=True,
         )
 
+    def test_retrieve_pdb_file_obsolete_bcif(self):
+        """Tests retrieving the obsolete molecule in bcif format."""
+        pdb_list = PDBList()
+        with self.assertRaises(
+            AssertionError,
+            msg="PDBList cannot retrieve obsolete structures in BinaryCIF format.",
+        ):
+            pdb_list.retrieve_pdb_file("347d", file_format="bcif", obsolete=True)
+
     def test_retrieve_pdb_file_mmcif(self):
         """Tests retrieving the (non-obsolete) molecule in mmcif format."""
         structure = "127d"
         self.check(structure, os.path.join(structure[1:3], f"{structure}.cif"), "mmCif")
+
+    def test_retrieve_pdb_file_bcif(self):
+        """Tests retrieving the (non-obsolete) molecule in BinaryCIF format."""
+        structure = "127d"
+        self.check(structure, os.path.join(structure[1:3], f"{structure}.bcif"), "bcif")
 
     def test_retrieve_pdb_file_obsolete_xml(self):
         """Tests retrieving the obsolete molecule in mmcif format."""
@@ -137,11 +151,6 @@ class TestPDBListGetStructure(unittest.TestCase):
         structure = "127d"
         self.check(structure, os.path.join(structure[1:3], f"{structure}.xml"), "xml")
 
-    def test_retrieve_pdb_file_mmtf(self):
-        """Tests retrieving the molecule in mmtf format."""
-        structure = "127d"
-        self.check(structure, os.path.join(structure[1:3], f"{structure}.mmtf"), "mmtf")
-
     def test_double_retrieve_structure(self):
         """Tests retrieving the same file to different directories."""
         structure = "127d"
@@ -153,11 +162,22 @@ class TestPDBListGetStructure(unittest.TestCase):
         with self.assertRaises(ValueError) as context:
             pdb_list.retrieve_pdb_file("127d", file_format="invalid")
 
-        self.assertEqual(
-            "Specified file_format invalid does not exist or is not supported. Please use one of the "
-            "following: pdb, mmCif, xml, mmtf, bundle.",
-            str(context.exception),
-        )
+            self.assertEqual(
+                "Specified file_format invalid does not exist or is not supported. Please use one of the "
+                "following: pdb, mmCif, xml, bundle.",
+                str(context.exception),
+            )
+
+    def test_deprecated_mmtf_format(self):
+        pdb_list = PDBList()
+        with self.assertRaises(ValueError) as context:
+            pdb_list.retrieve_pdb_file("127d", file_format="mmtf")
+
+            self.assertEqual(
+                "The MMTF format is deprecated and no longer available. Please use one of the "
+                "following: pdb, mmCif, xml, bundle.",
+                str(context.exception),
+            )
 
     def test_retrieve_pdb_file_not_existing(self):
         """Tests retrieving a non-existent molecule - returns None and prints error message."""
