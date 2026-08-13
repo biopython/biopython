@@ -254,6 +254,67 @@ class TestPDBListGetAssembly(unittest.TestCase):
         )
 
 
+class TestPDBListUpdateObsoleteHandling(unittest.TestCase):
+    """Regression tests for moving obsolete files in update_pdb."""
+
+    @contextlib.contextmanager
+    def make_temp_directory(self, directory):
+        temp_dir = tempfile.mkdtemp(dir=directory)
+        try:
+            yield temp_dir
+        finally:
+            shutil.rmtree(temp_dir)
+
+    def test_update_pdb_moves_obsolete_mmcif(self):
+        pdb_code = "127d"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp)
+            current_dir = os.path.join(tmp, pdb_code[1:3])
+            obsolete_dir = os.path.join(tmp, "obsolete", pdb_code[1:3])
+            os.makedirs(current_dir, exist_ok=True)
+            source_file = os.path.join(current_dir, f"{pdb_code}.cif")
+            with open(source_file, "w", encoding="utf-8") as handle:
+                handle.write("stub")
+
+            with unittest.mock.patch.object(
+                pdblist, "get_recent_changes", return_value=([], [], [pdb_code])
+            ):
+                pdblist.update_pdb(file_format="mmCif")
+
+            self.assertFalse(os.path.exists(source_file))
+            self.assertTrue(
+                os.path.exists(os.path.join(obsolete_dir, f"{pdb_code}.cif"))
+            )
+
+    def test_update_pdb_moves_obsolete_mmcif_assemblies(self):
+        pdb_code = "127d"
+        with self.make_temp_directory(os.getcwd()) as tmp:
+            pdblist = PDBList(pdb=tmp)
+            current_dir = os.path.join(tmp, pdb_code[1:3])
+            obsolete_dir = os.path.join(tmp, "obsolete", pdb_code[1:3])
+            os.makedirs(current_dir, exist_ok=True)
+            source_file = os.path.join(current_dir, f"{pdb_code}.cif")
+            source_assembly = os.path.join(current_dir, f"{pdb_code}-assembly1.cif")
+            with open(source_file, "w", encoding="utf-8") as handle:
+                handle.write("stub")
+            with open(source_assembly, "w", encoding="utf-8") as handle:
+                handle.write("stub")
+
+            with unittest.mock.patch.object(
+                pdblist, "get_recent_changes", return_value=([], [], [pdb_code])
+            ):
+                pdblist.update_pdb(file_format="mmCif", with_assemblies=True)
+
+            self.assertFalse(os.path.exists(source_file))
+            self.assertFalse(os.path.exists(source_assembly))
+            self.assertTrue(
+                os.path.exists(os.path.join(obsolete_dir, f"{pdb_code}.cif"))
+            )
+            self.assertTrue(
+                os.path.exists(os.path.join(obsolete_dir, f"{pdb_code}-assembly1.cif"))
+            )
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)
