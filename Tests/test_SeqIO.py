@@ -3299,6 +3299,12 @@ class TestSeqIO(SeqIOTestBaseClass):
         self.assertEqual(read_record.id, record.id)
         self.assertEqual(read_record.description, record.description)
 
+    def test_genbank24(self):
+        """Test that genbank files can handle misplaced BASE COUNT line."""
+        rec = SeqIO.read("GenBank/base_count_misplaced.gb", "genbank")
+        self.assertEqual(len(rec), 136)
+        self.assertEqual(len(rec.features), 6)
+
     def test_embl1(self):
         sequences = [None]
         ids = ["DS830848.1"]
