@@ -277,9 +277,9 @@ class TestQual(QualityIOTestBaseClass):
     def test_qual_empty_title(self):
         """Check QUAL record with empty title."""
         record = SeqIO.read(StringIO(">\n1 2 3"), "qual")
-        self.assertEqual(records.id, "")
-        self.assertEqual(records.description, "")
-        self.assertEqual(records.letter_annotations["phred_quality"], [1, 2, 3])
+        self.assertEqual(record.id, "")
+        self.assertEqual(record.description, "")
+        self.assertEqual(record.letter_annotations["phred_quality"], [1, 2, 3])
 
     def test_qual(self):
         """Check FASTQ parsing matches QUAL parsing."""
