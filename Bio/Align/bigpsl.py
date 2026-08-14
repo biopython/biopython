@@ -231,203 +231,508 @@ class AlignmentWriter(bigbed.AlignmentWriter):
         self.mask = mask
         self.wildcard = wildcard
 
+    def _get_sequences(self, alignment):
+        """Return target and query sequences from an alignment."""
+        target, query = alignment.sequences
+
+        try:
+            query = query.seq
+        except AttributeError:
+            pass
+
+        try:
+            target = target.seq
+        except AttributeError:
+            pass
+
+        return target, query
+
+    def _prepare_coordinates(self, alignment, target, query):
+        """Prepare coordinates and determine the alignment strand."""
+        coordinates = alignment.coordinates
+        t_size = len(target)
+        q_size = len(query)
+        dnax = None
+
+        if coordinates[1, 0] > coordinates[1, -1]:
+            strand = "-"
+            query = reverse_complement(query)
+            coordinates = coordinates.copy()
+            coordinates[1, :] = q_size - coordinates[1, :]
+        elif coordinates[0, 0] > coordinates[0, -1]:
+            strand = "-"
+            target = reverse_complement(target)
+            coordinates = coordinates.copy()
+            coordinates[0, :] = t_size - coordinates[0, :]
+            dnax = True
+        else:
+            strand = "+"
+
+        return coordinates, target, query, strand, dnax
+
+    def _count_matches(self, target_sequence, query_sequence):
+        """Count matches, mismatches, repeat matches and wildcards."""
+        matches = 0
+        mis_matches = 0
+        rep_matches = 0
+        n_count = 0
+
+        if target_sequence is None or query_sequence is None:
+            return 1, 0, 0, 0
+
+        mask = self.mask
+        wildcard = self.wildcard
+
+        if mask == "lower":
+            target_upper = target_sequence.upper()
+            query_upper = query_sequence.upper()
+
+            for u1, u2, c1 in zip(
+                target_upper,
+                query_upper,
+                target_sequence,
+            ):
+                if wildcard in (u1, u2):
+                    n_count += 1
+                elif u1 == u2:
+                    if u1 == c1:
+                        matches += 1
+                    else:
+                        rep_matches += 1
+                else:
+                    mis_matches += 1
+
+        elif mask == "upper":
+            target_lower = target_sequence.lower()
+            query_lower = query_sequence.lower()
+
+            for u1, u2, c1 in zip(
+                target_lower,
+                query_lower,
+                target_sequence,
+            ):
+                if wildcard in (u1, u2):
+                    n_count += 1
+                elif u1 == u2:
+                    if u1 == c1:
+                        matches += 1
+                    else:
+                        rep_matches += 1
+                else:
+                    mis_matches += 1
+
+        else:
+            for u1, u2 in zip(
+                target_sequence.upper(),
+                query_sequence.upper(),
+            ):
+                if wildcard in (u1, u2):
+                    n_count += 1
+                elif u1 == u2:
+                    matches += 1
+                else:
+                    mis_matches += 1
+
+        return matches, mis_matches, rep_matches, n_count
+
+    def _get_block_sequences(
+        self,
+        target,
+        query,
+        t_start,
+        t_end,
+        q_start,
+        q_end,
+    ):
+        """Return byte sequences for an alignment block."""
+        target_sequence = target[t_start:t_end]
+        query_sequence = query[q_start:q_end]
+
+        try:
+            target_sequence = bytes(target_sequence)
+        except TypeError:
+            target_sequence = bytes(target_sequence, "ASCII")
+        except UndefinedSequenceError:
+            target_sequence = None
+
+        try:
+            query_sequence = bytes(query_sequence)
+        except TypeError:
+            query_sequence = bytes(query_sequence, "ASCII")
+        except UndefinedSequenceError:
+            query_sequence = None
+
+        return target_sequence, query_sequence
+
+    def _process_blocks(
+        self,
+        coordinates,
+        target,
+        query,
+        dnax,
+    ):
+        """Extract alignment blocks and calculate alignment statistics."""
+        matches = 0
+        mis_matches = 0
+        rep_matches = 0
+        n_count = 0
+
+        block_sizes = []
+        q_starts = []
+        t_starts = []
+
+        t_start, q_start = coordinates[:, 0]
+        q_count = 0
+
+        for t_end, q_end in coordinates[:, 1:].transpose():
+            if t_start == t_end:
+                q_start = q_end
+                continue
+
+            if q_start == q_end:
+                t_start = t_end
+                continue
+
+            t_count = t_end - t_start
+            q_count = q_end - q_start
+
+            t_starts.append(t_start)
+            q_starts.append(q_start)
+            block_sizes.append(q_count)
+
+            if t_count == q_count:
+                assert dnax is not True
+                dnax = False
+            else:
+                assert t_count == 3 * q_count
+                assert dnax is not False
+                dnax = True
+
+            target_sequence, query_sequence = self._get_block_sequences(
+                target,
+                query,
+                t_start,
+                t_end,
+                q_start,
+                q_end,
+            )
+
+            if target_sequence is None or query_sequence is None:
+                matches += q_count
+            else:
+                block_matches = self._count_matches(
+                    target_sequence,
+                    query_sequence,
+                )
+                matches += block_matches[0]
+                mis_matches += block_matches[1]
+                rep_matches += block_matches[2]
+                n_count += block_matches[3]
+
+            t_start = t_end
+            q_start = q_end
+
+        return (
+            np.array(t_starts),
+            np.array(q_starts),
+            np.array(block_sizes),
+            matches,
+            mis_matches,
+            rep_matches,
+            n_count,
+            dnax,
+            q_count,
+        )
+
+    def _get_alignment_statistics(
+        self,
+        alignment,
+        t_starts,
+        q_starts,
+        block_sizes,
+        matches,
+        mis_matches,
+        rep_matches,
+        n_count,
+    ):
+        """Use alignment-provided statistics when available."""
+        try:
+            matches = alignment.matches
+        except AttributeError:
+            pass
+
+        try:
+            mis_matches = alignment.misMatches
+        except AttributeError:
+            pass
+
+        try:
+            rep_matches = alignment.repMatches
+        except AttributeError:
+            pass
+
+        try:
+            n_count = alignment.nCount
+        except AttributeError:
+            pass
+
+        return (
+            t_starts,
+            q_starts,
+            block_sizes,
+            matches,
+            mis_matches,
+            rep_matches,
+            n_count,
+        )
+
+    def _prepare_query_coordinates(
+        self,
+        q_starts,
+        block_sizes,
+        q_size,
+        q_start,
+        q_end,
+        strand,
+        dnax,
+        alignment,
+    ):
+        """Prepare query coordinates for the bigPsl representation."""
+        o_strand = "+"
+
+        if strand == "-":
+            if dnax is True:
+                o_strand = "-"
+                q_starts = q_size - (q_starts + block_sizes)
+                q_starts = q_starts[::-1]
+                alignment.coordinates = alignment.coordinates[:, ::-1]
+            else:
+                q_start, q_end = q_size - q_end, q_size - q_start
+
+        return q_starts, q_start, q_end, o_strand
+
+    def _get_cds(self, alignment):
+        """Return the CDS location in NCBI format."""
+        if self.cds is False:
+            return ""
+
+        for feature in alignment.query.features:
+            if feature.type == "CDS":
+                return _insdc_location_string(
+                    feature.location,
+                    len(alignment.query),
+                )
+
+        return "n/a"
+
+    def _get_sequence_type(self, alignment):
+        """Return the bigPsl sequence type."""
+        molecule_type = alignment.query.annotations.get("molecule_type")
+
+        if molecule_type == "DNA":
+            return "1"
+
+        if molecule_type == "protein":
+            return "2"
+
+        return "0"
+
+    def _set_alignment_annotations(
+        self,
+        alignment,
+        q_start,
+        q_end,
+        o_strand,
+        q_size,
+        q_starts,
+        o_sequence,
+        o_cds,
+        t_size,
+        matches,
+        mis_matches,
+        rep_matches,
+        n_count,
+        seq_type,
+    ):
+        """Store bigPsl-specific information in the alignment."""
+        alignment.annotations["oChromStart"] = str(q_start)
+        alignment.annotations["oChromEnd"] = str(q_end)
+        alignment.annotations["oStrand"] = o_strand
+        alignment.annotations["oChromSize"] = str(q_size)
+        alignment.annotations["oChromStarts"] = ",".join(
+            map(str, q_starts)
+        )
+        alignment.annotations["oSequence"] = o_sequence
+        alignment.annotations["oCDS"] = o_cds
+        alignment.annotations["chromSize"] = str(t_size)
+        alignment.annotations["match"] = str(matches)
+        alignment.annotations["misMatch"] = str(mis_matches)
+        alignment.annotations["repMatch"] = str(rep_matches)
+        alignment.annotations["nCount"] = str(n_count)
+        alignment.annotations["seqType"] = seq_type
+
+    def _prepare_query_metadata(
+        self,
+        alignment,
+        q_start,
+        q_end,
+        q_size,
+        q_starts,
+        strand,
+        dnax,
+    ):
+        """Prepare query-related metadata for the bigPsl record."""
+        q_starts, q_start, q_end, o_strand = (
+            self._prepare_query_coordinates(
+                q_starts,
+                self._current_block_sizes,
+                q_size,
+                q_start,
+                q_end,
+                strand,
+                dnax,
+                alignment,
+            )
+        )
+
+        if self.fa is True:
+            o_sequence = str(alignment.query.seq)
+        else:
+            o_sequence = ""
+
+        o_cds = self._get_cds(alignment)
+        seq_type = self._get_sequence_type(alignment)
+
+        return (
+            q_starts,
+            q_start,
+            q_end,
+            o_strand,
+            o_sequence,
+            o_cds,
+            seq_type,
+        )
+
     def write_file(self, stream, alignments):
         """Write the file."""
         fixed_alignments = Alignments()
-        cds = self.cds
-        fa = self.fa
+
         for alignment in alignments:
             if not isinstance(alignment, Alignment):
                 raise TypeError("Expected an Alignment object")
+
             coordinates = alignment.coordinates
-            if not coordinates.size:  # alignment consists of gaps only
+
+            if not coordinates.size:
                 continue
-            target, query = alignment.sequences
-            try:
-                query = query.seq
-            except AttributeError:
-                pass
-            try:
-                target = target.seq
-            except AttributeError:
-                pass
-            tSize = len(target)
-            qSize = len(query)
-            # fmt: off
-            dnax = None  # set to True for translated DNA aligned to protein,
-            # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
-            # fmt: on
-            if coordinates[1, 0] > coordinates[1, -1]:
-                # DNA/RNA mapped to reverse strand of DNA/RNA
-                strand = "-"
-                query = reverse_complement(query)
-                coordinates = coordinates.copy()
-                coordinates[1, :] = qSize - coordinates[1, :]
-            elif coordinates[0, 0] > coordinates[0, -1]:
-                # protein mapped to reverse strand of DNA
-                strand = "-"
-                target = reverse_complement(target)
-                coordinates = coordinates.copy()
-                coordinates[0, :] = tSize - coordinates[0, :]
-                dnax = True
-            else:
-                # mapped to forward strand
-                strand = "+"
-            wildcard = self.wildcard
-            mask = self.mask
-            # variable names follow those in the PSL file format specification
-            matches = 0
-            misMatches = 0
-            repMatches = 0
-            nCount = 0
-            blockSizes = []
-            qStarts = []
-            tStarts = []
-            tStart, qStart = coordinates[:, 0]
-            for tEnd, qEnd in coordinates[:, 1:].transpose():
-                if tStart == tEnd:
-                    qStart = qEnd
-                elif qStart == qEnd:
-                    tStart = tEnd
-                else:
-                    tCount = tEnd - tStart
-                    qCount = qEnd - qStart
-                    tStarts.append(tStart)
-                    qStarts.append(qStart)
-                    blockSizes.append(qCount)
-                    if tCount == qCount:
-                        assert dnax is not True
-                        dnax = False
-                    else:
-                        # translated DNA aligned to protein, typically generated by
-                        # blat -t=dnax -q=prot
-                        assert tCount == 3 * qCount
-                        assert dnax is not False
-                        dnax = True
-                    tSeq = target[tStart:tEnd]
-                    qSeq = query[qStart:qEnd]
-                    try:
-                        tSeq = bytes(tSeq)
-                    except TypeError:  # string
-                        tSeq = bytes(tSeq, "ASCII")
-                    except UndefinedSequenceError:  # sequence contents is unknown
-                        tSeq = None
-                    try:
-                        qSeq = bytes(qSeq)
-                    except TypeError:  # string
-                        qSeq = bytes(qSeq, "ASCII")
-                    except UndefinedSequenceError:  # sequence contents is unknown
-                        qSeq = None
-                    if tSeq is None or qSeq is None:
-                        # contents of at least one sequence is unknown;
-                        # count all aligned letters as matches:
-                        matches += qCount
-                    else:
-                        if mask == "lower":
-                            for u1, u2, c1 in zip(tSeq.upper(), qSeq.upper(), tSeq):
-                                if u1 == wildcard or u2 == wildcard:
-                                    nCount += 1
-                                elif u1 == u2:
-                                    if u1 == c1:
-                                        matches += 1
-                                    else:
-                                        repMatches += 1
-                                else:
-                                    misMatches += 1
-                        elif mask == "upper":
-                            for u1, u2, c1 in zip(tSeq.lower(), qSeq.lower(), tSeq):
-                                if u1 == wildcard or u2 == wildcard:
-                                    nCount += 1
-                                elif u1 == u2:
-                                    if u1 == c1:
-                                        matches += 1
-                                    else:
-                                        repMatches += 1
-                                else:
-                                    misMatches += 1
-                        else:
-                            for u1, u2 in zip(tSeq.upper(), qSeq.upper()):
-                                if u1 == wildcard or u2 == wildcard:
-                                    nCount += 1
-                                elif u1 == u2:
-                                    matches += 1
-                                else:
-                                    misMatches += 1
-                    tStart = tEnd
-                    qStart = qEnd
-            tStarts = np.array(tStarts)
-            qStarts = np.array(qStarts)
-            blockSizes = np.array(blockSizes)
-            try:
-                matches = alignment.matches
-            except AttributeError:
-                pass
-            try:
-                misMatches = alignment.misMatches
-            except AttributeError:
-                pass
-            try:
-                repMatches = alignment.repMatches
-            except AttributeError:
-                pass
-            try:
-                nCount = alignment.nCount
-            except AttributeError:
-                pass
-            qStart = qStarts[0]  # start of alignment in query
-            qEnd = qStarts[-1] + qCount  # end of alignment in query
-            oStrand = "+"
-            if strand == "-":
-                if dnax is True:
-                    oStrand = "-"
-                    qStarts = qSize - (qStarts + blockSizes)
-                    qStarts = qStarts[::-1]
-                    alignment.coordinates = alignment.coordinates[:, ::-1]
-                else:
-                    qStart, qEnd = qSize - qEnd, qSize - qStart
-            if fa is True:
-                oSequence = str(alignment.query.seq)
-            else:
-                oSequence = ""
-            if cds is True:
-                for feature in alignment.query.features:
-                    if feature.type == "CDS":
-                        oCDS = _insdc_location_string(
-                            feature.location, len(alignment.query)
-                        )
-                        break
-                else:
-                    oCDS = "n/a"
-            else:
-                oCDS = ""
-            seqType = 0
-            molecule_type = alignment.query.annotations.get("molecule_type")
-            if molecule_type == "DNA":
-                seqType = "1"
-            elif molecule_type == "protein":
-                seqType = "2"
-            else:
-                seqType = "0"
-            alignment.annotations["oChromStart"] = str(qStart)
-            alignment.annotations["oChromEnd"] = str(qEnd)
-            alignment.annotations["oStrand"] = oStrand
-            alignment.annotations["oChromSize"] = str(qSize)
-            alignment.annotations["oChromStarts"] = ",".join(map(str, qStarts))
-            alignment.annotations["oSequence"] = oSequence
-            alignment.annotations["oCDS"] = oCDS
-            alignment.annotations["chromSize"] = str(tSize)
-            alignment.annotations["match"] = str(matches)
-            alignment.annotations["misMatch"] = str(misMatches)
-            alignment.annotations["repMatch"] = str(repMatches)
-            alignment.annotations["nCount"] = str(nCount)
-            alignment.annotations["seqType"] = seqType
+
+            target, query = self._get_sequences(alignment)
+            t_size = len(target)
+            q_size = len(query)
+
+            (
+                coordinates,
+                target,
+                query,
+                strand,
+                dnax,
+            ) = self._prepare_coordinates(
+                alignment,
+                target,
+                query,
+            )
+
+            (
+                t_starts,
+                q_starts,
+                block_sizes,
+                matches,
+                mis_matches,
+                rep_matches,
+                n_count,
+                dnax,
+                q_count,
+            ) = self._process_blocks(
+                coordinates,
+                target,
+                query,
+                dnax,
+            )
+
+            (
+                t_starts,
+                q_starts,
+                block_sizes,
+                matches,
+                mis_matches,
+                rep_matches,
+                n_count,
+            ) = self._get_alignment_statistics(
+                alignment,
+                t_starts,
+                q_starts,
+                block_sizes,
+                matches,
+                mis_matches,
+                rep_matches,
+                n_count,
+            )
+
+            q_start = q_starts[0]
+            q_end = q_starts[-1] + q_count
+
+            self._current_block_sizes = block_sizes
+
+            (
+                q_starts,
+                q_start,
+                q_end,
+                o_strand,
+                o_sequence,
+                o_cds,
+                seq_type,
+            ) = self._prepare_query_metadata(
+                alignment,
+                q_start,
+                q_end,
+                q_size,
+                q_starts,
+                strand,
+                dnax,
+            )
+
+            self._set_alignment_annotations(
+                alignment,
+                q_start,
+                q_end,
+                o_strand,
+                q_size,
+                q_starts,
+                o_sequence,
+                o_cds,
+                t_size,
+                matches,
+                mis_matches,
+                rep_matches,
+                n_count,
+                seq_type,
+            )
+
             fixed_alignments.append(alignment)
+
         fixed_alignments.sort(
-            key=lambda alignment: (alignment.target.id, alignment.coordinates[0, 0])
+            key=lambda alignment: (
+                alignment.target.id,
+                alignment.coordinates[0, 0],
+            )
         )
         fixed_alignments.targets = alignments.targets
+
         bigbed.AlignmentWriter(
-            stream, bedN=12, declaration=declaration, compress=self.compress
+            stream,
+            bedN=12,
+            declaration=declaration,
+            compress=self.compress,
         ).write(fixed_alignments)
 
 
