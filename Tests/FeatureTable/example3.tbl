@@ -1,0 +1,41 @@
+>Feature Chr_1
+1	8618836	REFERENCE
+			CFMR	12345
+1495	550	gene
+			locus_tag	Tatro_000001
+1495	1230	mRNA
+1171	550
+			product	hypothetical protein
+			transcript_id	gnl|ncbi|Tatro_000001-T1_mrna
+			protein_id	gnl|ncbi|Tatro_000001-T1
+1495	1230	CDS
+1171	550
+			codon_start	1
+			db_xref	InterPro:IPR002410
+			db_xref	PFAM:PF08386
+			db_xref	InterPro:IPR000073
+			db_xref	InterPro:IPR029058
+			db_xref	InterPro:IPR013595
+			db_xref	InterPro:IPR050266
+			db_xref	PFAM:PF12697
+			note	MEROPS:MER0025512
+			product	hypothetical protein
+			transcript_id	gnl|ncbi|Tatro_000001-T1_mrna
+			protein_id	gnl|ncbi|Tatro_000001-T1
+5108	3585	gene
+			locus_tag	Tatro_000002
+5108	4516	mRNA
+4452	3585
+			product	hypothetical protein
+			transcript_id	gnl|ncbi|Tatro_000002-T1_mrna
+			protein_id	gnl|ncbi|Tatro_000002-T1
+4959	4516	CDS
+4452	3781
+			codon_start	1
+			db_xref	PFAM:PF00172
+			db_xref	InterPro:IPR001138
+			db_xref	InterPro:IPR036864
+			product	hypothetical protein
+			transcript_id	gnl|ncbi|Tatro_000002-T1_mrna
+			protein_id	gnl|ncbi|Tatro_000002-T1
+
