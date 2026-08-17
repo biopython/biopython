@@ -568,8 +568,8 @@ def _open(request):
     ``max_retries`` times. This function also enforces the "up to three queries per second
     rule" to avoid abusing the NCBI servers (this limit is increased to 10 if using an API key).
 
-    :param req_or_cgi: A Request object returned by ``_build_request``.
-    :type req_or_cgi: urllib.request.Request
+    :param request: A Request object returned by ``_build_request``.
+    :type request: urllib.request.Request
     :returns: Handle to HTTP response as returned by ``urllib.request.urlopen``. Will be wrapped in
         an ``io.TextIOWrapper`` if its content type is plain text.
     :rtype: http.client.HTTPResponse or io.TextIOWrapper
