@@ -831,8 +831,18 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             return (-2 - y) if x in breaks else (-2000 - y)
 
         alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, no_gaps, specific_gaps)
-        self.assertEqual(len(alignments), 1)
+        self.assertEqual(len(alignments), 2)
         formatted = pairwise2.format_alignment(*alignments[0])
+        self.assertEqual(
+            formatted,
+            """\
+AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
+||.            ......|||||||||||||  
+AAB------------BBAAAACCCCAAAABBBAA--
+  Score=-10
+""",  # noqa: W291
+        )
+        formatted = pairwise2.format_alignment(*alignments[1])
         self.assertEqual(
             formatted,
             """\
