@@ -36,6 +36,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Al Fattah Suyadi (first contribution)
+- Arata Synqa Bando (first contribution)
 - Laura Piñero Roig (first contribution)
 - Marcus Campbell (first contribution)
 - Michiel de Hoon
