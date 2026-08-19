@@ -667,13 +667,14 @@ def _make_score_matrix_generic(
 
     # Initialize first row and column with gap scores. This is like opening up
     # i gaps at the beginning of sequence A or B.
-    for i in range(lenA + 1):
+    score_matrix[0][0] = 0.0
+    for i in range(1, lenA + 1):
         if penalize_end_gaps[1]:  # [1]:gap in sequence B
             score = gap_B_fn(0, i)
         else:
             score = 0.0
         score_matrix[i][0] = score
-    for i in range(lenB + 1):
+    for i in range(1, lenB + 1):
         if penalize_end_gaps[0]:  # [0]:gap in sequence A
             score = gap_A_fn(0, i)
         else:

@@ -793,7 +793,7 @@ class TestPersiteGapPenalties(unittest.TestCase):
             ...unless it is in one of the allowed positions:
             """
             breaks = [0, 11, len(seq2)]
-            return (-2 - y) if x in breaks else (-2000 - y)
+            return (-1 - y) if x in breaks else (-2000 - y)
 
         alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, no_gaps, specific_gaps)
         self.assertEqual(len(alignments), 1)
@@ -804,7 +804,7 @@ class TestPersiteGapPenalties(unittest.TestCase):
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||          |||||||||||  
 --AABBBAAAACC----------CCAAAABBBAA--
-  Score=2
+  Score=5
 """,  # noqa: W291
         )
 
@@ -828,7 +828,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             ...unless it is in one of the allowed positions:
             """
             breaks = [0, 3, len(seq2)]
-            return (-2 - y) if x in breaks else (-2000 - y)
+            return (-1 - y) if x in breaks else (-2000 - y)
 
         alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, no_gaps, specific_gaps)
         self.assertEqual(len(alignments), 1)
@@ -839,7 +839,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||          ......|||||||||||||  
 --AAB----------BBAAAACCCCAAAABBBAA--
-  Score=-10
+  Score=-7
 """,  # noqa: W291
         )
 
