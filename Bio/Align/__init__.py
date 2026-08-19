@@ -4598,38 +4598,41 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             self.substitution_matrix = substitution_matrix
 
 
-def align(seqA, seqB, *args, **kwargs):
-    """Convenience function for alignments."""
+def _create_aligner(args, kwargs):
     kwargs = dict(kwargs)
     if "strand" in kwargs:
         strand = kwargs["strand"]
         del kwargs["strand"]
     else:
-        strand = "+"
-    if "mode" in kwargs:
-        if kwargs["mode"] not in ("global", "local"):
-            raise ValueError("mode must be 'global' or 'local' (default: 'global')")
-    else:
-        kwargs["mode"] = "global"
+        for index, arg in enumerate(args):
+            if arg in "+-":
+                strand = arg
+                args = args[:index] + args[index + 1 :]
+                break
+        else:
+            strand = "+"
+    if "mode" not in kwargs:
+        for index, arg in enumerate(args):
+            if arg in ("global", "local"):
+                kwargs["mode"] = arg
+                args = args[:index] + args[index + 1 :]
+                break
+        else:
+            kwargs["mode"] = "global"
     aligner = PairwiseAligner(*args, **kwargs)
+    return strand, aligner
+
+
+def align(seqA, seqB, *args, **kwargs):
+    """Convenience function for alignments."""
+    strand, aligner = _create_aligner(args, kwargs)
     alignments = aligner.align(seqA, seqB, strand)
     return alignments
 
 
 def score(seqA, seqB, *args, **kwargs):
     """Convenience function to calculate alignment scores."""
-    kwargs = dict(kwargs)
-    if "strand" in kwargs:
-        strand = kwargs["strand"]
-        del kwargs["strand"]
-    else:
-        strand = "+"
-    if "mode" in kwargs:
-        if kwargs["mode"] not in ("global", "local"):
-            raise ValueError("mode must be 'global' or 'local' (default: 'global')")
-    else:
-        kwargs["mode"] = "global"
-    aligner = PairwiseAligner(*args, **kwargs)
+    strand, aligner = _create_aligner(args, kwargs)
     alignments = aligner.score(seqA, seqB, strand)
     return alignments
 
