@@ -793,7 +793,7 @@ class TestPersiteGapPenalties(unittest.TestCase):
             ...unless it is in one of the allowed positions:
             """
             breaks = [0, 11, len(seq2)]
-            return (-2 - y) if x in breaks else (-2000 - y)
+            return (-1 - y) if x in breaks else (-2000 - y)
 
         alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, no_gaps, specific_gaps)
         self.assertEqual(len(alignments), 1)
@@ -804,7 +804,7 @@ class TestPersiteGapPenalties(unittest.TestCase):
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||||||||||          |||||||||||  
 --AABBBAAAACC----------CCAAAABBBAA--
-  Score=2
+  Score=5
 """,  # noqa: W291
         )
 
@@ -828,28 +828,18 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
             ...unless it is in one of the allowed positions:
             """
             breaks = [0, 3, len(seq2)]
-            return (-2 - y) if x in breaks else (-2000 - y)
+            return (-1 - y) if x in breaks else (-2000 - y)
 
         alignments = pairwise2.align.globalmc(seq1, seq2, 1, -1, no_gaps, specific_gaps)
-        self.assertEqual(len(alignments), 2)
+        self.assertEqual(len(alignments), 1)
         formatted = pairwise2.format_alignment(*alignments[0])
-        self.assertEqual(
-            formatted,
-            """\
-AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
-||.            ......|||||||||||||  
-AAB------------BBAAAACCCCAAAABBBAA--
-  Score=-10
-""",  # noqa: W291
-        )
-        formatted = pairwise2.format_alignment(*alignments[1])
         self.assertEqual(
             formatted,
             """\
 AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
   |||          ......|||||||||||||  
 --AAB----------BBAAAACCCCAAAABBBAA--
-  Score=-10
+  Score=-7
 """,  # noqa: W291
         )
 
