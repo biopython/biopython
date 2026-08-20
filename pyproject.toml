@@ -132,10 +132,6 @@ name = "Bio.Align.substitution_matrices._arraycore"
 sources = ["Bio/Align/substitution_matrices/_arraycore.c"]
 
 [[tool.setuptools.ext-modules]]
-name = "Bio.cpairwise2"
-sources = ["Bio/cpairwise2module.c"]
-
-[[tool.setuptools.ext-modules]]
 name = "Bio.Nexus.cnexus"
 sources = ["Bio/Nexus/cnexus.c"]
 

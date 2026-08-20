@@ -777,7 +777,7 @@ Currently, a ``PairwiseAligner`` object is initialized by default with a match
 score of +1.0, a mismatch score of 0.0, and all gap scores equal to -1.0.
 Biopython versions 1.85 and older used a default gap score of 0.0 (this choice
 was made to be consistent with the older pairwise aligner in ``Bio.pairwise2``,
-which uses a default gap score of 0.0). However, this scheme assigns the same
+which used a default gap score of 0.0). However, this scheme assigns the same
 score to a mismatch and a insertion or deletion, e.g.
 
 .. code:: pycon
