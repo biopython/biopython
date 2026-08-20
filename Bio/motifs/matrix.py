@@ -263,13 +263,14 @@ class GenericPositionMatrix(dict):
             for i in range(self.length):
                 maximum = 0
                 total = 0
+                consensus_letter = undefined
                 for letter in alphabet:
                     count = self[letter][i]
                     total += count
                     if count > maximum:
                         maximum = count
                         consensus_letter = letter
-                if maximum < identity * total:
+                if total == 0 or maximum < identity * total:
                     consensus_letter = undefined
                 else:
                     if setcase is None:
