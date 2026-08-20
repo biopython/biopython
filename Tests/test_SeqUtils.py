@@ -23,6 +23,8 @@ from Bio.SeqUtils.CheckSum import gcg
 from Bio.SeqUtils.CheckSum import seguid
 from Bio.SeqUtils.lcc import lcc_mult
 from Bio.SeqUtils.lcc import lcc_simp
+from Bio.SeqUtils.IsoelectricPoint import IsoelectricPoint as IP
+from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
 
 class SeqUtilsTests(unittest.TestCase):
@@ -425,6 +427,22 @@ TTT	0.886
         llc_lst = lcc_mult(record, len(record))
         self.assertEqual(len(llc_lst), 1)
         self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
+
+    def test_IsoelectricPoint(self):
+        X = IP("ADDKNPLEECFRETDYEEFLEIARNGLKATSNPKRVV")
+        self.assertAlmostEqual(X.pi(), 4.83, places=2)
+        self.assertAlmostEqual(X.charge_at_pH(7.4), -4.22, places=2)
+        Y = IP("EFYTVDGQK", "IPC2_peptide")
+        self.assertAlmostEqual(Y.pi(), 4.28, places=2)
+        Z = IP("EFYTVDGQK", "Toseland")
+        self.assertAlmostEqual(Z.pi(), 4.06, places=2)
+
+    def test_ProteinAnalysis(self):
+        X = ProteinAnalysis(
+            "MAEGEITTFTALTEKFNLPPGNYKKPKLLYCSNGGHFLRILPDGTVDGTRDRSDQHIQLQLSAESVGEVYIKSTETGQYLAMDTSGLLYGSQTPSEECLFLERLEENHYNTYTSKKHAEKNWFVGLKKNGSCKRGPRTHYGQKAILFLPLPV"
+        )
+        self.assertAlmostEqual(X.isoelectric_point(), 6.96, places=2)
+        self.assertAlmostEqual(X.isoelectric_point("Nozaki"), 8.00, places=2)
 
 
 if __name__ == "__main__":
