@@ -274,6 +274,13 @@ class TestQual(QualityIOTestBaseClass):
         records2 = list(SeqIO.parse("Quality/example.fastq", "fastq"))
         self.compare_records(records1, records2)
 
+    def test_qual_empty_title(self):
+        """Check QUAL record with empty title."""
+        record = SeqIO.read(StringIO(">\n1 2 3"), "qual")
+        self.assertEqual(record.id, "")
+        self.assertEqual(record.description, "")
+        self.assertEqual(record.letter_annotations["phred_quality"], [1, 2, 3])
+
     def test_qual(self):
         """Check FASTQ parsing matches QUAL parsing."""
         records1 = list(SeqIO.parse("Quality/example.qual", "qual"))
