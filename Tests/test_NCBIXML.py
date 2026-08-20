@@ -9,12 +9,27 @@ import os
 import unittest
 import warnings
 
+from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonParserWarning
 from Bio.Blast import NCBIXML
 
 
 class TestNCBIXML(unittest.TestCase):
     """Tests for the NCBI XML parser."""
+
+    def test_deprecated_letter_attributes(self):
+        """Accessing legacy BLAST record letter counts emits deprecation warnings."""
+        filename = "xml_2212L_blastp_001.xml"
+        datafile = os.path.join("Blast", filename)
+        with open(datafile, "rb") as handle:
+            record = NCBIXML.read(handle)
+
+        self.assertEqual(record.query_length, 103)
+        self.assertEqual(record.database_length, 1011751523)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            self.assertEqual(record.query_letters, 103)
+        with self.assertWarns(BiopythonDeprecationWarning):
+            self.assertEqual(record.database_letters, 1011751523)
 
     def test_xml_2212L_blastp_001(self):
         """Parsing BLASTP 2.2.12, gi|49176427|ref|NP_418280.3| (xml_2212L_blastp_001)."""

@@ -34,6 +34,7 @@ import warnings
 import xml.sax
 from xml.sax.handler import ContentHandler
 
+from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonParserWarning
 
 from Bio.Align import MultipleSeqAlignment
@@ -74,11 +75,35 @@ class Header:
         self.reference = ""
 
         self.query = ""
-        self.query_letters = None
+        self._query_letters = None
 
         self.database = ""
         self.database_sequences = None
-        self.database_letters = None
+        self._database_letters = None
+
+    @property
+    def query_letters(self):
+        """Number of letters in the query sequence. DEPRECATED."""
+        import warnings
+
+        warnings.warn(
+            "The query_letters attribute is deprecated; please use query_length instead.",
+            BiopythonDeprecationWarning,
+            stacklevel=2,
+        )
+        return self._query_letters
+
+    @property
+    def database_letters(self):
+        """Number of letters in the database. DEPRECATED."""
+        import warnings
+
+        warnings.warn(
+            "The database_letters attribute is deprecated; please use database_length instead.",
+            BiopythonDeprecationWarning,
+            stacklevel=2,
+        )
+        return getattr(self, "database_length", self._database_letters)
 
 
 class Description:
@@ -774,13 +799,13 @@ class BlastParser(_XMLparser):
             self._blast.query = self._header.query
         if not hasattr(self._blast, "query_id") or not self._blast.query_id:
             self._blast.query_id = self._header.query_id
-        if not hasattr(self._blast, "query_letters") or not self._blast.query_letters:
-            self._blast.query_letters = self._header.query_letters
+        if not self._blast._query_letters:
+            self._blast._query_letters = self._header._query_letters
 
         # Hack to record the query length as both the query_letters and
         # query_length properties (as in the plain text parser, see
         # Bug 2176 comment 12):
-        self._blast.query_length = self._blast.query_letters
+        self._blast.query_length = self._blast._query_letters
         # Perhaps in the long term we should deprecate one, but I would
         # prefer to drop query_letters - so we need a transition period
         # with both.
@@ -877,7 +902,7 @@ class BlastParser(_XMLparser):
         Important in old pre 2.2.14 BLAST, for recent versions
         <Iteration_query-len> is enough
         """
-        self._header.query_letters = int(self._value)
+        self._header._query_letters = int(self._value)
 
     def _set_record_query_id(self):
         """Record the identifier of the query (PRIVATE)."""
@@ -889,7 +914,7 @@ class BlastParser(_XMLparser):
 
     def _set_record_query_letters(self):
         """Record the length of the query (PRIVATE)."""
-        self._blast.query_letters = int(self._value)
+        self._blast._query_letters = int(self._value)
 
     # def _end_BlastOutput_query_seq(self):
     #     """The query sequence (PRIVATE)."""
