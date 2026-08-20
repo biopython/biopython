@@ -357,8 +357,9 @@ class PdbAtomIterator(SequenceIterator):
 
 
 PDBX_POLY_SEQ_SCHEME_FIELDS = (
-    "_pdbx_poly_seq_scheme.asym_id",  # Chain ID
+    "_pdbx_poly_seq_scheme.asym_id",  # PDB-labelled chain ID
     "_pdbx_poly_seq_scheme.mon_id",  # Residue type
+    "_pdbx_poly_seq_scheme.pdb_strand_id",  # Author-labelled chain ID
 )
 
 STRUCT_REF_FIELDS = (
@@ -380,7 +381,7 @@ class CifSeqresIterator(SequenceIterator):
 
     modes = "t"
 
-    def __init__(self, source: _TextIOSource) -> None:
+    def __init__(self, source: _TextIOSource, use_author_chain_ids: bool = False) -> None:
         """Iterate over chains in an mmCIF file as SeqRecord objects.
 
         Argument source is a file-like object or a path to a file.
@@ -441,8 +442,16 @@ class CifSeqresIterator(SequenceIterator):
             elif not isinstance(records[field], list):
                 records[field] = [records[field]]
 
+        if use_author_chain_ids:
+            # This is the "author" asym ID, which is assigned by the authors
+            # and doesn't necessarily follow a strict pattern.
+            chain_field_name = "_pdbx_poly_seq_scheme.pdb_strand_id"
+        else:
+            # This is the "label" asym ID, which is assigned by the PDB.
+            chain_field_name = "_pdbx_poly_seq_scheme.asym_id"
+
         for asym_id, mon_id in zip(
-            records["_pdbx_poly_seq_scheme.asym_id"],
+            records[chain_field_name],
             records["_pdbx_poly_seq_scheme.mon_id"],
         ):
             mon_id_1l = _res2aacode(mon_id)
@@ -508,7 +517,7 @@ class CifAtomIterator(SequenceIterator):
 
     modes = "t"
 
-    def __init__(self, source: _TextIOSource) -> None:
+    def __init__(self, source: _TextIOSource, use_author_chain_ids: bool = True) -> None:
         """Iterate over structures in an mmCIF file as SeqRecord objects.
 
         Argument source is a file-like object or a path to a file.
@@ -559,7 +568,7 @@ class CifAtomIterator(SequenceIterator):
         # Only import parser when needed, to avoid/delay NumPy dependency in SeqIO
         from Bio.PDB.MMCIFParser import MMCIFParser
 
-        structure = MMCIFParser().get_structure(None, source)
+        structure = MMCIFParser(auth_chains=use_author_chain_ids).get_structure(None, source)
         pdb_id = structure.header["idcode"]
         if not pdb_id:
             warnings.warn("Could not determine the PDB ID.", BiopythonParserWarning)
