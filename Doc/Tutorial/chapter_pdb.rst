@@ -2107,7 +2107,7 @@ The ``PDBList`` class can also be used as a command-line tool:
 
 .. code:: pycon
 
-   python PDBList.py 1fat
+   python PDBList.py fetch 1fat
 
 The downloaded file will be called ``pdb1fat.ent`` and stored in the
 current working directory. Note that the ``retrieve_pdb_file`` method
@@ -2131,12 +2131,12 @@ directory:
 
 .. code:: pycon
 
-   python PDBList.py all /data/pdb
+   python PDBList.py all --pdb-path /data/pdb
 
-   python PDBList.py all /data/pdb -d
+   python PDBList.py all --pdb-path /data/pdb --flat
 
 The API method for this is called ``download_entire_pdb``. Adding the
-``-d`` option will store all files in the same directory. Otherwise,
+``--flat`` option will store all files in the same directory. Otherwise,
 they are sorted into PDB-style subdirectories according to their PDB
 ID’s. Depending on the traffic, a complete download will take 2-4 days.
 
