@@ -48,7 +48,6 @@ from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
-
 # Import errors may occur here if a compiled _pairwisealigner.c file or
 # compiled _codonaligner.c file (_pairwisealigner.pyd or _pairwisealigner.so,
 # or _codonaligner.pyd or _codonaligner.so) is missing or if the user is
@@ -4446,7 +4445,6 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
-        # self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
         if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
             sA = np.frombuffer(sA, dtype=np.uint8).astype(np.int32)
@@ -4504,7 +4502,6 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def score(self, seqA, seqB, strand="+"):
         """Return the alignment score of two sequences using PairwiseAligner."""
-        # self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
         if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
             seqA = np.frombuffer(seqA, dtype=np.uint8).astype(np.int32)
@@ -4599,6 +4596,45 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             self.mismatch_score = state["mismatch_score"]
         else:
             self.substitution_matrix = substitution_matrix
+
+
+def _create_aligner(args, kwargs):
+    kwargs = dict(kwargs)
+    if "strand" in kwargs:
+        strand = kwargs["strand"]
+        del kwargs["strand"]
+    else:
+        for index, arg in enumerate(args):
+            if arg in "+-":
+                strand = arg
+                args = args[:index] + args[index + 1 :]
+                break
+        else:
+            strand = "+"
+    if "mode" not in kwargs:
+        for index, arg in enumerate(args):
+            if arg in ("global", "local"):
+                kwargs["mode"] = arg
+                args = args[:index] + args[index + 1 :]
+                break
+        else:
+            kwargs["mode"] = "global"
+    aligner = PairwiseAligner(*args, **kwargs)
+    return strand, aligner
+
+
+def align(seqA, seqB, *args, **kwargs):
+    """Convenience function for alignments."""
+    strand, aligner = _create_aligner(args, kwargs)
+    alignments = aligner.align(seqA, seqB, strand)
+    return alignments
+
+
+def score(seqA, seqB, *args, **kwargs):
+    """Convenience function to calculate alignment scores."""
+    strand, aligner = _create_aligner(args, kwargs)
+    alignments = aligner.score(seqA, seqB, strand)
+    return alignments
 
 
 class CodonAligner(_codonaligner.CodonAligner):
