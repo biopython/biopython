@@ -257,6 +257,16 @@ class TestSeqStringMethods(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.s >= 1
 
+    def test_less_than_comparison_with_bytes(self):
+        """Test __lt__ comparison with bytes."""
+        self.assertLess(self.s, b"\xff" * len(self.s))
+
+    def test_incompatible_comparison_error_mentions_seq(self):
+        """Test incompatible-type comparison raises a TypeError naming Seq."""
+        with self.assertRaises(TypeError) as context:
+            self.s < 1
+        self.assertIn("Seq", str(context.exception))
+
     def test_add_method_using_wrong_object(self):
         with self.assertRaises(TypeError):
             self.s + {}

@@ -454,8 +454,9 @@ class _SeqAbstractBaseClass(ABC):
             return self._data < other._data
         elif isinstance(other, str):
             return self._data < other.encode("ASCII")
-        else:
+        elif isinstance(other, (bytes, bytearray)):
             return self._data < other
+        return NotImplemented
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -463,8 +464,9 @@ class _SeqAbstractBaseClass(ABC):
             return self._data <= other._data
         elif isinstance(other, str):
             return self._data <= other.encode("ASCII")
-        else:
+        elif isinstance(other, (bytes, bytearray)):
             return self._data <= other
+        return NotImplemented
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
@@ -472,8 +474,9 @@ class _SeqAbstractBaseClass(ABC):
             return self._data > other._data
         elif isinstance(other, str):
             return self._data > other.encode("ASCII")
-        else:
+        elif isinstance(other, (bytes, bytearray)):
             return self._data > other
+        return NotImplemented
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
@@ -481,8 +484,9 @@ class _SeqAbstractBaseClass(ABC):
             return self._data >= other._data
         elif isinstance(other, str):
             return self._data >= other.encode("ASCII")
-        else:
+        elif isinstance(other, (bytes, bytearray)):
             return self._data >= other
+        return NotImplemented
 
     def __len__(self):
         """Return the length of the sequence."""
