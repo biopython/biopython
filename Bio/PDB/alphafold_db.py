@@ -114,3 +114,42 @@ def get_structural_models_for(
             mmcif_path = download_cif_for(prediction, directory)
 
         yield mmcif_parser.get_structure(qualifier, mmcif_path)
+
+class AlphaFoldList:
+    """A PDBList-like interface for the AlphaFold Protein Structure Database."""
+
+    def __init__(self, output_dir: Optional[Union[str, bytes, os.PathLike]] = None):
+        """Initialize the class with an optional default download directory.
+        
+        :param output_dir: Default directory where structural files will be saved.
+        """
+        self.output_dir = output_dir
+
+    def retrieve_structure_file(
+        self, 
+        uniprot_id: str, 
+        output_dir: Optional[Union[str, bytes, os.PathLike]] = None
+    ) -> str:
+        """Download the latest mmCIF structural model for a given UniProt accession.
+
+        :param uniprot_id: A UniProt accession string, e.g., "P00520"
+        :param output_dir: Overrides the default initialization output directory.
+        :return: String path to the downloaded mmCIF file.
+        """
+        # 1. Fetch metadata using the existing standalone function
+        predictions = list(get_predictions(uniprot_id))
+        
+        if not predictions:
+            raise ValueError(f"No AlphaFold predictions found for UniProt ID: {uniprot_id}")
+            
+        # 2. Grab the latest entry (typically the first prediction entry contains the latest structure)
+        latest_prediction = predictions[0]
+        
+        # 3. Use the chosen directory fallback hierarchy
+        target_dir = output_dir if output_dir is not None else self.output_dir
+        
+        # 4. Download structural file utilizing the standalone downloader helper
+        # Note: download_cif_for requires a single prediction dictionary or iterable
+        file_path = download_cif_for(latest_prediction, directory=target_dir)
+        
+        return file_path
