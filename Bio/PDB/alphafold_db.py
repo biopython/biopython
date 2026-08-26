@@ -118,7 +118,7 @@ def get_structural_models_for(
 class AlphaFoldList:
     """A PDBList-like interface for the AlphaFold Protein Structure Database."""
 
-    def __init__(self, output_dir: Optional[Union[str, bytes, os.PathLike]] = None):
+    def __init__(self, output_dir: str | bytes | os.PathLike | None = None):
         """Initialize the class with an optional default download directory.
         
         :param output_dir: Default directory where structural files will be saved.
@@ -128,7 +128,7 @@ class AlphaFoldList:
     def retrieve_structure_file(
         self, 
         uniprot_id: str, 
-        output_dir: Optional[Union[str, bytes, os.PathLike]] = None
+        output_dir: str | bytes | os.PathLike | None = None
     ) -> str:
         """Download the latest mmCIF structural model for a given UniProt accession.
 
