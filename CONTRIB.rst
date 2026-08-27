@@ -278,6 +278,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Nick Negretti <https://github.com/nimne>
 - Nicolas Fontrodona <https://github.com/NFontrodona>
 - Nigel Delaney <https://github.com/evolvedmicrobe>
+- Nikhil Dabas <https://github.com/ndabas>
 - Noam Kremen <https://github.com/noamkremen>
 - Oliver Wissett <https://github.com/OWissett>
 - Olivier Morelle <https://github.com/Oli4>
