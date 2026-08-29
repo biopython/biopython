@@ -276,6 +276,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Nathan J. Edwards <nje5 at edu domain georgetown>
 - Neil P. <https://github.com/npars>
 - Nick Negretti <https://github.com/nimne>
+- Nicola Trinca <https://github.com/trinik15>
 - Nicolas Fontrodona <https://github.com/NFontrodona>
 - Nigel Delaney <https://github.com/evolvedmicrobe>
 - Noam Kremen <https://github.com/noamkremen>
