@@ -102,7 +102,9 @@ PyDoc_STRVAR(
     "until it finds the end-of-line character (defined by self->eol)\n"
     "or a null character.\n"
     "\n"
-    "The parser skips the first offset bytes.\n"
+    "The parser skips the first offset bytes, which must be a valid\n"
+    "position in line: a ValueError is raised if offset is negative or\n"
+    "is not smaller than the number of bytes in line.\n"
     "\n"
     "Any dashes in line are interpreted as gaps.\n"
     "This method finds the gap locations and stores them in self.\n"
@@ -139,6 +141,13 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     bool gap = false;
 
     if (!PyArg_ParseTuple(args, "S|n:feed", &line, &offset)) return NULL;
+
+    if (offset < 0 || offset >= PyBytes_GET_SIZE(line)) {
+        PyErr_Format(PyExc_ValueError,
+                     "offset %zd is out of range for a line of length %zd",
+                     offset, PyBytes_GET_SIZE(line));
+        return NULL;
+    }
 
     buffer = PyBytes_AS_STRING(line) + offset;
 
@@ -186,7 +195,7 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
     data[n] = row;
     m = s - buffer;
     if (n == 0) self->m = m;
-    else if (buffer + m != s) {
+    else if (m != self->m) {
         PyErr_Format(PyExc_ValueError,
                      "line has length %zd (expected %zd)", m, self->m);
         PyMem_Free(row);
