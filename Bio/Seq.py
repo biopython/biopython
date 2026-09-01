@@ -455,7 +455,13 @@ class _SeqAbstractBaseClass(ABC):
         elif isinstance(other, str):
             return self._data < other.encode("ASCII")
         else:
-            return self._data < other
+            try:
+                return self._data < other
+            except TypeError:
+                raise TypeError(
+                    f"'<' not supported between instances of "
+                    f"'{type(self).__name__}' and '{type(other).__name__}'"
+                ) from None
 
     def __le__(self, other):
         """Implement the less-than or equal operand."""
@@ -464,7 +470,13 @@ class _SeqAbstractBaseClass(ABC):
         elif isinstance(other, str):
             return self._data <= other.encode("ASCII")
         else:
-            return self._data <= other
+            try:
+                return self._data <= other
+            except TypeError:
+                raise TypeError(
+                    f"'<=' not supported between instances of "
+                    f"'{type(self).__name__}' and '{type(other).__name__}'"
+                ) from None
 
     def __gt__(self, other):
         """Implement the greater-than operand."""
@@ -473,7 +485,13 @@ class _SeqAbstractBaseClass(ABC):
         elif isinstance(other, str):
             return self._data > other.encode("ASCII")
         else:
-            return self._data > other
+            try:
+                return self._data > other
+            except TypeError:
+                raise TypeError(
+                    f"'>' not supported between instances of "
+                    f"'{type(self).__name__}' and '{type(other).__name__}'"
+                ) from None
 
     def __ge__(self, other):
         """Implement the greater-than or equal operand."""
@@ -482,7 +500,13 @@ class _SeqAbstractBaseClass(ABC):
         elif isinstance(other, str):
             return self._data >= other.encode("ASCII")
         else:
-            return self._data >= other
+            try:
+                return self._data >= other
+            except TypeError:
+                raise TypeError(
+                    f"'>=' not supported between instances of "
+                    f"'{type(self).__name__}' and '{type(other).__name__}'"
+                ) from None
 
     def __len__(self):
         """Return the length of the sequence."""

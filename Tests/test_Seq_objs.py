@@ -5,6 +5,7 @@
 """Unittests for the Seq objects."""
 
 import array
+import operator
 import unittest
 import warnings
 
@@ -1160,6 +1161,24 @@ class ComparisonTests(unittest.TestCase):
                     Seq(None, 10) != seq1
                 with self.assertRaises(UndefinedSequenceError, msg=msg):
                     Seq(None, 10) != seq2
+
+    def test_ordering_with_incompatible_type(self):
+        comparisons = (
+            ("<", operator.lt),
+            ("<=", operator.le),
+            (">", operator.gt),
+            (">=", operator.ge),
+        )
+        for sequence in (Seq("ACGT"), MutableSeq("ACGT")):
+            for symbol, comparison in comparisons:
+                with self.subTest(sequence=type(sequence).__name__, symbol=symbol):
+                    message = (
+                        f"'{symbol}' not supported between instances of "
+                        f"'{type(sequence).__name__}' and 'int'"
+                    )
+                    with self.assertRaises(TypeError) as context:
+                        comparison(sequence, 1)
+                    self.assertEqual(str(context.exception), message)
 
     def test_lt(self):
         s1 = "GCATGTATGT"
