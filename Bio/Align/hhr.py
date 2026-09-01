@@ -233,4 +233,10 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         return alignment
 
     def __len__(self):
+        """Return the number of alignments.
+
+        The ``.hhr`` file format holds this count in its summary table;
+        the ``_read_header(self, stream)`` method parses that number
+        and caches it in ``self._length``.
+        """
         return self._length

@@ -312,6 +312,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Rudolf Koopmann <https://github.com/koopmann>
 - Ryan Stecher <https://github.com/rystecher>
 - Sacha Laurent <https://github.com/Cashalow>
+- Saiyma Sarmin <https://github.com/ssarmin>
 - Saket Choudhary <https://github.com/saketkc>
 - Samuel Prince <https://github.com/drs>
 - Santeri Paajanen <https://github.com/paajasan>
