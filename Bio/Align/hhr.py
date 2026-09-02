@@ -53,7 +53,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         line = stream.readline()
         if not line:
             raise ValueError("Truncated file.")
-        assert line.split() == [
+        if line.split() != [
             "No",
             "Hit",
             "Prob",
@@ -66,21 +66,30 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             "HMM",
             "Template",
             "HMM",
-        ]
+        ]:
+            raise ValueError("Failed to find summary table header in .hhr file")
         counter = 0
         for line in stream:
             if line.strip() == "":
                 break
             counter += 1
             word, _ = line.split(None, 1)
-            assert int(word) == counter
+            if int(word) != counter:
+                raise ValueError(
+                    "Unexpected alignment number %s in summary table (expected %d)"
+                    % (word, counter)
+                )
         self._length = counter
         self._counter = 0
 
     def _read_next_alignment(self, stream):
         def create_alignment():
             n = len(target_sequence)
-            assert len(query_sequence) == n
+            if len(query_sequence) != n:
+                raise ValueError(
+                    "Query and target sequences have different lengths in .hhr file (%d != %d)"
+                    % (len(query_sequence), n)
+                )
             if n == 0:
                 return
             lines = [target_sequence.encode(), query_sequence.encode()]
@@ -163,7 +172,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 counter = self._counter
                 self._counter += 1
                 key, value = line.split()
-                assert int(value) == self._counter
+                if int(value) != self._counter:
+                    raise ValueError(
+                        "Unexpected alignment number %s (expected %d)"
+                        % (value, self._counter)
+                    )
                 if self._counter > self._length:
                     raise ValueError(
                         "Expected %d alignments, found %d"
@@ -181,19 +194,27 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 key1, key2, start, consensus, end, total = line.split()
                 start = int(start) - 1
                 end = int(end)
-                assert total.startswith("(")
-                assert total.endswith(")")
+                if not (total.startswith("(") and total.endswith(")")):
+                    raise ValueError("Failed to parse total length %s" % total)
                 total = int(total[1:-1])
                 query_consensus += consensus
             elif line.startswith("Q "):
                 key1, key2, start, sequence, end, total = line.split()
-                assert self.query_name.startswith(key2)
+                if not (self.query_name.startswith(key2)):
+                    raise ValueError(
+                        "Expected query name '%s' to start with '%s'"
+                        % (self.query_name, key2)
+                    )
                 start = int(start) - 1
                 end = int(end)
-                assert total.startswith("(")
-                assert total.endswith(")")
+                if not (total.startswith("(") and total.endswith(")")):
+                    raise ValueError("Failed to parse total length %s" % total)
                 query_length = int(total[1:-1])
-                assert query_length == self.metadata["Match_columns"]
+                if query_length != self.metadata["Match_columns"]:
+                    raise ValueError(
+                        "Query length %d does not match header Match_columns %d"
+                        % (query_length, self.metadata["Match_columns"])
+                    )
                 if query_start is None:
                     query_start = start
                 query_sequence += sequence
@@ -207,18 +228,19 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 key1, key2, start, consensus, end, total = line.split()
                 start = int(start) - 1
                 end = int(end)
-                assert total.startswith("(")
-                assert total.endswith(")")
+                if not (total.startswith("(") and total.endswith(")")):
+                    raise ValueError("Failed to parse total length %s" % total)
                 total = int(total[1:-1])
                 target_consensus += consensus
             elif line.startswith("T "):
                 key, name, start, sequence, end, total = line.split()
-                assert key == "T"
+                if key != "T":
+                    raise ValueError("Failed to parse line '%s...'" % line[:30])
                 target_name = name
                 start = int(start) - 1
                 end = int(end)
-                assert total.startswith("(")
-                assert total.endswith(")")
+                if not (total.startswith("(") and total.endswith(")")):
+                    raise ValueError("Failed to parse total length %s" % total)
                 target_length = int(total[1:-1])
                 if target_start is None:
                     target_start = start
