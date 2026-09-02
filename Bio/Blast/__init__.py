@@ -115,6 +115,7 @@ class HSP(Alignment):
     """
 
     def __repr__(self):
+        """Return a string representation showing the target, query, and alignment shape."""
         query = self.query
         target = self.target
         n, m = self.shape
