@@ -233,4 +233,5 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         return alignment
 
     def __len__(self):
+        """Returns the number of pairwise alignments in the file."""
         return self._length
