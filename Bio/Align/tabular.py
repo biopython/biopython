@@ -72,7 +72,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             # FASTA
             metadata["Command line"] = line[2:]
             line = stream.readline()
-            assert line.startswith("# ")
+            if not line.startswith("# "):
+                raise ValueError(
+                    f"Expected FASTA program/version line starting with '#', "
+                    f"found '{line.rstrip()}'"
+                )
             metadata["Program"], metadata["Version"] = line[2:].rstrip().split(None, 1)
             self._final_prefix = "# FASTA processed "
         else:
@@ -81,12 +85,20 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             self._final_prefix = "# BLAST processed "
         for line in stream:
             line = line.strip()
-            assert line.startswith("# ")
+            if not line.startswith("# "):
+                raise ValueError(
+                    f"Expected comment line starting with '#' in tabular header, "
+                    f"found '{line}'"
+                )
             try:
                 prefix, value = line[2:].split(": ")
             except ValueError:
                 suffix = " hits found"
-                assert line.endswith(suffix)
+                if not line.endswith(suffix):
+                    raise ValueError(
+                        f"Expected line ending with '{suffix}' in tabular header, "
+                        f"found '{line}'"
+                    ) from None
                 hits = int(line[2 : -len(suffix)])
                 break
             if prefix == "Query":
@@ -94,7 +106,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     query_line, query_size = value.rsplit(" - ", 1)
                     query_size, unit = query_size.split()
                     self._query_size = int(query_size)
-                    assert unit in ("nt", "aa")
+                    if unit not in ("nt", "aa"):
+                        raise ValueError(
+                            f"Unexpected unit '{unit}' for query size in tabular header, "
+                            f"expected 'nt' or 'aa'"
+                        )
                 else:
                     query_line = value
                     self._query_size = None
@@ -142,15 +158,22 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         coordinates = None
         query_size = self._query_size
         columns = line.split("\t")
-        assert len(columns) == len(self._fields)
+        if len(columns) != len(self._fields):
+            raise ValueError(
+                f"Number of columns ({len(columns)}) does not match number of "
+                f"fields ({len(self._fields)}) declared in header"
+            )
         annotations = {}
         query_annotations = {}
         target_annotations = {}
         for column, field in zip(columns, self._fields):
             if field == "query id":
                 query_id = column
-                if self._query_id is not None:
-                    assert query_id == self._query_id
+                if self._query_id is not None and query_id != self._query_id:
+                    raise ValueError(
+                        f"Query id '{query_id}' does not match expected query "
+                        f"id '{self._query_id}' from header"
+                    )
             elif field == "subject id":
                 target_id = column
             elif field == "% identity":
@@ -188,8 +211,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif field == "query length":
                 if query_size is None:
                     query_size = int(column)
-                else:
-                    assert query_size == int(column)
+                elif query_size != int(column):
+                    raise ValueError(
+                        f"Query length {column} does not match previously "
+                        f"found query length {query_size}"
+                    )
             elif field == "subject ids":
                 target_annotations["ids"] = column
             elif field == "subject gi":
@@ -290,7 +316,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         else:
             query_sequence = query_sequence.replace("-", "")
             if program == "TBLASTN":
-                assert len(query_sequence) == query_end - query_start
+                if len(query_sequence) != (query_end - query_start):
+                    raise ValueError(
+                        f"Query sequence length ({len(query_sequence)}) does not "
+                        f"match q. start/end span ({query_end - query_start})"
+                    )
                 query_seq = Seq({query_start: query_sequence}, length=query_size)
             elif program == "TBLASTX":
                 query_annotations["start"] = query_start
@@ -319,7 +349,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             else:
                 target_sequence = target_sequence.replace("-", "")
                 if target_start is not None and target_end is not None:
-                    assert len(target_sequence) == target_end - target_start
+                    if len(target_sequence) != (target_end - target_start):
+                        raise ValueError(
+                            f"Target sequence length ({len(target_sequence)}) does "
+                            f"not match s. start/end span ({target_end - target_start})"
+                        )
                     target_seq = Seq({target_start: target_sequence}, length=target_end)
         target = SeqRecord(target_seq, id=target_id)
         if target_annotations:
