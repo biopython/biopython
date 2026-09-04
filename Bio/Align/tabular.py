@@ -74,7 +74,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             line = stream.readline()
             if not line.startswith("# "):
                 raise ValueError(
-                    f"Expected FASTA program/version line starting with '#', "
+                    f"Expected FASTA program/version line starting with '# ', "
                     f"found '{line.rstrip()}'"
                 )
             metadata["Program"], metadata["Version"] = line[2:].rstrip().split(None, 1)
@@ -87,7 +87,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             line = line.strip()
             if not line.startswith("# "):
                 raise ValueError(
-                    f"Expected comment line starting with '#' in tabular header, "
+                    f"Expected comment line starting with '# ' in tabular header, "
                     f"found '{line}'"
                 )
             try:
