@@ -445,10 +445,12 @@ class InfernalTextParser(_BaseInfernalParser):
                 lines[i] = self.line
                 self.line = read_forward(self.handle)
 
-            # get the position of the alignment in the string using the PP line
-            blklen = len(lines[4 + offset].strip().split()[0])
-            blkstart = len(lines[4 + offset]) - blklen - 4
-            blkend = len(lines[4 + offset]) - 4
+            # get the position of the alignment in the string using the PP line,
+            # rstripped so that CRLF line endings do not shift the column offsets.
+            pp_line = lines[4 + offset].rstrip()
+            blklen = len(pp_line.split()[0])
+            blkend = len(pp_line) - len(" PP")
+            blkstart = blkend - blklen
             model_seq += lines[1 + offset][blkstart:blkend]
             hit_seq += lines[3 + offset][blkstart:blkend]
             # NC line is specific to cm model searches

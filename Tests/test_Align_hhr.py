@@ -9980,6 +9980,46 @@ AlignmentCounts object with
         self.assertEqual(len(alignments), 10)
 
 
+class Align_hhr_allx_badtotal_q(unittest.TestCase):
+    path = os.path.join("HHsuite", "allx_badtotal_q.hhr")
+
+    def test_reading(self):
+        alignments = Align.parse(self.path, "hhr")
+        with self.assertRaises(ValueError) as cm:
+            next(alignments)
+        self.assertEqual(str(cm.exception), "Failed to parse total length 39")
+
+
+class Align_hhr_allx_badtotal_qconsensus(unittest.TestCase):
+    path = os.path.join("HHsuite", "allx_badtotal_qconsensus.hhr")
+
+    def test_reading(self):
+        alignments = Align.parse(self.path, "hhr")
+        with self.assertRaises(ValueError) as cm:
+            next(alignments)
+        self.assertEqual(str(cm.exception), "Failed to parse total length 39")
+
+
+class Align_hhr_allx_badtotal_t(unittest.TestCase):
+    path = os.path.join("HHsuite", "allx_badtotal_t.hhr")
+
+    def test_reading(self):
+        alignments = Align.parse(self.path, "hhr")
+        with self.assertRaises(ValueError) as cm:
+            next(alignments)
+        self.assertEqual(str(cm.exception), "Failed to parse total length 30")
+
+
+class Align_hhr_allx_badtotal_tconsensus(unittest.TestCase):
+    path = os.path.join("HHsuite", "allx_badtotal_tconsensus.hhr")
+
+    def test_reading(self):
+        alignments = Align.parse(self.path, "hhr")
+        with self.assertRaises(ValueError) as cm:
+            next(alignments)
+        self.assertEqual(str(cm.exception), "Failed to parse total length 30")
+
+
 class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
     path = os.path.join("HHsuite", "4p79_hhsearch_server_NOssm.hhr")
 

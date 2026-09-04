@@ -140,8 +140,14 @@ Parser_feed(Parser* self, PyObject* args, PyObject *kwds)
 
     if (!PyArg_ParseTuple(args, "S|n:feed", &line, &offset)) return NULL;
 
-    buffer = PyBytes_AS_STRING(line) + offset;
+    if (offset < 0 || offset > PyBytes_GET_SIZE(line)) {
+        PyErr_Format(PyExc_ValueError,
+                     "offset %zd is out of range for bytes object of length %zd",
+                     offset, PyBytes_GET_SIZE(line));
+        return NULL;
+    }
 
+    buffer = PyBytes_AS_STRING(line) + offset;
     s = buffer;
     row = PyMem_Malloc(size*sizeof(Py_uintptr_t));
     if (!row) return NULL;
