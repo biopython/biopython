@@ -13,6 +13,8 @@
 
 """Generic unit tests for the SMCRA classes of the Bio.PDB module."""
 
+from Bio.Entrez.Parser import NoneElement
+
 import unittest
 import warnings
 from copy import deepcopy
@@ -194,17 +196,54 @@ class SortingTests(unittest.TestCase):
         # Change the coordinates of an atom in structure2
         structure2[0]["A"][(" ", 180, " ")]["C"].set_coord((0, 0, 0))
 
+        # Strict equality should be symmetric
         self.assertTrue(structure.strictly_equals(structure2))
-        self.assertTrue(
-            structure2.strictly_equals(structure)
-        )  # Strict equality should be symmetric
-
+        self.assertTrue(structure2.strictly_equals(structure))
         self.assertFalse(
             structure.strictly_equals(structure2, compare_coordinates=True)
         )
         self.assertFalse(
             structure2.strictly_equals(structure, compare_coordinates=True)
-        )  # Strict equality should be symmetric
+        )
+
+        # Also change the occupancy of that atom in structure2
+        structure[0]["A"][(" ", 180, " ")]["C"].occupancy = 0.75
+        structure2[0]["A"][(" ", 180, " ")]["C"].occupancy = 0.5
+
+        self.assertFalse(structure.strictly_equals(structure2))
+        self.assertFalse(structure2.strictly_equals(structure))
+
+        # Check when one occupancy is None:
+        structure[0]["A"][(" ", 180, " ")]["C"].occupancy = None
+        structure2[0]["A"][(" ", 180, " ")]["C"].occupancy = 0.5
+
+        self.assertFalse(structure.strictly_equals(structure2))
+        self.assertFalse(structure2.strictly_equals(structure))
+
+        # Also change the b-factor of that atom in structure2
+        structure[0]["A"][(" ", 180, " ")]["C"].occupancy = 1.0
+        structure2[0]["A"][(" ", 180, " ")]["C"].occupancy = 1.0
+        structure[0]["A"][(" ", 180, " ")]["C"].bfactor = 0.4
+        structure2[0]["A"][(" ", 180, " ")]["C"].bfactor = 0.6
+
+        self.assertFalse(structure.strictly_equals(structure2))
+        self.assertFalse(structure2.strictly_equals(structure))
+
+        # And when one b-factor is None
+        structure[0]["A"][(" ", 180, " ")]["C"].bfactor = None
+        structure2[0]["A"][(" ", 180, " ")]["C"].bfactor = 0.6
+
+        self.assertFalse(structure.strictly_equals(structure2))
+        self.assertFalse(structure2.strictly_equals(structure))
+
+        # And when radius different
+        structure[0]["A"][(" ", 180, " ")]["C"].bfactor = None
+        structure2[0]["A"][(" ", 180, " ")]["C"].bfactor = None
+        structure[0]["A"][(" ", 180, " ")]["C"].radius = 1.1
+        structure2[0]["A"][(" ", 180, " ")]["C"].radius = 1.2
+
+        self.assertFalse(structure.strictly_equals(structure2))
+        self.assertFalse(structure2.strictly_equals(structure))
 
     def test_residue_sort(self):
         """Test atoms are sorted correctly in residues."""
