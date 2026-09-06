@@ -793,9 +793,11 @@ class Records(UserList):
         del self._stream
 
     def __iter__(self):
+        """Return the current instance as its own iterator."""
         return self
 
     def __next__(self):
+        """Return the next parsed record."""
         if self._loaded is True:
             try:
                 record = self._records[self._index]
