@@ -117,6 +117,42 @@ class TestSimpleLocation(unittest.TestCase):
         loc2 = SimpleLocation(23, 42, 1, "foo", "baz")
         self.assertNotEqual(loc1, loc2)
 
+    def test_hash_consistent_with_eq(self):
+        """Test equal locations hash equally, and can be used in a set."""
+        loc1 = SimpleLocation(23, 42, 1)
+        loc2 = SimpleLocation(23, 42, 1)
+        self.assertEqual(loc1, loc2)
+        self.assertEqual(hash(loc1), hash(loc2))
+
+        loc1 = SimpleLocation(23, 42, 1, "foo", "bar")
+        loc2 = SimpleLocation(23, 42, 1, "foo", "bar")
+        self.assertEqual(loc1, loc2)
+        self.assertEqual(hash(loc1), hash(loc2))
+
+        loc1 = SimpleLocation(23, 42, 1, "foo")
+        loc2 = SimpleLocation(23, 42, 1, "bar")
+        self.assertNotEqual(loc1, loc2)
+        self.assertNotEqual(hash(loc1), hash(loc2))
+
+        loc1 = SimpleLocation(23, 42, 1, "foo", "bar")
+        loc2 = SimpleLocation(23, 42, 1, "foo", "baz")
+        self.assertNotEqual(loc1, loc2)
+        self.assertNotEqual(hash(loc1), hash(loc2))
+
+    def test_hash_in_set(self):
+        """Test that equal locations collapse into one entry in a set."""
+        loc_a = SimpleLocation(23, 42, 1, "foo", "bar")
+        loc_b = SimpleLocation(23, 42, 1, "foo", "bar")  # equal to loc_a
+        loc_c = SimpleLocation(23, 43, 1, "foo", "bar")  # different end
+
+        locations1 = {loc_a, loc_b, loc_c}
+        locations2 = {loc_c, loc_a, loc_b}
+        self.assertEqual(locations1, locations2)
+        self.assertEqual(hash(frozenset(locations1)), hash(frozenset(locations2)))
+        self.assertEqual(len(locations1), 2)
+        self.assertIn(loc_a, locations1)
+        self.assertIn(loc_c, locations1)
+
     def test_start_before_end(self):
         expected = "must be greater than or equal to start location"
         with self.assertRaises(ValueError) as err:
