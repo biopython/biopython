@@ -1195,7 +1195,10 @@ class SimpleLocation(Location):
             yield from range(self._start, self._end)
 
     def __eq__(self, other):
-        """Implement equality by comparing all the location attributes."""
+        """Implement equality by comparing all the location attributes.
+
+        See also __hash__, which is kept consistent with this method.
+        """
         if not isinstance(other, SimpleLocation):
             return False
         return (
@@ -1205,6 +1208,18 @@ class SimpleLocation(Location):
             and self.ref == other.ref
             and self.ref_db == other.ref_db
         )
+
+    def __hash__(self):
+        """Implement hash with all the location attributes.
+
+        Based on start, end, strand, ref and ref_db, matching the attributes
+        used by __eq__. Note this reflects equality of coordinates (and,
+        where set, an external reference), not identity of the parent
+        sequence: two SimpleLocation objects with the same coordinates but
+        no ref/ref_db will compare equal and hash equal even if they were
+        created against different parent sequences.
+        """
+        return hash((self._start, self._end, self._strand, self.ref, self.ref_db))
 
     def _shift(self, offset):
         """Return a copy of the SimpleLocation shifted by an offset (PRIVATE).
