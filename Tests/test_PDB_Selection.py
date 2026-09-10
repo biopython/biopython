@@ -4,12 +4,16 @@ Run Bio.PDB.Selection tests.
 Currently only tests unfold_entities.
 """
 
+import itertools
 import unittest
+from typing import Union
 
-from Bio.PDB import PDBParser
+from Bio.PDB import PDBParser, MMCIFParser
+from Bio.PDB.Atom import Atom
+from Bio.PDB.Entity import Entity, DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Residue import Residue
-from Bio.PDB.Selection import unfold_entities
+from Bio.PDB.Selection import unfold_entities, _SelectParser, _AtomIndicator, select
 
 
 def res_full_id(res: Residue):
@@ -147,6 +151,186 @@ class UnfoldEntitiesTests(unittest.TestCase):
 
         with self.assertRaises(PDBException):
             unfold_entities([structure_atom, structure_chain], "A")
+
+
+class SelectParserTests(unittest.TestCase):
+    def setUp(self):
+        try:
+            import pyparsing as pp
+        except ImportError:
+            self.skipTest("pyparsing is required to test the parser")
+
+        self.parser = _SelectParser()
+
+    def test_identifiers(self):
+        comparators = ("==", "!=", "<=", "<", ">=", ">")
+        tests = [
+            ("model 0", ("model", "0")),
+            *(
+                (f"model {comparator} 0", ("model", comparator, "0"))
+                for comparator in comparators
+            ),
+            ("chain A", ("chain", "A")),
+            *(
+                (f"chain {comparator} A", ("chain", comparator, "A"))
+                for comparator in comparators
+            ),
+            ("resn ALA", ("resn", "ALA")),
+            *(
+                (f"resn {comparator} ALA", ("resn", comparator, "ALA"))
+                for comparator in ("==", "!=")
+            ),
+            ("resi 10", ("resi", "10")),
+            *(
+                (f"resi {comparator} 10", ("resi", comparator, "10"))
+                for comparator in comparators
+            ),
+            ("name C", ("name", "C")),
+            *(
+                (f"name {comparator} C", ("name", comparator, "C"))
+                for comparator in ("==", "!=")
+            ),
+        ]
+
+        for query, expected_result in tests:
+            result = tuple(self.parser(query)[0])
+            self.assertEqual(result, expected_result)
+
+    def test_boolean_operators(self):
+        tests = (
+            (
+                "model 0 and chain B",
+                [["model", "0"], "and", ["chain", "B"]],
+            ),
+            (
+                "model 0 and (chain B or chain E)",
+                [
+                    ["model", "0"],
+                    "and",
+                    [["chain", "B"], "or", ["chain", "E"]],
+                ],
+            ),
+            (
+                "model 0 or chain B and not resn ALA",
+                [
+                    ["model", "0"],
+                    "or",
+                    [["chain", "B"], "and", ["not", ["resn", "ALA"]]],
+                ],
+            ),
+            (
+                "(model 0 or chain B) and resn ALA",
+                [
+                    [["model", "0"], "or", ["chain", "B"]],
+                    "and",
+                    ["resn", "ALA"],
+                ],
+            ),
+            (
+                "not chain A and chain B",
+                [["not", ["chain", "A"]], "and", ["chain", "B"]],
+            ),
+            (
+                "not (chain A and chain B)",
+                ["not", [["chain", "A"], "and", ["chain", "B"]]],
+            ),
+        )
+
+        for query, expected_result in tests:
+            result = self.parser(query)[0].as_list()
+            self.assertEqual(result, expected_result)
+
+    def test_bad_input(self):
+        import pyparsing as pp
+
+        parser = self.parser
+
+        with self.assertRaises(pp.ParseException):
+            parser("bad input")
+        with self.assertRaises(pp.ParseException):
+            parser("model <=")
+        with self.assertRaises(pp.ParseException):
+            parser("chain chain A")
+
+
+class AtomIndicatorTests(unittest.TestCase):
+    def setUp(self):
+        try:
+            import pyparsing as pp
+        except ImportError:
+            self.skipTest("pyparsing is required to test the parser")
+
+        parser = _SelectParser()
+
+        def create_indicator(query: str):
+            return _AtomIndicator(parse_results=parser(query)[0])
+
+        self.create_indicator = create_indicator
+        structure_parser = MMCIFParser(QUIET=True)
+        self.structure = structure_parser.get_structure("7CFN", "PDB/7CFN.cif")
+
+    def test_query(self):
+        structure = self.structure
+        model = structure[0]
+        indicator = self.create_indicator("not (chain A or chain B) and resn != CYS")
+
+        for residue in itertools.chain(model["A"], model["B"]):
+            for atom in residue:
+                self.assertFalse(indicator(atom))
+
+        for residue in itertools.chain(model["G"], model["N"], model["R"]):
+            for atom in residue:
+                self.assertEqual(indicator(atom), residue.resname != "CYS")
+
+    def test_query2(self):
+        structure = self.structure
+        model = structure[0]
+        indicator = self.create_indicator(
+            "model 0 and not chain B and resi >= 10 and resi < 100 and name != C"
+        )
+
+        for chain in model:
+            for residue in chain:
+                for atom in residue:
+                    self.assertEqual(
+                        indicator(atom),
+                        chain.id != "B"
+                        and residue.id[1] in range(10, 100)
+                        and atom.name != "C",
+                    )
+
+
+def get_atoms(entity: Union[Entity, DisorderedEntityWrapper]):
+    """
+    This helper is necessary because structure.get_atoms() does not yield
+    all of the entities in a disordered entity.
+    """
+    if isinstance(entity, Atom):
+        yield entity
+    else:
+        for child in entity.child_dict.values():
+            yield from get_atoms(child)
+
+
+class End2EndSelectTests(unittest.TestCase):
+    def setUp(self):
+        try:
+            import pyparsing as pp
+        except ImportError:
+            self.skipTest("pyparsing is required to test the parser")
+
+        structure_parser = MMCIFParser(QUIET=True)
+        # Note that this structure contains disordered residues and atoms.
+        self.structure = structure_parser.get_structure("3JQH", "PDB/3JQH.cif")
+
+    def test_query(self):
+        structure = self.structure
+        selection = select(structure, "resn PRO or resn GLU and name CA")
+        atoms = get_atoms(selection)
+        serial_numbers = {atom.serial_number for atom in atoms}
+        expected = {1, 2, 3, 4, 5, 6, 7, 15, 71, 111, 155, 202}
+
+        self.assertEqual(serial_numbers, expected)
 
 
 if __name__ == "__main__":
