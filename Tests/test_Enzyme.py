@@ -136,6 +136,18 @@ class TestEnzyme(unittest.TestCase):
             f"Did not expect:\n{record}",
         )
 
+    def test_pr_line_invalid_prefix(self):
+        """Reject Enzyme record where PR line lacks the 'PROSITE; ' prefix."""
+        bad_record = (
+            "ID   4.1.1.14\n"
+            "DE   Valine decarboxylase.\n"
+            "PR   NOT_PROSITE; PDOC00110;\n"
+            "//\n"
+        )
+        handle = StringIO(bad_record)
+        with self.assertRaisesRegex(ValueError, "Unexpected PR line"):
+            list(Enzyme.parse(handle))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
