@@ -19,7 +19,11 @@ from Bio.PDB.StructureBuilder import StructureBuilder
 
 
 class PDBParser:
-    """Parse a PDB file and return a Structure object."""
+    """Parse a PDB file and return a Structure object.
+
+    Note: PDBParser instances are not thread-safe and should not be shared
+    across threads; create one parser per thread or use ProcessPoolExecutor.
+    """
 
     def __init__(
         self,
