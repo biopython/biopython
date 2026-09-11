@@ -180,13 +180,14 @@ class VectorTests(unittest.TestCase):
         for i in range(2):
             for j in range(2):
                 for k in range(2):
-                    sc = get_spherical_coordinates(
+                    xyz = np.array(
                         [
-                            (0.5 if i else -0.5),
-                            0.5 if j else -0.5,
-                            (1 if k else -1) * srt22,
+                            [0.5 if i else -0.5],
+                            [0.5 if j else -0.5],
+                            [(1 if k else -1) * srt22],
                         ]
                     )
+                    sc = get_spherical_coordinates(xyz)
                     # print(sc[0], np.degrees(sc[1]), np.degrees(sc[2]))
                     self.assertEqual(1.0, sc[0])  # r
                     self.assertEqual(
