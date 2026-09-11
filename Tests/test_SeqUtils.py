@@ -14,6 +14,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils import gc_fraction
+from Bio.SeqUtils import GC123
 from Bio.SeqUtils import GC_skew
 from Bio.SeqUtils import seq1
 from Bio.SeqUtils import seq3
@@ -387,6 +388,25 @@ TTT	0.886
 
         with self.assertRaises(ValueError):
             gc_fraction(seq, "other string")
+
+    def test_GC123(self):
+        """Tests GC123 function."""
+        seq = "ATGCGTATCGAT"
+        # GC123 returns (total_gc, gc1, gc2, gc3)
+        # Pos 0: A, C, A, G -> G: 1, C: 1. GC1 = 50%
+        # Pos 1: T, G, T, A -> G: 1. GC2 = 25%
+        # Pos 2: G, T, C, T -> G: 1, C: 1. GC3 = 50%
+        # Total GC: 5/12 = 41.666...%
+        res = GC123(seq)
+        self.assertAlmostEqual(res[0], 41.6666666, places=5)
+        self.assertAlmostEqual(res[1], 50.0)
+        self.assertAlmostEqual(res[2], 25.0)
+        self.assertAlmostEqual(res[3], 50.0)
+
+        # Test with empty sequence or sequence with no valid bases
+        # This triggers the ZeroDivisionError catch
+        res = GC123("")
+        self.assertEqual(res, (0, 0, 0, 0))
 
     def test_GC_skew(self):
         s = "A" * 50
