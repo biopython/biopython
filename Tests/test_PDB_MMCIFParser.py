@@ -247,17 +247,23 @@ class ParseReal(unittest.TestCase):
     def test_insertions(self):
         """Test file with residue insertion codes."""
         parser = MMCIFParser(QUIET=1)
+        parser_lab_res = MMCIFParser(auth_residues=False, QUIET=True)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", PDBConstructionWarning)
             structure = parser.get_structure("example", "PDB/4ZHL.cif")
+            structure_lr = parser_lab_res.get_structure("example", "PDB/4ZHL.cif")
         for ppbuild in [PPBuilder(), CaPPBuilder()]:
             # First try allowing non-standard amino acids,
             polypeptides = ppbuild.build_peptides(structure[0], False)
+            polypeptides_lr = ppbuild.build_peptides(structure_lr[0], False)
             self.assertEqual(len(polypeptides), 2)
             pp = polypeptides[0]
+            pp_lr = polypeptides_lr[0]
             # Check the start and end positions (first segment only)
             self.assertEqual(pp[0].get_id()[1], 16)
             self.assertEqual(pp[-1].get_id()[1], 244)
+            self.assertEqual(pp[22].get_id(), (" ", 37, "A"))
+            self.assertEqual(pp_lr[22].get_id(), (" ", 23, " "))
             # Check the sequence
             refseq = (
                 "IIGGEFTTIENQPWFAAIYRRHRGGSVTYVCGGSLISPCWVISATHCFIDYPKKEDYIVYLGR"
