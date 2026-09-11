@@ -15,8 +15,10 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils import gc_fraction
 from Bio.SeqUtils import GC_skew
+from Bio.SeqUtils import nt_search
 from Bio.SeqUtils import seq1
 from Bio.SeqUtils import seq3
+from Bio.SeqUtils import six_frame_translations
 from Bio.SeqUtils.CheckSum import crc32
 from Bio.SeqUtils.CheckSum import crc64
 from Bio.SeqUtils.CheckSum import gcg
@@ -425,6 +427,94 @@ TTT	0.886
         llc_lst = lcc_mult(record, len(record))
         self.assertEqual(len(llc_lst), 1)
         self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
+
+
+    def test_nt_search(self):
+        """Tests nt_search function for DNA subsequence searching with IUPAC codes."""
+        # Exact match — single occurrence
+        result = nt_search("ATGCATGC", "ATG")
+        self.assertEqual(result[0], "ATG")  # pattern
+        self.assertIn(0, result)  # found at position 0
+
+        # Multiple occurrences of the same subsequence
+        result = nt_search("ATGATGATG", "ATG")
+        self.assertEqual(result[1:], [0, 3, 6])
+
+        # No match returns only the pattern element
+        result = nt_search("ATGCATGC", "TTT")
+        self.assertEqual(len(result), 1)
+        self.assertIsInstance(result[0], str)
+
+        # Ambiguous code N matches any nucleotide (A, T, G or C)
+        result = nt_search("ATGC", "N")
+        self.assertEqual(result[1:], [0, 1, 2, 3])
+
+        # Ambiguous code R matches purines (A or G)
+        result = nt_search("AGTC", "R")
+        self.assertIn(0, result[1:])  # A at position 0
+        self.assertIn(1, result[1:])  # G at position 1
+        self.assertNotIn(2, result[1:])  # T is not a purine
+        self.assertNotIn(3, result[1:])  # C is not a purine
+
+        # Ambiguous code Y matches pyrimidines (C or T)
+        result = nt_search("AGTC", "Y")
+        self.assertIn(2, result[1:])  # T at position 2
+        self.assertIn(3, result[1:])  # C at position 3
+        self.assertNotIn(0, result[1:])  # A is not a pyrimidine
+
+        # Position accuracy — subsequence at a known offset
+        result = nt_search("GGGTATGCCC", "ATG")
+        self.assertIn(4, result[1:])  # ATG starts at index 4
+
+    def test_six_frame_translations(self):
+        """Tests six_frame_translations returns correct formatted output."""
+        # Verify return type is string
+        result = six_frame_translations("ATGAAATAA")
+        self.assertIsInstance(result, str)
+
+        # Header must contain GC_Frame and nucleotide counts
+        seq = "ATGCATGC"
+        result = six_frame_translations(seq)
+        self.assertIn("GC_Frame:", result)
+        self.assertIn("a:", result)
+        self.assertIn("g:", result)
+        self.assertIn("c:", result)
+        self.assertIn("t:", result)
+
+        # Sequence length and GC% are reported in the header
+        self.assertIn(f"{len(seq)} nt", result)
+        self.assertIn("%GC", result)
+
+        # Start codon ATG translates to M in all frames that contain it
+        seq = "ATGAAATAA"  # ATG in frame 1 → M, TAA = stop (*)
+        result = six_frame_translations(seq)
+        self.assertIn("M", result)
+        self.assertIn("*", result)
+
+        # Long sequences (>20 nt) use abbreviated display in header
+        long_seq = "ATGCATGCATGCATGCATGCATGC"  # 24 nt
+        result = six_frame_translations(long_seq)
+        self.assertIn("...", result)
+
+        # Short sequences (<= 20 nt) display the full sequence in header
+        short_seq = "ATGCATGCATGCATGCATGC"  # exactly 20 nt
+        result = six_frame_translations(short_seq)
+        self.assertIn(short_seq.lower(), result)
+
+        # Known output — docstring example (RNA sequence)
+        rna_seq = "AUGGCCAUUGUAAUGGGCCGCUGA"
+        result = six_frame_translations(rna_seq)
+        self.assertIn("54.17 %GC", result)
+        self.assertIn("24 nt", result)
+        # Frame +1 should begin with M (ATG/AUG = Met)
+        self.assertIn("M  A  I  V  M  G  R  *", result)
+
+        # Alternative genetic code — mitochondrial (code 2) uses different stop codons
+        result_standard = six_frame_translations("ATGAAATAA", genetic_code=1)
+        result_mito = six_frame_translations("ATGAAATAA", genetic_code=2)
+        self.assertIsInstance(result_mito, str)
+        # The two codes may differ for certain codons
+        self.assertNotEqual(result_standard, result_mito)
 
 
 if __name__ == "__main__":
