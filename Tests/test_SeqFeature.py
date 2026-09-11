@@ -153,6 +153,37 @@ class TestSimpleLocation(unittest.TestCase):
         self.assertIn(loc_a, locations1)
         self.assertIn(loc_c, locations1)
 
+    def test_hash_consistent_with_eq_fuzzy_positions(self):
+        """Test fuzzy positions hash consistently with the equality they satisfy."""
+        # BeforePosition(23) compares equal to plain int 23, so a location
+        # built from it should be equal, and hash equal, to one built from 23.
+        loc1 = SimpleLocation(BeforePosition(23), 42, 1)
+        loc2 = SimpleLocation(23, 42, 1)
+        self.assertEqual(loc1, loc2)
+        self.assertEqual(hash(loc1), hash(loc2))
+
+        # WithinPosition compares equal based on its integer value alone,
+        # regardless of its left/right fuzziness bounds.
+        loc1 = SimpleLocation(WithinPosition(10, left=10, right=13), 42, 1)
+        loc2 = SimpleLocation(WithinPosition(10, left=8, right=10), 42, 1)
+        self.assertEqual(loc1, loc2)
+        self.assertEqual(hash(loc1), hash(loc2))
+
+    def test_hash_unknown_position(self):
+        """Test UnknownPosition hashes as None, even though instances are not equal."""
+        loc1 = SimpleLocation(UnknownPosition(), 42, 1)
+        loc2 = SimpleLocation(UnknownPosition(), 42, 1)
+        # UnknownPosition does not define __eq__, so distinct instances
+        # compare by identity and are not equal to each other...
+        self.assertNotEqual(loc1, loc2)
+        # ...but UnknownPosition.__hash__ always returns hash(None), so
+        # locations built from different UnknownPosition instances still
+        # hash equal. This is a legitimate hash collision (equal objects
+        # must hash equal, but the converse isn't required), so it should
+        # not cause them to collapse in a set.
+        self.assertEqual(hash(loc1), hash(loc2))
+        self.assertEqual(len({loc1, loc2}), 2)
+
     def test_start_before_end(self):
         expected = "must be greater than or equal to start location"
         with self.assertRaises(ValueError) as err:
