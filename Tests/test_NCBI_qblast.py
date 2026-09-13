@@ -269,13 +269,13 @@ class TestQblast(unittest.TestCase):
 
         if record.query == "No definition line":
             # We used a sequence as the query
-            self.assertEqual(len(query), record.query_letters)
+            self.assertEqual(len(query), record.query_length)
         elif query.startswith(">"):
             # We used a FASTA record as the query
             expected = query[1:].split("\n", 1)[0]
             self.assertEqual(expected, record.query)
         elif (
-            record.query_id.startswith("Query_") and len(query) == record.query_letters
+            record.query_id.startswith("Query_") and len(query) == record.query_length
         ):
             # We used a sequence as the entry and it was given a placeholder name
             pass
