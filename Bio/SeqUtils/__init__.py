@@ -644,8 +644,8 @@ class CodonAdaptationIndex(dict):
         always one, are excluded from the calculation, as are stop codons.
         If the sequence contains no other codons - for example an empty
         sequence, or a coding sequence made up only of ATG and TGG - the
-        geometric mean is taken over zero terms and a ``ZeroDivisionError``
-        is raised:
+        geometric mean would be taken over zero remaining terms, and a
+        ``ZeroDivisionError`` is raised:
 
         >>> from Bio.SeqUtils import CodonAdaptationIndex
         >>> cai = CodonAdaptationIndex(["GCTGCCGCA", "ATGTGG"])
