@@ -7,7 +7,7 @@
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
 # Please see the LICENSE file that should have been included as part of this
 # package.
-"""Code to work with the BLAST XML output.
+"""Code to work with the BLAST XML output (OBSOLETE).
 
 The BLAST XML DTD file is available on the NCBI site at:
 https://www.ncbi.nlm.nih.gov/dtd/NCBI_BlastOutput.dtd
@@ -26,6 +26,7 @@ MultipleAlignment  Holds information about a multiple alignment.
 DatabaseReport     Holds information from the database report.
 Parameters         Holds information from the parameters.
 
+You are now encouraged to use the `Bio.BLAST.parse` or function instead.
 """
 # XXX finish printable BLAST output
 
