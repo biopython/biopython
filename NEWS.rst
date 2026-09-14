@@ -175,11 +175,11 @@ Our main documentation, the Biopython Tutorial and Cookbook, has been
 converted from LaTeX to reStructuredText, and combined with the existing API
 documentation, into a single more modern and navigable HTML output.
 
-``Bio.Blast``` contains a new parser for BLAST XML output as a replacement for
-the old parser in ``Bio.Blast.NCBIXML```. The main differences between the
+``Bio.Blast`` contains a new parser for BLAST XML output as a replacement for
+the old parser in ``Bio.Blast.NCBIXML``. The main differences between the
 parsers is as follows:
 
-* The old parser stores information in a ``Bio.Blast.NCBIXML.Blast``` object,
+* The old parser stores information in a ``Bio.Blast.NCBIXML.Blast`` object,
   with attribute names based on plain-text Blast output. The new parser stores
   information in a Bio.Blast.Record object. This class follows the DTD that
   describes the XML in terms of attribute names and dictionary key names,
@@ -190,9 +190,9 @@ parsers is as follows:
   the alignment information as a Bio.Align.Alignment object, which can then be
   used to e.g. print the alignment in a different format.
 
-Bio.Blast also contains a new qblast function as a replacement for the old
-qblast function in Bio.Blast.NCBIWWW. The main difference is that the old
-qblast function in Bio.Blast.NCBIWWW returns the BLAST search results as Python
+``Bio.Blast`` also contains a new ``qblast`` function as a replacement for the old
+``qblast`` function in ``Bio.Blast.NCBIWWW``. The main difference is that the old
+qblast function in ``Bio.Blast.NCBIWWW`` returns the BLAST search results as Python
 strings, while the new qblast returns bytes objects. Note that in Python, to
 parse an XML file it should be opened in binary mode, as the string encoding is
 specified in the XML data itself. The object returned by the new qblast
