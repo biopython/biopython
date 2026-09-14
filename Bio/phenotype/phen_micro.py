@@ -371,7 +371,7 @@ class PlateRecord:
             )
 
     def __setitem__(self, key, value):
-     """Add a WellRecord to the plate using the well identifier as key."""
+        """Add a WellRecord to the plate using the well identifier as key."""
         if not isinstance(key, str):
             raise ValueError("Well identifier should be string-like")
         self._is_well(value)
@@ -386,7 +386,7 @@ class PlateRecord:
         self._update()
 
     def __delitem__(self, key):
-     """Delete a WellRecord from the plate using the well identifier as key."""
+        """Delete a WellRecord from the plate using the well identifier as key."""
         if not isinstance(key, str):
             raise ValueError("Well identifier should be string-like")
         del self._wells[key]
@@ -394,12 +394,12 @@ class PlateRecord:
         self._update()
 
     def __iter__(self):
-     """Iterate over the wells of the plate."""
+        """Iterate over the wells of the plate."""
         for well in sorted(self._wells):
             yield self._wells[well]
 
     def __contains__(self, wellid):
-     """Return True if the well identifier is in the plate."""
+        """Return True if the well identifier is in the plate."""
         if wellid in self._wells:
             return True
         return False
@@ -408,7 +408,7 @@ class PlateRecord:
         return len(self._wells)
 
     def __eq__(self, other):
-     """Return True if both plates have the same wells."""
+        """Return True if both plates have the same wells."""
         if isinstance(other, self.__class__):
             return self._wells == other._wells
         else:
