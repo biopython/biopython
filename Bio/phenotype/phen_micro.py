@@ -405,6 +405,7 @@ class PlateRecord:
         return False
 
     def __len__(self):
+        """Return the number of wells in this plate."""
         return len(self._wells)
 
     def __eq__(self, other):
