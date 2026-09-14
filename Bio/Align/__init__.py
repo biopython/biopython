@@ -4598,8 +4598,11 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             self.substitution_matrix = substitution_matrix
 
 
-def _create_aligner(args, kwargs):
+def _create_aligner(args, kwargs, mode):
     kwargs = dict(kwargs)
+    if "mode" in kwargs:
+        raise TypeError("received an unexpected keyword argument 'mode'")
+    kwargs["mode"] = mode
     if "strand" in kwargs:
         strand = kwargs["strand"]
         del kwargs["strand"]
@@ -4611,29 +4614,56 @@ def _create_aligner(args, kwargs):
                 break
         else:
             strand = "+"
-    if "mode" not in kwargs:
-        for index, arg in enumerate(args):
-            if arg in ("global", "local"):
-                kwargs["mode"] = arg
-                args = args[:index] + args[index + 1 :]
-                break
-        else:
-            kwargs["mode"] = "global"
+    gap_score = kwargs.get("g")
+    if gap_score is not None:
+        del kwargs["g"]
+    open_gap_score = kwargs.get("o")
+    if open_gap_score is not None:
+        del kwargs["o"]
+    extend_gap_score = kwargs.get("e")
+    if extend_gap_score is not None:
+        del kwargs["e"]
+    insertion_score = kwargs.get("i")
+    if insertion_score is not None:
+        del kwargs["i"]
+        try:
+            open_insertion_score, extend_insertion_score = insertion_score
+        except ValueError:
+            open_insertion_score = extend_insertion_score = insertion_score
+    deletion_score = kwargs.get("d")
+    if deletion_score is not None:
+        del kwargs["d"]
+        try:
+            open_deletion_score, extend_deletion_score = deletion_score
+        except ValueError:
+            open_deletion_score = extend_deletion_score = deletion_score
     aligner = PairwiseAligner(*args, **kwargs)
+    if gap_score is not None:
+        aligner.gap_score = gap_score
+    if open_gap_score is not None:
+        aligner.open_gap_score = open_gap_score
+    if extend_gap_score is not None:
+        aligner.extend_gap_score = extend_gap_score
+    if insertion_score is not None:
+        aligner.open_insertion_score = open_insertion_score
+        aligner.extend_insertion_score = extend_insertion_score
+    if deletion_score is not None:
+        aligner.open_deletion_score = open_deletion_score
+        aligner.extend_deletion_score = extend_deletion_score
     return strand, aligner
 
 
-def align(seqA, seqB, *args, **kwargs):
+def global_align(seqA, seqB, *args, **kwargs):
     """Convenience function for alignments."""
-    strand, aligner = _create_aligner(args, kwargs)
+    strand, aligner = _create_aligner(args, kwargs, "global")
     alignments = aligner.align(seqA, seqB, strand)
     return alignments
 
 
-def score(seqA, seqB, *args, **kwargs):
+def local_align(seqA, seqB, *args, **kwargs):
     """Convenience function to calculate alignment scores."""
-    strand, aligner = _create_aligner(args, kwargs)
-    alignments = aligner.score(seqA, seqB, strand)
+    strand, aligner = _create_aligner(args, kwargs, "local")
+    alignments = aligner.align(seqA, seqB, strand)
     return alignments
 
 
