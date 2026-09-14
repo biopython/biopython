@@ -247,6 +247,85 @@ class TestCompoundLocation(unittest.TestCase):
         loc2 = 5
         self.assertNotEqual(loc1, loc2)
 
+    def test_hash_consistent_with_eq(self):
+        """Test equal locations hash equally, and can be used in a set."""
+        loc1 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
+        loc2 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
+        self.assertEqual(loc1, loc2)
+        self.assertEqual(hash(loc1), hash(loc2))
+
+        loc1 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
+        loc2 = CompoundLocation([SimpleLocation(12, 17, 1), SimpleLocation(23, 42, 1)])
+        self.assertEqual(loc1, loc2)
+        self.assertEqual(hash(loc1), hash(loc2))
+
+        loc1 = CompoundLocation([SimpleLocation(12, 17, 1), SimpleLocation(23, 42, 1)])
+        loc2 = CompoundLocation(
+            [SimpleLocation(12, 17, 1), SimpleLocation(23, 42, 1)], "order"
+        )
+        self.assertNotEqual(loc1, loc2)
+        self.assertNotEqual(hash(loc1), hash(loc2))
+
+        loc1 = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
+        loc2 = SimpleLocation(12, 17, -1) + SimpleLocation(23, 42, -1)
+        self.assertNotEqual(loc1, loc2)
+        self.assertNotEqual(hash(loc1), hash(loc2))
+
+    def test_hash_in_set(self):
+        """Test that equal locations collapse into one entry in a set."""
+        loc_a = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)
+        loc_b = SimpleLocation(12, 17, 1) + SimpleLocation(23, 42, 1)  # equal to loc_a
+        loc_c = (
+            SimpleLocation(12, 17, 1)
+            + SimpleLocation(23, 42, 1)
+            + SimpleLocation(50, 60, 1)
+        )
+
+        locations1 = {loc_a, loc_b, loc_c}
+        locations2 = {loc_c, loc_a, loc_b}
+        self.assertEqual(locations1, locations2)
+        self.assertEqual(hash(frozenset(locations1)), hash(frozenset(locations2)))
+        self.assertEqual(len(locations1), 2)
+        self.assertIn(loc_a, locations1)
+        self.assertIn(loc_c, locations1)
+
+    def test_hash_consistent_with_eq_fuzzy_positions(self):
+        """Test fuzzy positions hash consistently with the equality they satisfy."""
+        # BeforePosition(23) compares equal to plain int 23, so a compound
+        # location built from it should be equal, and hash equal, to one
+        # built from 23.
+        loc1 = SimpleLocation(BeforePosition(23), 42, 1) + SimpleLocation(50, 60, 1)
+        loc2 = SimpleLocation(23, 42, 1) + SimpleLocation(50, 60, 1)
+        self.assertEqual(loc1, loc2)
+        self.assertEqual(hash(loc1), hash(loc2))
+
+        # WithinPosition compares equal based on its integer value alone,
+        # regardless of its left/right fuzziness bounds.
+        loc1 = SimpleLocation(
+            WithinPosition(10, left=10, right=13), 42, 1
+        ) + SimpleLocation(50, 60, 1)
+        loc2 = SimpleLocation(
+            WithinPosition(10, left=8, right=10), 42, 1
+        ) + SimpleLocation(50, 60, 1)
+        self.assertEqual(loc1, loc2)
+        self.assertEqual(hash(loc1), hash(loc2))
+
+    def test_hash_unknown_position(self):
+        """Test UnknownPosition hashes as None, even though instances are not equal."""
+        loc1 = SimpleLocation(UnknownPosition(), 42, 1) + SimpleLocation(50, 60, 1)
+        loc2 = SimpleLocation(UnknownPosition(), 42, 1) + SimpleLocation(50, 60, 1)
+        # UnknownPosition does not define __eq__, so distinct instances
+        # compare by identity, which makes the underlying SimpleLocation
+        # parts (and therefore these CompoundLocation objects) not equal...
+        self.assertNotEqual(loc1, loc2)
+        # ...but UnknownPosition.__hash__ always returns hash(None), so
+        # compound locations built from different UnknownPosition instances
+        # still hash equal. This is a legitimate hash collision (equal
+        # objects must hash equal, but the converse isn't required), so it
+        # should not cause them to collapse in a set.
+        self.assertEqual(hash(loc1), hash(loc2))
+        self.assertEqual(len({loc1, loc2}), 2)
+
 
 class TestSeqFeature(unittest.TestCase):
     """Tests for the SeqFeature.SeqFeature class."""
