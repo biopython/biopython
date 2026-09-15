@@ -15,6 +15,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils import gc_fraction
 from Bio.SeqUtils import GC_skew
+from Bio.SeqUtils import molecular_weight
 from Bio.SeqUtils import seq1
 from Bio.SeqUtils import seq3
 from Bio.SeqUtils.CheckSum import crc32
@@ -403,6 +404,12 @@ TTT	0.886
         self.assertEqual(seq3(s1).upper(), s3.upper())
         self.assertEqual(seq1(seq3(s1)), s1)
         self.assertEqual(seq3(seq1(s3)).upper(), s3.upper())
+
+    def test_molecular_weight_empty_sequence(self):
+        """Test molecular_weight raises ValueError for an empty sequence."""
+        for seq_type in ("DNA", "RNA", "protein"):
+            with self.assertRaises(ValueError):
+                molecular_weight("", seq_type)
 
     def test_lcc_simp(self):
         s = "ACGATAGC"

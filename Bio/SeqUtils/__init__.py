@@ -447,12 +447,23 @@ def molecular_weight(
     >>> print("%0.2f" % molecular_weight("AGC", "protein"))
     249.29
 
+    The molecular weight of an empty sequence is not defined, and raises
+    a ValueError:
+
+    >>> molecular_weight("", "DNA")
+    Traceback (most recent call last):
+        ...
+    ValueError: molecular_weight requires a non-empty sequence
+
     """
     try:
         seq = seq.seq
     except AttributeError:  # not a  SeqRecord object
         pass
     seq = "".join(str(seq).split()).upper()  # Do the minimum formatting
+
+    if not seq:
+        raise ValueError("molecular_weight requires a non-empty sequence")
 
     if seq_type == "DNA":
         if monoisotopic:
