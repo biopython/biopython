@@ -26,7 +26,7 @@ MultipleAlignment  Holds information about a multiple alignment.
 DatabaseReport     Holds information from the database report.
 Parameters         Holds information from the parameters.
 
-You are now encouraged to use the `Bio.BLAST.parse` or function instead.
+You are now encouraged to use the `Bio.BLAST.parse` function instead.
 """
 # XXX finish printable BLAST output
 
