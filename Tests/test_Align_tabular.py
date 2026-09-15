@@ -31,18 +31,18 @@ class TestFastaProtein(unittest.TestCase):
     )
 
     filename = os.path.join("Fasta", "protein_lib.fa")
-    records = SeqIO.parse(filename, "fasta")
-    targets = {record.id: record.seq.upper() for record in records}
+    with SeqIO.parse(filename, "fasta") as records:
+        targets = {record.id: record.seq.upper() for record in records}
 
     def test_m8CB(self):
         # Alignment file obtained by running
         # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
         path = "Fasta/protein_m8CB.txt"
-        alignments = Align.parse(path, "tabular")
-        self.check_m8CB(alignments)
-        alignments = iter(alignments)
-        self.check_m8CB(alignments)
+        with Align.parse(path, "tabular") as alignments:
+            self.check_m8CB(alignments)
+            alignments = iter(alignments)
+            self.check_m8CB(alignments)
         with Align.parse(path, "tabular") as alignments:
             self.check_m8CB(alignments)
         with self.assertRaises(AttributeError):
@@ -53,11 +53,11 @@ class TestFastaProtein(unittest.TestCase):
             alignments._stream
         with open(path) as stream:
             data = stream.read()
-        stream = NamedTemporaryFile("w+t")
-        stream.write(data)
-        stream.seek(0)
-        alignments = Align.parse(stream, "tabular")
-        self.check_m8CB(alignments)
+        with NamedTemporaryFile("w+t") as stream:
+            stream.write(data)
+            stream.seek(0)
+            alignments = Align.parse(stream, "tabular")
+            self.check_m8CB(alignments)
 
     def check_m8CB(self, alignments):
         self.assertEqual(
@@ -1499,7 +1499,10 @@ AlignmentCounts object with
         # fasta36 -q -m 8CB seq/mgstm1.aa seq/prot_test.lseg
         # in the fasta36 source distribution
         path = "Fasta/protein_m8CC.txt"
-        alignments = Align.parse(path, "tabular")
+        with Align.parse(path, "tabular") as alignments:
+            self.check_m8CC(alignments)
+
+    def check_m8CC(self, alignments):
         self.assertEqual(
             alignments.metadata["Command line"],
             "fasta36 -q -m 8CC seq/mgstm1.aa seq/prot_test.lseg",
@@ -2943,15 +2946,18 @@ class TestFastaNucleotide(unittest.TestCase):
     )
 
     filename = os.path.join("Fasta", "nucleotide_lib.fa")
-    records = SeqIO.parse(filename, "fasta")
-    targets = {record.id: record.seq.upper() for record in records}
+    with SeqIO.parse(filename, "fasta") as records:
+        targets = {record.id: record.seq.upper() for record in records}
 
     def test_m8CB(self):
         # Alignment file obtained by running
         # fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib
         # in the fasta36 source distribution
         path = "Fasta/nucleotide_m8CB.txt"
-        alignments = Align.parse(path, "tabular")
+        with Align.parse(path, "tabular") as alignments:
+            self.check_m8CB(alignments)
+
+    def check_m8CB(self, alignments):
         self.assertEqual(
             alignments.metadata["Command line"],
             "fasta36 -m 8CB seq/mgstm1.nt seq/gst.nlib",
@@ -4413,7 +4419,10 @@ AlignmentCounts object with
         # fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib
         # in the fasta36 source distribution
         path = "Fasta/nucleotide_m8CC.txt"
-        alignments = Align.parse(path, "tabular")
+        with Align.parse(path, "tabular") as alignments:
+            self.check_m8CC(alignments)
+
+    def check_m8CC(self, alignments):
         self.assertEqual(
             alignments.metadata["Command line"],
             "fasta36 -m 8CC seq/mgstm1.nt seq/gst.nlib",
