@@ -4614,41 +4614,84 @@ def _create_aligner(args, kwargs, mode):
                 break
         else:
             strand = "+"
-    gap_score = kwargs.get("g")
-    if gap_score is not None:
+    match_score = None
+    mismatch_score = None
+    open_insertion_score = None
+    extend_insertion_score = None
+    open_deletion_score = None
+    extend_deletion_score = None
+    try:
+        match_score = kwargs["m"]
+    except KeyError:
+        pass
+    else:
+        del kwargs["m"]
+        try:
+            match_score, mismatch_score = match_score
+        except ValueError:
+            pass
+    try:
+        gap_score = kwargs["g"]
+    except KeyError:
+        pass
+    else:
         del kwargs["g"]
-    open_gap_score = kwargs.get("o")
-    if open_gap_score is not None:
+        open_insertion_score = gap_score
+        open_deletion_score = gap_score
+        extend_insertion_score = gap_score
+        extend_deletion_score = gap_score
+    try:
+        open_gap_score = kwargs["o"]
+    except KeyError:
+        pass
+    else:
         del kwargs["o"]
-    extend_gap_score = kwargs.get("e")
-    if extend_gap_score is not None:
+        try:
+            open_insertion_score, open_deletion_score = open_gap_score
+        except ValueError:
+            open_insertion_score = open_deletion_score = open_gap_score
+    try:
+        extend_gap_score = kwargs["e"]
+    except KeyError:
+        pass
+    else:
         del kwargs["e"]
-    insertion_score = kwargs.get("i")
-    if insertion_score is not None:
+        try:
+            extend_insertion_score, extend_deletion_score = extend_gap_score
+        except ValueError:
+            extend_insertion_score = extend_deletion_score = extend_gap_score
+    try:
+        insertion_score = kwargs["i"]
+    except KeyError:
+        pass
+    else:
         del kwargs["i"]
         try:
             open_insertion_score, extend_insertion_score = insertion_score
         except ValueError:
             open_insertion_score = extend_insertion_score = insertion_score
-    deletion_score = kwargs.get("d")
-    if deletion_score is not None:
+    try:
+        deletion_score = kwargs["d"]
+    except KeyError:
+        pass
+    else:
         del kwargs["d"]
         try:
             open_deletion_score, extend_deletion_score = deletion_score
         except ValueError:
             open_deletion_score = extend_deletion_score = deletion_score
     aligner = PairwiseAligner(*args, **kwargs)
-    if gap_score is not None:
-        aligner.gap_score = gap_score
-    if open_gap_score is not None:
-        aligner.open_gap_score = open_gap_score
-    if extend_gap_score is not None:
-        aligner.extend_gap_score = extend_gap_score
-    if insertion_score is not None:
+    if match_score is not None:
+        aligner.match_score = match_score
+    if mismatch_score is not None:
+        aligner.mismatch_score = mismatch_score
+    if open_insertion_score is not None:
         aligner.open_insertion_score = open_insertion_score
+    if extend_insertion_score is not None:
         aligner.extend_insertion_score = extend_insertion_score
-    if deletion_score is not None:
+    if open_deletion_score is not None:
         aligner.open_deletion_score = open_deletion_score
+    if extend_deletion_score is not None:
         aligner.extend_deletion_score = extend_deletion_score
     return strand, aligner
 
