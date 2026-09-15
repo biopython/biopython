@@ -85,10 +85,10 @@ Biopython modules, methods, functions
 
 Bio.Blast.NCBIXML
 -----------------
-This older parser stored the alignment in ``Bio.Blast.NCBIXML.Blast``` objects
+This older parser stored the alignment in ``Bio.Blast.NCBIXML.Blast`` objects
 based on the XML tags. As of Biopython 1.84, ``Bio.Blast`` has a new parser
-function `` which instead stores the alignment information like the
- ``Bio.Align.Alignment``` objects, which can then be used to e.g. print the
+function `parse` which instead stores the alignment information like the
+``Bio.Align.Alignment`` objects, which can then be used to e.g. print the
 alignment in a different format. Declared obsolete in release 1.89.
 
 Bio.SeqIO.FastaIO
