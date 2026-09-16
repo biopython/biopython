@@ -598,6 +598,38 @@ class CenterOfMassTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             s.center_of_mass()
 
+    def test_structure_rog(self):
+        """Calculate Structure mass-weighted radius of gyration."""
+        rog = self.structure.radius_of_gyration()
+
+        self.assertAlmostEqual(rog, 13.944, places=3)
+
+    def test_structure_rog_geometric(self):
+        """Calculate Structure geometric radius of gyration."""
+        rog = self.structure.radius_of_gyration(geometric=True)
+
+        self.assertAlmostEqual(rog, 13.729, places=3)
+
+    def test_chain_rog_geometric(self):
+        """Calculate geometric radius of gyration of individual chains."""
+        expected = {"A": 11.279, "B": 12.338, "C": 12.508}
+
+        for chain in self.structure[0].get_chains():  # one model only
+            rog = chain.radius_of_gyration(geometric=True)
+            self.assertAlmostEqual(rog, expected[chain.id], places=3)
+
+    def test_rog_empty_structure(self):
+        """Radius of gyration of empty structure raises ValueError."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            s = self.parser.get_structure("c", "PDB/disordered.pdb")  # smaller
+
+        for child in list(s):
+            s.detach_child(child.id)
+
+        with self.assertRaises(ValueError):
+            s.radius_of_gyration()
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
