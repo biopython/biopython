@@ -35,7 +35,6 @@ import xml.sax
 from xml.sax.handler import ContentHandler
 
 from Bio import BiopythonParserWarning
-
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -84,6 +83,9 @@ class Header:
 
     @property
     def query_letters(self):
+        """Return query_length (DEPRECATED)."""
+        from Bio import BiopythonDeprecationWarning
+
         warnings.warn(
             "query_letters is deprecated; please use query_length instead.",
             BiopythonDeprecationWarning,
@@ -93,6 +95,8 @@ class Header:
 
     @query_letters.setter
     def query_letters(self, value):
+        from Bio import BiopythonDeprecationWarning
+
         warnings.warn(
             "query_letters is deprecated; please use query_length instead.",
             BiopythonDeprecationWarning,
@@ -102,6 +106,9 @@ class Header:
 
     @property
     def database_letters(self):
+        """Return database_length (DEPRECATED)."""
+        from Bio import BiopythonDeprecationWarning
+
         warnings.warn(
             "database_letters is deprecated; please use database_length instead.",
             BiopythonDeprecationWarning,
@@ -111,6 +118,8 @@ class Header:
 
     @database_letters.setter
     def database_letters(self, value):
+        from Bio import BiopythonDeprecationWarning
+
         warnings.warn(
             "database_letters is deprecated; please use database_length instead.",
             BiopythonDeprecationWarning,
@@ -818,7 +827,6 @@ class BlastParser(_XMLparser):
         # Hack to record the claimed database size as database_length
         # (as well as in num_letters_in_database, see Bug 2176 comment 13):
         self._blast.database_length = self._blast.num_letters_in_database
-        
 
         # Hack to record the claimed database sequence count as database_sequences
         self._blast.database_sequences = self._blast.num_sequences_in_database

@@ -274,9 +274,7 @@ class TestQblast(unittest.TestCase):
             # We used a FASTA record as the query
             expected = query[1:].split("\n", 1)[0]
             self.assertEqual(expected, record.query)
-        elif (
-            record.query_id.startswith("Query_") and len(query) == record.query_length
-        ):
+        elif record.query_id.startswith("Query_") and len(query) == record.query_length:
             # We used a sequence as the entry and it was given a placeholder name
             pass
         else:
