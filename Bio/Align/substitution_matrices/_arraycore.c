@@ -179,13 +179,10 @@ static struct PyModuleDef module = {
 PyMODINIT_FUNC
 PyInit__arraycore(void)
 {
-    int result;
     PyObject *basemodule;
     PyObject *baseclass;
-    PyTypeObject* basetype;
-
-    PyObject *mod = PyModule_Create(&module);
-    if (!mod) return NULL;
+    PyObject *mod;
+    PyTypeObject *basetype;
 
     // Import the module containing the base class
     basemodule = PyImport_ImportModule("numpy");
@@ -195,39 +192,65 @@ PyInit__arraycore(void)
     // Get the base class
     baseclass = PyObject_GetAttrString(basemodule, "ndarray");
     Py_DECREF(basemodule);
-    if (!baseclass || !PyType_Check(baseclass)) {
-        Py_XDECREF(basemodule);
+    if (!baseclass) {
+        PyErr_SetString(PyExc_RuntimeError, "Failed to get numpy.ndarray");
+        return NULL;
+    }
+    if (!PyType_Check(baseclass)) {
+        Py_DECREF(baseclass);
         PyErr_SetString(PyExc_RuntimeError, "Failed to get numpy.ndarray");
         return NULL;
     }
 
     basetype = (PyTypeObject *)baseclass;
     if (!(basetype->tp_flags & Py_TPFLAGS_BASETYPE)) {
+        Py_DECREF(baseclass);
         PyErr_SetString(PyExc_RuntimeError,
                         "numpy ndarray class is not subclassable");
         return NULL;
     }
     if (basetype->tp_itemsize != 0) {
+        Py_DECREF(baseclass);
         PyErr_Format(PyExc_RuntimeError,
                      "expected numpy arrays to have tp_itemsize 0 (found %zd)",
                      basetype->tp_itemsize);
         return NULL;
     }
     if (!basetype->tp_new) {
+        Py_DECREF(baseclass);
         PyErr_SetString(PyExc_RuntimeError,
                         "numpy ndarray class does not have tp_new");
+        return NULL;
+    }
+    if (Array_Type.tp_dict != NULL &&
+        !(Array_Type.tp_flags & Py_TPFLAGS_READY)) {
+        Py_DECREF(baseclass);
+        PyErr_SetString(PyExc_RuntimeError,
+                        "Array type initialization previously failed");
         return NULL;
     }
 
     Array_Type.tp_basicsize = basetype->tp_basicsize + sizeof(Fields);
     Array_Type.tp_base = (PyTypeObject *)baseclass;
 
-    if (PyType_Ready(&Array_Type) < 0)
+    mod = PyModule_Create(&module);
+    if (!mod) {
+        Array_Type.tp_base = NULL;
+        Py_DECREF(baseclass);
         return NULL;
+    }
 
-    result = PyModule_AddObjectRef(mod, "Array", (PyObject*)&Array_Type);
-    Py_DECREF(&Array_Type);
-    if (result == -1) {
+    if (PyType_Ready(&Array_Type) < 0) {
+        if (Array_Type.tp_bases == NULL) {
+            Array_Type.tp_base = NULL;
+        }
+        Py_DECREF(baseclass);
+        Py_DECREF(mod);
+        return NULL;
+    }
+    Py_DECREF(baseclass);
+
+    if (PyModule_AddObjectRef(mod, "Array", (PyObject *)&Array_Type) < 0) {
         Py_DECREF(mod);
         return NULL;
     }
