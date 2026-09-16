@@ -123,9 +123,7 @@ class QCPSuperimposerTest(unittest.TestCase):
         theta = 0.9
         ax = np.array([1.0, 2.0, 3.0])
         ax = ax / np.linalg.norm(ax)
-        k = np.array(
-            [[0.0, -ax[2], ax[1]], [ax[2], 0.0, -ax[0]], [-ax[1], ax[0], 0.0]]
-        )
+        k = np.array([[0.0, -ax[2], ax[1]], [ax[2], 0.0, -ax[0]], [-ax[1], ax[0], 0.0]])
         rot = np.eye(3) + np.sin(theta) * k + (1.0 - np.cos(theta)) * k @ k
         mob = ref @ rot.T + np.array([5.0, -2.0, 7.0])
 
