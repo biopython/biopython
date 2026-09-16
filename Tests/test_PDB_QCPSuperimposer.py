@@ -117,6 +117,27 @@ class QCPSuperimposerTest(unittest.TestCase):
             np.allclose(svd_sup.get_transformed(), sup.get_transformed(), atol=1e-3)
         )
 
+    def test_collinear_reference_transformed_rmsd(self):
+        """Align a rotated copy of collinear points; do not return I."""
+        ref = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [2.0, 0.0, 0.0]])
+        theta = 0.9
+        ax = np.array([1.0, 2.0, 3.0])
+        ax = ax / np.linalg.norm(ax)
+        k = np.array(
+            [[0.0, -ax[2], ax[1]], [ax[2], 0.0, -ax[0]], [-ax[1], ax[0], 0.0]]
+        )
+        rot = np.eye(3) + np.sin(theta) * k + (1.0 - np.cos(theta)) * k @ k
+        mob = ref @ rot.T + np.array([5.0, -2.0, 7.0])
+
+        sup = QCPSuperimposer()
+        sup.set(ref, mob)
+        sup.run()
+        fitted = sup.get_transformed()
+        rms_fitted = np.sqrt(((ref - fitted) ** 2).sum() / ref.shape[0])
+        self.assertFalse(np.allclose(sup.rot, np.eye(3)))
+        self.assertAlmostEqual(rms_fitted, 0.0, places=12)
+        self.assertTrue(np.allclose(fitted, ref, atol=1e-12))
+
     def test_get_transformed(self):
         """Test transformation of coordinates after QCP."""
         sup = QCPSuperimposer()
