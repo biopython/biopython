@@ -114,7 +114,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 line = "\t".join(fields) + "\n"
                 stream.write(line)
 
-    def format_alignment(self, alignment, md=None):
+    def format_alignment(self, alignment, md=None, tlen=None):
         """Return a string with a single alignment formatted as one SAM line."""
         if not isinstance(alignment, Alignment):
             raise TypeError("Expected an Alignment object")
@@ -242,7 +242,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             pnext = 0
         else:
             pnext += 1  # 1-based coordinates
-        tLen = 0
+        if tlen is None:
+            try:
+                tlen = alignment.tlen
+            except AttributeError:
+                tlen = 0
         fields = [
             qName,
             str(flag),
@@ -252,7 +256,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             cigar,
             rnext,
             str(pnext),
-            str(tLen),
+            str(tlen),
             query,
             qual,
         ]
@@ -367,6 +371,83 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 fields.append(field)
         line = "\t".join(fields) + "\n"
         return line
+
+    def write_alignments(self, stream, alignments):
+        """Write alignments to the output file, and return the number of alignments."""
+        if not isinstance(alignments, (list, tuple)):
+            return super().write_alignments(stream, alignments)
+        tlens = self._calculate_tlens(alignments)
+        for index, alignment in enumerate(alignments):
+            line = self.format_alignment(alignment, tlen=tlens.get(index))
+            stream.write(line)
+        return len(alignments)
+
+    def _calculate_tlens(self, alignments):
+        """Calculate TLEN values for paired alignments."""
+        records = {}
+        tlens = {}
+        for index, alignment in enumerate(alignments):
+            if hasattr(alignment, "tlen"):
+                continue
+            record = self._get_tlen_record(alignment)
+            if record is None:
+                continue
+            qname, rname, pnext, t_start, t_end = record
+            records.setdefault(qname, []).append((index, rname, pnext, t_start, t_end))
+        for records_by_qname in records.values():
+            if len(records_by_qname) != 2:
+                continue
+            record1, record2 = records_by_qname
+            index1, rname1, pnext1, start1, end1 = record1
+            index2, rname2, pnext2, start2, end2 = record2
+            if rname1 != rname2 or pnext1 != start2 or pnext2 != start1:
+                continue
+            tlen = max(end1, end2) - min(start1, start2)
+            if tlen == 0:
+                continue
+            if start1 < start2 or (start1 == start2 and end1 <= end2):
+                tlens[index1] = tlen
+                tlens[index2] = -tlen
+            else:
+                tlens[index1] = -tlen
+                tlens[index2] = tlen
+        return tlens
+
+    def _get_tlen_record(self, alignment):
+        """Return the information needed to calculate TLEN for an alignment."""
+        try:
+            flag = alignment.flag
+        except AttributeError:
+            return None
+        if not flag & 0x1 or flag & (0x4 | 0x8 | 0x100 | 0x800):
+            return None
+        try:
+            pnext = alignment.pnext
+        except AttributeError:
+            return None
+        if pnext < 0:
+            return None
+        try:
+            target, query = alignment.sequences
+            qname = query.id
+            rname = target.id
+        except AttributeError:
+            return None
+        try:
+            rnext = alignment.rnext
+        except AttributeError:
+            return None
+        if rnext not in ("=", rname):
+            return None
+        coordinates = alignment.coordinates
+        if coordinates is None:
+            return None
+        t_coordinates = coordinates[0, :]
+        t_start = min(t_coordinates)
+        t_end = max(t_coordinates)
+        if t_start == t_end:
+            return None
+        return qname, rname, pnext, t_start, t_end
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):

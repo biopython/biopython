@@ -8534,6 +8534,53 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(n, 200)
 
 
+class TestAlign_tlen(unittest.TestCase):
+    def test_preserve_tlen(self):
+        """Test writing an explicit TLEN value."""
+        target = SeqRecord(Seq("N" * 100), id="target")
+        query = SeqRecord(Seq("ATGCATGCAT"), id="read")
+        coordinates = np.array([[10, 20], [0, 10]])
+        alignment = Alignment([target, query], coordinates)
+        alignment.flag = 99
+        alignment.rnext = "target"
+        alignment.pnext = 30
+        alignment.tlen = 30
+        self.assertEqual(
+            alignment.format("sam"),
+            "read\t99\ttarget\t11\t255\t10M\t=\t31\t30\tATGCATGCAT\t*\n",
+        )
+
+    def test_calculate_tlen(self):
+        """Test calculating TLEN for paired alignments."""
+        target = SeqRecord(Seq("N" * 100), id="target")
+        query1 = SeqRecord(Seq("ATGCATGCAT"), id="read")
+        query2 = SeqRecord(Seq("ATGCATGCAT"), id="read")
+        coordinates1 = np.array([[10, 20], [0, 10]])
+        coordinates2 = np.array([[30, 40], [10, 0]])
+        alignment1 = Alignment([target, query1], coordinates1)
+        alignment1.flag = 99
+        alignment1.rnext = "target"
+        alignment1.pnext = 30
+        alignment2 = Alignment([target, query2], coordinates2)
+        alignment2.flag = 147
+        alignment2.rnext = "target"
+        alignment2.pnext = 10
+        stream = StringIO()
+        n = Align.write([alignment1, alignment2], stream, "sam")
+        self.assertEqual(n, 2)
+        self.assertEqual(
+            stream.getvalue(),
+            "read\t99\ttarget\t11\t255\t10M\t=\t31\t30\tATGCATGCAT\t*\n"
+            "read\t147\ttarget\t31\t255\t10M\t=\t11\t-30\tATGCATGCAT\t*\n",
+        )
+        stream.seek(0)
+        alignments = Align.parse(stream, "sam")
+        alignment1 = next(alignments)
+        alignment2 = next(alignments)
+        self.assertEqual(alignment1.tlen, 30)
+        self.assertEqual(alignment2.tlen, -30)
+
+
 class TestAlign_clipping(unittest.TestCase):
     def test_6M(self):
         """Test alignment starting at non-zero position."""
