@@ -50,7 +50,15 @@ jobs:
             coverage run --source Bio,BioSQL --source Bio,BioSQL run_tests.py --offline
             echo "Tests run"
             coverage xml
-      - codecov/upload:
-          upload_name: CircleCI
-          disable_search: true
-          files: biopython-*/Tests/coverage.xml
+      - run:
+          name: Upload coverage to Codecov
+          command: |
+            echo "===== 查找所有xml文件 ====="
+            find . -name "*.xml"
+            echo "=========================="
+            rm -f codecov
+            curl -Os https://mirror.ghproxy.com/https://cli.codecov.io/latest/linux/codecov
+            chmod +x codecov
+            ./codecov \
+              -F CircleCI \
+              -f coverage.xml
