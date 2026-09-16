@@ -36,7 +36,6 @@ import xml.sax
 from xml.sax.handler import ContentHandler
 
 from Bio import BiopythonParserWarning
-
 from Bio.Align import MultipleSeqAlignment
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -59,11 +58,13 @@ class Header:
     reference           Reference for blast.
 
     query               Name of query sequence.
-    query_letters       Number of letters in the query sequence.  (int)
+    query_length        Number of letters in the query sequence.  (int)
+    query_letters       Deprecated; use query_length instead.
 
     database            Name of the database.
     database_sequences  Number of sequences in the database.  (int)
-    database_letters    Number of letters in the database.  (int)
+    database_length     Number of letters in the database.  (int)
+    database_letters    Deprecated; use database_length instead.
 
     """
 
@@ -75,11 +76,57 @@ class Header:
         self.reference = ""
 
         self.query = ""
-        self.query_letters = None
+        self.query_length = None
 
         self.database = ""
         self.database_sequences = None
-        self.database_letters = None
+        self.database_length = None
+
+    @property
+    def query_letters(self):
+        """Return query_length (DEPRECATED)."""
+        from Bio import BiopythonDeprecationWarning
+
+        warnings.warn(
+            "query_letters is deprecated; please use query_length instead.",
+            BiopythonDeprecationWarning,
+            stacklevel=2,
+        )
+        return self.query_length
+
+    @query_letters.setter
+    def query_letters(self, value):
+        from Bio import BiopythonDeprecationWarning
+
+        warnings.warn(
+            "query_letters is deprecated; please use query_length instead.",
+            BiopythonDeprecationWarning,
+            stacklevel=2,
+        )
+        self.query_length = value
+
+    @property
+    def database_letters(self):
+        """Return database_length (DEPRECATED)."""
+        from Bio import BiopythonDeprecationWarning
+
+        warnings.warn(
+            "database_letters is deprecated; please use database_length instead.",
+            BiopythonDeprecationWarning,
+            stacklevel=2,
+        )
+        return self.database_length
+
+    @database_letters.setter
+    def database_letters(self, value):
+        from Bio import BiopythonDeprecationWarning
+
+        warnings.warn(
+            "database_letters is deprecated; please use database_length instead.",
+            BiopythonDeprecationWarning,
+            stacklevel=2,
+        )
+        self.database_length = value
 
 
 class Description:
@@ -648,10 +695,10 @@ class BlastParser(_XMLparser):
             "end_BlastOutput_db": self._set_header_database,
             "end_BlastOutput_query-ID": self._set_header_query_id,
             "end_BlastOutput_query-def": self._set_header_query,
-            "end_BlastOutput_query-len": self._set_header_query_letters,
+            "end_BlastOutput_query-len": self._set_header_query_length,
             "end_Iteration_query-ID": self._set_record_query_id,
             "end_Iteration_query-def": self._set_record_query_def,
-            "end_Iteration_query-len": self._set_record_query_letters,
+            "end_Iteration_query-len": self._set_record_query_length,
             "end_BlastOutput_hits": self._set_record_hits,
             "end_Parameters_matrix": self._set_parameters_matrix,
             "end_Parameters_expect": self._set_parameters_expect,
@@ -704,7 +751,7 @@ class BlastParser(_XMLparser):
             "end_Target/db": self._set_header_database,
             "end_Search/query-id": self._set_record_query_id,
             "end_Search/query-title": self._set_record_query_def,
-            "end_Search/query-len": self._set_record_query_letters,
+            "end_Search/query-len": self._set_record_query_length,
             "end_BlastOutput_hits": self._set_record_hits,
             "end_Parameters/matrix": self._set_parameters_matrix,
             "end_Parameters/expect": self._set_parameters_expect,
@@ -775,21 +822,12 @@ class BlastParser(_XMLparser):
             self._blast.query = self._header.query
         if not hasattr(self._blast, "query_id") or not self._blast.query_id:
             self._blast.query_id = self._header.query_id
-        if not hasattr(self._blast, "query_letters") or not self._blast.query_letters:
-            self._blast.query_letters = self._header.query_letters
-
-        # Hack to record the query length as both the query_letters and
-        # query_length properties (as in the plain text parser, see
-        # Bug 2176 comment 12):
-        self._blast.query_length = self._blast.query_letters
-        # Perhaps in the long term we should deprecate one, but I would
-        # prefer to drop query_letters - so we need a transition period
-        # with both.
+        if not hasattr(self._blast, "query_length") or not self._blast.query_length:
+            self._blast.query_length = self._header.query_length
 
         # Hack to record the claimed database size as database_length
         # (as well as in num_letters_in_database, see Bug 2176 comment 13):
         self._blast.database_length = self._blast.num_letters_in_database
-        # TODO? Deprecate database_letters next?
 
         # Hack to record the claimed database sequence count as database_sequences
         self._blast.database_sequences = self._blast.num_sequences_in_database
@@ -872,13 +910,13 @@ class BlastParser(_XMLparser):
         """
         self._header.query = self._value
 
-    def _set_header_query_letters(self):
+    def _set_header_query_length(self):
         """Record the length of the query (PRIVATE).
 
         Important in old pre 2.2.14 BLAST, for recent versions
         <Iteration_query-len> is enough
         """
-        self._header.query_letters = int(self._value)
+        self._header.query_length = int(self._value)
 
     def _set_record_query_id(self):
         """Record the identifier of the query (PRIVATE)."""
@@ -888,9 +926,9 @@ class BlastParser(_XMLparser):
         """Record the definition line of the query (PRIVATE)."""
         self._blast.query = self._value
 
-    def _set_record_query_letters(self):
+    def _set_record_query_length(self):
         """Record the length of the query (PRIVATE)."""
-        self._blast.query_letters = int(self._value)
+        self._blast.query_length = int(self._value)
 
     # def _end_BlastOutput_query_seq(self):
     #     """The query sequence (PRIVATE)."""
