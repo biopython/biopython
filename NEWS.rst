@@ -18,6 +18,11 @@ Python 3.15 release candidate. It has also been tested on PyPy3.10 v7.3.19, as
 well as Python 3.11+ on Windows for ARM64. Python 3.10 is approaching end of
 life, our support for it is now deprecated.
 
+Biopython has adopted an explicit **No AI** policy, rejecting changes written
+using large language models (LLM) or generative artificial intelligence
+(GenAI) like Claude, or ChatGPT. Please see our ``CONTRIBUTING.rst`` file for
+full details.
+
 6 August 2026: Biopython 1.88
 =============================
 
