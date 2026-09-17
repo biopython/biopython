@@ -46,6 +46,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Antonio Trande <https://github.com/sagitter>
 - Antony Lee <https://github.com/anntzer>
 - Anuj Sharma <https://github.com/xulesc>
+- Arata Synqa Bando <https://github.com/synqa>
 - Ariel Aptekmann <https://github.com/aralap>
 - Arpan Sahoo <https://github.com/arpansahoo>
 - Artemi Bendandi <https://github.com/artbendandi>
