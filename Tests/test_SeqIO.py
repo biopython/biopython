@@ -3708,6 +3708,7 @@ class TestSeqIO(SeqIOTestBaseClass):
             alignment,
             messages,
         )
+
     def test_embl_date(self):
         """Test parsing DT lines in EMBL records."""
         text = """ID   TEST; SV 1; linear; DNA; STD; PLN; 4 BP.
