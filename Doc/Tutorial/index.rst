@@ -19,7 +19,6 @@ This is from Biopython |version|.
    chapter_align
    chapter_pairwise
    chapter_msa
-   chapter_pairwise2
    chapter_blast
    chapter_searchio
    chapter_entrez
