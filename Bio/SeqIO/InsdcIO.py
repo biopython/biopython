@@ -1291,15 +1291,30 @@ class EmblWriter(_InsdcWriter):
         mol_type = record.annotations.get("molecule_type")
         if mol_type is None:
             raise ValueError("missing molecule_type in annotations")
+        # Valid /mol_type values are defined by the INSDC Feature Table Definition,
+        # version 11.3 (October 2024):
+        # https://ftp.ebi.ac.uk/pub/databases/embl/doc/FT_current.txt
         if mol_type not in (
-            "DNA",
             "genomic DNA",
+            "genomic RNA",
             "unassigned DNA",
+            "unassigned RNA",
             "mRNA",
-            "RNA",
-            "protein",
+            "tRNA",
+            "rRNA",
+            "other RNA",
+            "other DNA",
+            "transcribed RNA",
+            "viral cRNA",
         ):
-            warnings.warn(f"Non-standard molecule type: {mol_type}", BiopythonWarning)
+            warnings.warn(
+                f"Non-standard molecule type: {mol_type}. The valid values are based "
+                "on the INSDC Feature Table Definition, version 11.3 (October 2024): "
+                "https://ftp.ebi.ac.uk/pub/databases/embl/doc/FT_current.txt. If the "
+                "list has changed, please report it at "
+                "https://github.com/biopython/biopython/issues.",
+                BiopythonWarning,
+            )
         mol_type_upper = mol_type.upper()
         if "DNA" in mol_type_upper:
             units = "BP"
