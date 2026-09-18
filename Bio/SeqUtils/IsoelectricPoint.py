@@ -134,7 +134,7 @@ class IsoelectricPoint:
 
     # This is the action function, it tries different pH until the charge of
     # the protein is 0 (or close).
-    def pi(self, pH=7.775, min_=4.05, max_=12):
+    def pi(self, pH=7.775, min_=0.0, max_=14.0):
         r"""Calculate and return the isoelectric point as float.
 
         This is a recursive function that uses bisection method.
@@ -143,12 +143,13 @@ class IsoelectricPoint:
         Arguments:
          - pH: the pH at which the current charge of the protein is computed.
            This pH lies at the centre of the interval (mean of `min_` and `max_`).
-         - min\_: the minimum of the interval. Initial value defaults to 4.05,
-           which is below the theoretical minimum, when the protein is composed
-           exclusively of aspartate.
-         - max\_: the maximum of the the interval. Initial value defaults to 12,
-           which is above the theoretical maximum, when the protein is composed
-           exclusively of arginine.
+         - min\_: the minimum of the interval.  The initial value is 0.0, which
+           is below the lowest plausible isoelectric point (a poly-aspartate
+           sequence has pI ~ 2.77, see issue #5312).  Values below zero are
+           numerically safe for ``charge_at_pH`` but biochemically meaningless.
+         - max\_: the maximum of the interval.  The initial value is 14.0, above
+           the highest plausible isoelectric point (a poly-arginine sequence
+           has pI ~ 12.0).
         """
         charge = self.charge_at_pH(pH)
         if max_ - min_ > 0.0001:

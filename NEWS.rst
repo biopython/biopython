@@ -18,6 +18,14 @@ Python 3.15 release candidate. It has also been tested on PyPy3.10 v7.3.19, as
 well as Python 3.11+ on Windows for ARM64. Python 3.10 is approaching end of
 life, our support for it is now deprecated.
 
+Fix ``IsoelectricPoint.pi()`` returning a pH at the bracket boundary
+with a large residual charge for strongly-charged homopolymer
+sequences (issue #5312).  The previous bracket ``[4.05, 12]`` excluded
+the true root for sequences such as poly-aspartate (pI ~ 2.77) or
+poly-arginine (pI ~ 13.0).  The bracket is widened to ``[0.0, 14.0]``,
+which covers every biochemically meaningful isoelectric point while
+remaining numerically safe for ``charge_at_pH``.
+
 6 August 2026: Biopython 1.88
 =============================
 
