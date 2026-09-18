@@ -26,6 +26,32 @@ import numpy as np
 from Bio.PDB.PDBExceptions import PDBException
 
 
+def _is_reference_degenerate(coords_ref_centered, tol=1e-10):
+    """Return True if the centered reference points span less than 3D.
+
+    The QCP Kabsch eigensolver used internally assumes the centered
+    reference set is full-rank (rank 3).  When the points are collinear
+    (rank 1) or coplanar (rank 2), the largest eigenvalue of the
+    covariance matrix is degenerate and the algorithm can return the
+    identity rotation while reporting an RMS of ~0, leaving the actual
+    transformed coordinates misaligned (issue #5309, related to #5004).
+    ``SVDSuperimposer`` handles these cases correctly, so callers in
+    this module route degenerate inputs through it instead.
+
+    The check is the SVD of the centered reference; ``tol`` is scaled
+    by the largest singular value so the tolerance tracks the scale of
+    the input.
+    """
+    if coords_ref_centered.shape[0] < 3:
+        return True
+    sv = np.linalg.svd(coords_ref_centered, compute_uv=False)
+    if sv[0] == 0.0:
+        # All points coincide; nothing to align.
+        return True
+    cutoff = tol * sv[0]
+    return (sv >= cutoff).sum() < 3
+
+
 def qcp(coords1, coords2, natoms):
     """Implement the QCP code in Python.
 
@@ -324,6 +350,25 @@ class QCPSuperimposer:
 
         coords -= com_coords
         coords_ref -= com_ref
+
+        # The Kabsch quaternion eigensolver below assumes the centered
+        # reference has rank 3.  On a collinear (rank 1) reference the
+        # largest eigenvalue is degenerate and the algorithm returns an
+        # identity rotation while reporting RMSD ~ 0 -- see issue #5309.
+        # SVDSuperimposer handles these degenerate cases correctly, so
+        # route them through it.  Performance for the common full-rank
+        # case is unchanged.
+        if _is_reference_degenerate(coords_ref):
+            from Bio.SVDSuperimposer import SVDSuperimposer
+
+            svd = SVDSuperimposer()
+            svd.set(self.reference_coords, self.coords)
+            svd.run()
+            # SVDSuperimposer computes rms lazily via get_rms().
+            self.rms = svd.get_rms()
+            self.rot = svd.rot
+            self.tran = svd.tran
+            return
 
         (self.rms, self.rot, _) = qcp(coords_ref, coords, self._natoms)
         self.tran = com_ref - np.dot(com_coords, self.rot)

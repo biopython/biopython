@@ -179,6 +179,134 @@ class QCPSuperimposerTest(unittest.TestCase):
         rms_fitted = np.sqrt(((ref - mob_fitted) ** 2).sum() / ref.shape[0])
         self.assertAlmostEqual(rms, rms_fitted, places=6)
 
+    # Tests for issue #5309: collinear / rank-deficient reference
+    # coordinates produced a wrong rotation while reporting RMSD ~ 0.
+    # The fix routes degenerate reference sets through SVDSuperimposer.
+
+    def _random_rigid_transform(self, rng):
+        """Return (rotation, translation) suitable for testing."""
+        axis = rng.normal(size=3)
+        axis /= np.linalg.norm(axis)
+        theta = rng.uniform(0.0, np.pi)
+        K = np.array(
+            [
+                [0.0, -axis[2], axis[1]],
+                [axis[2], 0.0, -axis[0]],
+                [-axis[1], axis[0], 0.0],
+            ]
+        )
+        rot = np.eye(3) + np.sin(theta) * K + (1.0 - np.cos(theta)) * (K @ K)
+        tran = rng.normal(scale=10.0, size=3)
+        return rot, tran
+
+    def test_collinear_reference(self):
+        """Collinear reference must not produce a wrong rotation (#5309)."""
+        rng = np.random.default_rng(2026)
+        rot, tran = self._random_rigid_transform(rng)
+        ref = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [2.0, 0.0, 0.0]])
+        mob = ref @ rot.T + tran
+
+        sup = QCPSuperimposer()
+        sup.set(ref, mob)
+        sup.run()
+
+        # The reported RMSD must match the true residual RMSD of the
+        # transformed coordinates -- the bug was RMSD ~ 0 while the
+        # actual alignment was off.
+        transformed = sup.get_transformed()
+        true_rmsd = np.sqrt(((ref - transformed) ** 2).sum() / ref.shape[0])
+        self.assertAlmostEqual(sup.rms, true_rmsd, places=10)
+        self.assertLess(true_rmsd, 1e-9)
+
+        # Should agree with SVDSuperimposer on this degenerate input.
+        svd_sup = SVDSuperimposer()
+        svd_sup.set(ref, mob)
+        svd_sup.run()
+        self.assertAlmostEqual(svd_sup.get_rms(), sup.rms, places=10)
+
+    def test_collinear_reference_off_axis(self):
+        """Collinear reference along a non-axis direction (#5309)."""
+        rng = np.random.default_rng(2027)
+        rot, tran = self._random_rigid_transform(rng)
+        # Direction (1, 2, 3), normalised.
+        d = np.array([1.0, 2.0, 3.0])
+        d /= np.linalg.norm(d)
+        ref = np.stack([np.zeros(3), d, 2.0 * d])
+        mob = ref @ rot.T + tran
+
+        sup = QCPSuperimposer()
+        sup.set(ref, mob)
+        sup.run()
+
+        transformed = sup.get_transformed()
+        true_rmsd = np.sqrt(((ref - transformed) ** 2).sum() / ref.shape[0])
+        self.assertAlmostEqual(sup.rms, true_rmsd, places=10)
+        self.assertLess(true_rmsd, 1e-9)
+
+    def test_coplanar_reference_unchanged(self):
+        """Coplanar (rank 2) reference must still align correctly."""
+        rng = np.random.default_rng(2028)
+        rot, tran = self._random_rigid_transform(rng)
+        ref = np.array(
+            [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0]]
+        )
+        mob = ref @ rot.T + tran
+
+        sup = QCPSuperimposer()
+        sup.set(ref, mob)
+        sup.run()
+        true_rmsd = np.sqrt(((ref - sup.get_transformed()) ** 2).sum() / 4)
+        self.assertLess(true_rmsd, 1e-9)
+
+    def test_coincident_points(self):
+        """All reference points identical -> degenerate, no crash."""
+        ref = np.zeros((3, 3))
+        mob = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
+
+        sup = QCPSuperimposer()
+        sup.set(ref, mob)
+        # run() should not raise; result is degenerate but well-defined.
+        sup.run()
+        self.assertIsNotNone(sup.rot)
+        self.assertIsNotNone(sup.tran)
+
+    def test_full_rank_reference_unchanged(self):
+        """Full-rank reference still uses the fast QCP path (no regression).
+
+        We check that QCP and SVDSuperimposer agree on the existing
+        well-conditioned 4-point fixture, and on 50 random rigid
+        rotations to guard against any regression in the common path.
+        """
+        # Existing fixture: must match SVDSuperimposer to 1e-3.
+        sup = QCPSuperimposer()
+        sup.set(self.x, self.y)
+        sup.run()
+        svd_sup = SVDSuperimposer()
+        svd_sup.set(self.x, self.y)
+        svd_sup.run()
+        self.assertAlmostEqual(svd_sup.get_rms(), sup.rms, places=3)
+        self.assertTrue(np.allclose(svd_sup.rot, sup.rot, atol=1e-3))
+
+        # Random regression sweep: QCP and SVD must agree on
+        # well-conditioned inputs.  QCP is a closed-form quaternion
+        # solver with ~1e-8 relative error per call, so we don't
+        # tighten past 1e-6.
+        rng = np.random.default_rng(2029)
+        ref = rng.normal(size=(20, 3))
+        for _ in range(50):
+            rot, tran = self._random_rigid_transform(rng)
+            mob = ref @ rot.T + tran
+
+            q = QCPSuperimposer()
+            q.set(ref, mob)
+            q.run()
+            s = SVDSuperimposer()
+            s.set(ref, mob)
+            s.run()
+            self.assertAlmostEqual(q.rms, s.get_rms(), places=6)
+            self.assertTrue(np.allclose(q.rot, s.rot, atol=1e-6))
+            self.assertTrue(np.allclose(q.tran, s.tran, atol=1e-6))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

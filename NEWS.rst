@@ -18,6 +18,18 @@ Python 3.15 release candidate. It has also been tested on PyPy3.10 v7.3.19, as
 well as Python 3.11+ on Windows for ARM64. Python 3.10 is approaching end of
 life, our support for it is now deprecated.
 
+Fix QCPSuperimposer returning a wrong rotation when the reference point
+set is collinear (rank 1) -- a case the Kabsch eigensolver in
+``Bio.PDB.qcprot`` did not handle.  The coplanar (rank 2) case was
+already fixed by an earlier change; this release closes the rank-1
+gap.  When the centered reference points span fewer than three
+dimensions, the algorithm previously returned an identity rotation
+while reporting RMSD ~ 0, leaving the transformed coordinates
+misaligned.  The fix detects rank deficiency via an SVD on the
+centered reference and routes degenerate inputs through
+``SVDSuperimposer``, which already handles these cases correctly.
+The common full-rank case is unchanged.
+
 6 August 2026: Biopython 1.88
 =============================
 
