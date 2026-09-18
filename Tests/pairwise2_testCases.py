@@ -129,7 +129,7 @@ GA--T
         # Note that the PairwiseAligner defaults to gap_score = -1.0,
         # while pairwise2 defaults to a zero gap score, so we need to
         # set gap_score explicitly here.
-        alignments = Align.global_align("GAACT", "GAT", gap_score=0.0)
+        alignments = Align.global_align("GAACT", "GAT", g=0.0)  # gap_score
         self.assertEqual(len(alignments), 2)
         self.assertAlmostEqual(alignments.score, 3.0)
         self.assertAlmostEqual(alignments[0].score, 3.0)
@@ -182,7 +182,7 @@ GAACT
         # Note that the PairwiseAligner defaults to gap_score = -1.0,
         # while pairwise2 defaults to a zero gap score, so we need to
         # set gap_score explicitly here.
-        alignments = Align.global_align("GAT", "GAACT", gap_score=0.0)
+        alignments = Align.global_align("GAT", "GAACT", g=0.0)  # gap_score
         self.assertEqual(len(alignments), 2)
         self.assertAlmostEqual(alignments.score, 3.0)
         self.assertAlmostEqual(alignments[0].score, 3.0)
@@ -226,7 +226,9 @@ query             0 GAACT 5
         # while pairwise2 defaults to a zero gap score, so we need to
         # set gap_score explicitly here.
         alignments = Align.global_align(
-            ["Gly", "Ala", "Thr"], ["Gly", "Ala", "Ala", "Cys", "Thr"], gap_score=0.0
+            ["Gly", "Ala", "Thr"],
+            ["Gly", "Ala", "Ala", "Cys", "Thr"],
+            g=0.0,  # gap_score
         )
         self.assertEqual(len(alignments), 2)
         self.assertEqual(alignments.score, 3.0)
@@ -264,7 +266,7 @@ class TestPairwiseLocal(unittest.TestCase):
 """,
         )
         # Same alignments, now using Bio.Align.
-        alignments = Align.local_align("AxBx", "zABz", open_gap_score=-0.1)
+        alignments = Align.local_align("AxBx", "zABz", o=-0.1)  # open_gap_score
         self.assertEqual(len(alignments), 1)
         self.assertEqual(alignments.score, 1.9)
         self.assertEqual(
@@ -296,7 +298,7 @@ zA-Bz
 """,  # noqa: W291
         )
         # Same alignments, now using Bio.Align.
-        alignments = Align.local_align("AxBx", "zABz", open_gap_score=-0.1)
+        alignments = Align.local_align("AxBx", "zABz", o=-0.1)  # open_gap_score
         self.assertEqual(len(alignments), 1)
         self.assertEqual(alignments.score, 1.9)
         alignment = alignments[0]
@@ -323,17 +325,17 @@ query             0 zA-Bz 4
         alignments1 = Align.local_align(
             "CWHISLKM",
             "CWHGISGLKM",
-            substitution_matrix=self.blosum62,
-            open_gap_score=-11,
-            extend_gap_score=-1,
+            s=self.blosum62,  # substitution_matrix
+            o=-11,  # open_gap_score
+            x=-1,  # extend_gap_score
         )
         self.assertEqual(len(alignments1), len(aligns1))
         alignments2 = Align.local_align(
             "MKLSIHWC",
             "MKLGSIGHWC",
-            substitution_matrix=self.blosum62,
-            open_gap_score=-11,
-            extend_gap_score=-1,
+            s=self.blosum62,  # substitution_matrix
+            o=-11,  # open_gap_score
+            x=-1,  # extend_gap_score
         )
         self.assertEqual(len(alignments2), len(aligns2))
 
@@ -357,7 +359,7 @@ query             0 zA-Bz 4
 """,
         )
         # Same alignments, now using Bio.Align.
-        alignments = Align.local_align("AxBx", "zABz", open_gap_score=-0.1)
+        alignments = Align.local_align("AxBx", "zABz", o=-0.1)  # open_gap_score
         self.assertEqual(len(alignments), 1)
         self.assertEqual(alignments.score, 1.9)
         self.assertEqual(
@@ -398,10 +400,9 @@ query             1 A-B 3
         alignments = Align.local_align(
             "xxxABCDxxx",
             "zzzABzzCDz",
-            match_score=1.0,
-            mismatch_score=-0.5,
-            open_gap_score=-3,
-            extend_gap_score=-1,
+            m=(1.0, -0.5),  # match_score, mismatch_score
+            o=-3,  # open_gap_score
+            x=-1,  # extend_gap_score
         )
         self.assertEqual(len(alignments), 2)
         self.assertEqual(alignments.score, 2.0)
@@ -438,9 +439,9 @@ query             7 CD 9
         alignments = Align.local_align(
             "VKAHGKKV",
             "FQAHCAGV",
-            substitution_matrix=self.blosum62,
-            open_gap_score=-4,
-            extend_gap_score=-4,
+            s=self.blosum62,  # substitution_matrix
+            o=-4,  # open_gap_score
+            x=-4,  # extend_gap_score
         )
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments.score, 13)
@@ -460,7 +461,7 @@ query             1 QAH 4
         # Note that the PairwiseAligner defaults to gap_score = -1.0,
         # while pairwise2 defaults to a zero gap score, so we need to
         # set gap_score explicitly here.
-        alignments = Align.local_align("AT", "GC", gap_score=0)
+        alignments = Align.local_align("AT", "GC", g=0)  # gap_score
         self.assertEqual(len(alignments), 0)
 
 
@@ -476,7 +477,7 @@ class TestScoreOnly(unittest.TestCase):
         # Note that the PairwiseAligner defaults to gap_score = -1.0,
         # while pairwise2 defaults to a zero gap score, so we need to
         # set gap_score explicitly here.
-        alignments = Align.global_align("GAACT", "GAT", gap_score=0)
+        alignments = Align.global_align("GAACT", "GAT", g=0)  # gap_score
         self.assertAlmostEqual(alignments.score, aligns2)
 
     def test_score_only_local(self):
@@ -490,10 +491,9 @@ class TestScoreOnly(unittest.TestCase):
         alignments = Align.local_align(
             "xxxABCDxxx",
             "zzzABzzCDz",
-            match_score=1.0,
-            mismatch_score=-0.5,
-            open_gap_score=-3,
-            extend_gap_score=-1,
+            m=(1.0, -0.5),  # match_score, mismatch_score
+            o=-3,  # open_gap_score
+            x=-1,  # extend_gap_score
         )
         self.assertAlmostEqual(alignments.score, aligns2)
 
@@ -532,10 +532,9 @@ A-
         alignments = Align.global_align(
             "AA",
             "A",
-            match_score=2.0,
-            mismatch_score=-1.0,
-            open_gap_score=-0.1,
-            extend_gap_score=0,
+            m=(2.0, -1.0),  # match_score, mismatch_score
+            o=-0.1,  # open_gap_score
+            x=0,  # extend_gap_score
         )
         self.assertEqual(len(alignments), 2)
         self.assertAlmostEqual(alignments.score, 1.9)
@@ -587,10 +586,9 @@ GA-
         alignments = Align.global_align(
             "GAA",
             "GA",
-            match_score=1.5,
-            mismatch_score=0,
-            open_gap_score=-0.1,
-            extend_gap_score=0,
+            m=(1.5, 0),  # match_score, mismatch_score
+            o=-0.1,  # open_gap_score
+            x=0,  # extend_gap_score
         )
         self.assertEqual(len(alignments), 2)
         self.assertAlmostEqual(alignments.score, 2.9)
@@ -628,7 +626,7 @@ GA--T
         )
         # Same alignment, now using Bio.Align.
         alignments = Align.global_align(
-            "GAACT", "GAT", open_gap_score=-0.1, extend_gap_score=0
+            "GAACT", "GAT", o=-0.1, x=0  # open_gap_score, extend_gap_score
         )
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments.score, 2.9)
@@ -660,10 +658,9 @@ G-ATA
         alignments = Align.global_align(
             "GCT",
             "GATA",
-            match_score=1,
-            mismatch_score=-2,
-            open_gap_score=-0.1,
-            extend_gap_score=0,
+            m=(1, -2),  # match_score, mismatch_score
+            o=-0.1,  # open_gap_score
+            x=0,  # extend_gap_score
         )
         self.assertEqual(len(alignments), 2)
         self.assertAlmostEqual(alignments.score, 1.7)
@@ -705,7 +702,7 @@ G--T
         )
         # Same alignment, now using Bio.Align.
         alignments = Align.global_align(
-            "GACT", "GT", open_gap_score=-0.5, extend_gap_score=-0.2
+            "GACT", "GT", o=-0.5, x=-0.2  # open_gap_score, extend_gap_score
         )
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments.score, 1.3)
@@ -736,7 +733,7 @@ G--T
         )
         # Same alignment, now using Bio.Align.
         alignments = Align.global_align(
-            "GACT", "GT", open_gap_score=-1.5, extend_gap_score=-0.2
+            "GACT", "GT", o=-1.5, x=-0.2  # open_gap_score, extend_gap_score
         )
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments.score, 0.3)
@@ -772,7 +769,7 @@ G--T
         )
         # Same alignment, now using Bio.Align.
         alignments = Align.global_align(
-            "GACT", "GT", open_gap_score=-0.2 - 1.5, extend_gap_score=-1.5
+            "GACT", "GT", o=-0.2 - 1.5, x=-1.5  # open_gap_score, extend_gap_score
         )
         self.assertEqual(len(alignments), 1)
         self.assertAlmostEqual(alignments.score, -1.2)
@@ -830,7 +827,11 @@ GT--
         # Same alignment, now using Bio.Align.
         aligns = pairwise2.align.globalxs("GACT", "GT", -0.8, -0.2, penalize_end_gaps=0)
         alignments = Align.global_align(
-            "GACT", "GT", open_gap_score=-0.8, extend_gap_score=-0.2, end_gap_score=0
+            "GACT",
+            "GT",
+            o=-0.8,  # open_gap_score
+            x=-0.2,  # extend_gap_score
+            e=0,  # end_gap_score
         )
         self.assertEqual(len(alignments), 3)
         self.assertAlmostEqual(alignments.score, 1.0)
@@ -910,11 +911,10 @@ GT--
         alignments = Align.global_align(
             "AT",
             "AGG",
-            match_score=1.0,
-            mismatch_score=-0.5,
-            open_gap_score=-1.75,
-            extend_gap_score=-0.25,
-            query_end_gap_score=0,
+            m=(1.0, -0.5),  # match_score, mismatch_score
+            o=-1.75,  # open_gap_score
+            x=-0.25,  # extend_gap_score
+            end_deletion_score=0,
         )
         self.assertAlmostEqual(alignments.score, -1.0)
         self.assertEqual(len(alignments), 1)
@@ -962,10 +962,8 @@ GTCT
         alignments = Align.global_align(
             "GAT",
             "GTCT",
-            target_open_gap_score=-0.3,
-            target_extend_gap_score=0,
-            query_open_gap_score=-0.3,
-            query_extend_gap_score=0,
+            i=(-0.3, 0),  # insertion_score
+            d=(-0.8, 0),  # deletion_score
         )
         self.assertAlmostEqual(alignments.score, 1.7)
         self.assertEqual(len(alignments), 2)
@@ -1005,10 +1003,8 @@ query             0 GTCT 4
         alignments = Align.local_align(
             "GAT",
             "GTCT",
-            target_open_gap_score=-0.5,
-            target_extend_gap_score=0,
-            query_open_gap_score=-0.2,
-            query_extend_gap_score=0,
+            i=(-0.5, 0),  # open_insertion_score, extend_insertion_score
+            d=(-0.2, 0),  # open_deletion_score, extend_deletion_score
         )
         self.assertAlmostEqual(alignments.score, 1.8)
         self.assertEqual(len(alignments), 1)
@@ -1104,9 +1100,9 @@ AT-T
         alignments = Align.local_align(
             "ATAT",
             "ATT",
-            open_gap_score=-0.5,
-            extend_gap_score=0,
-            substitution_matrix=self.substitution_matrix,
+            o=-0.5,  # open_gap_score
+            x=0,  # extend_gap_score
+            s=self.substitution_matrix,  # substitution_matrix
         )
         self.assertAlmostEqual(alignments.score, 3.0)
         self.assertEqual(len(alignments), 2)
@@ -1146,8 +1142,8 @@ query             0 AT-T 3
         alignments = Align.local_align(
             "ATAT",
             "ATT",
-            extend_gap_score=0,
-            substitution_matrix=self.substitution_matrix,
+            x=0,  # extend_gap_score
+            s=self.substitution_matrix,  # substitution_matrix
         )
         self.assertAlmostEqual(alignments.score, 3.0)
         self.assertEqual(len(alignments), 1)
@@ -1184,9 +1180,9 @@ query             0 ATT 3
         alignments = Align.local_align(
             "ATT",
             "ATAT",
-            open_gap_score=-1,
-            extend_gap_score=0,
-            substitution_matrix=self.substitution_matrix,
+            o=-1,  # open_gap_score
+            x=0,  # extend_gap_score
+            s=self.substitution_matrix,  # substitution_matrix
         )
         self.assertAlmostEqual(alignments.score, 2.5)
         self.assertEqual(len(alignments), 2)
@@ -1228,7 +1224,7 @@ class TestPairwiseOneCharacter(unittest.TestCase):
         )
         # Same alignment, now using Bio.Align.
         alignments = Align.local_align(
-            "abcde", "c", open_gap_score=-0.3, extend_gap_score=-0.1
+            "abcde", "c", o=-0.3, x=-0.1  # open_gap_score, extend_gap_score
         )
         self.assertAlmostEqual(alignments.score, 1.0)
         self.assertEqual(len(alignments), 1)
@@ -1270,7 +1266,7 @@ query             0 c 1
         )
         # Same alignment, now using Bio.Align.
         alignments = Align.local_align(
-            "abcce", "c", open_gap_score=-0.3, extend_gap_score=-0.1
+            "abcce", "c", o=-0.3, x=-0.1  # open_gap_score, extend_gap_score
         )
         self.assertAlmostEqual(alignments.score, 1.0)
         self.assertEqual(len(alignments), 2)
@@ -1308,7 +1304,7 @@ abcde
         )
         # Same alignment, now using Bio.Align.
         alignments = Align.global_align(
-            "abcde", "c", open_gap_score=-0.3, extend_gap_score=-0.1
+            "abcde", "c", o=-0.3, x=-0.1  # open_gap_score, extend_gap_score
         )
         self.assertAlmostEqual(alignments.score, 0.2)
         self.assertEqual(len(alignments), 1)
@@ -1360,7 +1356,7 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         )
         # Same alignment, now using Bio.Align.
         alignments = Align.global_align(
-            seq1, seq2, insertion_score=no_gaps, deletion_score=specific_gaps
+            seq1, seq2, i=no_gaps, d=specific_gaps  # insertion_score, deletion_score
         )
         self.assertAlmostEqual(alignments.score, 2.0)
         self.assertEqual(len(alignments), 1)
@@ -1421,10 +1417,9 @@ AAAABBBAAAACCCCCCCCCCCCCCAAAABBBAAAA
         alignments = Align.global_align(
             seq1,
             seq2,
-            match_score=1.0,
-            mismatch_score=-1.0,
-            insertion_score=no_gaps,
-            deletion_score=specific_gaps,
+            m=(1, -1),  # match_score, mismatch_score
+            i=no_gaps,  # insertion_score
+            d=specific_gaps,  # deletion_score
         )
         self.assertAlmostEqual(alignments.score, -10.0)
         self.assertEqual(len(alignments), 2)

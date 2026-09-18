@@ -4343,6 +4343,60 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         else:
             raise ValueError("Unknown scoring scheme '%s'" % scoring)
         for name, value in kwargs.items():
+            if name == "m":
+                match_score, mismatch_score = value
+                self.match_score = match_score
+                self.mismatch_score = mismatch_score
+                continue
+            elif name == "g":
+                name = "gap_score"
+            elif name == "i":
+                try:
+                    open_insertion_score, extend_insertion_score = value
+                except TypeError:
+                    name = "insertion_score"
+                else:
+                    self.open_insertion_score = open_insertion_score
+                    self.extend_insertion_score = extend_insertion_score
+                    continue
+            elif name == "d":
+                try:
+                    open_deletion_score, extend_deletion_score = value
+                except TypeError:
+                    name = "deletion_score"
+                else:
+                    self.open_deletion_score = open_deletion_score
+                    self.extend_deletion_score = extend_deletion_score
+                    continue
+            elif name == "o":
+                try:
+                    open_insertion_score, open_deletion_score = value
+                except TypeError:
+                    name = "open_gap_score"
+                else:
+                    self.open_insertion_score = open_insertion_score
+                    self.open_deletion_score = open_deletion_score
+                    continue
+            elif name == "x":
+                try:
+                    extend_insertion_score, extend_deletion_score = value
+                except TypeError:
+                    name = "extend_gap_score"
+                else:
+                    self.extend_insertion_score = extend_insertion_score
+                    self.extend_deletion_score = extend_deletion_score
+                    continue
+            elif name == "e":
+                try:
+                    end_insertion_score, end_deletion_score = value
+                except TypeError:
+                    name = "end_gap_score"
+                else:
+                    self.end_insertion_score = end_insertion_score
+                    self.end_deletion_score = end_deletion_score
+                    continue
+            elif name == "s":
+                name = "substitution_matrix"
             setattr(self, name, value)
 
     _new_keys = {
@@ -4603,96 +4657,29 @@ def _create_aligner(args, kwargs, mode):
     if "mode" in kwargs:
         raise TypeError("received an unexpected keyword argument 'mode'")
     kwargs["mode"] = mode
+    strand = None
+    scoring = None
+    if "scoring" in kwargs:
+        scoring = kwargs["scoring"]
+        del kwargs["scoring"]
     if "strand" in kwargs:
         strand = kwargs["strand"]
         del kwargs["strand"]
-    else:
-        for index, arg in enumerate(args):
-            if arg in "+-":
-                strand = arg
-                args = args[:index] + args[index + 1 :]
-                break
-        else:
-            strand = "+"
-    match_score = None
-    mismatch_score = None
-    open_insertion_score = None
-    extend_insertion_score = None
-    open_deletion_score = None
-    extend_deletion_score = None
-    try:
-        match_score = kwargs["m"]
-    except KeyError:
-        pass
-    else:
-        del kwargs["m"]
-        try:
-            match_score, mismatch_score = match_score
-        except ValueError:
-            pass
-    try:
-        gap_score = kwargs["g"]
-    except KeyError:
-        pass
-    else:
-        del kwargs["g"]
-        open_insertion_score = gap_score
-        open_deletion_score = gap_score
-        extend_insertion_score = gap_score
-        extend_deletion_score = gap_score
-    try:
-        open_gap_score = kwargs["o"]
-    except KeyError:
-        pass
-    else:
-        del kwargs["o"]
-        try:
-            open_insertion_score, open_deletion_score = open_gap_score
-        except ValueError:
-            open_insertion_score = open_deletion_score = open_gap_score
-    try:
-        extend_gap_score = kwargs["e"]
-    except KeyError:
-        pass
-    else:
-        del kwargs["e"]
-        try:
-            extend_insertion_score, extend_deletion_score = extend_gap_score
-        except ValueError:
-            extend_insertion_score = extend_deletion_score = extend_gap_score
-    try:
-        insertion_score = kwargs["i"]
-    except KeyError:
-        pass
-    else:
-        del kwargs["i"]
-        try:
-            open_insertion_score, extend_insertion_score = insertion_score
-        except ValueError:
-            open_insertion_score = extend_insertion_score = insertion_score
-    try:
-        deletion_score = kwargs["d"]
-    except KeyError:
-        pass
-    else:
-        del kwargs["d"]
-        try:
-            open_deletion_score, extend_deletion_score = deletion_score
-        except ValueError:
-            open_deletion_score = extend_deletion_score = deletion_score
-    aligner = PairwiseAligner(*args, **kwargs)
-    if match_score is not None:
-        aligner.match_score = match_score
-    if mismatch_score is not None:
-        aligner.mismatch_score = mismatch_score
-    if open_insertion_score is not None:
-        aligner.open_insertion_score = open_insertion_score
-    if extend_insertion_score is not None:
-        aligner.extend_insertion_score = extend_insertion_score
-    if open_deletion_score is not None:
-        aligner.open_deletion_score = open_deletion_score
-    if extend_deletion_score is not None:
-        aligner.extend_deletion_score = extend_deletion_score
+    clean_args = list(args)
+    for arg in args:
+        if arg in ("+", "-"):
+            if strand is not None:
+                raise ValueError("strand specified more than once")
+            strand = arg
+            clean_args.remove(arg)
+        elif isinstance(arg, str):
+            if scoring is not None:
+                raise ValueError("scoring specified more than once")
+            scoring = arg
+            clean_args.remove(arg)
+    aligner = PairwiseAligner(scoring=scoring, **kwargs)
+    if strand is None:
+        strand = "+"
     return strand, aligner
 
 
