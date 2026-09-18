@@ -37,6 +37,7 @@
 
 import contextlib
 import functools
+import glob
 import gzip
 import json
 import os
@@ -384,21 +385,38 @@ class PDBList:
                 # you can insert here some more log notes that
                 # something has gone wrong.
 
-        # Move the obsolete files to a special folder
-        # NOTE: This should be updated to handle multiple file types and
-        # assemblies. As of now, it only looks for PDB-formatted files.
-        # Using pathlib will be probably the best approach here, to build
-        # and index of which files we have efficiently (or glob them).
+        final_name = {
+            "pdb": "pdb{pdb_code}.ent",
+            "mmCif": "{pdb_code}.cif",
+            "xml": "{pdb_code}.xml",
+            "mmtf": "{pdb_code}.mmtf",
+            "bundle": "{pdb_code}-pdb-bundle.tar",
+        }
+        assembly_glob = {
+            "pdb": "{pdb_code}.pdb*",
+            "mmCif": "{pdb_code}-assembly*.cif",
+        }
+
+        # Move obsolete files to the obsolete folder for the selected format,
+        # and include assembly files when available for that format.
         for pdb_code in obsolete:
             if self.flat_tree:
-                old_file = os.path.join(self.local_pdb, f"pdb{pdb_code}.{file_format}")
+                old_file = os.path.join(
+                    self.local_pdb,
+                    final_name[file_format].format(pdb_code=pdb_code),
+                )
                 new_dir = self.obsolete_pdb
             else:
                 old_file = os.path.join(
-                    self.local_pdb, pdb_code[1:3], f"pdb{pdb_code}.{file_format}"
+                    self.local_pdb,
+                    pdb_code[1:3],
+                    final_name[file_format].format(pdb_code=pdb_code),
                 )
                 new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
-            new_file = os.path.join(new_dir, f"pdb{pdb_code}.{file_format}")
+            new_file = os.path.join(
+                new_dir,
+                final_name[file_format].format(pdb_code=pdb_code),
+            )
             if os.path.isfile(old_file):
                 os.makedirs(new_dir, exist_ok=True)
                 try:
@@ -411,6 +429,23 @@ class PDBList:
             else:
                 if self._verbose:
                     print(f"Obsolete file {old_file} is missing")
+
+            pattern = assembly_glob.get(file_format)
+            if pattern is not None:
+                source_pattern = os.path.join(
+                    os.path.dirname(old_file),
+                    pattern.format(pdb_code=pdb_code),
+                )
+                for old_assembly_file in glob.glob(source_pattern):
+                    new_assembly_file = os.path.join(
+                        new_dir,
+                        os.path.basename(old_assembly_file),
+                    )
+                    os.makedirs(new_dir, exist_ok=True)
+                    try:
+                        shutil.move(old_assembly_file, new_assembly_file)
+                    except Exception:
+                        print(f"Could not move {old_assembly_file} to obsolete folder")
 
     def download_pdb_files(
         self,
