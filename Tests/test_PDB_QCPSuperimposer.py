@@ -189,9 +189,11 @@ class QCPSuperimposerTest(unittest.TestCase):
         axis /= np.linalg.norm(axis)
         theta = rng.uniform(0.0, np.pi)
         K = np.array(
-            [[0.0, -axis[2], axis[1]],
-             [axis[2], 0.0, -axis[0]],
-             [-axis[1], axis[0], 0.0]]
+            [
+                [0.0, -axis[2], axis[1]],
+                [axis[2], 0.0, -axis[0]],
+                [-axis[1], axis[0], 0.0],
+            ]
         )
         rot = np.eye(3) + np.sin(theta) * K + (1.0 - np.cos(theta)) * (K @ K)
         tran = rng.normal(scale=10.0, size=3)
@@ -201,9 +203,7 @@ class QCPSuperimposerTest(unittest.TestCase):
         """Collinear reference must not produce a wrong rotation (#5309)."""
         rng = np.random.default_rng(2026)
         rot, tran = self._random_rigid_transform(rng)
-        ref = np.array(
-            [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [2.0, 0.0, 0.0]]
-        )
+        ref = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [2.0, 0.0, 0.0]])
         mob = ref @ rot.T + tran
 
         sup = QCPSuperimposer()
@@ -248,8 +248,7 @@ class QCPSuperimposerTest(unittest.TestCase):
         rng = np.random.default_rng(2028)
         rot, tran = self._random_rigid_transform(rng)
         ref = np.array(
-            [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0],
-             [0.0, 1.0, 0.0], [1.0, 1.0, 0.0]]
+            [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [1.0, 1.0, 0.0]]
         )
         mob = ref @ rot.T + tran
 
@@ -317,9 +316,7 @@ class QCPSuperimposerTest(unittest.TestCase):
         centered = ref - ref.mean(axis=0)
         self.assertFalse(_is_reference_degenerate(centered))
 
-        collinear = np.array(
-            [[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [2.0, 0.0, 0.0]]
-        )
+        collinear = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [2.0, 0.0, 0.0]])
         centered = collinear - collinear.mean(axis=0)
         self.assertTrue(_is_reference_degenerate(centered))
 
