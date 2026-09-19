@@ -48,7 +48,6 @@ from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
-
 # Import errors may occur here if a compiled _pairwisealigner.c file or
 # compiled _codonaligner.c file (_pairwisealigner.pyd or _pairwisealigner.so,
 # or _codonaligner.pyd or _codonaligner.so) is missing or if the user is
@@ -4344,6 +4343,60 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         else:
             raise ValueError("Unknown scoring scheme '%s'" % scoring)
         for name, value in kwargs.items():
+            if name == "m":
+                match_score, mismatch_score = value
+                self.match_score = match_score
+                self.mismatch_score = mismatch_score
+                continue
+            elif name == "g":
+                name = "gap_score"
+            elif name == "i":
+                try:
+                    open_insertion_score, extend_insertion_score = value
+                except TypeError:
+                    name = "insertion_score"
+                else:
+                    self.open_insertion_score = open_insertion_score
+                    self.extend_insertion_score = extend_insertion_score
+                    continue
+            elif name == "d":
+                try:
+                    open_deletion_score, extend_deletion_score = value
+                except TypeError:
+                    name = "deletion_score"
+                else:
+                    self.open_deletion_score = open_deletion_score
+                    self.extend_deletion_score = extend_deletion_score
+                    continue
+            elif name == "o":
+                try:
+                    open_insertion_score, open_deletion_score = value
+                except TypeError:
+                    name = "open_gap_score"
+                else:
+                    self.open_insertion_score = open_insertion_score
+                    self.open_deletion_score = open_deletion_score
+                    continue
+            elif name == "x":
+                try:
+                    extend_insertion_score, extend_deletion_score = value
+                except TypeError:
+                    name = "extend_gap_score"
+                else:
+                    self.extend_insertion_score = extend_insertion_score
+                    self.extend_deletion_score = extend_deletion_score
+                    continue
+            elif name == "e":
+                try:
+                    end_insertion_score, end_deletion_score = value
+                except TypeError:
+                    name = "end_gap_score"
+                else:
+                    self.end_insertion_score = end_insertion_score
+                    self.end_deletion_score = end_deletion_score
+                    continue
+            elif name == "s":
+                name = "substitution_matrix"
             setattr(self, name, value)
 
     _new_keys = {
@@ -4446,7 +4499,6 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
-        # self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
         if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             sA = bytes(seqA)
             sA = np.frombuffer(sA, dtype=np.uint8).astype(np.int32)
@@ -4504,7 +4556,6 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
 
     def score(self, seqA, seqB, strand="+"):
         """Return the alignment score of two sequences using PairwiseAligner."""
-        # self.warn_defaults_changed()  # FIXME remove this after 1.87 is out
         if isinstance(seqA, (bytes, Seq, MutableSeq, SeqRecord)):
             seqA = bytes(seqA)
             seqA = np.frombuffer(seqA, dtype=np.uint8).astype(np.int32)
@@ -4599,6 +4650,51 @@ AlignmentCounts object returned by the .counts method of an Alignment object."""
             self.mismatch_score = state["mismatch_score"]
         else:
             self.substitution_matrix = substitution_matrix
+
+
+def _create_aligner(args, kwargs, mode):
+    kwargs = dict(kwargs)
+    if "mode" in kwargs:
+        raise TypeError("received an unexpected keyword argument 'mode'")
+    kwargs["mode"] = mode
+    strand = None
+    scoring = None
+    if "scoring" in kwargs:
+        scoring = kwargs["scoring"]
+        del kwargs["scoring"]
+    if "strand" in kwargs:
+        strand = kwargs["strand"]
+        del kwargs["strand"]
+    clean_args = list(args)
+    for arg in args:
+        if isinstance(arg, str):
+            if arg in ("+", "-"):
+                if strand is not None:
+                    raise ValueError("strand specified more than once")
+                strand = arg
+            else:
+                if scoring is not None:
+                    raise ValueError("scoring specified more than once")
+                scoring = arg
+            clean_args.remove(arg)
+    aligner = PairwiseAligner(scoring=scoring, **kwargs)
+    if strand is None:
+        strand = "+"
+    return strand, aligner
+
+
+def global_align(seqA, seqB, *args, **kwargs):
+    """Convenience function for alignments."""
+    strand, aligner = _create_aligner(args, kwargs, "global")
+    alignments = aligner.align(seqA, seqB, strand)
+    return alignments
+
+
+def local_align(seqA, seqB, *args, **kwargs):
+    """Convenience function to calculate alignment scores."""
+    strand, aligner = _create_aligner(args, kwargs, "local")
+    alignments = aligner.align(seqA, seqB, strand)
+    return alignments
 
 
 class CodonAligner(_codonaligner.CodonAligner):
