@@ -15,8 +15,8 @@ algorithms.
 
 .. _`sec:pairwise-quick`:
 
-Pairwise sequence alignments: Quick and easy
---------------------------------------------
+The quick and easy approach to pairwise sequence alignments
+-----------------------------------------------------------
 
 In general, pairwise sequence alignments in Biopython are done by first
 creating a ``PairwiseAligner`` object, and then performing the alignment by
