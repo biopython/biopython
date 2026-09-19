@@ -5,7 +5,7 @@ Pairwise sequence alignment
 
 Pairwise sequence alignment is the process of aligning two sequences to
 each other by optimizing the similarity score between them. The
-``Bio.Align`` module contains the ``PairwiseAligner`` class for global
+``Bio.Align`` module provides a pairwise sequence aligner for global
 and local alignments using the Needleman-Wunsch, Smith-Waterman, Gotoh
 (three-state), and Waterman-Smith-Beyer global and local pairwise
 alignment algorithms, and the Fast Optimal Global Alignment Algorithm (FOGSAA),
@@ -13,13 +13,202 @@ with numerous options to change the alignment parameters. We refer to Durbin
 *et al.* [Durbin1998]_ for in-depth information on sequence alignment
 algorithms.
 
+.. _`sec:pairwise-quick`:
+
+Pairwise sequence alignments: Quick and easy
+--------------------------------------------
+
+In general, pairwise sequence alignments in Biopython are done by first
+creating a ``PairwiseAligner`` object, and then performing the alignment by
+calling the appropriate methods of the ``PairwiseAligner`` you created
+(see :ref:`sec:pairwise-basic`) . This is by far the fastest if you want to
+perform many alignments. Howeer, if you want to align a few sequences right
+here, right now, then you can use the convenience functions ``global_align``
+and ``local_align`` for global and local alignments, respectively:
+
+.. code:: pycon
+
+   >>> from Bio.Align import global_align, local_align
+
+Or, if you want to minimize the amount of typing needed, use an alias:
+
+.. doctest
+
+.. code:: pycon
+
+   >>> from Bio.Align import global_align as ga, local_align as la
+
+These functions create a ``PairwiseAligner`` object on the fly, using the
+provided arguments to set the alignment parameters, and then aligns the two sequences
+using this aligner.
+
+Suppose you want to do a global pairwise alignment between the two hemoglobin sequences (HBA_HUMAN, HBB_HUMAN) stored in alpha.faa and beta.faa (in the `examples` directory in the Biopython distribution):
+
+.. cont-doctest
+
+.. code:: pycon
+
+    >>> from Bio import SeqIO
+    >>> seq1 = SeqIO.read("alpha.faa", "fasta")
+    >>> seq2 = SeqIO.read("beta.faa", "fasta")
+    >>> alignments = ga(seq1, seq2)
+
+The ``global_align`` and ``local_align`` function take the two sequences to be aligned as input.
+By default, the pairwise aligner uses a match score of +1, a mismatch score of 0, and a gap score of -1.
+
+The variable ``alignments`` is an iterator over alignments (at least one) which have the same optimal score for the given parameters. In our example, there are 120 different alignments with the score 56.0. While ``alignments`` is an iterator, you can also use indexing to pull out one alignment:
+
+.. cont-doctest
+
+.. code:: pycon
+
+    >>> len(alignments)
+    120
+    >>> print(alignments[0])
+    HBA_HUMAN         0 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLSHGSAQ---
+                      0 ||-|.|..|..|.|.||||...--|.|.|||.|.....|.|...|..|-|||...|.---
+    HBB_HUMAN         0 MVHLTPEEKSAVTALWGKVNVD--EVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGN
+    <BLANKLINE>
+    HBA_HUMAN        55 --VKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAH
+                     60 --||.|||||..|.....||.|........||.||..||.|||.||.||...|...||.|
+    HBB_HUMAN        58 PKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHH
+    <BLANKLINE>
+    HBA_HUMAN       113 LPAEFTPAVHASLDKFLASVSTVLTSKYR 142
+                    120 ...||||.|.|...|..|.|...|..||. 149
+    HBB_HUMAN       118 FGKEFTPPVQAAYQKVVAGVANALAHKYH 147
+    <BLANKLINE>
+    >>> print(alignments.score)
+    56.0
+
+Additionally, these functions accept a keyword argument ``strand``, which you
+may use to align to the reverse strand by using ``strand='-'``. Any other
+arguments will be passed to the ``PairwiseAligner`` constructor to set the
+alignment parameters. Any strings as non-keyword arguments are interpreted as
+either the strand (if ``'+'`` or ``'-'``), or otherwise as the scoring scheme
+(see :ref:`sec:pairwise-predefined-scoring`). For example, you may want to align
+these two sequences using the BLASTP scoring parameters:
+
+.. cont-doctest
+
+.. code:: pycon
+
+    >>> alignments = ga(seq1, seq2, "blastp")
+    >>> print(alignments[0])
+    HBA_HUMAN         0 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF------DLSHGS
+                      0 ||-|.|..|..|.|.||||--...|.|.|||.|.....|.|...|..|------|...|.
+    HBB_HUMAN         0 MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGN
+    <BLANKLINE>
+    HBA_HUMAN        53 AQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAH
+                     60 ..||.|||||..|.....||.|........||.||..||.|||.||.||...|...||.|
+    HBB_HUMAN        58 PKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHH
+    <BLANKLINE>
+    HBA_HUMAN       113 LPAEFTPAVHASLDKFLASVSTVLTSKYR 142
+                    120 ...||||.|.|...|..|.|...|..||. 149
+    HBB_HUMAN       118 FGKEFTPPVQAAYQKVVAGVANALAHKYH 147
+    <BLANKLINE>
+    >>> print(alignments.score)
+    282.0
+
+
+Any keyword arguments to ``global_align`` or ``local_align`` are passed to the
+``PairwiseAligner`` constructor to set the alignment parameters. See tables
+:ref:`table:align-attributes` and :ref:`table:align-meta-attributes` for a list
+of aligner attributes and meta-attributes. In addition, you can use the
+following mnemonics:
+
+.. table:: Mnemonics to set pairwise alignment parameters
+   :name: table:align-mnemonics
+
+   +----------+----------------------------------------------------------------------+
+   | Mnemonic | Parameters it maps to                                                |
+   +==========+======================================================================+
+   |  ``m``   | ``match_score``, ``mismatch_score``                                  |
+   +----------+----------------------------------------------------------------------+
+   |  ``g``   | ``gap_score``                                                        |
+   +----------+----------------------------------------------------------------------+
+   |  ``i``   | ``insertion_score`` if one value;                                    |
+   |          | ``open_insertion_score``, ``extend_insertion_score`` if two values   |
+   +----------+----------------------------------------------------------------------+
+   |  ``d``   | ``deletion_score`` if one value;                                     |
+   |          | ``open_deletion_score``, ``extend_deletion_score`` if two values     |
+   +----------+----------------------------------------------------------------------+
+   |  ``o``   | ``open_gap_score`` if one value;                                     |
+   |          | ``open_insertion_score``, ``open_deletion_score`` if two values      |
+   +----------+----------------------------------------------------------------------+
+   |  ``x``   | ``extend_gap_score`` if one value;                                   |
+   |          | ``extend_insertion_score``, ``extend_deletion_score`` if two values  |
+   +----------+----------------------------------------------------------------------+
+   |  ``e``   | ``end_gap_score`` if one value;                                      |
+   |          | ``end_insertion_score``, ``end_deletion_score`` if two values        |
+   +----------+----------------------------------------------------------------------+
+   |  ``s``   | ``substitution_matrix``                                              |
+   +----------+----------------------------------------------------------------------+
+
+Better alignments are usually obtained by penalizing gaps: higher costs for opening a gap and lower costs for extending an existing gap. For amino acid sequences, match scores are usually encoded in matrices like PAM or BLOSUM. Thus, a more meaningful alignment for our example can be obtained by using the BLOSUM62 matrix, together with a gap open penalty of 10 and a gap extension penalty of 0.5:
+
+.. cont-doctest
+
+.. code:: pycon
+
+    >>> from Bio.Align import substitution_matrices
+    >>> blosum62 = substitution_matrices.load("BLOSUM62")
+    >>> alignments = ga(seq1, seq2, blosum62, o=-10, x=-0.5, s=blosum62)
+    >>> len(alignments)
+    2
+    >>> print(alignments[0])
+    HBA_HUMAN         0 MV-LSPADKTNVKAAWGKVGAHAGEYGAEALERMFLSFPTTKTYFPHF-DLS-----HGS
+                      0 ||-|.|..|..|.|.||||--...|.|.|||.|.....|.|...|..|-|||-----.|.
+    HBB_HUMAN         0 MVHLTPEEKSAVTALWGKV--NVDEVGGEALGRLLVVYPWTQRFFESFGDLSTPDAVMGN
+    <BLANKLINE>
+    HBA_HUMAN        53 AQVKGHGKKVADALTNAVAHVDDMPNALSALSDLHAHKLRVDPVNFKLLSHCLLVTLAAH
+                     60 ..||.|||||..|.....||.|........||.||..||.|||.||.||...|...||.|
+    HBB_HUMAN        58 PKVKAHGKKVLGAFSDGLAHLDNLKGTFATLSELHCDKLHVDPENFRLLGNVLVCVLAHH
+    <BLANKLINE>
+    HBA_HUMAN       113 LPAEFTPAVHASLDKFLASVSTVLTSKYR 142
+                    120 ...||||.|.|...|..|.|...|..||. 149
+    HBB_HUMAN       118 FGKEFTPPVQAAYQKVVAGVANALAHKYH 147
+    <BLANKLINE>
+    >>> print(alignments.score)
+    292.5
+
+Instead of passing a match/mismatch matrix, you can specify a match score and a mismatch score. The next example uses match/mismatch scores of 5/-4 and gap penalties (open/extend) of 2/0.5 for a local alignment:
+
+.. cont-doctest
+
+.. code:: pycon
+
+    >>> alignments = la("ATTAGGGGAACCCCT", "AGGGGAAAACCCC", m=(5, -4), o=-2, x=-0.5)
+    >>> print(alignments[0])
+    target            3 AGGGG--AACCCC 14
+                      0 |||||--|||||| 13
+    query             0 AGGGGAAAACCCC 13
+    <BLANKLINE>
+    >>> print(alignments.score)
+    52.5
+
+Add ``'-'`` as an argument if you want to align to the reverse strand:
+
+.. cont-doctest
+
+.. code:: pycon
+
+    >>> alignments = la("ATTAGGGGAACCCCT", "AGGGGAAAACCCC", "-", m=(5, -4), o=-2, x=-0.5)
+    >>> print(alignments[0])
+    target            4 GGGG----AACCCCT 15
+                      0 ||||------||||| 15
+    query            13 GGGGTTTT--CCCCT  0
+    <BLANKLINE>
+    >>> print(alignments.score)
+    39.0
+
+(Note that in this example, the algorithm inserted gaps in the target strand followed by gaps in the query strand, rather than accepting mismatches in this region.  This is due to the gap extension score being larger (less negative) than the mismatch score.)
+
 .. _`sec:pairwise-basic`:
 
-Basic usage
------------
+Pairwise sequence alignments using the pairwise aligner
+-------------------------------------------------------
 
-To generate pairwise alignments, first create a ``PairwiseAligner``
-object:
+If you want to perform many pairwise alignments, it is faster to create a ``PairwiseAligner`` object and use it to generate the alignments:
 
 .. doctest examples
 
@@ -46,6 +235,8 @@ or after the object is made:
 .. code:: pycon
 
    >>> aligner.match_score = 1.0
+
+You can also use the mnemonics listed in Table :ref:`table:align-mnemonics` to set the alignment parameters when constructing the aligner.
 
 Use the ``aligner.score`` method to calculate the alignment score
 between two sequences:
@@ -570,16 +761,22 @@ aligner allows fine-grained control over the gap scoring scheme by
 specifying the following twelve attributes of a ``PairwiseAligner``
 object:
 
-================================== ====================================
-**Opening scores**                 **Extending scores**
-================================== ====================================
-``open_left_deletion_score``       ``extend_left_deletion_score``
-``open_internal_deletion_score``   ``extend_internal_deletion_score``
-``open_right_deletion_score``      ``extend_right_deletion_score``
-``open_left_insertion_score``      ``extend_left_insertion_score``
-``open_internal_insertion_score``  ``extend_internal_insertion_score``
-``open_right_insertion_score``     ``extend_right_insertion_score``
-================================== ====================================
+.. table:: Attributes of the pairwise aligner objects.
+   :name: table:align-attributes
+
+   ================================== ====================================
+   **Opening scores**                 **Extending scores**
+   ================================== ====================================
+   ``open_left_deletion_score``       ``extend_left_deletion_score``
+   ``open_internal_deletion_score``   ``extend_internal_deletion_score``
+   ``open_right_deletion_score``      ``extend_right_deletion_score``
+   ``open_left_insertion_score``      ``extend_left_insertion_score``
+   ``open_internal_insertion_score``  ``extend_internal_insertion_score``
+   ``open_right_insertion_score``     ``extend_right_insertion_score``
+   ================================== ====================================
+
+
+This is a test: :ref:`table:align-attributes`.
 
 These attributes allow for different gap scores for internal gaps and on
 either end of the sequence, as shown in this example:

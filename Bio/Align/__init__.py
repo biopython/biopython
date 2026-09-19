@@ -4667,15 +4667,15 @@ def _create_aligner(args, kwargs, mode):
         del kwargs["strand"]
     clean_args = list(args)
     for arg in args:
-        if arg in ("+", "-"):
-            if strand is not None:
-                raise ValueError("strand specified more than once")
-            strand = arg
-            clean_args.remove(arg)
-        elif isinstance(arg, str):
-            if scoring is not None:
-                raise ValueError("scoring specified more than once")
-            scoring = arg
+        if isinstance(arg, str):
+            if arg in ("+", "-"):
+                if strand is not None:
+                    raise ValueError("strand specified more than once")
+                strand = arg
+            else:
+                if scoring is not None:
+                    raise ValueError("scoring specified more than once")
+                scoring = arg
             clean_args.remove(arg)
     aligner = PairwiseAligner(scoring=scoring, **kwargs)
     if strand is None:
