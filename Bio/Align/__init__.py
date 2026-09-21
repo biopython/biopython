@@ -4720,7 +4720,7 @@ def global_align(seqA, seqB, *args, **kwargs):
 
         >>> from Bio.Align import global_align
         >>> alignments = global_align("ACCGT", "ACG")
-        >>> print(alignments)  # doctest:+ELLIPSIS
+        >>> print(alignments)
         <PairwiseAlignments object (2 alignments; score=1) at 0x...>
         >>> alignments.score
         1.0
@@ -4746,10 +4746,10 @@ def global_align(seqA, seqB, *args, **kwargs):
 
         >>> alignments = global_align("ACCGT", "ACG",
         ...                           match_score=2,
-        ...                           mismatch_score=-1)  # doctest:+ELLIPSIS
+        ...                           mismatch_score=-1)
         >>> alignments
         <PairwiseAlignments object (2 alignments; score=4) at 0x...>
-        >>> alignments = global_align("ACCGT", "ACG", m=(2,-1))  # doctest:+ELLIPSIS
+        >>> alignments = global_align("ACCGT", "ACG", m=(2,-1))
         >>> alignments
         <PairwiseAlignments object (2 alignments; score=4) at 0x...>
         >>> for alignment in alignments:
@@ -4820,7 +4820,7 @@ def global_align(seqA, seqB, *args, **kwargs):
     You can also use one of the predefined scoring schemes:
 
         >>> alignments = global_align("ACCGT", "ACG", "blastn")
-        >>> alignments  # doctest:+ELLIPSIS
+        >>> alignments
         <PairwiseAlignments object (4 alignments; score=-8) at 0x...>
     """
     strand, aligner = _create_aligner(args, kwargs, "global")
@@ -4865,7 +4865,7 @@ def local_align(seqA, seqB, *args, **kwargs):
 
         >>> from Bio.Align import local_align
         >>> alignments = local_align("ACCGT", "ACG")
-        >>> print(alignments)  # doctest:+ELLIPSIS
+        >>> print(alignments)
         <PairwiseAlignments object (2 alignments; score=2) at 0x...>
         >>> alignments.score
         2.0
@@ -4891,10 +4891,10 @@ def local_align(seqA, seqB, *args, **kwargs):
 
         >>> alignments = local_align("ACCGT", "ACG",
         ...                          match_score=2,
-        ...                          mismatch_score=-1)  # doctest:+ELLIPSIS
+        ...                          mismatch_score=-1)
         >>> alignments
         <PairwiseAlignments object (2 alignments; score=5) at 0x...>
-        >>> alignments = local_align("ACCGT", "ACG", m=(2,-1))  # doctest:+ELLIPSIS
+        >>> alignments = local_align("ACCGT", "ACG", m=(2,-1))
         >>> alignments
         <PairwiseAlignments object (2 alignments; score=5) at 0x...>
         >>> for alignment in alignments:
@@ -4965,7 +4965,7 @@ def local_align(seqA, seqB, *args, **kwargs):
     You can also use one of the predefined scoring schemes:
 
         >>> alignments = local_align("ACCGT", "ACG", "blastn")
-        >>> alignments  # doctest:+ELLIPSIS
+        >>> alignments
         <PairwiseAlignments object (2 alignments; score=4) at 0x...>
     """
     strand, aligner = _create_aligner(args, kwargs, "local")
