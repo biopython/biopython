@@ -4822,7 +4822,7 @@ def global_align(seqA, seqB, *args, **kwargs):
         >>> alignments = global_align("ACCGT", "ACG", "blastn")
         >>> alignments  # doctest:+ELLIPSIS
         <PairwiseAlignments object (4 alignments; score=-8) at 0x...>
-    """
+    """  # noqa
     strand, aligner = _create_aligner(args, kwargs, "global")
     alignments = aligner.align(seqA, seqB, strand)
     return alignments
@@ -4967,7 +4967,7 @@ def local_align(seqA, seqB, *args, **kwargs):
         >>> alignments = local_align("ACCGT", "ACG", "blastn")
         >>> alignments  # doctest:+ELLIPSIS
         <PairwiseAlignments object (2 alignments; score=4) at 0x...>
-    """
+    """  # noqa
     strand, aligner = _create_aligner(args, kwargs, "local")
     alignments = aligner.align(seqA, seqB, strand)
     return alignments
