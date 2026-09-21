@@ -4702,15 +4702,15 @@ def global_align(seqA, seqB, *args, **kwargs):
     m: (match_score, mismatch_score).
     g: gap_score.
     i: insertion_score (if one value);
-       (open_insertion_score, extend_insertion_score) if two values.
+    .  (open_insertion_score, extend_insertion_score) if two values.
     d: deletion_score (if one value);
-       (open_deletion_score, extend_deletion_score) if two values.
+    .  (open_deletion_score, extend_deletion_score) if two values.
     o: open_gap_score (if one value);
-       (open_insertion_score, open_deletion_score) if two values.
+    .  (open_insertion_score, open_deletion_score) if two values.
     x: extend_gap_score (if one value);
-       (extend_insertion_score, extend_deletion_score) if two values.
+    .  (extend_insertion_score, extend_deletion_score) if two values.
     e: end_gap_score (if one value);
-       (end_insertion_score, end_deletion_score) if two values.
+    .  (end_insertion_score, end_deletion_score) if two values.
     s: substitution_matrix.
 
     Non-keyword arguments '+' or '-' are interpreted as the strand (see above).
@@ -4822,7 +4822,7 @@ def global_align(seqA, seqB, *args, **kwargs):
         >>> alignments = global_align("ACCGT", "ACG", "blastn")
         >>> alignments  # doctest:+ELLIPSIS
         <PairwiseAlignments object (4 alignments; score=-8) at 0x...>
-    """  # noqa
+    """
     strand, aligner = _create_aligner(args, kwargs, "global")
     alignments = aligner.align(seqA, seqB, strand)
     return alignments
@@ -4847,15 +4847,15 @@ def local_align(seqA, seqB, *args, **kwargs):
     m: (match_score, mismatch_score).
     g: gap_score.
     i: insertion_score (if one value);
-       (open_insertion_score, extend_insertion_score) if two values.
+    .  (open_insertion_score, extend_insertion_score) if two values.
     d: deletion_score (if one value);
-       (open_deletion_score, extend_deletion_score) if two values.
+    .  (open_deletion_score, extend_deletion_score) if two values.
     o: open_gap_score (if one value);
-       (open_insertion_score, open_deletion_score) if two values.
+    .  (open_insertion_score, open_deletion_score) if two values.
     x: extend_gap_score (if one value);
-       (extend_insertion_score, extend_deletion_score) if two values.
+    .  (extend_insertion_score, extend_deletion_score) if two values.
     e: end_gap_score (if one value);
-       (end_insertion_score, end_deletion_score) if two values.
+    .  (end_insertion_score, end_deletion_score) if two values.
     s: substitution_matrix.
 
     Non-keyword arguments '+' or '-' are interpreted as the strand (see above).
@@ -4967,7 +4967,7 @@ def local_align(seqA, seqB, *args, **kwargs):
         >>> alignments = local_align("ACCGT", "ACG", "blastn")
         >>> alignments  # doctest:+ELLIPSIS
         <PairwiseAlignments object (2 alignments; score=4) at 0x...>
-    """  # noqa
+    """
     strand, aligner = _create_aligner(args, kwargs, "local")
     alignments = aligner.align(seqA, seqB, strand)
     return alignments
