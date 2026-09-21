@@ -4699,19 +4699,19 @@ def global_align(seqA, seqB, *args, **kwargs):
     the PairwiseAligner documentation for details). This includes the following
     mnemonics:
 
-    m: (match_score, mismatch_score).
-    g: gap_score.
-    i: insertion_score (if one value);
-    .  (open_insertion_score, extend_insertion_score) if two values.
-    d: deletion_score (if one value);
-    .  (open_deletion_score, extend_deletion_score) if two values.
-    o: open_gap_score (if one value);
-    .  (open_insertion_score, open_deletion_score) if two values.
-    x: extend_gap_score (if one value);
-    .  (extend_insertion_score, extend_deletion_score) if two values.
-    e: end_gap_score (if one value);
-    .  (end_insertion_score, end_deletion_score) if two values.
-    s: substitution_matrix.
+    * m: (match_score, mismatch_score).
+    * g: gap_score.
+    * i: insertion_score (if one value);
+      (open_insertion_score, extend_insertion_score) if two values.
+    * d: deletion_score (if one value);
+      (open_deletion_score, extend_deletion_score) if two values.
+    * o: open_gap_score (if one value);
+      (open_insertion_score, open_deletion_score) if two values.
+    * x: extend_gap_score (if one value);
+      (extend_insertion_score, extend_deletion_score) if two values.
+    * e: end_gap_score (if one value);
+      (end_insertion_score, end_deletion_score) if two values.
+    * s: substitution_matrix.
 
     Non-keyword arguments '+' or '-' are interpreted as the strand (see above).
     Other non-keyword string arguments are interpreted as the scoring scheme
@@ -4844,19 +4844,19 @@ def local_align(seqA, seqB, *args, **kwargs):
     the PairwiseAligner documentation for details). This includes the following
     mnemonics:
 
-    m: (match_score, mismatch_score).
-    g: gap_score.
-    i: insertion_score (if one value);
-    .  (open_insertion_score, extend_insertion_score) if two values.
-    d: deletion_score (if one value);
-    .  (open_deletion_score, extend_deletion_score) if two values.
-    o: open_gap_score (if one value);
-    .  (open_insertion_score, open_deletion_score) if two values.
-    x: extend_gap_score (if one value);
-    .  (extend_insertion_score, extend_deletion_score) if two values.
-    e: end_gap_score (if one value);
-    .  (end_insertion_score, end_deletion_score) if two values.
-    s: substitution_matrix.
+    * m: (match_score, mismatch_score).
+    * g: gap_score.
+    * i: insertion_score (if one value);
+      (open_insertion_score, extend_insertion_score) if two values.
+    * d: deletion_score (if one value);
+      (open_deletion_score, extend_deletion_score) if two values.
+    * o: open_gap_score (if one value);
+      (open_insertion_score, open_deletion_score) if two values.
+    * x: extend_gap_score (if one value);
+      (extend_insertion_score, extend_deletion_score) if two values.
+    * e: end_gap_score (if one value);
+      (end_insertion_score, end_deletion_score) if two values.
+    * s: substitution_matrix.
 
     Non-keyword arguments '+' or '-' are interpreted as the strand (see above).
     Other non-keyword string arguments are interpreted as the scoring scheme
