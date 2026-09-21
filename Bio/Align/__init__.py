@@ -4717,7 +4717,7 @@ def global_align(seqA, seqB, *args, **kwargs):
     Other non-keyword string arguments are interpreted as the scoring scheme
     (e.g. "blastn" for the BLASTN gap scores and default substitution matrix;
     see the PairwiseAligner documentation for details).
-   
+
         >>> from Bio.Align import global_align
         >>> alignments = global_align("ACCGT", "ACG")
         >>> print(alignments)  # doctest:+ELLIPSIS
@@ -4754,7 +4754,7 @@ def global_align(seqA, seqB, *args, **kwargs):
         <PairwiseAlignments object (2 alignments; score=4) at 0x...>
         >>> for alignment in alignments:
         ...     print(alignment)
-        ... 
+        ...
         target            0 ACCGT 5
                           0 ||-|- 5
         query             0 AC-G- 3
@@ -4769,7 +4769,7 @@ def global_align(seqA, seqB, *args, **kwargs):
 
         >>> for a in global_align("ACCGT", "ACG", m=(2,-1), o=-0.5, x=-0.1):
         ...     print(a, f"score = {a.score}")
-        ... 
+        ...
         target            0 ACCGT 5
                           0 |-||- 5
         query             0 A-CG- 3
@@ -4862,7 +4862,7 @@ def local_align(seqA, seqB, *args, **kwargs):
     Other non-keyword string arguments are interpreted as the scoring scheme
     (e.g. "blastn" for the BLASTN gap scores and default substitution matrix;
     see the PairwiseAligner documentation for details).
-   
+
         >>> from Bio.Align import local_align
         >>> alignments = local_align("ACCGT", "ACG")
         >>> print(alignments)  # doctest:+ELLIPSIS
@@ -4899,7 +4899,7 @@ def local_align(seqA, seqB, *args, **kwargs):
         <PairwiseAlignments object (2 alignments; score=5) at 0x...>
         >>> for alignment in alignments:
         ...     print(alignment)
-        ... 
+        ...
         target            0 ACCG 4
                           0 ||-| 4
         query             0 AC-G 3
@@ -4914,7 +4914,7 @@ def local_align(seqA, seqB, *args, **kwargs):
 
         >>> for a in local_align("ACCGT", "ACG", m=(2,-1), o=-0.5, x=-0.1):
         ...     print(a, f"score = {a.score}")
-        ... 
+        ...
         target            0 ACCG 4
                           0 |-|| 4
         query             0 A-CG 3
