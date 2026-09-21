@@ -736,6 +736,9 @@ The ``draw_graphviz`` function was removed in Release 1.79.
 Bio.pairwise2
 -------------
 The ``Bio.pairwise2`` module was deprecated in Release 1.80.
+As of Release 1.89, the ``Bio.Align`` module provides the convenience functions
+``global_align`` and ``local_align`` with largely the same functionality and
+similar usage as the alignment functions provided in ``Bio.pairwise2``.
 
 Bio.Wise
 --------
