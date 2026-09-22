@@ -4980,7 +4980,7 @@ class CodonAligner(_codonaligner.CodonAligner):
     sequence to an amino acid sequence.
     """
 
-    def __init__(self, codon_table=None, anchor_len=10):
+    def __init__(self, codon_table=None):
         """Initialize a CodonAligner for a specific genetic code.
 
         Arguments:
