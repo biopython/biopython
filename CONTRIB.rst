@@ -235,6 +235,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Lewis A. Marshall <https://github.com/lewisamarshall>
 - Luca Monari <https://github.com/Lucandia>
 - Lucas Sinclair <https://github.com/xapple>
+- Lucio Montero <https://github.com/Lucioric2000>
 - Lukasz Walejko <https://github.com/lwalejko>
 - Lyn H. <http://github.com/flaar94>
 - Manuel Lera Ramirez <https://github.com/manulera>
