@@ -1352,6 +1352,41 @@ class TestSeqDefined(unittest.TestCase):
             self.assertTrue(seq.defined, msg=repr(seq))
             self.assertEqual(seq.defined_ranges, ((0, len(seq)),), msg=repr(seq))
 
+    def test_empty_dict(self):
+        # An empty dictionary describes a sequence of which no region is
+        # defined, and is therefore equivalent to data=None.
+        for length in (1, 4, 10):
+            seq = Seq.Seq({}, length=length)
+            self.assertFalse(seq.defined, msg=repr(seq))
+            self.assertEqual(seq.defined_ranges, (), msg=repr(seq))
+            self.assertEqual(repr(seq), repr(Seq.Seq(None, length=length)))
+            with self.assertRaises(Seq.UndefinedSequenceError):
+                seq[0]
+            with self.assertRaises(Seq.UndefinedSequenceError):
+                str(seq)
+
+    def test_empty_dict_addition(self):
+        # Adding an empty dictionary to any other sequence used to raise an
+        # IndexError instead of returning the expected result.
+        for length in (1, 4, 10):
+            seq = Seq.Seq({}, length=length)
+            self.assertEqual(
+                (seq + Seq.Seq("ACGT")).defined_ranges, ((length, length + 4),)
+            )
+            self.assertEqual((Seq.Seq("ACGT") + seq).defined_ranges, ((0, 4),))
+            self.assertEqual((seq + seq).defined_ranges, ())
+            self.assertEqual(len(seq + seq), 2 * length)
+            self.assertEqual(
+                (seq + Seq.Seq({0: "AC"}, 4)).defined_ranges, ((length, length + 2),)
+            )
+
+    def test_empty_dict_multiplication(self):
+        # Multiplying an empty dictionary used to raise an UnboundLocalError
+        # instead of behaving like any other fully undefined sequence.
+        for length in (1, 4, 10):
+            with self.assertRaises(Seq.UndefinedSequenceError):
+                Seq.Seq({}, length=length) * 2
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

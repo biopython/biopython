@@ -2153,6 +2153,10 @@ class Seq(_SeqAbstractBaseClass):
                 elif end == length and current == 0:
                     # sequence is fully defined
                     self._data = _data[current]
+                elif not _data:
+                    # no sequence data are defined, so the sequence is fully
+                    # undefined; this is the same as Seq(None, length=length)
+                    self._data = _UndefinedSequenceData(length)
                 else:
                     self._data = _PartiallyDefinedSequenceData(length, _data)
         else:
