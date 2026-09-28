@@ -40,6 +40,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrey Raspopov <https://github.com/Andrey-Raspopov>
 - Andrius Merkys <https://github.com/merkys>
 - Anil Tuncel <https://github.com/anilbey>
+- Aniruddha Adak <https://github.com/aniruddhaadak80>
 - Anne Pajon <ap one two at sanger ac uk>
 - Anthony Bradley <https://github.com/abradle>
 - Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
