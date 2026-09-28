@@ -203,6 +203,36 @@ class DistanceCalculatorTest(unittest.TestCase):
         self.assertEqual(dmat["Alpha", "Alpha"], 0.0)
         self.assertAlmostEqual(dmat["Alpha", "Gamma"], 4.0 / 5.0)
 
+    def test_identity_skip_letters_msa(self):
+        """Skipped positions must not count towards the maximum score."""
+        # The two sequences are identical and two of the six columns are
+        # skipped, so the distance must be zero.
+        aln = AlignIO.read(StringIO(">Alpha\nAC--GT\n>Gamma\nAC--GT"), "fasta")
+        calculator = DistanceCalculator("identity", skip_letters=("-", "*"))
+        dmat = calculator.get_distance(aln)
+        self.assertEqual(dmat["Alpha", "Alpha"], 0.0)
+        self.assertEqual(dmat["Alpha", "Gamma"], 0.0)
+
+    def test_identity_skip_letters(self):
+        """Skipped positions must not count towards the maximum score."""
+        # One substitution (T versus A) in the four non-skipped columns.
+        aln = Align.read(
+            StringIO(">Alpha\nAC--GT\n>Beta\nXXXXXX\n>Gamma\nAC--GA"), "fasta"
+        )
+        calculator = DistanceCalculator("identity", skip_letters=("-", "*"))
+        dmat = calculator.get_distance(aln)
+        self.assertEqual(dmat["Alpha", "Gamma"], 1 - 3 / 4.0)
+
+    def test_identity_skip_letters_ignores_gap_count(self):
+        """Adding gap columns must not change the distance."""
+        one_gap_free = AlignIO.read(StringIO(">Alpha\nACGT\n>Gamma\nACGA"), "fasta")
+        two_gaps = AlignIO.read(StringIO(">Alpha\nAC--GT\n>Gamma\nAC--GA"), "fasta")
+        calculator = DistanceCalculator("identity", skip_letters=("-", "*"))
+        first = calculator.get_distance(one_gap_free)
+        second = calculator.get_distance(two_gaps)
+        self.assertEqual(first["Alpha", "Gamma"], 1 - 3 / 4.0)
+        self.assertEqual(second["Alpha", "Gamma"], 1 - 3 / 4.0)
+
 
 class DistanceTreeConstructorTest(unittest.TestCase):
     """Test DistanceTreeConstructor."""
