@@ -4995,6 +4995,21 @@ class CodonAligner(_codonaligner.CodonAligner):
             raise TypeError("Input table is not a CodonTable object")
         self.codon_table = codon_table
         for name, value in kwargs.items():
+            if name == "m":
+                match_score, mismatch_score = value
+                self.match_score = match_score
+                self.mismatch_score = mismatch_score
+                continue
+            if name == "f":
+                name = "frameshift_score"
+            elif name == "n":  # negative
+                name = "frameshift_minus_score"
+            elif name == "p":
+                name = "frameshift_plus_score"
+            elif name == "o":
+                name = "frameshift_one_score"
+            elif name == "t":
+                name = "frameshift_two_score"
             setattr(self, name, value)
 
     def score(self, seqA, seqB):
@@ -5198,7 +5213,15 @@ def codon_align(seqA, seqB, codon_table=None, **kwargs):
        If codon_table is None, the standard genetic code is used.
 
     Other keyword arguments are passed to the CodonAligner initializer (see
-    the CodonAligner documentation for details).
+    the CodonAligner documentation for details).  This includes the following
+    mnemonics:
+
+    * m: (match_score, mismatch_score).
+    * f: frameshift_score.
+    * n: frameshift_minus_score  # negative
+    * p: frameshift_plus_score
+    * o: frameshift_one_score
+    * t: frameshift_two_score
 
     Returns an iterator of Alignment objects.
 

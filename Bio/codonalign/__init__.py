@@ -66,7 +66,8 @@ def build(
     ATG---CGT pro2
 
     Using the newer codon aligner in Bio.Align, this analysis can be performed
-    as follows:
+    as follows (note that here we are also calculating the amino acid alignment
+    between the two protein sequences):
 
     >>> from Bio.Align import global_align, codon_align
     >>> seq1 = SeqRecord(Seq('ATGTCTCGT'), id='pro1')
