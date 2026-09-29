@@ -371,6 +371,7 @@ class PlateRecord:
             )
 
     def __setitem__(self, key, value):
+        """Set a well in this plate using its identifier as the key."""
         if not isinstance(key, str):
             raise ValueError("Well identifier should be string-like")
         self._is_well(value)
@@ -385,6 +386,7 @@ class PlateRecord:
         self._update()
 
     def __delitem__(self, key):
+        """Delete a well from this plate by its identifier."""
         if not isinstance(key, str):
             raise ValueError("Well identifier should be string-like")
         del self._wells[key]
@@ -392,10 +394,12 @@ class PlateRecord:
         self._update()
 
     def __iter__(self):
+        """Iterate over the wells in identifier order."""
         for well in sorted(self._wells):
             yield self._wells[well]
 
     def __contains__(self, wellid):
+        """Return whether this plate contains the given well identifier."""
         if wellid in self._wells:
             return True
         return False
@@ -405,6 +409,7 @@ class PlateRecord:
         return len(self._wells)
 
     def __eq__(self, other):
+        """Return whether the two plates contain the same wells."""
         if isinstance(other, self.__class__):
             return self._wells == other._wells
         else:
@@ -726,10 +731,12 @@ class WellRecord:
         raise ValueError("Invalid index")
 
     def __iter__(self):
+        """Iterate over time-signal pairs in time order."""
         for time in sorted(self._signals.keys()):
             yield time, self._signals[time]
 
     def __eq__(self, other):
+        """Return whether the two wells have equal signals at each time."""
         if isinstance(other, self.__class__):
             if list(self._signals.keys()) != list(other._signals.keys()):
                 return False
