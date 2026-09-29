@@ -4,6 +4,13 @@
 
 """Tests for Array in the Bio.Align.substitution_matrices module."""
 
+import os
+import pickle
+import subprocess
+import sys
+import unittest
+from collections import Counter
+
 try:
     import numpy as np
 except ImportError:
@@ -13,21 +20,39 @@ except ImportError:
         "Install NumPy if you want to use Bio.Align.substitution_matrices."
     ) from None
 
-
-import os
-import pickle
-import unittest
-from collections import Counter
-
 from Bio import SeqIO
 from Bio.Align import substitution_matrices
 from Bio.Data import IUPACData
+
 
 nucleotide_alphabet = IUPACData.unambiguous_dna_letters
 protein_alphabet = IUPACData.protein_letters
 
 
 class TestBasics(unittest.TestCase):
+    @unittest.skipUnless(sys.implementation.name == "cpython", "requires CPython")
+    def test_arraycore_import_preserves_references(self):
+        extension = sys.modules["Bio.Align.substitution_matrices._arraycore"].__file__
+        tests = (
+            "ArrayCoreImportTests.test_successful_import",
+            "ArrayCoreImportTests.test_missing_ndarray",
+            "ArrayCoreImportTests.test_invalid_ndarray",
+            "ArrayCoreImportTests.test_poisoned_retry",
+        )
+        for test in tests:
+            with self.subTest(test=test):
+                subprocess.run(
+                    [
+                        sys.executable,
+                        "-m",
+                        "Tests.arraycore_import_tests",
+                        test,
+                        extension,
+                    ],
+                    check=True,
+                    cwd=os.path.dirname(os.path.dirname(__file__)),
+                )
+
     def test_basics_vector(self):
         """Test basic vector operations."""
         counts = substitution_matrices.Array("XYZ")
