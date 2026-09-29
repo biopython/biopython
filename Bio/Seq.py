@@ -141,6 +141,7 @@ class SequenceDataAbstractBaseClass(ABC):
         return other + bytes(self)
 
     def __mul__(self, other):
+        """Multiply this data by another object."""
         return other * bytes(self)
 
     def __contains__(self, item):
