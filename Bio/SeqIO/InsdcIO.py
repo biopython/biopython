@@ -800,6 +800,12 @@ class GenBankWriter(_InsdcWriter):
         mol_type = self._get_annotation_str(record, "molecule_type", None)
         if mol_type is None:
             raise ValueError("missing molecule_type in annotations")
+        # Strandedness (ss-, ds-, ms-) belongs in columns 45-47, before the
+        # molecule type in columns 48-53.
+        if mol_type[:3] in ("ss-", "ds-", "ms-"):
+            strand, mol_type = mol_type[:3], mol_type[3:]
+        else:
+            strand = "   "
         if mol_type and len(mol_type) > 7:
             # Deal with common cases from EMBL to GenBank
             mol_type = mol_type.replace("unassigned ", "").replace("genomic ", "")
@@ -831,9 +837,10 @@ class GenBankWriter(_InsdcWriter):
 
         assert len(units) == 2
         assert len(division) == 3
-        line = "LOCUS       %s %s    %s %s %s %s\n" % (
+        line = "LOCUS       %s %s %s%s %s %s %s\n" % (
             name_length,
             units,
+            strand,
             mol_type.ljust(7),
             topology,
             division,

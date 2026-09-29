@@ -8458,6 +8458,25 @@ class OutputTests(unittest.TestCase):
             self.assertEqual(old.description, new.description)
             self.assertEqual(old.seq, new.seq)
 
+    def test_locus_strandedness_columns(self):
+        """Strandedness goes in LOCUS columns 45-47, molecule type in 48-53."""
+        for mol_type in ["DNA", "ss-DNA", "ds-RNA", "ms-DNA", "ss-tRNA"]:
+            record = SeqRecord(
+                Seq("ACGT"),
+                id="Exported",
+                name="Exported",
+                annotations={"molecule_type": mol_type},
+            )
+            line = record.format("gb").splitlines()[0]
+            if mol_type[2:3] == "-":
+                strand, kind = mol_type[:3], mol_type[3:]
+            else:
+                strand, kind = "   ", mol_type
+            self.assertEqual(line[44:47], strand)
+            self.assertEqual(line[47:53].rstrip(), kind)
+            new = SeqIO.read(StringIO(record.format("gb")), "gb")
+            self.assertEqual(new.annotations["molecule_type"], mol_type)
+
     def test_seqrecord_default_description(self):
         """Read in file using SeqRecord default description."""
         old = SeqRecord(
