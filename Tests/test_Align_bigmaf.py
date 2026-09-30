@@ -27,10 +27,10 @@ class TestAlign_ucsc_test(unittest.TestCase):
         # BigMaf file ucsc_test.bb was created using the commands
         # tail -n +2 ucsc_test.maf | mafToBigMaf hg16 stdin stdout | sort -k1,1 -k2,2n > ucsc_test.txt
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_test.txt hg16.chrom.sizes ucsc_test.bb
-        alignments = Align.parse(self.path, "bigmaf")
-        self.check_alignments(alignments)
-        alignments = iter(alignments)
-        self.check_alignments(alignments)
+        with Align.parse(self.path, "bigmaf") as alignments:
+            self.check_alignments(alignments)
+            alignments = iter(alignments)
+            self.check_alignments(alignments)
         with Align.parse(self.path, "bigmaf") as alignments:
             self.check_alignments(alignments)
         with self.assertRaises(AttributeError):
@@ -42,9 +42,9 @@ class TestAlign_ucsc_test(unittest.TestCase):
 
     def test_writing(self):
         """Test writing ucsc_test.bb."""
-        alignments = Align.parse(self.path, "bigmaf")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigmaf")
+            with Align.parse(self.path, "bigmaf") as alignments:
+                Align.write(alignments, output, "bigmaf")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigmaf")
@@ -451,10 +451,10 @@ class TestAlign_bundle_without_target(unittest.TestCase):
         # BigMaf file bundle_without_target.bb was created using the commands
         # mafToBigMaf mm8 bundle_without_target.maf stdout | sort -k1,1 -k2,2n > bundle_without_target.txt
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab bundle_without_target.txt mm8.chrom.sizes bundle_without_target.bb
-        alignments = Align.parse(self.path, "bigmaf")
-        self.check_alignments(alignments)
-        alignments = iter(alignments)
-        self.check_alignments(alignments)
+        with Align.parse(self.path, "bigmaf") as alignments:
+            self.check_alignments(alignments)
+            alignments = iter(alignments)
+            self.check_alignments(alignments)
         with Align.parse(self.path, "bigmaf") as alignments:
             self.check_alignments(alignments)
         with self.assertRaises(AttributeError):
@@ -466,9 +466,9 @@ class TestAlign_bundle_without_target(unittest.TestCase):
 
     def test_writing(self):
         """Test writing bundle_without_target.bb."""
-        alignments = Align.parse(self.path, "bigmaf")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigmaf")
+            with Align.parse(self.path, "bigmaf") as alignments:
+                Align.write(alignments, output, "bigmaf")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigmaf")
@@ -647,14 +647,14 @@ class TestAlign_ucsc_mm9_chr10(unittest.TestCase):
         # mafToBigMaf mm9 ucsc_mm9_chr10.maf stdout | sort -k1,1 -k2,2n > ucsc_mm9_chr10.txt
         # bedToBigBed -type=bed3+1 -as=bigMaf.as -tab ucsc_mm9_chr10.txt mm9.chrom.sizes ucsc_mm9_chr10.bb
 
-        alignments = Align.parse(self.path, "bigmaf")
-        self.check_alignments(alignments)
+        with Align.parse(self.path, "bigmaf") as alignments:
+            self.check_alignments(alignments)
 
     def test_writing(self):
         """Test writing file ucsc_mm9_chr10.bb."""
-        alignments = Align.parse(self.path, "bigmaf")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigmaf")
+            with Align.parse(self.path, "bigmaf") as alignments:
+                Align.write(alignments, output, "bigmaf")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigmaf")
@@ -12561,62 +12561,62 @@ AlignmentCounts object with
 class TestAlign_searching(unittest.TestCase):
     def test_search_chromosome(self):
         path = "MAF/ucsc_test.bb"
-        alignments = Align.parse(path, "bigmaf")
-        selected_alignments = alignments.search("hg16.chr7")
-        alignment = next(selected_alignments)
-        self.assertEqual(alignment.coordinates[0, 0], 27578828)
-        self.assertEqual(alignment.coordinates[0, -1], 27578866)
-        self.assertAlmostEqual(alignment.score, 23262.0)
-        self.assertEqual(
-            str(alignment),
-            """\
+        with Align.parse(path, "bigmaf") as alignments:
+            selected_alignments = alignments.search("hg16.chr7")
+            alignment = next(selected_alignments)
+            self.assertEqual(alignment.coordinates[0, 0], 27578828)
+            self.assertEqual(alignment.coordinates[0, -1], 27578866)
+            self.assertAlmostEqual(alignment.score, 23262.0)
+            self.assertEqual(
+                str(alignment),
+                """\
 hg16.chr7  27578828 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 27578866
 panTro1.c  28741140 AAA-GGGAATGTTAACCAAATGA---ATTGTCTCTTACGGTG 28741178
 baboon       116834 AAA-GGGAATGTTAACCAAATGA---GTTGTCTCTTATGGTG   116872
 mm4.chr6   53215344 -AATGGGAATGTTAAGCAAACGA---ATTGTCTCTCAGTGTG 53215382
 rn3.chr4   81344243 -AA-GGGGATGCTAAGCCAATGAGTTGTTGTCTCTCAATGTG 81344283
 """,
-        )
-        alignment = next(selected_alignments)
-        self.assertEqual(alignment.coordinates[0, 0], 27699739)
-        self.assertEqual(alignment.coordinates[0, -1], 27699745)
-        self.assertAlmostEqual(alignment.score, 5062.0)
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            alignment = next(selected_alignments)
+            self.assertEqual(alignment.coordinates[0, 0], 27699739)
+            self.assertEqual(alignment.coordinates[0, -1], 27699745)
+            self.assertAlmostEqual(alignment.score, 5062.0)
+            self.assertEqual(
+                str(alignment),
+                """\
 hg16.chr7  27699739 TAAAGA 27699745
 panTro1.c  28862317 TAAAGA 28862323
 baboon       241163 TAAAGA   241169
 mm4.chr6   53303881 TAAAGA 53303887
 rn3.chr4   81444246 taagga 81444252
 """,
-        )
-        alignment = next(selected_alignments)
-        self.assertEqual(alignment.coordinates[0, 0], 27707221)
-        self.assertEqual(alignment.coordinates[0, -1], 27707234)
-        self.assertAlmostEqual(alignment.score, 6636.0)
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            alignment = next(selected_alignments)
+            self.assertEqual(alignment.coordinates[0, 0], 27707221)
+            self.assertEqual(alignment.coordinates[0, -1], 27707234)
+            self.assertAlmostEqual(alignment.score, 6636.0)
+            self.assertEqual(
+                str(alignment),
+                """\
 hg16.chr7  27707221 gcagctgaaaaca 27707234
 panTro1.c  28869787 gcagctgaaaaca 28869800
 baboon       249182 gcagctgaaaaca   249195
 mm4.chr6   53310102 ACAGCTGAAAATA 53310115
 """,
-        )
-        self.assertTrue(
-            np.array_equal(
-                np.array(alignment, "U"),
-                # fmt: off
+            )
+            self.assertTrue(
+                np.array_equal(
+                    np.array(alignment, "U"),
+                    # fmt: off
 np.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
           ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
           ['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
           ['A', 'C', 'A', 'G', 'C', 'T', 'G', 'A', 'A', 'A', 'A', 'T', 'A']],
          dtype='U')
-                # fmt: on
+                    # fmt: on
+                )
             )
-        )
-        self.assertRaises(StopIteration, next, selected_alignments)
+            self.assertRaises(StopIteration, next, selected_alignments)
 
     def test_search_region(self):
         path = "MAF/ucsc_mm9_chr10.bb"

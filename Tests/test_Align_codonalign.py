@@ -21,6 +21,7 @@ from Bio import Align
 from Bio import SeqIO
 from Bio.Align import Alignment
 from Bio.Align import CodonAligner
+from Bio.Align import codon_align
 from Bio.Align.analysis import calculate_dn_ds
 from Bio.Align.analysis import calculate_dn_ds_matrix
 from Bio.Align.analysis import mktest
@@ -323,27 +324,268 @@ dna               3 AAAAAAAAAAAATTT 18
 """,
         )
 
+    def test_convenience_functions(self):
+        dna = SeqRecord(Seq("TTTAAAAAAAAATTT"), id="dna")
+        pro = SeqRecord(Seq("FKKKF"), id="pro")
+        alignments = codon_align(pro, dna, frameshift_score=-1.0)
+        self.assertEqual(len(alignments), 1)
+        self.assertAlmostEqual(alignments.score, 5.0)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  K  F    5
+dna               0 TTTAAAAAAAAATTT 15
+""",
+        )
+        dna = SeqRecord(Seq("TTTAAAAAAAATTT"), id="dna")
+        alignments = codon_align(pro, dna, frameshift_score=-1.0)
+        self.assertEqual(len(alignments), 2)
+        self.assertAlmostEqual(alignments.score, 4.0)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K   3
+dna               0 TTTAAAAAA 9
+
+pro               3 K  F    5
+dna               8 AAATTT 14
+""",
+        )
+        alignment = alignments[1]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K   2
+dna               0 TTTAAA 6
+
+pro               2 K  K  F    5
+dna               5 AAAAAATTT 14
+""",
+        )
+        dna = SeqRecord(Seq("TTTAAAAAAATTT"), id="dna")
+        alignments = codon_align(pro, dna, frameshift_score=-1.0)
+        self.assertEqual(len(alignments), 2)
+        self.assertAlmostEqual(alignments.score, 4.0)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K   3
+dna               0 TTTAAAAAA 9
+
+pro               3 K  F    5
+dna               7 AAATTT 13
+""",
+        )
+        alignment = alignments[1]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K   2
+dna               0 TTTAAA 6
+
+pro               2 K  K  F    5
+dna               4 AAAAAATTT 13
+""",
+        )
+        dna = SeqRecord(Seq("TTTAAAAAATTT"), id="dna")
+        alignments = codon_align(pro, dna, frameshift_score=-1.0)
+        self.assertEqual(len(alignments), 2)
+        self.assertAlmostEqual(alignments.score, 3.0)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K   2
+dna               0 TTTAAA 6
+
+pro               2 K   3
+dna               5 AAA 8
+
+pro               3 K  F    5
+dna               6 AAATTT 12
+""",
+        )
+        alignment = alignments[1]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K   2
+dna               0 TTTAAA 6
+
+pro               2 K   3
+dna               4 AAA 7
+
+pro               3 K  F    5
+dna               6 AAATTT 12
+""",
+        )
+        dna = SeqRecord(Seq("TTTAAAAATTT"), id="dna")
+        alignments = codon_align(pro, dna, frameshift_score=-1.0)
+        self.assertEqual(len(alignments), 1)
+        self.assertAlmostEqual(alignments.score, 3.0)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K   2
+dna               0 TTTAAA 6
+
+pro               2 K   3
+dna               4 AAA 7
+
+pro               3 K  F    5
+dna               5 AAATTT 11
+""",
+        )
+        dna = SeqRecord(Seq("TTTAAAAAAAAAATTT"), id="dna")
+        alignments = codon_align(pro, dna, frameshift_score=-1.0)
+        self.assertEqual(len(alignments), 6)
+        self.assertAlmostEqual(alignments.score, 4.0)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  K  F    5
+dna               0 TTTAAAAAAAAAATT 15
+""",
+        )
+        alignment = alignments[1]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  K  F    5
+dna               1 TTAAAAAAAAAATTT 16
+""",
+        )
+        alignment = alignments[2]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  -K  K  K  F    5
+dna               0 TTTAAAAAAAAAATTT 16
+""",
+        )
+        alignment = alignments[3]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  -K  K  F    5
+dna               0 TTTAAAAAAAAAATTT 16
+""",
+        )
+        alignment = alignments[4]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  -K  F    5
+dna               0 TTTAAAAAAAAAATTT 16
+""",
+        )
+        alignment = alignments[5]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  K  -F    5
+dna               0 TTTAAAAAAAAAATTT 16
+""",
+        )
+        dna = SeqRecord(Seq("TTTAAAAAAAAAAATTT"), id="dna")
+        alignments = codon_align(pro, dna, frameshift_score=-1.0)
+        self.assertEqual(len(alignments), 6)
+        self.assertAlmostEqual(alignments.score, 4.0)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  K  F    5
+dna               0 TTTAAAAAAAAAAAT 15
+""",
+        )
+        alignment = alignments[1]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  K  F    5
+dna               2 TAAAAAAAAAAATTT 17
+""",
+        )
+        alignment = alignments[2]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  --K  K  K  F    5
+dna               0 TTTAAAAAAAAAAATTT 17
+""",
+        )
+        alignment = alignments[3]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  --K  K  F    5
+dna               0 TTTAAAAAAAAAAATTT 17
+""",
+        )
+        alignment = alignments[4]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  --K  F    5
+dna               0 TTTAAAAAAAAAAATTT 17
+""",
+        )
+        alignment = alignments[5]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  K  --F    5
+dna               0 TTTAAAAAAAAAAATTT 17
+""",
+        )
+        dna = SeqRecord(Seq("TTTAAAAAAAAAAAATTT"), id="dna")
+        alignments = codon_align(pro, dna, frameshift_score=-1.0)
+        self.assertEqual(len(alignments), 2)
+        self.assertAlmostEqual(alignments.score, 4.0)
+        alignment = alignments[0]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  K  F    5
+dna               0 TTTAAAAAAAAAAAA 15
+""",
+        )
+        alignment = alignments[1]
+        self.assertEqual(
+            str(alignment),
+            """\
+pro               0 F  K  K  K  F    5
+dna               3 AAAAAAAAAAAATTT 18
+""",
+        )
+
 
 class TestBuildAndIO(unittest.TestCase):
     def test1(self):
         aligner = CodonAligner()
-        nucleotide_records = SeqIO.parse("codonalign/nucl1.fa", "fasta")
         protein_alignment = Align.read("codonalign/pro1.aln", "clustal")
         self.assertEqual(len(protein_alignment.sequences), 3)
-        codon_alignments = []
-        nucleotide_record = next(nucleotide_records)
-        protein_record = protein_alignment.sequences[0]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 183], [0, 549]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+        with SeqIO.parse("codonalign/nucl1.fa", "fasta") as nucleotide_records:
+            codon_alignments = []
+            nucleotide_record = next(nucleotide_records)
+            protein_record = protein_alignment.sequences[0]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 183], [0, 549]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig697         0 R  G  D  Q  R  S  N  F  Q  L  S  P  S  T  M  Q  I  S  T  G  
 isotig697         0 AGAGGCGATCAACGCAGCAACTTCCAGCTGTCTCCCTCCACCATGCAGATCTCCACAGGG
 
@@ -374,20 +616,20 @@ isotig697       480 CAGAATAAGCCAGACTTGAAGAGGTTGTGTAATTTCTTGAATATGCAAAATCTTAAAAGG
 isotig697       180 G  A  C   183
 isotig697       540 GGGGCATGC 549
 """,
-        )
-        nucleotide_record = next(nucleotide_records)
-        protein_record = protein_alignment.sequences[1]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 65], [0, 195]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            nucleotide_record = next(nucleotide_records)
+            protein_record = protein_alignment.sequences[1]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 65], [0, 195]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  K  V  S  A  A  L  L  C  L  L  L  I  A  A  T  F  I  P  Q  
 ENSG00000         0 ATGAAAGTCTCTGCCGCCCTTCTGTGCCTGCTGCTCATAGCAGCCACCTTCATTCCCCAA
 
@@ -400,20 +642,20 @@ ENSG00000       120 AGGAAGATCTCAGTGCAGAGGCTCGCGAGCTATAGAAGAATCACCAGCAGCAAGTGTCCC
 ENSG00000        60 K  E  A  V  M    65
 ENSG00000       180 AAAGAAGCTGTGATG 195
 """,
-        )
-        nucleotide_record = next(nucleotide_records)
-        protein_record = protein_alignment.sequences[2]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 99], [9, 306]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            nucleotide_record = next(nucleotide_records)
+            protein_record = protein_alignment.sequences[2]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 99], [9, 306]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  K  V  S  A  A  L  L  C  L  L  L  I  A  A  T  F  I  P  Q  
 ENSG00000         9 ATGAAAGTCTCTGCCGCCCTTCTGTGCCTGCTGCTCATAGCAGCCACCTTCATTCCCCAA
 
@@ -432,21 +674,21 @@ ENSG00000       249 AAGTGGGTTCAGGATTCCATGGACCACCTGGACAAGCAAACCCAAACTCCGAAGACT
 ENSG00000        99
 ENSG00000       306
 """,
-        )
-        alignment = protein_alignment.mapall(codon_alignments)
-        self.assertTrue(
-            np.array_equal(
-                alignment.coordinates,
-                # fmt: off
-                np.array([[0, 42, 126, 126, 231, 333, 549],
-                          [0,  0,  84,  90, 195, 195, 195],
-                          [9,  9,  93,  99, 204, 306, 306]])
-                # fmt: on
             )
-        )
-        self.assertEqual(
-            format(alignment, "clustal"),
-            """\
+            alignment = protein_alignment.mapall(codon_alignments)
+            self.assertTrue(
+                np.array_equal(
+                    alignment.coordinates,
+                    # fmt: off
+                    np.array([[0, 42, 126, 126, 231, 333, 549],
+                              [0,  0,  84,  90, 195, 195, 195],
+                              [9,  9,  93,  99, 204, 306, 306]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(
+                format(alignment, "clustal"),
+                """\
 isotig69710                         AGAGGCGATCAACGCAGCAACTTCCAGCTGTCTCCCTCCACCATGCAGAT
 ENSG00000108691:ENST0000058090      ------------------------------------------ATGAAAGT
 ENSG00000108691:ENST0000022583      ------------------------------------------ATGAAAGT
@@ -497,27 +739,27 @@ ENSG00000108691:ENST0000022583      -----
 
 
 """,
-        )
+            )
 
     def test2(self):
         aligner = CodonAligner()
-        nucleotide_records = SeqIO.parse("codonalign/nucl2.fa", "fasta")
         protein_alignment = Align.read("codonalign/pro2.aln", "clustal")
         self.assertEqual(len(protein_alignment.sequences), 3)
-        codon_alignments = []
-        nucleotide_record = next(nucleotide_records)
-        protein_record = protein_alignment.sequences[0]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1094], [0, 3282]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+        with SeqIO.parse("codonalign/nucl2.fa", "fasta") as nucleotide_records:
+            codon_alignments = []
+            nucleotide_record = next(nucleotide_records)
+            protein_record = protein_alignment.sequences[0]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 1094], [0, 3282]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig351         0 E  R  Q  G  R  W  C  V  P  G  E  A  V  E  A  R  V  S  R  S  
 isotig351         0 GAAAGGCAGGGTCGctGGTGCGTGCCCGGCGAGGCTGTGGAGGCCcgTGTGTCTAGAAGC
 
@@ -683,20 +925,20 @@ isotig351      3180 AAAAATTCCATGACATATAGCTTCCAGGTTTCTCAGCTCTTGTATGACAATATCACACAT
 isotig351      1080 Y  Y  Y  V  F  N  L  S  Q  R  E  M  P  L   1094
 isotig351      3240 TaCTATTATGTATTCAATCTCAGCCAAAGGGAGATGCCTTTA 3282
 """,
-        )
-        nucleotide_record = next(nucleotide_records)
-        protein_record = protein_alignment.sequences[1]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1104], [0, 3312]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            nucleotide_record = next(nucleotide_records)
+            protein_record = protein_alignment.sequences[1]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 1104], [0, 3312]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig351         0 E  R  Q  G  R  W  C  V  P  G  E  A  V  E  A  R  V  S  R  S  
 isotig351         0 GAAAGGCAGGGTCGctGGTGCGTGCCCGGCGAGGCTGTGGAGGCCcgTGTGTCTAGAAGC
 
@@ -865,20 +1107,20 @@ isotig351      3240 GTACAATTAATGAATCTGAACACATTaCTATTATGTATTCAATCTCAGCCAATAAAGGGA
 isotig351      1100 D  A  F  N   1104
 isotig351      3300 GATGCCTTTAAC 3312
 """,
-        )
-        nucleotide_record = next(nucleotide_records)
-        protein_record = protein_alignment.sequences[2]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 419], [0, 1257]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            nucleotide_record = next(nucleotide_records)
+            protein_record = protein_alignment.sequences[2]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 419], [0, 1257]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  A  E  P  V  G  K  R  G  R  W  S  G  G  S  G  A  G  R  G  
 ENSG00000         0 ATGGCGGAGCCTGTGGGGAAGCGGGGCCGCTGGTCCGGAGGTAGCGGTGCCGGCCGAGGG
 
@@ -945,30 +1187,30 @@ ENSG00000      1200 AGGGAGCTGCCAGCTGACCTGGGCATGGAATCTGGGGACCTCATTGAGGTCTGGGGC
 ENSG00000       419
 ENSG00000      1257
 """,
-        )
-        alignment = protein_alignment.mapall(codon_alignments)
-        self.assertTrue(
-            np.array_equal(
-                alignment.coordinates,
-                # fmt: off
-                np.array([[   0,   72,  255,  255,  603,  606, 1317, 1530,
-                           1530, 1737, 1737, 1902, 1902, 1926, 1926, 2031,
-                           2088, 2343, 2346, 2418, 2442, 2556, 2562, 2763,
-                           2784, 2853, 2859, 3165, 3165, 3282, 3282],
-                          [   0,   72,  255,  255,  603,  606, 1317, 1530,
-                           1569, 1776, 1821, 1986, 1992, 2016, 2031, 2136,
-                           2136, 2391, 2391, 2463, 2463, 2577, 2577, 2778,
-                           2778, 2847, 2847, 3153, 3162, 3279, 3312],
-                          [   0,    0,  183,  198,  546,  546, 1257, 1257,
-                           1257, 1257, 1257, 1257, 1257, 1257, 1257, 1257,
-                           1257, 1257, 1257, 1257, 1257, 1257, 1257, 1257,
-                           1257, 1257, 1257, 1257, 1257, 1257, 1257]])
-                # fmt: on
             )
-        )
-        self.assertEqual(
-            format(alignment, "clustal"),
-            """\
+            alignment = protein_alignment.mapall(codon_alignments)
+            self.assertTrue(
+                np.array_equal(
+                    alignment.coordinates,
+                    # fmt: off
+                    np.array([[   0,   72,  255,  255,  603,  606, 1317, 1530,
+                               1530, 1737, 1737, 1902, 1902, 1926, 1926, 2031,
+                               2088, 2343, 2346, 2418, 2442, 2556, 2562, 2763,
+                               2784, 2853, 2859, 3165, 3165, 3282, 3282],
+                              [   0,   72,  255,  255,  603,  606, 1317, 1530,
+                               1569, 1776, 1821, 1986, 1992, 2016, 2031, 2136,
+                               2136, 2391, 2391, 2463, 2463, 2577, 2577, 2778,
+                               2778, 2847, 2847, 3153, 3162, 3279, 3312],
+                              [   0,    0,  183,  198,  546,  546, 1257, 1257,
+                               1257, 1257, 1257, 1257, 1257, 1257, 1257, 1257,
+                               1257, 1257, 1257, 1257, 1257, 1257, 1257, 1257,
+                               1257, 1257, 1257, 1257, 1257, 1257, 1257]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(
+                format(alignment, "clustal"),
+                """\
 isotig35100                         GAAAGGCAGGGTCGctGGTGCGTGCCCGGCGAGGCTGTGGAGGCCcgTGT
 isotig35101                         GAAAGGCAGGGTCGctGGTGCGTGCCCGGCGAGGCTGTGGAGGCCcgTGT
 ENSG00000176953:ENST0000032080      --------------------------------------------------
@@ -1247,27 +1489,28 @@ ENSG00000176953:ENST0000032080      --------------------------------------------
 
 
 """,
-        )
+            )
 
     def test3(self):
         aligner = CodonAligner()
-        nucleotide_records = SeqIO.index("codonalign/nucl3.fa", "fasta")
         protein_alignment = Align.read("codonalign/pro3.aln", "clustal")
         self.assertEqual(len(protein_alignment.sequences), 10)
-        codon_alignments = []
-        protein_record = protein_alignment.sequences[0]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+        try:
+            nucleotide_records = SeqIO.index("codonalign/nucl3.fa", "fasta")
+            codon_alignments = []
+            protein_record = protein_alignment.sequences[0]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  S  L  W  G  L  V  S  K  M  P  P  E  K  V  Q  R  L  Y  V  
 ENSG00000         0 ATGTCTCTGTGGGGTCTGGTCTCCAAGATGCCCCCAGAAAAAGTGCAGCGGCTCTATGTC
 
@@ -1397,20 +1640,20 @@ ENSG00000      2460 CAGCCCCTCCTGCAGCCCTCCCACTATGGGCAATCTGGGATCTCAATGTCCCACATGGAC
 ENSG00000       840 L  R  A  N  P  S  W    847
 ENSG00000      2520 CTAAGGGCCAACCCCAGTTGG 2541
 """,
-        )
-        protein_record = protein_alignment.sequences[1]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[1]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  S  L  W  G  L  V  S  K  M  P  P  E  K  V  Q  R  L  Y  V  
 ENSG00000         0 ATGTCTCTGTGGGGTCTGGTCTCCAAGATGCCCCCAGAAAAAGTGCAGCGGCTCTATGTC
 
@@ -1540,20 +1783,20 @@ ENSG00000      2460 CAGCCCCTCCTGCAGCCCTCCCACTATGGGCAATCTGGGATCTCAATGTCCCACATGGAC
 ENSG00000       840 L  R  A  N  P  S  W    847
 ENSG00000      2520 CTAAGGGCCAACCCCAGTTGG 2541
 """,
-        )
-        protein_record = protein_alignment.sequences[2]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[2]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  S  L  W  G  L  V  S  K  M  P  P  E  K  V  Q  R  L  Y  V  
 ENSG00000         0 ATGTCTCTGTGGGGTCTGGTCTCCAAGATGCCCCCAGAAAAAGTGCAGCGGCTCTATGTC
 
@@ -1683,20 +1926,20 @@ ENSG00000      2460 CAGCCCCTCCTGCAGCCCTCCCACTATGGGCAATCTGGGATCTCAATGTCCCACATGGAC
 ENSG00000       840 L  R  A  N  P  S  W    847
 ENSG00000      2520 CTAAGGGCCAACCCCAGTTGG 2541
 """,
-        )
-        protein_record = protein_alignment.sequences[3]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[3]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  S  L  W  G  L  V  S  K  M  P  P  E  K  V  Q  R  L  Y  V  
 ENSG00000         0 ATGTCTCTGTGGGGTCTGGTCTCCAAGATGCCCCCAGAAAAAGTGCAGCGGCTCTATGTC
 
@@ -1826,20 +2069,20 @@ ENSG00000      2460 CAGCCCCTCCTGCAGCCCTCCCACTATGGGCAATCTGGGATCTCAATGTCCCACATGGAC
 ENSG00000       840 L  R  A  N  P  S  W    847
 ENSG00000      2520 CTAAGGGCCAACCCCAGTTGG 2541
 """,
-        )
-        protein_record = protein_alignment.sequences[4]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[4]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  E  Q  F  R  H  L  P  M  P  F  H  W  K  Q  E  E  L  K  F  
 ENSG00000         0 ATGGAACAGTTCCGCCACTTGCCAATGCCTTTCCACTGGAAGCAGGAAGAACTCAAGTTT
 
@@ -1951,20 +2194,20 @@ ENSG00000      2100 GGGGAGTCGGGGGGAGGGTCCTTGGGGGCACAGCCCCTCCTGCAGCCCTCCCACTATGGG
 ENSG00000       720 Q  S  G  I  S  M  S  H  M  D  L  R  A  N  P  S  W    737
 ENSG00000      2160 CAATCTGGGATCTCAATGTCCCACATGGACCTAAGGGCCAACCCCAGTTGG 2211
 """,
-        )
-        protein_record = protein_alignment.sequences[5]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[5]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  E  Q  F  R  H  L  P  M  P  F  H  W  K  Q  E  E  L  K  F  
 ENSG00000         0 ATGGAACAGTTCCGCCACTTGCCAATGCCTTTCCACTGGAAGCAGGAAGAACTCAAGTTT
 
@@ -2076,20 +2319,20 @@ ENSG00000      2100 GGGGAGTCGGGGGGAGGGTCCTTGGGGGCACAGCCCCTCCTGCAGCCCTCCCACTATGGG
 ENSG00000       720 Q  S  G  I  S  M  S  H  M  D  L  R  A  N  P  S  W    737
 ENSG00000      2160 CAATCTGGGATCTCAATGTCCCACATGGACCTAAGGGCCAACCCCAGTTGG 2211
 """,
-        )
-        protein_record = protein_alignment.sequences[6]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[6]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  E  Q  F  R  H  L  P  M  P  F  H  W  K  Q  E  E  L  K  F  
 ENSG00000         0 ATGGAACAGTTCCGCCACTTGCCAATGCCTTTCCACTGGAAGCAGGAAGAACTCAAGTTT
 
@@ -2201,21 +2444,21 @@ ENSG00000      2100 GGGGAGTCGGGGGGAGGGTCCTTGGGGGCACAGCCCCTCCTGCAGCCCTCCCACTATGGG
 ENSG00000       720 Q  S  G  I  S  M  S  H  M  D  L  R  A  N  P  S  W    737
 ENSG00000      2160 CAATCTGGGATCTCAATGTCCCACATGGACCTAAGGGCCAACCCCAGTTGG 2211
 """,
-        )
-        protein_record = protein_alignment.sequences[7]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        nucleotide_record = nucleotide_record.upper()
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1021], [0, 3063]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[7]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            nucleotide_record = nucleotide_record.upper()
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 1021], [0, 3063]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig466         0 E  V  T  Q  S  R  R  K  P  V  R  E  G  R  P  W  E  P  S  Q  
 isotig466         0 GAGGTTACTCAGAGTAGGAGGAAGCCGGTCAGAGAGGGCAGACCCTGGGAACCTTCGCAG
 
@@ -2372,21 +2615,21 @@ isotig466      3000 AACACGCAGGAAAAGACAGCTTCGAGAAACCTATGTTCGCAATATAACAGAAGGCTGCTT
 isotig466      1020 C   1021
 isotig466      3060 TGC 3063
 """,
-        )
-        protein_record = protein_alignment.sequences[8]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        nucleotide_record = nucleotide_record.upper()
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 806], [0, 2418]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[8]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            nucleotide_record = nucleotide_record.upper()
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 806], [0, 2418]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig125         0 A  R  R  G  Q  A  A  L  G  S  P  A  A  R  T  W  S  Q  R  S  
 isotig125         0 GCTAGGAGAGGCCAGGCGGCCCTCGGGAGCCCAGCTGCTCGCACCTGGAGCCAGCGCAGC
 
@@ -2510,21 +2753,21 @@ isotig125      2340 GCCCTCGGCAGGAGGGCAGTTGTCACTCACGTTCATGGATCTGACTTCGGAGTGCGCTAC
 isotig125       800 L  P  H  V  R  S    806
 isotig125      2400 CTCCCCCATGTGAGGAGC 2418
 """,
-        )
-        protein_record = protein_alignment.sequences[9]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        nucleotide_record = nucleotide_record.upper()
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 796], [0, 2388]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[9]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            nucleotide_record = nucleotide_record.upper()
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 796], [0, 2388]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig125         0 A  R  R  G  Q  A  A  L  G  S  P  A  A  R  T  W  S  Q  R  S  
 isotig125         0 GCTAGGAGAGGCCAGGCGGCCCTCGGGAGCCCAGCTGCTCGCACCTGGAGCCAGCGCAGC
 
@@ -2645,128 +2888,128 @@ isotig125      2280 AGACAAGGACATGACCGGGTGTCTGGTGGTGAGTCCTGCTATGGAAGAGCTGTTTATTGG
 isotig125       780 V  L  Q  G  D  R  D  S  R  E  D  Q  N  Q  A  S    796
 isotig125      2340 GTACTTCAGGGTGACCGGGATTCAAGAGAAGACCAGAATCAGGCCTCA 2388
 """,
-        )
-        alignment = protein_alignment.mapall(codon_alignments)
-        self.assertTrue(
-            np.array_equal(
-                alignment.coordinates,
-                # fmt: off
-                np.array([[   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,   36,   36,   63,   63,
-                            213,  222,  240,  240,  330,  330,  330,  405,
-                            405,  438,  450,  579,  579,  729,  729,  837,
-                            837,  897,  912,  975,  987, 1020, 1026, 1074,
-                           1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
-                           1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
-                           1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
-                           2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
-                           2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
-                           2382, 2424, 2463, 2484, 2517, 2541],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,   36,   36,   63,   63,
-                            213,  222,  240,  240,  330,  330,  330,  405,
-                            405,  438,  450,  579,  579,  729,  729,  837,
-                            837,  897,  912,  975,  987, 1020, 1026, 1074,
-                           1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
-                           1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
-                           1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
-                           2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
-                           2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
-                           2382, 2424, 2463, 2484, 2517, 2541],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,   36,   36,   63,   63,
-                            213,  222,  240,  240,  330,  330,  330,  405,
-                            405,  438,  450,  579,  579,  729,  729,  837,
-                            837,  897,  912,  975,  987, 1020, 1026, 1074,
-                           1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
-                           1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
-                           1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
-                           2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
-                           2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
-                           2382, 2424, 2463, 2484, 2517, 2541],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,   36,   36,   63,   63,
-                            213,  222,  240,  240,  330,  330,  330,  405,
-                            405,  438,  450,  579,  579,  729,  729,  837,
-                            837,  897,  912,  975,  987, 1020, 1026, 1074,
-                           1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
-                           1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
-                           1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
-                           2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
-                           2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
-                           2382, 2424, 2463, 2484, 2517, 2541],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,   75,
-                             75,  108,  120,  249,  249,  399,  399,  507,
-                            507,  567,  582,  645,  657,  690,  696,  744,
-                            747,  777,  777,  786,  789,  852,  858,  972,
-                            972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
-                           1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
-                           1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
-                           1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
-                           2052, 2094, 2133, 2154, 2187, 2211],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,   75,
-                             75,  108,  120,  249,  249,  399,  399,  507,
-                            507,  567,  582,  645,  657,  690,  696,  744,
-                            747,  777,  777,  786,  789,  852,  858,  972,
-                            972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
-                           1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
-                           1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
-                           1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
-                           2052, 2094, 2133, 2154, 2187, 2211],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,   75,
-                             75,  108,  120,  249,  249,  399,  399,  507,
-                            507,  567,  582,  645,  657,  690,  696,  744,
-                            747,  777,  777,  786,  789,  852,  858,  972,
-                            972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
-                           1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
-                           1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
-                           1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
-                           2052, 2094, 2133, 2154, 2187, 2211],
-                          [   0,   12,   21,  357,  378,  417,  444,  474,
-                            516,  549,  564,  570,  606,  615,  642,  645,
-                            795,  795,  813,  828,  918,  918,  999, 1074,
-                           1077, 1110, 1110, 1239, 1251, 1401, 1428, 1536,
-                           1560, 1620, 1620, 1683, 1683, 1716, 1716, 1764,
-                           1764, 1794, 1809, 1818, 1818, 1881, 1881, 1995,
-                           2001, 2091, 2091, 2148, 2148, 2148, 2373, 2373,
-                           2502, 2532, 2595, 2619, 2628, 2628, 2682, 2706,
-                           2706, 2709, 2727, 2727, 2727, 2772, 2772, 2805,
-                           2817, 2817, 2835, 2895, 2898, 2916, 2928, 2937,
-                           2946, 2946, 2985, 3006, 3039, 3063],
-                          [   0,    0,    9,    9,   30,   30,   57,   57,
-                             99,   99,  114,  114,  150,  159,  186,  189,
-                            339,  339,  357,  372,  462,  465,  546,  621,
-                            624,  657,  669,  798,  810,  960,  987, 1095,
-                           1119, 1179, 1179, 1242, 1254, 1287, 1287, 1335,
-                           1335, 1365, 1380, 1389, 1392, 1455, 1455, 1569,
-                           1575, 1665, 1665, 1722, 1725, 1725, 1950, 1953,
-                           2082, 2112, 2175, 2175, 2184, 2184, 2184, 2208,
-                           2208, 2208, 2226, 2226, 2226, 2271, 2271, 2304,
-                           2304, 2304, 2304, 2304, 2307, 2325, 2337, 2346,
-                           2346, 2346, 2385, 2385, 2418, 2418],
-                          [   0,    0,    9,    9,   30,   30,   57,   57,
-                             99,   99,  114,  114,  150,  159,  186,  189,
-                            339,  339,  357,  372,  462,  465,  546,  621,
-                            624,  657,  669,  798,  810,  960,  987, 1095,
-                           1119, 1179, 1179, 1242, 1254, 1287, 1287, 1335,
-                           1335, 1365, 1380, 1389, 1392, 1455, 1455, 1569,
-                           1575, 1665, 1665, 1722, 1725, 1725, 1950, 1953,
-                           2082, 2112, 2175, 2175, 2184, 2184, 2184, 2208,
-                           2208, 2208, 2226, 2229, 2229, 2229, 2229, 2262,
-                           2274, 2274, 2274, 2334, 2337, 2337, 2349, 2349,
-                           2349, 2349, 2388, 2388, 2388, 2388]])
-                # fmt: on
             )
-        )
-        self.assertEqual(
-            format(alignment, "clustal"),
-            """\
+            alignment = protein_alignment.mapall(codon_alignments)
+            self.assertTrue(
+                np.array_equal(
+                    alignment.coordinates,
+                    # fmt: off
+                    np.array([[   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,   36,   36,   63,   63,
+                                213,  222,  240,  240,  330,  330,  330,  405,
+                                405,  438,  450,  579,  579,  729,  729,  837,
+                                837,  897,  912,  975,  987, 1020, 1026, 1074,
+                               1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
+                               1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
+                               1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
+                               2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
+                               2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
+                               2382, 2424, 2463, 2484, 2517, 2541],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,   36,   36,   63,   63,
+                                213,  222,  240,  240,  330,  330,  330,  405,
+                                405,  438,  450,  579,  579,  729,  729,  837,
+                                837,  897,  912,  975,  987, 1020, 1026, 1074,
+                               1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
+                               1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
+                               1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
+                               2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
+                               2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
+                               2382, 2424, 2463, 2484, 2517, 2541],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,   36,   36,   63,   63,
+                                213,  222,  240,  240,  330,  330,  330,  405,
+                                405,  438,  450,  579,  579,  729,  729,  837,
+                                837,  897,  912,  975,  987, 1020, 1026, 1074,
+                               1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
+                               1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
+                               1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
+                               2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
+                               2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
+                               2382, 2424, 2463, 2484, 2517, 2541],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,   36,   36,   63,   63,
+                                213,  222,  240,  240,  330,  330,  330,  405,
+                                405,  438,  450,  579,  579,  729,  729,  837,
+                                837,  897,  912,  975,  987, 1020, 1026, 1074,
+                               1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
+                               1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
+                               1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
+                               2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
+                               2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
+                               2382, 2424, 2463, 2484, 2517, 2541],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,   75,
+                                 75,  108,  120,  249,  249,  399,  399,  507,
+                                507,  567,  582,  645,  657,  690,  696,  744,
+                                747,  777,  777,  786,  789,  852,  858,  972,
+                                972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
+                               1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
+                               1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
+                               1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
+                               2052, 2094, 2133, 2154, 2187, 2211],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,   75,
+                                 75,  108,  120,  249,  249,  399,  399,  507,
+                                507,  567,  582,  645,  657,  690,  696,  744,
+                                747,  777,  777,  786,  789,  852,  858,  972,
+                                972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
+                               1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
+                               1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
+                               1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
+                               2052, 2094, 2133, 2154, 2187, 2211],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,   75,
+                                 75,  108,  120,  249,  249,  399,  399,  507,
+                                507,  567,  582,  645,  657,  690,  696,  744,
+                                747,  777,  777,  786,  789,  852,  858,  972,
+                                972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
+                               1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
+                               1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
+                               1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
+                               2052, 2094, 2133, 2154, 2187, 2211],
+                              [   0,   12,   21,  357,  378,  417,  444,  474,
+                                516,  549,  564,  570,  606,  615,  642,  645,
+                                795,  795,  813,  828,  918,  918,  999, 1074,
+                               1077, 1110, 1110, 1239, 1251, 1401, 1428, 1536,
+                               1560, 1620, 1620, 1683, 1683, 1716, 1716, 1764,
+                               1764, 1794, 1809, 1818, 1818, 1881, 1881, 1995,
+                               2001, 2091, 2091, 2148, 2148, 2148, 2373, 2373,
+                               2502, 2532, 2595, 2619, 2628, 2628, 2682, 2706,
+                               2706, 2709, 2727, 2727, 2727, 2772, 2772, 2805,
+                               2817, 2817, 2835, 2895, 2898, 2916, 2928, 2937,
+                               2946, 2946, 2985, 3006, 3039, 3063],
+                              [   0,    0,    9,    9,   30,   30,   57,   57,
+                                 99,   99,  114,  114,  150,  159,  186,  189,
+                                339,  339,  357,  372,  462,  465,  546,  621,
+                                624,  657,  669,  798,  810,  960,  987, 1095,
+                               1119, 1179, 1179, 1242, 1254, 1287, 1287, 1335,
+                               1335, 1365, 1380, 1389, 1392, 1455, 1455, 1569,
+                               1575, 1665, 1665, 1722, 1725, 1725, 1950, 1953,
+                               2082, 2112, 2175, 2175, 2184, 2184, 2184, 2208,
+                               2208, 2208, 2226, 2226, 2226, 2271, 2271, 2304,
+                               2304, 2304, 2304, 2304, 2307, 2325, 2337, 2346,
+                               2346, 2346, 2385, 2385, 2418, 2418],
+                              [   0,    0,    9,    9,   30,   30,   57,   57,
+                                 99,   99,  114,  114,  150,  159,  186,  189,
+                                339,  339,  357,  372,  462,  465,  546,  621,
+                                624,  657,  669,  798,  810,  960,  987, 1095,
+                               1119, 1179, 1179, 1242, 1254, 1287, 1287, 1335,
+                               1335, 1365, 1380, 1389, 1392, 1455, 1455, 1569,
+                               1575, 1665, 1665, 1722, 1725, 1725, 1950, 1953,
+                               2082, 2112, 2175, 2175, 2184, 2184, 2184, 2208,
+                               2208, 2208, 2226, 2229, 2229, 2229, 2229, 2262,
+                               2274, 2274, 2274, 2334, 2337, 2337, 2349, 2349,
+                               2349, 2349, 2388, 2388, 2388, 2388]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(
+                format(alignment, "clustal"),
+                """\
 ENSG00000166888:ENST0000030013      --------------------------------------------------
 ENSG00000166888:ENST0000054387      --------------------------------------------------
 ENSG00000166888:ENST0000055615      --------------------------------------------------
@@ -3517,27 +3760,30 @@ isotig12566                         ----------------
 
 
 """,
-        )
+            )
+        finally:
+            nucleotide_records.close()
 
     def test4(self):
         aligner = CodonAligner()
-        nucleotide_records = SeqIO.index("codonalign/nucl4.fa", "fasta")
         protein_alignment = Align.read("codonalign/pro4.aln", "clustal")
         self.assertEqual(len(protein_alignment.sequences), 10)
-        codon_alignments = []
-        protein_record = protein_alignment.sequences[0]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+        try:
+            nucleotide_records = SeqIO.index("codonalign/nucl4.fa", "fasta")
+            codon_alignments = []
+            protein_record = protein_alignment.sequences[0]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  S  L  W  G  L  V  S  K  M  P  P  E  K  V  Q  R  L  Y  V  
 ENSG00000         0 ATGTCTCTGTGGGGTCTGGTCTCCAAGATGCCCCCAGAAAAAGTGCAGCGGCTCTATGTC
 
@@ -3667,20 +3913,20 @@ ENSG00000      2460 CAGCCCCTCCTGCAGCCCTCCCACTATGGGCAATCTGGGATCTCAATGTCCCACATGGAC
 ENSG00000       840 L  R  A  N  P  S  W    847
 ENSG00000      2520 CTAAGGGCCAACCCCAGTTGG 2541
 """,
-        )
-        protein_record = protein_alignment.sequences[1]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[1]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  S  L  W  G  L  V  S  K  M  P  P  E  K  V  Q  R  L  Y  V  
 ENSG00000         0 ATGTCTCTGTGGGGTCTGGTCTCCAAGATGCCCCCAGAAAAAGTGCAGCGGCTCTATGTC
 
@@ -3810,20 +4056,20 @@ ENSG00000      2460 CAGCCCCTCCTGCAGCCCTCCCACTATGGGCAATCTGGGATCTCAATGTCCCACATGGAC
 ENSG00000       840 L  R  A  N  P  S  W    847
 ENSG00000      2520 CTAAGGGCCAACCCCAGTTGG 2541
 """,
-        )
-        protein_record = protein_alignment.sequences[2]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[2]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  S  L  W  G  L  V  S  K  M  P  P  E  K  V  Q  R  L  Y  V  
 ENSG00000         0 ATGTCTCTGTGGGGTCTGGTCTCCAAGATGCCCCCAGAAAAAGTGCAGCGGCTCTATGTC
 
@@ -3953,20 +4199,20 @@ ENSG00000      2460 CAGCCCCTCCTGCAGCCCTCCCACTATGGGCAATCTGGGATCTCAATGTCCCACATGGAC
 ENSG00000       840 L  R  A  N  P  S  W    847
 ENSG00000      2520 CTAAGGGCCAACCCCAGTTGG 2541
 """,
-        )
-        protein_record = protein_alignment.sequences[3]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[3]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 847], [0, 2541]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  S  L  W  G  L  V  S  K  M  P  P  E  K  V  Q  R  L  Y  V  
 ENSG00000         0 ATGTCTCTGTGGGGTCTGGTCTCCAAGATGCCCCCAGAAAAAGTGCAGCGGCTCTATGTC
 
@@ -4096,20 +4342,20 @@ ENSG00000      2460 CAGCCCCTCCTGCAGCCCTCCCACTATGGGCAATCTGGGATCTCAATGTCCCACATGGAC
 ENSG00000       840 L  R  A  N  P  S  W    847
 ENSG00000      2520 CTAAGGGCCAACCCCAGTTGG 2541
 """,
-        )
-        protein_record = protein_alignment.sequences[4]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[4]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  E  Q  F  R  H  L  P  M  P  F  H  W  K  Q  E  E  L  K  F  
 ENSG00000         0 ATGGAACAGTTCCGCCACTTGCCAATGCCTTTCCACTGGAAGCAGGAAGAACTCAAGTTT
 
@@ -4221,20 +4467,20 @@ ENSG00000      2100 GGGGAGTCGGGGGGAGGGTCCTTGGGGGCACAGCCCCTCCTGCAGCCCTCCCACTATGGG
 ENSG00000       720 Q  S  G  I  S  M  S  H  M  D  L  R  A  N  P  S  W    737
 ENSG00000      2160 CAATCTGGGATCTCAATGTCCCACATGGACCTAAGGGCCAACCCCAGTTGG 2211
 """,
-        )
-        protein_record = protein_alignment.sequences[5]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[5]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  E  Q  F  R  H  L  P  M  P  F  H  W  K  Q  E  E  L  K  F  
 ENSG00000         0 ATGGAACAGTTCCGCCACTTGCCAATGCCTTTCCACTGGAAGCAGGAAGAACTCAAGTTT
 
@@ -4346,20 +4592,20 @@ ENSG00000      2100 GGGGAGTCGGGGGGAGGGTCCTTGGGGGCACAGCCCCTCCTGCAGCCCTCCCACTATGGG
 ENSG00000       720 Q  S  G  I  S  M  S  H  M  D  L  R  A  N  P  S  W    737
 ENSG00000      2160 CAATCTGGGATCTCAATGTCCCACATGGACCTAAGGGCCAACCCCAGTTGG 2211
 """,
-        )
-        protein_record = protein_alignment.sequences[6]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[6]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 737], [0, 2211]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  E  Q  F  R  H  L  P  M  P  F  H  W  K  Q  E  E  L  K  F  
 ENSG00000         0 ATGGAACAGTTCCGCCACTTGCCAATGCCTTTCCACTGGAAGCAGGAAGAACTCAAGTTT
 
@@ -4471,21 +4717,21 @@ ENSG00000      2100 GGGGAGTCGGGGGGAGGGTCCTTGGGGGCACAGCCCCTCCTGCAGCCCTCCCACTATGGG
 ENSG00000       720 Q  S  G  I  S  M  S  H  M  D  L  R  A  N  P  S  W    737
 ENSG00000      2160 CAATCTGGGATCTCAATGTCCCACATGGACCTAAGGGCCAACCCCAGTTGG 2211
 """,
-        )
-        protein_record = protein_alignment.sequences[7]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        nucleotide_record = nucleotide_record.upper()
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1021], [0, 3063]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[7]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            nucleotide_record = nucleotide_record.upper()
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 1021], [0, 3063]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig466         0 E  V  T  Q  S  R  R  K  P  V  R  E  G  R  P  W  E  P  S  Q  
 isotig466         0 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
@@ -4642,21 +4888,21 @@ isotig466      3000 AACACGCAGGAAAAGACAGCTTCGAGAAACCTATGTTCGCAATATAACAGAAGGCTGCTT
 isotig466      1020 C   1021
 isotig466      3060 TGC 3063
 """,
-        )
-        protein_record = protein_alignment.sequences[8]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        nucleotide_record = nucleotide_record.upper()
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 806], [0, 2418]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[8]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            nucleotide_record = nucleotide_record.upper()
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 806], [0, 2418]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig125         0 A  R  R  G  Q  A  A  L  G  S  P  A  A  R  T  W  S  Q  R  S  
 isotig125         0 GCTAGGAGAGGCCAGGCGGCCCTCGGGAGCCCAGCTGCTCGCACCTGGAGCCAGCGCAGC
 
@@ -4780,21 +5026,21 @@ isotig125      2340 GCCCTCGGCAGGAGGGCAGTTGTCACTCACGTTCATGGATCTGACTTCGGAGTGCGCTAC
 isotig125       800 L  P  H  V  R  S    806
 isotig125      2400 CTCCCCCATGTGAGGAGC 2418
 """,
-        )
-        protein_record = protein_alignment.sequences[9]
-        nucleotide_record = nucleotide_records[protein_record.id]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        nucleotide_record = nucleotide_record.upper()
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 796], [0, 2388]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[9]
+            nucleotide_record = nucleotide_records[protein_record.id]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            nucleotide_record = nucleotide_record.upper()
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 796], [0, 2388]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig125         0 A  R  R  G  Q  A  A  L  G  S  P  A  A  R  T  W  S  Q  R  S  
 isotig125         0 GCTAGGAGAGGCCAGGCGGCCCTCGGGAGCCCAGCTGCTCGCACCTGGAGCCAGCGCAGC
 
@@ -4915,128 +5161,128 @@ isotig125      2280 AGACAAGGACATGACCGGGTGTCTGGTGGTGAGTCCTGCTATGGAAGAGCTGTTTATTGG
 isotig125       780 V  L  Q  G  D  R  D  S  R  E  D  Q  N  Q  A  S    796
 isotig125      2340 GTACTTCAGGGTGACCGGGATTCAAGAGAAGACCAGAATCAGGCCTCA 2388
 """,
-        )
-        alignment = protein_alignment.mapall(codon_alignments)
-        self.assertTrue(
-            np.array_equal(
-                alignment.coordinates,
-                # fmt: off
-                np.array([[   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,   36,   36,   63,   63,
-                            213,  222,  240,  240,  330,  330,  330,  405,
-                            405,  438,  450,  579,  579,  729,  729,  837,
-                            837,  897,  912,  975,  987, 1020, 1026, 1074,
-                           1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
-                           1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
-                           1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
-                           2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
-                           2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
-                           2382, 2424, 2463, 2484, 2517, 2541],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,   36,   36,   63,   63,
-                            213,  222,  240,  240,  330,  330,  330,  405,
-                            405,  438,  450,  579,  579,  729,  729,  837,
-                            837,  897,  912,  975,  987, 1020, 1026, 1074,
-                           1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
-                           1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
-                           1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
-                           2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
-                           2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
-                           2382, 2424, 2463, 2484, 2517, 2541],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,   36,   36,   63,   63,
-                            213,  222,  240,  240,  330,  330,  330,  405,
-                            405,  438,  450,  579,  579,  729,  729,  837,
-                            837,  897,  912,  975,  987, 1020, 1026, 1074,
-                           1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
-                           1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
-                           1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
-                           2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
-                           2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
-                           2382, 2424, 2463, 2484, 2517, 2541],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,   36,   36,   63,   63,
-                            213,  222,  240,  240,  330,  330,  330,  405,
-                            405,  438,  450,  579,  579,  729,  729,  837,
-                            837,  897,  912,  975,  987, 1020, 1026, 1074,
-                           1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
-                           1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
-                           1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
-                           2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
-                           2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
-                           2382, 2424, 2463, 2484, 2517, 2541],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,   75,
-                             75,  108,  120,  249,  249,  399,  399,  507,
-                            507,  567,  582,  645,  657,  690,  696,  744,
-                            747,  777,  777,  786,  789,  852,  858,  972,
-                            972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
-                           1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
-                           1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
-                           1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
-                           2052, 2094, 2133, 2154, 2187, 2211],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,   75,
-                             75,  108,  120,  249,  249,  399,  399,  507,
-                            507,  567,  582,  645,  657,  690,  696,  744,
-                            747,  777,  777,  786,  789,  852,  858,  972,
-                            972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
-                           1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
-                           1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
-                           1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
-                           2052, 2094, 2133, 2154, 2187, 2211],
-                          [   0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,    0,
-                              0,    0,    0,    0,    0,    0,    0,   75,
-                             75,  108,  120,  249,  249,  399,  399,  507,
-                            507,  567,  582,  645,  657,  690,  696,  744,
-                            747,  777,  777,  786,  789,  852,  858,  972,
-                            972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
-                           1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
-                           1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
-                           1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
-                           2052, 2094, 2133, 2154, 2187, 2211],
-                          [   0,   12,   21,  357,  378,  417,  444,  474,
-                            516,  549,  564,  570,  606,  615,  642,  645,
-                            795,  795,  813,  828,  918,  918,  999, 1074,
-                           1077, 1110, 1110, 1239, 1251, 1401, 1428, 1536,
-                           1560, 1620, 1620, 1683, 1683, 1716, 1716, 1764,
-                           1764, 1794, 1809, 1818, 1818, 1881, 1881, 1995,
-                           2001, 2091, 2091, 2148, 2148, 2148, 2373, 2373,
-                           2502, 2532, 2595, 2619, 2628, 2628, 2682, 2706,
-                           2706, 2709, 2727, 2727, 2727, 2772, 2772, 2805,
-                           2817, 2817, 2835, 2895, 2898, 2916, 2928, 2937,
-                           2946, 2946, 2985, 3006, 3039, 3063],
-                          [   0,    0,    9,    9,   30,   30,   57,   57,
-                             99,   99,  114,  114,  150,  159,  186,  189,
-                            339,  339,  357,  372,  462,  465,  546,  621,
-                            624,  657,  669,  798,  810,  960,  987, 1095,
-                           1119, 1179, 1179, 1242, 1254, 1287, 1287, 1335,
-                           1335, 1365, 1380, 1389, 1392, 1455, 1455, 1569,
-                           1575, 1665, 1665, 1722, 1725, 1725, 1950, 1953,
-                           2082, 2112, 2175, 2175, 2184, 2184, 2184, 2208,
-                           2208, 2208, 2226, 2226, 2226, 2271, 2271, 2304,
-                           2304, 2304, 2304, 2304, 2307, 2325, 2337, 2346,
-                           2346, 2346, 2385, 2385, 2418, 2418],
-                          [   0,    0,    9,    9,   30,   30,   57,   57,
-                             99,   99,  114,  114,  150,  159,  186,  189,
-                            339,  339,  357,  372,  462,  465,  546,  621,
-                            624,  657,  669,  798,  810,  960,  987, 1095,
-                           1119, 1179, 1179, 1242, 1254, 1287, 1287, 1335,
-                           1335, 1365, 1380, 1389, 1392, 1455, 1455, 1569,
-                           1575, 1665, 1665, 1722, 1725, 1725, 1950, 1953,
-                           2082, 2112, 2175, 2175, 2184, 2184, 2184, 2208,
-                           2208, 2208, 2226, 2229, 2229, 2229, 2229, 2262,
-                           2274, 2274, 2274, 2334, 2337, 2337, 2349, 2349,
-                           2349, 2349, 2388, 2388, 2388, 2388]])
-                # fmt: on
             )
-        )
-        self.assertEqual(
-            format(alignment, "clustal"),
-            """\
+            alignment = protein_alignment.mapall(codon_alignments)
+            self.assertTrue(
+                np.array_equal(
+                    alignment.coordinates,
+                    # fmt: off
+                    np.array([[   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,   36,   36,   63,   63,
+                                213,  222,  240,  240,  330,  330,  330,  405,
+                                405,  438,  450,  579,  579,  729,  729,  837,
+                                837,  897,  912,  975,  987, 1020, 1026, 1074,
+                               1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
+                               1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
+                               1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
+                               2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
+                               2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
+                               2382, 2424, 2463, 2484, 2517, 2541],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,   36,   36,   63,   63,
+                                213,  222,  240,  240,  330,  330,  330,  405,
+                                405,  438,  450,  579,  579,  729,  729,  837,
+                                837,  897,  912,  975,  987, 1020, 1026, 1074,
+                               1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
+                               1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
+                               1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
+                               2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
+                               2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
+                               2382, 2424, 2463, 2484, 2517, 2541],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,   36,   36,   63,   63,
+                                213,  222,  240,  240,  330,  330,  330,  405,
+                                405,  438,  450,  579,  579,  729,  729,  837,
+                                837,  897,  912,  975,  987, 1020, 1026, 1074,
+                               1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
+                               1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
+                               1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
+                               2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
+                               2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
+                               2382, 2424, 2463, 2484, 2517, 2541],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,   36,   36,   63,   63,
+                                213,  222,  240,  240,  330,  330,  330,  405,
+                                405,  438,  450,  579,  579,  729,  729,  837,
+                                837,  897,  912,  975,  987, 1020, 1026, 1074,
+                               1077, 1107, 1107, 1116, 1119, 1182, 1188, 1302,
+                               1302, 1392, 1398, 1455, 1458, 1470, 1695, 1695,
+                               1824, 1824, 1887, 1887, 1896, 1902, 1956, 1980,
+                               2022, 2025, 2043, 2046, 2061, 2106, 2187, 2220,
+                               2232, 2253, 2271, 2331, 2334, 2352, 2364, 2373,
+                               2382, 2424, 2463, 2484, 2517, 2541],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,   75,
+                                 75,  108,  120,  249,  249,  399,  399,  507,
+                                507,  567,  582,  645,  657,  690,  696,  744,
+                                747,  777,  777,  786,  789,  852,  858,  972,
+                                972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
+                               1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
+                               1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
+                               1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
+                               2052, 2094, 2133, 2154, 2187, 2211],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,   75,
+                                 75,  108,  120,  249,  249,  399,  399,  507,
+                                507,  567,  582,  645,  657,  690,  696,  744,
+                                747,  777,  777,  786,  789,  852,  858,  972,
+                                972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
+                               1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
+                               1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
+                               1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
+                               2052, 2094, 2133, 2154, 2187, 2211],
+                              [   0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,    0,
+                                  0,    0,    0,    0,    0,    0,    0,   75,
+                                 75,  108,  120,  249,  249,  399,  399,  507,
+                                507,  567,  582,  645,  657,  690,  696,  744,
+                                747,  777,  777,  786,  789,  852,  858,  972,
+                                972, 1062, 1068, 1125, 1128, 1140, 1365, 1365,
+                               1494, 1494, 1557, 1557, 1566, 1572, 1626, 1650,
+                               1692, 1695, 1713, 1716, 1731, 1776, 1857, 1890,
+                               1902, 1923, 1941, 2001, 2004, 2022, 2034, 2043,
+                               2052, 2094, 2133, 2154, 2187, 2211],
+                              [   0,   12,   21,  357,  378,  417,  444,  474,
+                                516,  549,  564,  570,  606,  615,  642,  645,
+                                795,  795,  813,  828,  918,  918,  999, 1074,
+                               1077, 1110, 1110, 1239, 1251, 1401, 1428, 1536,
+                               1560, 1620, 1620, 1683, 1683, 1716, 1716, 1764,
+                               1764, 1794, 1809, 1818, 1818, 1881, 1881, 1995,
+                               2001, 2091, 2091, 2148, 2148, 2148, 2373, 2373,
+                               2502, 2532, 2595, 2619, 2628, 2628, 2682, 2706,
+                               2706, 2709, 2727, 2727, 2727, 2772, 2772, 2805,
+                               2817, 2817, 2835, 2895, 2898, 2916, 2928, 2937,
+                               2946, 2946, 2985, 3006, 3039, 3063],
+                              [   0,    0,    9,    9,   30,   30,   57,   57,
+                                 99,   99,  114,  114,  150,  159,  186,  189,
+                                339,  339,  357,  372,  462,  465,  546,  621,
+                                624,  657,  669,  798,  810,  960,  987, 1095,
+                               1119, 1179, 1179, 1242, 1254, 1287, 1287, 1335,
+                               1335, 1365, 1380, 1389, 1392, 1455, 1455, 1569,
+                               1575, 1665, 1665, 1722, 1725, 1725, 1950, 1953,
+                               2082, 2112, 2175, 2175, 2184, 2184, 2184, 2208,
+                               2208, 2208, 2226, 2226, 2226, 2271, 2271, 2304,
+                               2304, 2304, 2304, 2304, 2307, 2325, 2337, 2346,
+                               2346, 2346, 2385, 2385, 2418, 2418],
+                              [   0,    0,    9,    9,   30,   30,   57,   57,
+                                 99,   99,  114,  114,  150,  159,  186,  189,
+                                339,  339,  357,  372,  462,  465,  546,  621,
+                                624,  657,  669,  798,  810,  960,  987, 1095,
+                               1119, 1179, 1179, 1242, 1254, 1287, 1287, 1335,
+                               1335, 1365, 1380, 1389, 1392, 1455, 1455, 1569,
+                               1575, 1665, 1665, 1722, 1725, 1725, 1950, 1953,
+                               2082, 2112, 2175, 2175, 2184, 2184, 2184, 2208,
+                               2208, 2208, 2226, 2229, 2229, 2229, 2229, 2262,
+                               2274, 2274, 2274, 2334, 2337, 2337, 2349, 2349,
+                               2349, 2349, 2388, 2388, 2388, 2388]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(
+                format(alignment, "clustal"),
+                """\
 ENSG00000166888:ENST0000030013      --------------------------------------------------
 ENSG00000166888:ENST0000054387      --------------------------------------------------
 ENSG00000166888:ENST0000055615      --------------------------------------------------
@@ -5787,28 +6033,30 @@ isotig12566                         ----------------
 
 
 """,
-        )
+            )
+        finally:
+            nucleotide_records.close()
 
     def test5(self):
         aligner = CodonAligner()
         # aligner.frameshift_score = -10.0
-        nucleotide_records = SeqIO.parse("codonalign/nucl5.fa", "fasta")
         protein_alignment = Align.read("codonalign/pro5.aln", "clustal")
         self.assertEqual(len(protein_alignment.sequences), 3)
-        codon_alignments = []
-        nucleotide_record = next(nucleotide_records)
-        protein_record = protein_alignment.sequences[0]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 183], [0, 549]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+        with SeqIO.parse("codonalign/nucl5.fa", "fasta") as nucleotide_records:
+            codon_alignments = []
+            nucleotide_record = next(nucleotide_records)
+            protein_record = protein_alignment.sequences[0]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 183], [0, 549]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 isotig697         0 R  G  D  Q  R  S  N  F  Q  L  S  P  S  T  M  Q  I  S  T  G  
 isotig697         0 TGAGGCGATCAACGCAGCAACTTCCAGCTGTCTCCCTCCACCATGCAGATCTCCACAGGG
 
@@ -5839,20 +6087,20 @@ isotig697       480 CAGAATAAGCCAGACTTGAAGAGGTTGTGTAATTTCTTGAATATGCAAAATCTTAAAAGG
 isotig697       180 G  A  C   183
 isotig697       540 GGGGCATGC 549
 """,
-        )
-        nucleotide_record = next(nucleotide_records)
-        protein_record = protein_alignment.sequences[1]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 65], [0, 195]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            nucleotide_record = next(nucleotide_records)
+            protein_record = protein_alignment.sequences[1]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 65], [0, 195]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  K  V  S  A  A  L  L  C  L  L  L  I  A  A  T  F  I  P  Q  
 ENSG00000         0 ATGAAAGTCTCTGCCGCCCTTCTGTGCCTGCTGCTCATAGCAGCCACCTTCATTCCCCAA
 
@@ -5865,20 +6113,20 @@ ENSG00000       120 AGGAAGATCTCAGTGCAGAGGCTCGCGAGCTATAGAAGAATCACCAGCAGCAAGTGTCCC
 ENSG00000        60 K  E  A  V  M    65
 ENSG00000       180 AAAGAAGCTGTGATG 195
 """,
-        )
-        nucleotide_record = next(nucleotide_records)
-        protein_record = protein_alignment.sequences[2]
-        self.assertEqual(nucleotide_record.id, protein_record.id)
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 99], [9, 306]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            nucleotide_record = next(nucleotide_records)
+            protein_record = protein_alignment.sequences[2]
+            self.assertEqual(nucleotide_record.id, protein_record.id)
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 99], [9, 306]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 ENSG00000         0 M  K  V  S  A  A  L  L  C  L  L  L  I  A  A  T  F  I  P  Q  
 ENSG00000         9 ATGAAAGTCTCTGCCGCCCTTCTGTGCCTGCTGCTCATAGCAGCCACCTTCATTCCCCAA
 
@@ -5897,21 +6145,21 @@ ENSG00000       249 AAGTGGGTTCAGGATTCCATGGACCACCTGGACAAGCAAACCCAAACTCCGAAGACT
 ENSG00000        99
 ENSG00000       306
 """,
-        )
-        alignment = protein_alignment.mapall(codon_alignments)
-        self.assertTrue(
-            np.array_equal(
-                alignment.coordinates,
-                # fmt: off
-                np.array([[0, 42, 126, 126, 231, 333, 549],
-                          [0,  0,  84,  90, 195, 195, 195],
-                          [9,  9,  93,  99, 204, 306, 306]])
-                # fmt: on
             )
-        )
-        self.assertEqual(
-            format(alignment, "clustal"),
-            """\
+            alignment = protein_alignment.mapall(codon_alignments)
+            self.assertTrue(
+                np.array_equal(
+                    alignment.coordinates,
+                    # fmt: off
+                    np.array([[0, 42, 126, 126, 231, 333, 549],
+                              [0,  0,  84,  90, 195, 195, 195],
+                              [9,  9,  93,  99, 204, 306, 306]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(
+                format(alignment, "clustal"),
+                """\
 isotig69710                         TGAGGCGATCAACGCAGCAACTTCCAGCTGTCTCCCTCCACCATGCAGAT
 ENSG00000108691:ENST0000058090      ------------------------------------------ATGAAAGT
 ENSG00000108691:ENST0000022583      ------------------------------------------ATGAAAGT
@@ -5962,7 +6210,7 @@ ENSG00000108691:ENST0000022583      -----
 
 
 """,
-        )
+            )
 
 
 class Test_build(unittest.TestCase):
@@ -6300,23 +6548,24 @@ pro3             60 CACTCTTTTCTCATGACCATCCAG 84
 class Test_dn_ds(unittest.TestCase):
     def test_dn_ds(self):
         aligner = CodonAligner()
-        nucleotide_records = SeqIO.index("codonalign/egfr_nucl.fa", "fasta")
         protein_alignment = Align.read("codonalign/egfr_pro.aln", "clustal")
         self.assertEqual(len(protein_alignment.sequences), 6)
-        codon_alignments = []
-        protein_record = protein_alignment.sequences[0]
-        self.assertEqual(protein_record.id, "gi|17136534|ref|NP_476758.1|")
-        nucleotide_record = nucleotide_records["gi|24657088|ref|NM_057410.3|"]
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1377], [84, 4215]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+        try:
+            nucleotide_records = SeqIO.index("codonalign/egfr_nucl.fa", "fasta")
+            codon_alignments = []
+            protein_record = protein_alignment.sequences[0]
+            self.assertEqual(protein_record.id, "gi|17136534|ref|NP_476758.1|")
+            nucleotide_record = nucleotide_records["gi|24657088|ref|NM_057410.3|"]
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 1377], [84, 4215]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 gi|171365         0 M  M  I  I  S  M  W  M  S  I  S  R  G  L  W  D  S  S  S  I  
 gi|246570        84 ATGATGATTATCAGCATGTGGATGAGCATATCGCGAGGATTGTGGGACAGCAGCTCCATC
 
@@ -6524,20 +6773,20 @@ gi|246570      4104 AAGGTGCCAATGCCAGGCAGTGAGCCAACGAGCTCCGATCACGAGTACTACAATGATACC
 gi|171365      1360 Q  R  E  L  Q  P  L  H  R  N  R  N  T  E  T  R  V   1377
 gi|246570      4164 CAACGGGAGTTGCAGCCACTGCATCGAAACCGCAACACGGAGACGAGGGTG 4215
 """,
-        )
-        protein_record = protein_alignment.sequences[1]
-        self.assertEqual(protein_record.id, "gi|17136536|ref|NP_476759.1|")
-        nucleotide_record = nucleotide_records["gi|24657104|ref|NM_057411.3|"]
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1426], [22, 4300]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[1]
+            self.assertEqual(protein_record.id, "gi|17136536|ref|NP_476759.1|")
+            nucleotide_record = nucleotide_records["gi|24657104|ref|NM_057411.3|"]
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 1426], [22, 4300]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 gi|171365         0 M  L  L  R  R  R  N  G  P  C  P  F  P  L  L  L  L  L  L  A  
 gi|246571        22 ATGCTGCTGCGACGGCGCAACGGCCCCTGCCCCTTCCCCCTGCTGCTCCTGCTCCTGGCC
 
@@ -6754,20 +7003,20 @@ gi|246571      4222 TCCGATCACGAGTACTACAATGATACCCAACGGGAGTTGCAGCCACTGCATCGAAACCGC
 gi|171365      1420 N  T  E  T  R  V   1426
 gi|246571      4282 AACACGGAGACGAGGGTG 4300
 """,
-        )
-        protein_record = protein_alignment.sequences[2]
-        self.assertEqual(protein_record.id, "gi|302179501|gb|ADK98534.1|")
-        nucleotide_record = nucleotide_records["gi|302179500|gb|HM749883.1|"]
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1185], [0, 3555]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[2]
+            self.assertEqual(protein_record.id, "gi|302179501|gb|ADK98534.1|")
+            nucleotide_record = nucleotide_records["gi|302179500|gb|HM749883.1|"]
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(alignment.coordinates, np.array([[0, 1185], [0, 3555]]))
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 gi|302179         0 M  K  K  H  E  L  L  C  Q  G  T  S  N  K  L  T  Q  L  G  T  
 gi|302179         0 ATGAAAAAGCACGAGTTACTTTGCCAAGGGACAAGTAACAAGCTCACCCAGTTGGGCACT
 
@@ -6948,20 +7197,22 @@ gi|302179      3480 ATCTTTAAGGGGCCTGCAGCTGAAAATGCAGAATACCTGCGGGCAGCACCAGCAGGCAGT
 gi|302179      1180 D  F  T  G  A   1185
 gi|302179      3540 GACTTTACTGGGGCC 3555
 """,
-        )
-        protein_record = protein_alignment.sequences[3]
-        self.assertEqual(protein_record.id, "gi|47522840|ref|NP_999172.1|")
-        nucleotide_record = nucleotide_records["gi|47522839|ref|NM_214007.1|"]
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1209], [126, 3753]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[3]
+            self.assertEqual(protein_record.id, "gi|47522840|ref|NP_999172.1|")
+            nucleotide_record = nucleotide_records["gi|47522839|ref|NM_214007.1|"]
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(
+                    alignment.coordinates, np.array([[0, 1209], [126, 3753]])
+                )
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 gi|475228         0 M  R  R  S  W  A  G  G  A  A  L  L  A  L  L  A  A  H  F  Q  
 gi|475228       126 ATGCGACGCTCCTGGGCGGGCGGCGCCGCGCTCCTGGCGCTGCTGGCCGCGCACTTCCAG
 
@@ -7145,20 +7396,22 @@ gi|475228      3666 AAGTCAAACGGCATCTGTAAGGGTCCCGCCGCCGAAAACGCAGAGTACCTAAGGGCGGCA
 gi|475228      1200 P  A  S  S  D  L  T  G  A   1209
 gi|475228      3726 CCAGCCAGCAGTGACCTTACTGGGGCA 3753
 """,
-        )
-        protein_record = protein_alignment.sequences[4]
-        self.assertEqual(protein_record.id, "gi|29725609|ref|NP_005219.2|")
-        nucleotide_record = nucleotide_records["gi|41327737|ref|NM_005228.3|"]
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1210], [246, 3876]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[4]
+            self.assertEqual(protein_record.id, "gi|29725609|ref|NP_005219.2|")
+            nucleotide_record = nucleotide_records["gi|41327737|ref|NM_005228.3|"]
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(
+                    alignment.coordinates, np.array([[0, 1210], [246, 3876]])
+                )
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 gi|297256         0 M  R  P  S  G  T  A  G  A  A  L  L  A  L  L  A  A  L  C  P  
 gi|413277       246 ATGCGACCCTCCGGGACGGCCGGGGCAGCGCTCCTGGCGCTGCTGGCTGCGCTCTGCCCG
 
@@ -7342,20 +7595,22 @@ gi|413277      3786 GCCAAGCCAAATGGCATCTTTAAGGGCTCCACAGCTGAAAATGCAGAATACCTAAGGGTC
 gi|297256      1200 A  P  Q  S  S  E  F  I  G  A   1210
 gi|413277      3846 GCGCCACAAAGCAGTGAATTTATTGGAGCA 3876
 """,
-        )
-        protein_record = protein_alignment.sequences[5]
-        self.assertEqual(protein_record.id, "gi|6478868|gb|AAF14008.1|")
-        nucleotide_record = nucleotide_records["gi|6478867|gb|M37394.2|RATEGFR"]
-        alignments = aligner.align(protein_record, nucleotide_record)
-        self.assertEqual(len(alignments), 1)
-        alignment = next(alignments)
-        codon_alignments.append(alignment)
-        self.assertTrue(
-            np.array_equal(alignment.coordinates, np.array([[0, 1209], [153, 3780]]))
-        )
-        self.assertEqual(
-            str(alignment),
-            """\
+            )
+            protein_record = protein_alignment.sequences[5]
+            self.assertEqual(protein_record.id, "gi|6478868|gb|AAF14008.1|")
+            nucleotide_record = nucleotide_records["gi|6478867|gb|M37394.2|RATEGFR"]
+            alignments = aligner.align(protein_record, nucleotide_record)
+            self.assertEqual(len(alignments), 1)
+            alignment = next(alignments)
+            codon_alignments.append(alignment)
+            self.assertTrue(
+                np.array_equal(
+                    alignment.coordinates, np.array([[0, 1209], [153, 3780]])
+                )
+            )
+            self.assertEqual(
+                str(alignment),
+                """\
 gi|647886         0 M  R  P  S  G  T  A  R  T  K  L  L  L  L  L  A  A  L  C  A  
 gi|647886       153 ATGCGACCCTCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCC
 
@@ -7539,72 +7794,72 @@ gi|647886      3693 AAGCCGAATGGCATCTTTAAGGGCCCCACAGCTGAAAATGCAGAGTACCTGCGGGTGGCA
 gi|647886      1200 P  P  S  S  E  F  S  G  A   1209
 gi|647886      3753 CCGCCAAGCAGTGAGTTTAGTGGAGCA 3780
 """,
-        )
-        alignment = protein_alignment.mapall(codon_alignments)
-        self.assertTrue(
-            np.array_equal(
-                alignment.coordinates,
-                # fmt: off
-            np.array([[  84,  105,  114,  129,  171,  183,  198,  198,  210,
-                        234,  366,  369,  492,  507,  531,  531,  741,  741,
-                        807,  810, 1038, 1038, 1089, 1089, 1107, 1107, 1161,
-                       1161, 1245, 1260, 1281, 1290, 1443, 1446, 1779, 1779,
-                       1821, 1821, 1902, 1953, 1986, 2085, 2097, 2151, 2175,
-                       2301, 2319, 2319, 2355, 2358, 2373, 2394, 2418, 2559,
-                       2610, 2613, 2655, 2661, 3585, 3594, 3642, 3645, 3765,
-                       3765, 3777, 3777, 3777, 3777, 3843, 3843, 3858, 3864,
-                       3894, 3900, 3921, 3921, 3969, 3975, 4038, 4038, 4215],
-                      [  22,   22,   31,   46,   88,  100,  115,  283,  295,
-                        319,  451,  454,  577,  592,  616,  616,  826,  826,
-                        892,  895, 1123, 1123, 1174, 1174, 1192, 1192, 1246,
-                       1246, 1330, 1345, 1366, 1375, 1528, 1531, 1864, 1864,
-                       1906, 1906, 1987, 2038, 2071, 2170, 2182, 2236, 2260,
-                       2386, 2404, 2404, 2440, 2443, 2458, 2479, 2503, 2644,
-                       2695, 2698, 2740, 2746, 3670, 3679, 3727, 3730, 3850,
-                       3850, 3862, 3862, 3862, 3862, 3928, 3928, 3943, 3949,
-                       3979, 3985, 4006, 4006, 4054, 4060, 4123, 4123, 4300],
-                      [   0,    0,    0,   15,   15,   15,   15,   15,   15,
-                         15,  147,  147,  270,  270,  294,  312,  522,  525,
-                        591,  591,  819,  822,  873,  879,  897,  903,  957,
-                        981, 1065, 1065, 1086, 1086, 1239, 1239, 1572, 1578,
-                       1620, 1638, 1719, 1719, 1752, 1752, 1764, 1764, 1788,
-                       1788, 1806, 1809, 1845, 1845, 1860, 1860, 1884, 1884,
-                       1935, 1935, 1977, 1977, 2901, 2901, 2949, 2949, 3069,
-                       3081, 3093, 3093, 3093, 3099, 3165, 3183, 3198, 3198,
-                       3228, 3228, 3249, 3258, 3306, 3306, 3369, 3378, 3555],
-                      [ 126,  126,  126,  141,  183,  183,  198,  198,  210,
-                        210,  342,  342,  465,  465,  489,  507,  717,  720,
-                        786,  786, 1014, 1017, 1068, 1074, 1092, 1098, 1152,
-                       1176, 1260, 1260, 1281, 1281, 1434, 1434, 1767, 1773,
-                       1815, 1833, 1914, 1914, 1947, 1947, 1959, 1959, 1983,
-                       1983, 2001, 2004, 2040, 2040, 2055, 2055, 2079, 2079,
-                       2130, 2130, 2172, 2172, 3096, 3096, 3144, 3144, 3264,
-                       3276, 3288, 3288, 3291, 3297, 3363, 3381, 3396, 3396,
-                       3426, 3426, 3447, 3456, 3504, 3504, 3567, 3576, 3753],
-                      [ 246,  246,  246,  261,  303,  303,  318,  318,  330,
-                        330,  462,  462,  585,  585,  609,  627,  837,  840,
-                        906,  906, 1134, 1137, 1188, 1194, 1212, 1218, 1272,
-                       1296, 1380, 1380, 1401, 1401, 1554, 1554, 1887, 1893,
-                       1935, 1953, 2034, 2034, 2067, 2067, 2079, 2079, 2103,
-                       2103, 2121, 2124, 2160, 2160, 2175, 2175, 2199, 2199,
-                       2250, 2250, 2292, 2292, 3216, 3216, 3264, 3264, 3384,
-                       3396, 3408, 3411, 3414, 3420, 3486, 3504, 3519, 3519,
-                       3549, 3549, 3570, 3579, 3627, 3627, 3690, 3699, 3876],
-                      [ 153,  153,  153,  168,  210,  210,  225,  225,  237,
-                        237,  369,  369,  492,  492,  516,  534,  744,  747,
-                        813,  813, 1041, 1044, 1095, 1101, 1119, 1125, 1179,
-                       1203, 1287, 1287, 1308, 1308, 1461, 1461, 1794, 1800,
-                       1842, 1860, 1941, 1941, 1974, 1974, 1986, 1986, 2010,
-                       2010, 2028, 2031, 2067, 2070, 2085, 2085, 2109, 2109,
-                       2160, 2160, 2202, 2202, 3126, 3126, 3174, 3174, 3294,
-                       3306, 3318, 3318, 3318, 3324, 3390, 3408, 3423, 3423,
-                       3453, 3453, 3474, 3483, 3531, 3531, 3594, 3603, 3780]])
-                # fmt: on
             )
-        )
-        self.assertEqual(
-            format(alignment, "clustal"),
-            """\
+            alignment = protein_alignment.mapall(codon_alignments)
+            self.assertTrue(
+                np.array_equal(
+                    alignment.coordinates,
+                    # fmt: off
+                np.array([[  84,  105,  114,  129,  171,  183,  198,  198,  210,
+                            234,  366,  369,  492,  507,  531,  531,  741,  741,
+                            807,  810, 1038, 1038, 1089, 1089, 1107, 1107, 1161,
+                           1161, 1245, 1260, 1281, 1290, 1443, 1446, 1779, 1779,
+                           1821, 1821, 1902, 1953, 1986, 2085, 2097, 2151, 2175,
+                           2301, 2319, 2319, 2355, 2358, 2373, 2394, 2418, 2559,
+                           2610, 2613, 2655, 2661, 3585, 3594, 3642, 3645, 3765,
+                           3765, 3777, 3777, 3777, 3777, 3843, 3843, 3858, 3864,
+                           3894, 3900, 3921, 3921, 3969, 3975, 4038, 4038, 4215],
+                          [  22,   22,   31,   46,   88,  100,  115,  283,  295,
+                            319,  451,  454,  577,  592,  616,  616,  826,  826,
+                            892,  895, 1123, 1123, 1174, 1174, 1192, 1192, 1246,
+                           1246, 1330, 1345, 1366, 1375, 1528, 1531, 1864, 1864,
+                           1906, 1906, 1987, 2038, 2071, 2170, 2182, 2236, 2260,
+                           2386, 2404, 2404, 2440, 2443, 2458, 2479, 2503, 2644,
+                           2695, 2698, 2740, 2746, 3670, 3679, 3727, 3730, 3850,
+                           3850, 3862, 3862, 3862, 3862, 3928, 3928, 3943, 3949,
+                           3979, 3985, 4006, 4006, 4054, 4060, 4123, 4123, 4300],
+                          [   0,    0,    0,   15,   15,   15,   15,   15,   15,
+                             15,  147,  147,  270,  270,  294,  312,  522,  525,
+                            591,  591,  819,  822,  873,  879,  897,  903,  957,
+                            981, 1065, 1065, 1086, 1086, 1239, 1239, 1572, 1578,
+                           1620, 1638, 1719, 1719, 1752, 1752, 1764, 1764, 1788,
+                           1788, 1806, 1809, 1845, 1845, 1860, 1860, 1884, 1884,
+                           1935, 1935, 1977, 1977, 2901, 2901, 2949, 2949, 3069,
+                           3081, 3093, 3093, 3093, 3099, 3165, 3183, 3198, 3198,
+                           3228, 3228, 3249, 3258, 3306, 3306, 3369, 3378, 3555],
+                          [ 126,  126,  126,  141,  183,  183,  198,  198,  210,
+                            210,  342,  342,  465,  465,  489,  507,  717,  720,
+                            786,  786, 1014, 1017, 1068, 1074, 1092, 1098, 1152,
+                           1176, 1260, 1260, 1281, 1281, 1434, 1434, 1767, 1773,
+                           1815, 1833, 1914, 1914, 1947, 1947, 1959, 1959, 1983,
+                           1983, 2001, 2004, 2040, 2040, 2055, 2055, 2079, 2079,
+                           2130, 2130, 2172, 2172, 3096, 3096, 3144, 3144, 3264,
+                           3276, 3288, 3288, 3291, 3297, 3363, 3381, 3396, 3396,
+                           3426, 3426, 3447, 3456, 3504, 3504, 3567, 3576, 3753],
+                          [ 246,  246,  246,  261,  303,  303,  318,  318,  330,
+                            330,  462,  462,  585,  585,  609,  627,  837,  840,
+                            906,  906, 1134, 1137, 1188, 1194, 1212, 1218, 1272,
+                           1296, 1380, 1380, 1401, 1401, 1554, 1554, 1887, 1893,
+                           1935, 1953, 2034, 2034, 2067, 2067, 2079, 2079, 2103,
+                           2103, 2121, 2124, 2160, 2160, 2175, 2175, 2199, 2199,
+                           2250, 2250, 2292, 2292, 3216, 3216, 3264, 3264, 3384,
+                           3396, 3408, 3411, 3414, 3420, 3486, 3504, 3519, 3519,
+                           3549, 3549, 3570, 3579, 3627, 3627, 3690, 3699, 3876],
+                          [ 153,  153,  153,  168,  210,  210,  225,  225,  237,
+                            237,  369,  369,  492,  492,  516,  534,  744,  747,
+                            813,  813, 1041, 1044, 1095, 1101, 1119, 1125, 1179,
+                           1203, 1287, 1287, 1308, 1308, 1461, 1461, 1794, 1800,
+                           1842, 1860, 1941, 1941, 1974, 1974, 1986, 1986, 2010,
+                           2010, 2028, 2031, 2067, 2070, 2085, 2085, 2109, 2109,
+                           2160, 2160, 2202, 2202, 3126, 3126, 3174, 3174, 3294,
+                           3306, 3318, 3318, 3318, 3324, 3390, 3408, 3423, 3423,
+                           3453, 3453, 3474, 3483, 3531, 3531, 3594, 3603, 3780]])
+                    # fmt: on
+                )
+            )
+            self.assertEqual(
+                format(alignment, "clustal"),
+                """\
 gi|24657088|ref|NM_057410.3|        ATGATGATTATCAGCATGTGGATGAGCATATCGCGAGGATTGTGGGACAG
 gi|24657104|ref|NM_057411.3|        ---------------------ATGCTGCTGCGACGGCGCAACGGCCCCTG
 gi|302179500|gb|HM749883.1|         ------------------------------ATGAAAAAGCACGAG-----
@@ -8230,157 +8485,161 @@ gi|6478867|gb|M37394.2|RATEGFR      AGAGTACCTGCGGGTGGCACCGCCAAGCAGTGAGTTTAGTGGAG
 
 
 """,
-        )
+            )
 
-        pairwise_alignment = alignment[:2]
-        dN, dS = calculate_dn_ds(pairwise_alignment, method="NG86")
-        self.assertAlmostEqual(dN, 0.0209, places=4)
-        self.assertAlmostEqual(dS, 0.0178, places=4)
-        dN, dS = calculate_dn_ds(pairwise_alignment, method="LWL85")
-        self.assertAlmostEqual(dN, 0.0203, places=4)
-        self.assertAlmostEqual(dS, 0.0164, places=4)
+            pairwise_alignment = alignment[:2]
+            dN, dS = calculate_dn_ds(pairwise_alignment, method="NG86")
+            self.assertAlmostEqual(dN, 0.0209, places=4)
+            self.assertAlmostEqual(dS, 0.0178, places=4)
+            dN, dS = calculate_dn_ds(pairwise_alignment, method="LWL85")
+            self.assertAlmostEqual(dN, 0.0203, places=4)
+            self.assertAlmostEqual(dS, 0.0164, places=4)
 
-        try:
-            import scipy
-        except ImportError:
-            # Silently skip the rest of the test
-            return
+            try:
+                import scipy
+            except ImportError:
+                # Silently skip the rest of the test
+                return
 
-        # This should be present:
-        from scipy.linalg import expm
+            # This should be present:
+            from scipy.linalg import expm
 
-        dN, dS = calculate_dn_ds(pairwise_alignment, method="YN00")
-        self.assertAlmostEqual(dN, 0.0198, places=4)
-        self.assertAlmostEqual(dS, 0.0222, places=4)
+            dN, dS = calculate_dn_ds(pairwise_alignment, method="YN00")
+            self.assertAlmostEqual(dN, 0.0198, places=4)
+            self.assertAlmostEqual(dS, 0.0222, places=4)
 
-        try:
-            # New in scipy v0.11
-            from scipy.optimize import minimize
+            try:
+                # New in scipy v0.11
+                from scipy.optimize import minimize
 
-            dN, dS = calculate_dn_ds(pairwise_alignment, method="ML")
-            self.assertAlmostEqual(dN, 0.0194, places=4)
-            self.assertAlmostEqual(dS, 0.0217, places=4)
-        except ImportError:
-            pass
+                dN, dS = calculate_dn_ds(pairwise_alignment, method="ML")
+                self.assertAlmostEqual(dN, 0.0194, places=4)
+                self.assertAlmostEqual(dS, 0.0217, places=4)
+            except ImportError:
+                pass
 
-        # NG86 method with default codon table
-        dn_correct = [
-            0,
-            0.02090783050583131,
-            0,
-            0.6115239249238438,
-            0.6102203266798018,
-            0,
-            0.6140350835631757,
-            0.6040168621204747,
-            0.041180350405913294,
-            0,
-            0.6141532531400524,
-            0.6018263135601294,
-            0.06701051445629494,
-            0.061470360954086874,
-            0,
-            0.6187088340904762,
-            0.6068687248870475,
-            0.07386903034833081,
-            0.07357890927918581,
-            0.05179847072570129,
-            0,
-        ]
-        ds_correct = [
-            0,
-            0.01783718763890243,
-            0,
-            2.9382055377913687,
-            3.0375115405379267,
-            0,
-            2.008913071877126,
-            2.0182088023715616,
-            0.5638033197005285,
-            0,
-            2.771425931736778,
-            2.7353083173058295,
-            0.6374483799734671,
-            0.723542095485497,
-            0,
-            -1,
-            -1,
-            0.953865978141643,
-            1.182154857347706,
-            0.843182957978177,
-            0,
-        ]
-        dn, ds = calculate_dn_ds_matrix(alignment)
-        dn_list = []
-        for i in dn.matrix:
-            dn_list.extend(i)
-        for dn_cal, dn_corr in zip(dn_list, dn_correct):
-            self.assertAlmostEqual(dn_cal, dn_corr, places=4)
-        ds_list = []
-        for i in ds.matrix:
-            ds_list.extend(i)
-        for ds_cal, ds_corr in zip(ds_list, ds_correct):
-            self.assertAlmostEqual(ds_cal, ds_corr, places=4)
-        # YN00 method with user specified codon table
-        dn_correct = [
-            0,
-            0.019701773284646867,
-            0,
-            0.6109649819852769,
-            0.6099903856901369,
-            0,
-            0.6114499930666559,
-            0.6028068208599121,
-            0.045158286242251426,
-            0,
-            0.6151835071687592,
-            0.6053227393422296,
-            0.07034397741651377,
-            0.06956967795096626,
-            0,
-            0.6103850655769698,
-            0.5988716898831496,
-            0.07905930042150053,
-            0.08203052937107111,
-            0.05659346894088538,
-            0,
-        ]
-        ds_correct = [
-            0,
-            0.01881718550096053,
-            0,
-            1.814457265482046,
-            1.8417575124882066,
-            0,
-            1.5627041719628896,
-            1.563930819079887,
-            0.4748890153032888,
-            0,
-            1.6754828466084355,
-            1.6531212012501901,
-            0.5130923627791538,
-            0.5599667707191436,
-            0,
-            2.0796114236540943,
-            2.1452591651827304,
-            0.7243066372971764,
-            0.8536617406770075,
-            0.6509203399899367,
-            0,
-        ]
-        dn, ds = calculate_dn_ds_matrix(
-            alignment, method="LWL85", codon_table=CodonTable.unambiguous_dna_by_id[3]
-        )
-        dn_list = []
-        for i in dn.matrix:
-            dn_list.extend(i)
-        for dn_cal, dn_corr in zip(dn_list, dn_correct):
-            self.assertAlmostEqual(dn_cal, dn_corr, places=4)
-        ds_list = []
-        for i in ds.matrix:
-            ds_list.extend(i)
-        for ds_cal, ds_corr in zip(ds_list, ds_correct):
-            self.assertAlmostEqual(ds_cal, ds_corr, places=4)
+            # NG86 method with default codon table
+            dn_correct = [
+                0,
+                0.02090783050583131,
+                0,
+                0.6115239249238438,
+                0.6102203266798018,
+                0,
+                0.6140350835631757,
+                0.6040168621204747,
+                0.041180350405913294,
+                0,
+                0.6141532531400524,
+                0.6018263135601294,
+                0.06701051445629494,
+                0.061470360954086874,
+                0,
+                0.6187088340904762,
+                0.6068687248870475,
+                0.07386903034833081,
+                0.07357890927918581,
+                0.05179847072570129,
+                0,
+            ]
+            ds_correct = [
+                0,
+                0.01783718763890243,
+                0,
+                2.9382055377913687,
+                3.0375115405379267,
+                0,
+                2.008913071877126,
+                2.0182088023715616,
+                0.5638033197005285,
+                0,
+                2.771425931736778,
+                2.7353083173058295,
+                0.6374483799734671,
+                0.723542095485497,
+                0,
+                -1,
+                -1,
+                0.953865978141643,
+                1.182154857347706,
+                0.843182957978177,
+                0,
+            ]
+            dn, ds = calculate_dn_ds_matrix(alignment)
+            dn_list = []
+            for i in dn.matrix:
+                dn_list.extend(i)
+            for dn_cal, dn_corr in zip(dn_list, dn_correct):
+                self.assertAlmostEqual(dn_cal, dn_corr, places=4)
+            ds_list = []
+            for i in ds.matrix:
+                ds_list.extend(i)
+            for ds_cal, ds_corr in zip(ds_list, ds_correct):
+                self.assertAlmostEqual(ds_cal, ds_corr, places=4)
+            # YN00 method with user specified codon table
+            dn_correct = [
+                0,
+                0.019701773284646867,
+                0,
+                0.6109649819852769,
+                0.6099903856901369,
+                0,
+                0.6114499930666559,
+                0.6028068208599121,
+                0.045158286242251426,
+                0,
+                0.6151835071687592,
+                0.6053227393422296,
+                0.07034397741651377,
+                0.06956967795096626,
+                0,
+                0.6103850655769698,
+                0.5988716898831496,
+                0.07905930042150053,
+                0.08203052937107111,
+                0.05659346894088538,
+                0,
+            ]
+            ds_correct = [
+                0,
+                0.01881718550096053,
+                0,
+                1.814457265482046,
+                1.8417575124882066,
+                0,
+                1.5627041719628896,
+                1.563930819079887,
+                0.4748890153032888,
+                0,
+                1.6754828466084355,
+                1.6531212012501901,
+                0.5130923627791538,
+                0.5599667707191436,
+                0,
+                2.0796114236540943,
+                2.1452591651827304,
+                0.7243066372971764,
+                0.8536617406770075,
+                0.6509203399899367,
+                0,
+            ]
+            dn, ds = calculate_dn_ds_matrix(
+                alignment,
+                method="LWL85",
+                codon_table=CodonTable.unambiguous_dna_by_id[3],
+            )
+            dn_list = []
+            for i in dn.matrix:
+                dn_list.extend(i)
+            for dn_cal, dn_corr in zip(dn_list, dn_correct):
+                self.assertAlmostEqual(dn_cal, dn_corr, places=4)
+            ds_list = []
+            for i in ds.matrix:
+                ds_list.extend(i)
+            for ds_cal, ds_corr in zip(ds_list, ds_correct):
+                self.assertAlmostEqual(ds_cal, ds_corr, places=4)
+        finally:
+            nucleotide_records.close()
 
 
 class Test_MK(unittest.TestCase):

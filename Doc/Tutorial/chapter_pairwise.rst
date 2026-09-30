@@ -15,14 +15,14 @@ algorithms.
 
 .. _`sec:pairwise-quick`:
 
-The quick and easy approach to pairwise sequence alignments
------------------------------------------------------------
+The quick and easy approach to pairwise sequence alignment
+----------------------------------------------------------
 
 In general, pairwise sequence alignments in Biopython are done by first
 creating a ``PairwiseAligner`` object, and then performing the alignment by
 calling the appropriate methods of the ``PairwiseAligner`` you created
 (see :ref:`sec:pairwise-basic`) . This is by far the fastest if you want to
-perform many alignments. Howeer, if you want to align a few sequences right
+perform many alignments. However, if you want to align a few sequences right
 here, right now, then you can use the convenience functions ``global_align``
 and ``local_align`` for global and local alignments, respectively:
 
@@ -2350,6 +2350,73 @@ specialized aligner for aligning a nucleotide sequence to the amino acid
 sequence it encodes. Such alignments are non-trivial if frameshifts
 occur during translation.
 
+The quick and easy approach to codon alignment
+----------------------------------------------
+
+To align a nucleotide sequence to an amino acid sequence, you would first
+create a ``CodonAligner`` object, and then use this object to perform the
+alignments.and then use this object to perform the alignments (see section
+:ref:`sec:codon-aligner` below). This is the fastest approach if you want
+to align many sequences. However, if you want to align just a few sequences,
+you may want to use the ``codon_align`` convenience function. This function
+creates a ``CodonAligner`` object, using the provided arguments to set the
+alignment parameters, and then aligns the two sequences to each other:
+
+.. doctest . lib:numpy
+
+.. code:: pycon
+
+   >>> from Bio.Align import codon_align
+   >>> nuc = "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG"
+   >>> aa = "SGTSRTKRLLLLAALGAAGGALE"
+   >>> alignments = codon_align(aa, nuc)
+   >>> len(alignments)
+   1
+   >>> alignment = alignments[0]
+   >>> print(alignment)
+   target            0 S  G  T  S  R  T  K  R   8
+   query             0 TCAGGGACTTCGAGAACCAAGCGC 24
+   <BLANKLINE>
+   target            8 L  L  L  L  A  A  L  G  A  A  G  G  A  L  E   23
+   query            23 CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG 68
+   <BLANKLINE>
+
+Note that the length of the nucleotide sequence (68) is one less than expected
+(:math:`3 \times 23 = 69`) due to a frameshift event. You can see this frame
+shift by printing out the original sequence and the aligned sequence:
+
+.. blacken-docs:off
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> print(alignment[1]); print(nuc)
+   TCAGGGACTTCGAGAACCAAGCGCCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG
+   TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG
+
+.. blacken-docs:on
+
+The alignment coordinates will tell you where exactly the frameshift occurs:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> alignment.coordinates
+   array([[ 0,  8,  8, 23],
+          [ 0, 24, 23, 68]])
+
+The first row shows the alignment coordinates for the amino acid sequence.
+The alignment coordinates for the nucleotide sequence, in the second row,
+shows a frameshift of -1 after 24 nucleotides.
+
+The ``codon_align`` convenience function accepts optional
+keyword arguments, which are passed to the ``CodonAligner``
+constructor as is (see :ref:`sec:codon-aligner`).
+
+.. _`sec:codon-aligner`:
+
 Aligning a nucleotide sequence to an amino acid sequence
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -2418,6 +2485,27 @@ Table :ref:`table:codonalign-meta-attributes`.
    |                            | ``frameshift_plus_one_score``,  |
    |                            | ``frameshift_plus_two_score``   |
    +----------------------------+---------------------------------+
+
+You can also use the following mnemonics:
+
+.. table:: Mnemonics to set codon alignment parameters
+   :name: table:codonalign-mnemonics
+
+   +----------+----------------------------------------------------------------------+
+   | Mnemonic | Parameters it maps to                                                |
+   +==========+======================================================================+
+   |  ``m``   | ``match_score``, ``mismatch_score``                                  |
+   +----------+----------------------------------------------------------------------+
+   |  ``f``   | ``frameshift_score``                                                 |
+   +----------+----------------------------------------------------------------------+
+   |  ``n``   | ``frameshift_minus_score``                                           |
+   +----------+----------------------------------------------------------------------+
+   |  ``p``   | ``frameshift_plus_score``                                            |
+   +----------+----------------------------------------------------------------------+
+   |  ``o``   | ``frameshift_one_score``                                             |
+   +----------+----------------------------------------------------------------------+
+   |  ``t``   | ``frameshift_two_score``                                             |
+   +----------+----------------------------------------------------------------------+
 
 Now let’s consider two nucleotide sequences and the amino acid sequences
 they encode:

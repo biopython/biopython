@@ -66,23 +66,22 @@ def build(
     ATG---CGT pro2
 
     Using the newer codon aligner in Bio.Align, this analysis can be performed
-    as follows:
+    as follows (note that here we are also calculating the amino acid alignment
+    between the two protein sequences):
 
-    >>> from Bio.Align import PairwiseAligner, CodonAligner
+    >>> from Bio.Align import global_align, codon_align
     >>> seq1 = SeqRecord(Seq('ATGTCTCGT'), id='pro1')
     >>> seq2 = SeqRecord(Seq('ATGCGT'), id='pro2')
     >>> pro1 = SeqRecord(Seq('MSR'), id='pro1')
     >>> pro2 = SeqRecord(Seq('MR'), id='pro2')
-    >>> aligner = PairwiseAligner()
-    >>> protein_alignment = aligner.align(pro1, pro2)[0]
+    >>> protein_alignment = global_align(pro1, pro2)[0]
     >>> print(protein_alignment)
     pro1              0 MSR 3
                       0 |-| 3
     pro2              0 M-R 2
     <BLANKLINE>
-    >>> codon_aligner = CodonAligner()
-    >>> alignment1 = codon_aligner.align(pro1, seq1)[0]
-    >>> alignment2 = codon_aligner.align(pro2, seq2)[0]
+    >>> alignment1 = codon_align(pro1, seq1)[0]
+    >>> alignment2 = codon_align(pro2, seq2)[0]
     >>> print(alignment1)
     pro1              0 M  S  R   3
     pro1              0 ATGTCTCGT 9
@@ -97,13 +96,24 @@ def build(
                       0 |||---||| 9
     pro2              0 ATG---CGT 6
     <BLANKLINE>
-    >>> naive_alignment = aligner.align(seq1, seq2)[0]
-    >>> print(naive_alignment)
+
+    For comparison, this is what you get if you directly align the nucleotide
+    sequences to each other:
+
+    >>> naive_alignments = global_align(seq1, seq2)
+    >>> for naive_alignment in naive_alignments:
+    ...     print(naive_alignment)
     pro1              0 ATGTCTCGT 9
                       0 |||-|--|| 9
     pro2              0 ATG-C--GT 6
     <BLANKLINE>
+    pro1              0 ATGTCTCGT 9
+                      0 |||---||| 9
+    pro2              0 ATG---CGT 6
+    <BLANKLINE>
 
+    i.e. the correct alignment but also an incorrect alignment with
+    incomplete codons.
     """
     # TODO
     # add an option to allow the user to specify the returned object?
