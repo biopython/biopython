@@ -29,8 +29,8 @@ class TestCombinedFile(unittest.TestCase):
 
     filename = "combined.fa"
     path = os.path.join("Mauve", filename)
-    records = SeqIO.parse(path, "fasta")
-    sequences = {str(index): record.seq for index, record in enumerate(records)}
+    with SeqIO.parse(path, "fasta") as records:
+        sequences = {str(index): record.seq for index, record in enumerate(records)}
     del filename
     del path
     del records
