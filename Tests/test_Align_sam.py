@@ -32,19 +32,19 @@ class TestAlign_dna_rna(unittest.TestCase):
 
     def setUp(self):
         data = {}
-        records = SeqIO.parse("Blat/dna.fa", "fasta")
-        for record in records:
-            name, start_end = record.id.split(":")
-            assert name == "chr3"
-            start, end = start_end.split("-")
-            start = int(start)
-            end = int(end)
-            sequence = str(record.seq).upper()
-            assert len(sequence) == end - start
-            data[start] = sequence
+        with SeqIO.parse("Blat/dna.fa", "fasta") as records:
+            for record in records:
+                name, start_end = record.id.split(":")
+                assert name == "chr3"
+                start, end = start_end.split("-")
+                start = int(start)
+                end = int(end)
+                sequence = str(record.seq).upper()
+                assert len(sequence) == end - start
+                data[start] = sequence
         self.dna = Seq(data, length=198295559)
-        records = SeqIO.parse("Blat/rna.fa", "fasta")
-        self.rna = {record.id: record.seq for record in records}
+        with SeqIO.parse("Blat/rna.fa", "fasta") as records:
+            self.rna = {record.id: record.seq for record in records}
         self.rna["NR_111921.1"] = self.rna["NR_111921.1"][:-12]
         self.rna["NR_111921.1_modified"] = self.rna["NR_111921.1_modified"][:-12]
         # Last 12 nucleotides were clipped by Blat as the poly(A) tail
@@ -1698,10 +1698,10 @@ AlignmentCounts object with
     def test_reading(self):
         """Test parsing dna_rna.sam."""
         path = "Blat/dna_rna.sam"
-        alignments = Align.parse(path, "sam")
-        self.check_alignments(alignments)
-        alignments = iter(alignments)
-        self.check_alignments(alignments)
+        with Align.parse(path, "sam") as alignments:
+            self.check_alignments(alignments)
+            alignments = iter(alignments)
+            self.check_alignments(alignments)
         with Align.parse(path, "sam") as alignments:
             self.check_alignments(alignments)
         with self.assertRaises(AttributeError):
@@ -1714,22 +1714,22 @@ AlignmentCounts object with
     def test_reading_psl_comparison(self):
         """Test parsing dna_rna.sam and comparing to dna_rna.psl."""
         path = "Blat/dna_rna.sam"
-        sam_alignments = Align.parse(path, "sam")
-        path = "Blat/dna_rna.psl"
-        psl_alignments = Align.parse(path, "psl")
-        for sam_alignment, psl_alignment in zip(sam_alignments, psl_alignments):
-            self.assertEqual(sam_alignment.target.id, psl_alignment.target.id)
-            self.assertEqual(sam_alignment.query.id, psl_alignment.query.id)
-            self.assertTrue(
-                np.array_equal(sam_alignment.coordinates, psl_alignment.coordinates)
-            )
+        with Align.parse(path, "sam") as sam_alignments:
+            path = "Blat/dna_rna.psl"
+            with Align.parse(path, "psl") as psl_alignments:
+                for sam_alignment, psl_alignment in zip(sam_alignments, psl_alignments):
+                    self.assertEqual(sam_alignment.target.id, psl_alignment.target.id)
+                    self.assertEqual(sam_alignment.query.id, psl_alignment.query.id)
+                    self.assertTrue(
+                        np.array_equal(sam_alignment.coordinates, psl_alignment.coordinates)
+                    )
 
     def test_writing(self):
         """Test writing the alignments in dna_rna.sam."""
-        path = "Blat/dna_rna.sam"
-        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        n = Align.write(alignments, stream, "sam", md=True)
+        path = "Blat/dna_rna.sam"
+        with Align.parse(path, "sam") as alignments:
+            n = Align.write(alignments, stream, "sam", md=True)
         self.assertEqual(n, 4)
         stream.seek(0)
         alignments = Align.parse(stream, "sam")
@@ -3675,15 +3675,15 @@ AlignmentCounts object with
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.sam."""
         path = "Blat/psl_34_001.sam"
-        alignments = Align.parse(path, "sam")
-        self.check_alignments_psl_34_001(alignments)
+        with Align.parse(path, "sam") as alignments:
+            self.check_alignments_psl_34_001(alignments)
 
     def test_writing_psl_34_001(self):
         """Test writing the alignments in psl_34_001.sam."""
-        path = "Blat/psl_34_001.sam"
-        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        n = Align.write(alignments, stream, "sam")
+        path = "Blat/psl_34_001.sam"
+        with Align.parse(path, "sam") as alignments:
+            n = Align.write(alignments, stream, "sam")
         self.assertEqual(n, 22)
         stream.seek(0)
         alignments = Align.parse(stream, "sam")
@@ -4012,15 +4012,15 @@ AlignmentCounts object with
     def test_reading_psl_34_003(self):
         """Test parsing psl_34_003.sam."""
         path = "Blat/psl_34_003.sam"
-        alignments = Align.parse(path, "sam")
-        self.check_alignments_psl_34_003(alignments)
+        with Align.parse(path, "sam") as alignments:
+            self.check_alignments_psl_34_003(alignments)
 
     def test_writing_psl_34_003(self):
         """Test writing the alignments in psl_34_003.sam."""
-        path = "Blat/psl_34_003.sam"
-        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        n = Align.write(alignments, stream, "sam")
+        path = "Blat/psl_34_003.sam"
+        with Align.parse(path, "sam") as alignments:
+            n = Align.write(alignments, stream, "sam")
         self.assertEqual(n, 3)
         stream.seek(0)
         alignments = Align.parse(stream, "sam")
@@ -5701,15 +5701,15 @@ AlignmentCounts object with
     def test_reading_psl_34_004(self):
         """Test parsing psl_34_004.sam."""
         path = "Blat/psl_34_004.sam"
-        alignments = Align.parse(path, "sam")
-        self.check_alignments_psl_34_004(alignments)
+        with Align.parse(path, "sam") as alignments:
+            self.check_alignments_psl_34_004(alignments)
 
     def test_writing_psl_34_004(self):
         """Test writing the alignments in psl_34_004.sam."""
         path = "Blat/psl_34_004.sam"
-        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        n = Align.write(alignments, stream, "sam")
+        with Align.parse(path, "sam") as alignments:
+            n = Align.write(alignments, stream, "sam")
         self.assertEqual(n, 19)
         stream.seek(0)
         alignments = Align.parse(stream, "sam")
@@ -7642,15 +7642,15 @@ AlignmentCounts object with
     def test_reading_psl_34_005(self):
         """Test parsing psl_34_005.sam."""
         path = "Blat/psl_34_005.sam"
-        alignments = Align.parse(path, "sam")
-        self.check_alignments_psl_34_005(alignments)
+        with Align.parse(path, "sam") as alignments:
+            self.check_alignments_psl_34_005(alignments)
 
     def test_writing_psl_34_005(self):
         """Test writing the alignments in psl_34_005.sam."""
         path = "Blat/psl_34_005.sam"
-        alignments = Align.parse(path, "sam")
         stream = StringIO()
-        n = Align.write(alignments, stream, "sam")
+        with Align.parse(path, "sam") as alignments:
+            n = Align.write(alignments, stream, "sam")
         self.assertEqual(n, 22)
         stream.seek(0)
         alignments = Align.parse(stream, "sam")
@@ -7660,7 +7660,10 @@ AlignmentCounts object with
 
 class TestAlign_sambam(unittest.TestCase):
     def test_ex1(self):
-        alignments = Align.parse("SamBam/ex1.sam", "sam")
+        with Align.parse("SamBam/ex1.sam", "sam") as alignments:
+            self.check_ex1(alignments)
+
+    def check_ex1(self, alignments):
         n = 0
         for alignment in alignments:
             n += 1
@@ -7727,7 +7730,10 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(alignment.annotations["H1"], 1)
 
     def test_ex1_header(self):
-        alignments = Align.parse("SamBam/ex1_header.sam", "sam")
+        with Align.parse("SamBam/ex1_header.sam", "sam") as alignments:
+            self.check_ex1_header(alignments)
+
+    def check_ex1_header(self, alignments):
         self.assertEqual(alignments.metadata["HD"], {"VN": "1.3", "SO": "coordinate"})
         self.assertEqual(len(alignments.targets), 2)
         self.assertEqual(alignments.targets[0].id, "chr1")
@@ -7801,7 +7807,10 @@ class TestAlign_sambam(unittest.TestCase):
         self.assertEqual(alignment.annotations["H1"], 1)
 
     def test_sam1(self):
-        alignments = Align.parse("SamBam/sam1.sam", "sam")
+        with Align.parse("SamBam/sam1.sam", "sam") as alignments:
+            self.check_sam1(alignments)
+
+    def check_sam1(self, alignments):
         self.assertEqual(len(alignments.targets), 1)
         self.assertEqual(alignments.targets[0].id, "1")
         self.assertEqual(len(alignments.targets[0].seq), 239940)
@@ -7936,7 +7945,10 @@ class TestAlign_sambam(unittest.TestCase):
         )
 
     def test_sam2(self):
-        alignments = Align.parse("SamBam/sam2.sam", "sam")
+        with Align.parse("SamBam/sam2.sam", "sam") as alignments:
+            self.check_sam2(alignments)
+
+    def check_sam2(self, alignments):
         self.assertEqual(len(alignments.targets), 1)
         self.assertEqual(alignments.targets[0].id, "1")
         self.assertEqual(len(alignments.targets[0].seq), 239940)
