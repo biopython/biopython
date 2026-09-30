@@ -2385,9 +2385,9 @@ Note that the length of the nucleotide sequence (68) is one less than expected
 (:math:`3 \times 23 = 69`) due to a frameshift event. You can see this frame
 shift by printing out the original sequence and the aligned sequence:
 
-.. cont-doctest
-
 .. blacken-docs:off
+
+.. cont-doctest
 
 .. code:: pycon
 
