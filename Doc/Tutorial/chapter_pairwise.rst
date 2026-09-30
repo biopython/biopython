@@ -2387,12 +2387,15 @@ shift by printing out the original sequence and the aligned sequence:
 
 .. cont-doctest
 
+.. blacken-docs:off
+
 .. code:: pycon
 
-   >>> print(alignment[1])
-   ... print(nuc)
+   >>> print(alignment[1]); print(nuc)
    TCAGGGACTTCGAGAACCAAGCGCCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG
    TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG
+
+.. blacken-docs:on
 
 The alignment coordinates will tell you where exactly the frameshift occurs:
 
