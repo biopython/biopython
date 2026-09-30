@@ -17,12 +17,12 @@ substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 class TestClustalReadingWriting(unittest.TestCase):
     def check_reading_writing(self, path):
-        alignments = Align.parse(path, "clustal")
         stream = StringIO()
-        n = Align.write(alignments, stream, "clustal")
-        self.assertEqual(n, 1)
-        alignments = Align.parse(path, "clustal")
-        alignment = next(alignments)
+        with Align.parse(path, "clustal") as alignments:
+            n = Align.write(alignments, stream, "clustal")
+            self.assertEqual(n, 1)
+        with Align.parse(path, "clustal") as alignments:
+            alignment = next(alignments)
         stream.seek(0)
         saved_alignments = Align.parse(stream, "clustal")
         self.assertEqual(saved_alignments.metadata, alignments.metadata)
@@ -56,11 +56,11 @@ class TestClustalReadingWriting(unittest.TestCase):
         self.check_reading_writing(path)
         with open(path) as stream:
             data = stream.read()
-        stream = NamedTemporaryFile("w+t")
-        stream.write(data)
-        stream.seek(0)
-        alignments = Align.parse(stream, "clustal")
-        self.check_clustalw(alignments)
+        with NamedTemporaryFile("w+t") as stream:
+            stream.write(data)
+            stream.seek(0)
+            alignments = Align.parse(stream, "clustal")
+            self.check_clustalw(alignments)
 
     def check_clustalw(self, alignments):
         self.assertEqual(alignments.metadata["Program"], "CLUSTAL")
@@ -863,12 +863,12 @@ AlignmentCounts object with
         path = "Clustalw/probcons.aln"
         # example taken from the PROBCONS documentation
         with open(path) as stream:
-            alignments = Align.parse(stream, "clustal")
-            self.assertEqual(alignments.metadata["Program"], "PROBCONS")
-            self.assertEqual(alignments.metadata["Version"], "1.12")
-            alignment = next(alignments)
-            with self.assertRaises(StopIteration):
-                next(alignments)
+            with Align.parse(stream, "clustal") as alignments:
+                self.assertEqual(alignments.metadata["Program"], "PROBCONS")
+                self.assertEqual(alignments.metadata["Version"], "1.12")
+                alignment = next(alignments)
+                with self.assertRaises(StopIteration):
+                    next(alignments)
         self.assertTrue(
             np.array_equal(
                 np.array(alignment, "U"),
