@@ -7470,24 +7470,24 @@ AlignmentCounts object with
 
     def test_reading(self):
         """Test reading bigbedtest.bb."""
-        alignments = Align.parse(self.path, "bigbed")
-        self.check_alignments(alignments)
+        with Align.parse(self.path, "bigbed") as alignments:
+            self.check_alignments(alignments)
 
     def test_writing(self):
         """Test writing bigbedtest.bb."""
-        alignments = Align.parse(self.path, "bigbed")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigbed", bedN=6)
+            with Align.parse(self.path, "bigbed") as alignments:
+                Align.write(alignments, output, "bigbed", bedN=6)
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
             self.check_alignments(alignments)
 
     def test_search_chromosome(self):
-        alignments = Align.parse(self.path, "bigbed")
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
+        with Align.parse(self.path, "bigbed") as alignments:
+            self.assertEqual(
+                str(alignments.declaration),
+                """\
 table bed
 "Browser Extensible Data"
 (
@@ -7499,77 +7499,77 @@ table bed
    char[1] strand;        "+ or - for strand"
 )
 """,
-        )
-        selected_alignments = alignments.search("chr2")
-        names = [alignment.query.id for alignment in selected_alignments]
+            )
+            selected_alignments = alignments.search("chr2")
+            names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name4", "name5", "name6", "name7"])
 
     def test_search_region(self):
-        alignments = Align.parse(self.path, "bigbed")
-        selected_alignments = alignments.search("chr2", 105, 1000)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name5", "name6", "name7"])
-        selected_alignments = alignments.search("chr2", 110, 1000)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name6", "name7"])
-        selected_alignments = alignments.search("chr2", 40, 50)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4"])
-        selected_alignments = alignments.search("chr2", 50, 50)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4"])
-        selected_alignments = alignments.search("chr2", 50, 200)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4", "name5"])
-        selected_alignments = alignments.search("chr2", 200, 220)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name6", "name7"])
-        selected_alignments = alignments.search("chr2", 220, 220)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name7"])
+        with Align.parse(self.path, "bigbed") as alignments:
+            selected_alignments = alignments.search("chr2", 105, 1000)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name5", "name6", "name7"])
+            selected_alignments = alignments.search("chr2", 110, 1000)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name6", "name7"])
+            selected_alignments = alignments.search("chr2", 40, 50)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name4"])
+            selected_alignments = alignments.search("chr2", 50, 50)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name4"])
+            selected_alignments = alignments.search("chr2", 50, 200)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name4", "name5"])
+            selected_alignments = alignments.search("chr2", 200, 220)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name6", "name7"])
+            selected_alignments = alignments.search("chr2", 220, 220)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name7"])
 
     def test_search_position(self):
-        alignments = Align.parse(self.path, "bigbed")
-        selected_alignments = alignments.search("chr1", 250)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name3"])
+        with Align.parse(self.path, "bigbed") as alignments:
+            selected_alignments = alignments.search("chr1", 250)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name3"])
 
     def test_three_iterators(self):
         """Create three iterators and use them concurrently."""
-        alignments1 = Align.parse(self.path, "bigbed")
-        alignments2 = alignments1.search("chr2")
-        alignments3 = alignments1.search("chr2", 110, 1000)
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name1")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name2")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name4")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name5")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name6")
-        alignment3 = next(alignments3)
-        self.assertEqual(alignment3.query.id, "name6")
-        alignment3 = next(alignments3)
-        self.assertEqual(alignment3.query.id, "name7")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name3")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name4")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name5")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name7")
-        self.assertRaises(StopIteration, next, alignments2)
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name6")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name7")
-        self.assertRaises(StopIteration, next, alignments3)
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name8")
-        self.assertRaises(StopIteration, next, alignments1)
+        with Align.parse(self.path, "bigbed") as alignments1:
+            alignments2 = alignments1.search("chr2")
+            alignments3 = alignments1.search("chr2", 110, 1000)
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name1")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name2")
+            alignment2 = next(alignments2)
+            self.assertEqual(alignment2.query.id, "name4")
+            alignment2 = next(alignments2)
+            self.assertEqual(alignment2.query.id, "name5")
+            alignment2 = next(alignments2)
+            self.assertEqual(alignment2.query.id, "name6")
+            alignment3 = next(alignments3)
+            self.assertEqual(alignment3.query.id, "name6")
+            alignment3 = next(alignments3)
+            self.assertEqual(alignment3.query.id, "name7")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name3")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name4")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name5")
+            alignment2 = next(alignments2)
+            self.assertEqual(alignment2.query.id, "name7")
+            self.assertRaises(StopIteration, next, alignments2)
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name6")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name7")
+            self.assertRaises(StopIteration, next, alignments3)
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name8")
+            self.assertRaises(StopIteration, next, alignments1)
 
 
 class BinaryTestBaseClass(unittest.TestCase):
