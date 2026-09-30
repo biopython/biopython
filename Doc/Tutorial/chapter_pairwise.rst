@@ -2401,10 +2401,12 @@ The alignment coordinates will tell you where exactly the frameshift occurs:
 .. code:: pycon
 
    >>> alignment.coordinates
-   array([[ 0,  8,  8, 23],    # amino acid coordinates
-          [ 0, 24, 23, 68]])   # nucleotide coordinates
+   array([[ 0,  8,  8, 23],
+          [ 0, 24, 23, 68]])
 
-showing that the frameshift occurs after 24 nucleotides.
+The first row shows the alignment coordinates for the amino acid sequence.
+The alignment coordinates for the nucleotide sequence, in the second row,
+shows a frameshift of -1 after 24 nucleotides.
 
 The ``codon_align`` convenience function accepts optional
 keyword arguments, which are passed to the ``CodonAligner``
