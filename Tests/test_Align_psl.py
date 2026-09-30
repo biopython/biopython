@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Align.psl module."""
+
 import unittest
 from io import StringIO
 from tempfile import NamedTemporaryFile
@@ -37,27 +38,27 @@ class TestAlign_dna_rna(unittest.TestCase):
 
     def setUp(self):
         data = {}
-        records = SeqIO.parse("Blat/dna.fa", "fasta")
-        for record in records:
-            name, start_end = record.id.split(":")
-            assert name == "chr3"
-            start, end = start_end.split("-")
-            start = int(start)
-            end = int(end)
-            sequence = str(record.seq)
-            assert len(sequence) == end - start
-            data[start] = sequence
+        with SeqIO.parse("Blat/dna.fa", "fasta") as records:
+            for record in records:
+                name, start_end = record.id.split(":")
+                assert name == "chr3"
+                start, end = start_end.split("-")
+                start = int(start)
+                end = int(end)
+                sequence = str(record.seq)
+                assert len(sequence) == end - start
+                data[start] = sequence
         self.dna = data
-        records = SeqIO.parse("Blat/rna.fa", "fasta")
-        self.rna = {record.id: record.seq for record in records}
+        with SeqIO.parse("Blat/rna.fa", "fasta") as records:
+            self.rna = {record.id: record.seq for record in records}
 
     def test_reading(self):
         """Test parsing dna_rna.psl."""
         path = "Blat/dna_rna.psl"
-        alignments = Align.parse(path, "psl")
-        self.check_alignments(alignments)
-        alignments = iter(alignments)
-        self.check_alignments(alignments)
+        with Align.parse(path, "psl") as alignments:
+            self.check_alignments(alignments)
+            alignments = iter(alignments)
+            self.check_alignments(alignments)
         with Align.parse(path, "psl") as alignments:
             self.check_alignments(alignments)
         with self.assertRaises(AttributeError):
@@ -68,11 +69,11 @@ class TestAlign_dna_rna(unittest.TestCase):
             alignments._stream
         with open(path) as stream:
             data = stream.read()
-        stream = NamedTemporaryFile("w+t")
-        stream.write(data)
-        stream.seek(0)
-        alignments = Align.parse(stream, "psl")
-        self.check_alignments(alignments)
+        with NamedTemporaryFile("w+t") as stream:
+            stream.write(data)
+            stream.seek(0)
+            alignments = Align.parse(stream, "psl")
+            self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["psLayout version"], "3")
@@ -1503,9 +1504,9 @@ AlignmentCounts object with
         path = "Blat/dna_rna.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        n = Align.write(alignments, stream, "psl")
+        with Align.parse(path, "psl") as alignments:
+            n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 4)
         stream.seek(0)
         written_data = stream.read()
@@ -1518,15 +1519,16 @@ AlignmentCounts object with
         # from the sequence data and the alignment, and store those values in
         # the PSL file.
         alignments = []
-        for alignment in Align.parse(path, "psl"):
-            del alignment.matches
-            del alignment.misMatches
-            del alignment.repMatches
-            del alignment.nCount
-            dna = Seq(self.dna, length=len(alignment.target))
-            alignment.target.seq = dna
-            alignment.query.seq = self.rna[alignment.sequences[1].id]
-            alignments.append(alignment)
+        with Align.parse(path, "psl") as original_alignments:
+            for alignment in original_alignments:
+                del alignment.matches
+                del alignment.misMatches
+                del alignment.repMatches
+                del alignment.nCount
+                dna = Seq(self.dna, length=len(alignment.target))
+                alignment.target.seq = dna
+                alignment.query.seq = self.rna[alignment.sequences[1].id]
+                alignments.append(alignment)
         stream = StringIO()
         n = Align.write(alignments, stream, "psl", mask="lower")
         self.assertEqual(n, 4)
@@ -1537,20 +1539,19 @@ AlignmentCounts object with
 
 
 class TestAlign_dna(unittest.TestCase):
-    queries = {
-        record.id: str(record.seq)
-        for record in SeqIO.parse("Blat/fasta_34.fa", "fasta")
-    }
+
+    with SeqIO.parse("Blat/fasta_34.fa", "fasta") as records:
+        queries = {record.id: str(record.seq) for record in records}
 
     def test_reading_psl_34_001(self):
         """Test parsing psl_34_001.psl and pslx_34_001.pslx."""
-        self.check_reading_psl_34_001("psl")
-        self.check_reading_psl_34_001("pslx")
+        for fmt in ("psl", "pslx"):
+            path = f"Blat/{fmt}_34_001.{fmt}"
+            with Align.parse(path, "psl") as alignments:
+                self.check_reading_psl_34_001(alignments, fmt)
 
-    def check_reading_psl_34_001(self, fmt):
+    def check_reading_psl_34_001(self, alignments, fmt):
         """Check parsing psl_34_001.psl or pslx_34_001.pslx."""
-        path = f"Blat/{fmt}_34_001.{fmt}"
-        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
@@ -4928,9 +4929,9 @@ AlignmentCounts object with
         path = "Blat/psl_34_001.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        n = Align.write(alignments, stream, "psl")
+        with Align.parse(path, "psl") as alignments:
+            n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 22)
         stream.seek(0)
         written_data = stream.read()
@@ -4939,14 +4940,13 @@ AlignmentCounts object with
 
     def test_reading_psl_34_002(self):
         """Test parsing psl_34_002.psl and pslx_34_002.pslx."""
-        path = "Blat/psl_34_002.psl"
-        self.check_reading_psl_34_002(path)
-        path = "Blat/pslx_34_002.pslx"
-        self.check_reading_psl_34_002(path)
+        for fmt in ("psl", "pslx"):
+            path = f"Blat/{fmt}_34_002.{fmt}"
+            with Align.parse(path, "psl") as alignments:
+                self.check_reading_psl_34_002(alignments)
 
-    def check_reading_psl_34_002(self, path):
+    def check_reading_psl_34_002(self, alignments):
         """Check parsing psl_34_002.psl or pslx_34_002.pslx."""
-        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         self.assertRaises(StopIteration, next, alignments)
 
@@ -4955,9 +4955,9 @@ AlignmentCounts object with
         path = "Blat/psl_34_002.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        n = Align.write(alignments, stream, "psl")
+        with Align.parse(path, "psl") as alignments:
+            n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 0)
         stream.seek(0)
         written_data = stream.read()
@@ -4966,13 +4966,13 @@ AlignmentCounts object with
 
     def test_reading_psl_34_003(self):
         """Test parsing psl_34_003.psl and pslx_34_003.pslx."""
-        self.check_reading_psl_34_003("psl")
-        self.check_reading_psl_34_003("pslx")
+        for fmt in ("psl", "pslx"):
+            path = f"Blat/{fmt}_34_003.{fmt}"
+            with Align.parse(path, "psl") as alignments:
+                self.check_reading_psl_34_003(alignments, fmt)
 
-    def check_reading_psl_34_003(self, fmt):
+    def check_reading_psl_34_003(self, alignments, fmt):
         """Check parsing psl_34_003.psl or pslx_34_003.pslx."""
-        path = f"Blat/{fmt}_34_003.{fmt}"
-        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
@@ -5435,9 +5435,9 @@ AlignmentCounts object with
         path = "Blat/psl_34_003.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        n = Align.write(alignments, stream, "psl")
+        with Align.parse(path, "psl") as alignments:
+            n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 3)
         stream.seek(0)
         written_data = stream.read()
@@ -5446,13 +5446,13 @@ AlignmentCounts object with
 
     def test_reading_psl_34_004(self):
         """Test parsing psl_34_004.psl and pslx_34_004.pslx."""
-        self.check_reading_psl_34_004("psl")
-        self.check_reading_psl_34_004("pslx")
+        for fmt in ("psl", "pslx"):
+            path = f"Blat/{fmt}_34_004.{fmt}"
+            with Align.parse(path, "psl") as alignments:
+                self.check_reading_psl_34_004(alignments, fmt)
 
-    def check_reading_psl_34_004(self, fmt):
+    def check_reading_psl_34_004(self, alignments, fmt):
         """Check parsing psl_34_004.psl or pslx_34_004.pslx."""
-        path = f"Blat/{fmt}_34_004.{fmt}"
-        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 38)
@@ -8376,9 +8376,9 @@ AlignmentCounts object with
         path = "Blat/psl_34_004.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        n = Align.write(alignments, stream, "psl")
+        with Align.parse(path, "psl") as alignments:
+            n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 19)
         stream.seek(0)
         written_data = stream.read()
@@ -8387,13 +8387,13 @@ AlignmentCounts object with
 
     def test_reading_psl_34_005(self):
         """Test parsing psl_34_005.psl and pslx_34_005.pslx."""
-        self.check_reading_psl_34_005("psl")
-        self.check_reading_psl_34_005("pslx")
+        for fmt in ("psl", "pslx"):
+            path = f"Blat/{fmt}_34_005.{fmt}"
+            with Align.parse(path, "psl") as alignments:
+                self.check_reading_psl_34_005(alignments, fmt)
 
-    def check_reading_psl_34_005(self, fmt):
+    def check_reading_psl_34_005(self, alignments, fmt):
         """Check parsing psl_34_005.psl or pslx_34_005.pslx."""
-        path = f"Blat/{fmt}_34_005.{fmt}"
-        alignments = Align.parse(path, "psl")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 16)
         self.assertEqual(alignment.misMatches, 0)
@@ -11770,9 +11770,9 @@ AlignmentCounts object with
         path = "Blat/psl_34_005.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        n = Align.write(alignments, stream, "psl", header=False)
+        with Align.parse(path, "psl") as alignments:
+            n = Align.write(alignments, stream, "psl", header=False)
         self.assertEqual(n, 22)
         stream.seek(0)
         written_data = stream.read()
@@ -11784,13 +11784,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
     @classmethod
     def read_dna(cls, assembly, sequence):
         path = "Blat/%s.fa" % assembly
-        records = SeqIO.parse(path, "fasta")
-        for record in records:
-            name, start_end = record.id.split(":")
-            if name == sequence.id:
-                break
-        else:
-            raise Exception("Failed to find DNA sequence")
+        with SeqIO.parse(path, "fasta") as records:
+            for record in records:
+                name, start_end = record.id.split(":")
+                if name == sequence.id:
+                    break
+            else:
+                raise Exception("Failed to find DNA sequence")
         start, end = start_end.split("-")
         start = int(start)
         end = int(end)
@@ -11801,13 +11801,13 @@ class TestAlign_dnax_prot(unittest.TestCase):
 
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.psl and pslx_35_001.pslx."""
-        self.check_reading_psl_35_001("psl")
-        self.check_reading_psl_35_001("pslx")
+        for fmt in ("psl", "pslx"):
+            path = f"Blat/{fmt}_35_001.{fmt}"
+            with Align.parse(path, "psl") as alignments:
+                self.check_reading_psl_35_001(alignments, fmt)
 
-    def check_reading_psl_35_001(self, fmt):
+    def check_reading_psl_35_001(self, alignments, fmt):
         """Check parsing psl_35_001.psl or pslx_35_001.pslx."""
-        path = f"Blat/{fmt}_35_001.{fmt}"
-        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 52)
@@ -12920,9 +12920,9 @@ AlignmentCounts object with
         path = "Blat/psl_35_001.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        n = Align.write(alignments, stream, "psl")
+        with Align.parse(path, "psl") as alignments:
+            n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 8)
         stream.seek(0)
         written_data = stream.read()
@@ -12947,105 +12947,109 @@ AlignmentCounts object with
         # Load the protein sequence:
         protein = SeqIO.read("Blat/CAG33136.1.fasta", "fasta")
         protein_alignments = []
-        alignments = Align.parse(path, "psl")
-        for i, alignment in enumerate(alignments):
-            alignment.sequences[0].seq = TestAlign_dnax_prot.read_dna(
-                "hg38", alignment.sequences[0]
-            )
-            self.assertEqual(alignment.sequences[1].id, protein.id)
-            alignment.sequences[1].seq = protein.seq
-            # The alignment is on the forward strand of the DNA sequence:
-            self.assertLess(alignment.coordinates[0, 0], alignment.coordinates[0, -1])
-            # The protein alignment is also in the forward orientation:
-            self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-            # Now extract the aligned sequences:
-            aligned_dna = ""
-            aligned_protein = ""
-            for start, end in alignment.aligned[0]:
-                aligned_dna += alignment.sequences[0].seq[start:end]
-            for start, end in alignment.aligned[1]:
-                aligned_protein += alignment.sequences[1].seq[start:end]
-            # Translate the aligned DNA sequence:
-            aligned_dna = Seq(aligned_dna)
-            aligned_dna_translated = Seq(aligned_dna.translate())
-            aligned_protein = Seq(aligned_protein)
-            # Create a new alignment including the aligned sequences only:
-            records = [
-                SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
-                SeqRecord(aligned_protein, id=alignment.sequences[1].id),
-            ]
-            coordinates = np.array(
-                [[0, len(aligned_dna_translated)], [0, len(aligned_protein)]]
-            )
-            protein_alignment = Alignment(records, coordinates)
-            protein_alignments.append(protein_alignment)
-            if i == 0:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+        with Align.parse(path, "psl") as alignments:
+            for i, alignment in enumerate(alignments):
+                alignment.sequences[0].seq = TestAlign_dnax_prot.read_dna(
+                    "hg38", alignment.sequences[0]
+                )
+                self.assertEqual(alignment.sequences[1].id, protein.id)
+                alignment.sequences[1].seq = protein.seq
+                # The alignment is on the forward strand of the DNA sequence:
+                self.assertLess(
+                    alignment.coordinates[0, 0], alignment.coordinates[0, -1]
+                )
+                # The protein alignment is also in the forward orientation:
+                self.assertLess(
+                    alignment.coordinates[1, 0], alignment.coordinates[1, -1]
+                )
+                # Now extract the aligned sequences:
+                aligned_dna = ""
+                aligned_protein = ""
+                for start, end in alignment.aligned[0]:
+                    aligned_dna += alignment.sequences[0].seq[start:end]
+                for start, end in alignment.aligned[1]:
+                    aligned_protein += alignment.sequences[1].seq[start:end]
+                # Translate the aligned DNA sequence:
+                aligned_dna = Seq(aligned_dna)
+                aligned_dna_translated = Seq(aligned_dna.translate())
+                aligned_protein = Seq(aligned_protein)
+                # Create a new alignment including the aligned sequences only:
+                records = [
+                    SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
+                    SeqRecord(aligned_protein, id=alignment.sequences[1].id),
+                ]
+                coordinates = np.array(
+                    [[0, len(aligned_dna_translated)], [0, len(aligned_protein)]]
+                )
+                protein_alignment = Alignment(records, coordinates)
+                protein_alignments.append(protein_alignment)
+                if i == 0:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 chr13             0 YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF 52
                   0 |||||||||||||||||||||||||||||||||||||||||||||||||||| 52
 CAG33136.         0 YEVFRTEEEEKIKSQGQDVTSSVYFMKQTISNACGTIGLIHAIANNKDKMHF 52
 """,
-                )
-            elif i == 1:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                    )
+                elif i == 1:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 chr13             0 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK 44
                   0 |||||||||||||||||||||||||||||||||||||||||||| 44
 CAG33136.         0 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK 44
 """,
-                )
-            elif i == 2:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                    )
+                elif i == 2:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 chr13             0 MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD 44
                   0 |||||||||||||||||||||||||||||||||||||||||||| 44
 CAG33136.         0 MEGQRWLPLEANPEVESGSTLKKFLEESVSMSPEERARYLENYD 44
 """,
-                )
-            elif i == 3:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                    )
+                elif i == 3:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 chr13             0 DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA 47
                   0 ||||||||||||||||||||||||||||||||||||||||||||||| 47
 CAG33136.         0 DGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA 47
 """,
-                )
-            elif i == 4:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                    )
+                elif i == 4:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 chr13             0 APSIDEKVDLHFIALVHVDGHLYEL 25
                   0 ||||||||||||||||||||||||| 25
 CAG33136.         0 APSIDEKVDLHFIALVHVDGHLYEL 25
 """,
-                )
-            elif i == 5:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                    )
+                elif i == 5:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 chr13             0 AIRVTHETSAHEGQTE 16
                   0 |||||||||||||||| 16
 CAG33136.         0 AIRVTHETSAHEGQTE 16
 """,
-                )
-            elif i == 6:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                    )
+                elif i == 6:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 chr4              0 GQEVSPKVYFMKQTIGNSCGTIGLIHAVANNQDK 34
                   0 ||.|...||||||||.|.|||||||||.|||.|| 34
 CAG33136.         0 GQDVTSSVYFMKQTISNACGTIGLIHAIANNKDK 34
 """,
-                )
-            elif i == 7:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                    )
+                elif i == 7:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 chr4              0 QVLSRLGVAGQWRFVDVLGLEEESLGSVPAPACALLLLFPLTDDKVNFHFILFNNVDGHL
                   0 |.|..||....|.||||.|...|.|..||.|.||.|||||.||.||..|||....|||||
 CAG33136.         0 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITDEKVDLHFIALVHVDGHL
@@ -13054,43 +13058,43 @@ chr4             60 YEL 63
                  60 ||| 63
 CAG33136.        60 YEL 63
 """,
-                )
-        # Write the protein alignments to a PSL file:
-        stream = StringIO()
-        n = Align.write(protein_alignments, stream, "psl", wildcard="X")
-        self.assertEqual(n, 8)
+                    )
+            # Write the protein alignments to a PSL file:
+            stream = StringIO()
+            n = Align.write(protein_alignments, stream, "psl", wildcard="X")
+            self.assertEqual(n, 8)
         # Read the alignments back in:
-        alignments = Align.parse(path, "psl")
         stream.seek(0)
-        protein_alignments = Align.parse(stream, "psl")
-        for alignment, protein_alignment in zip(alignments, protein_alignments):
-            # Confirm that the recalculated values for matches, misMatches,
-            # repMatches, and nCount are correct:
-            self.assertEqual(alignment.matches, protein_alignment.matches)
-            self.assertEqual(alignment.misMatches, protein_alignment.misMatches)
-            self.assertEqual(alignment.repMatches, protein_alignment.repMatches)
-            self.assertEqual(alignment.nCount, protein_alignment.nCount)
+        with Align.parse(path, "psl") as alignments:
+            protein_alignments = Align.parse(stream, "psl")
+            for alignment, protein_alignment in zip(alignments, protein_alignments):
+                # Confirm that the recalculated values for matches, misMatches,
+                # repMatches, and nCount are correct:
+                self.assertEqual(alignment.matches, protein_alignment.matches)
+                self.assertEqual(alignment.misMatches, protein_alignment.misMatches)
+                self.assertEqual(alignment.repMatches, protein_alignment.repMatches)
+                self.assertEqual(alignment.nCount, protein_alignment.nCount)
 
     def test_reading_psl_35_002(self):
         """Test parsing psl_35_002.psl."""
         # See below for a description of the file balAcu1.fa.
         # We use this file here so we can check the SeqFeatures.
-        records = SeqIO.parse("Blat/balAcu1.fa", "fasta")
         self.dna = {}
-        for record in records:
-            name, start_end = record.id.split(":")
-            start, end = start_end.split("-")
-            start = int(start)
-            end = int(end)
-            sequence = str(record.seq)
-            self.dna[name] = Seq({start: sequence}, length=end)
-        self.check_reading_psl_35_002("psl")
-        self.check_reading_psl_35_002("pslx")
+        with SeqIO.parse("Blat/balAcu1.fa", "fasta") as records:
+            for record in records:
+                name, start_end = record.id.split(":")
+                start, end = start_end.split("-")
+                start = int(start)
+                end = int(end)
+                sequence = str(record.seq)
+                self.dna[name] = Seq({start: sequence}, length=end)
+        for fmt in ("psl", "pslx"):
+            path = f"Blat/{fmt}_35_002.{fmt}"
+            with Align.parse(path, "psl") as alignments:
+                self.check_reading_psl_35_002(alignments, fmt)
 
-    def check_reading_psl_35_002(self, fmt):
+    def check_reading_psl_35_002(self, alignments, fmt):
         """Check parsing psl_35_002.psl or pslx_35_002.pslx."""
-        path = f"Blat/{fmt}_35_002.{fmt}"
-        alignments = Align.parse(path, "psl")
         self.assertEqual(alignments.metadata["psLayout version"], "3")
         alignment = next(alignments)
         self.assertEqual(alignment.matches, 210)
@@ -13562,9 +13566,9 @@ AlignmentCounts object with
         path = "Blat/psl_35_002.psl"
         with open(path) as stream:
             original_data = stream.read()
-        alignments = Align.parse(path, "psl")
         stream = StringIO()
-        n = Align.write(alignments, stream, "psl")
+        with Align.parse(path, "psl") as alignments:
+            n = Align.write(alignments, stream, "psl")
         self.assertEqual(n, 3)
         stream.seek(0)
         written_data = stream.read()
@@ -13590,57 +13594,59 @@ AlignmentCounts object with
         # Load the protein sequence:
         protein = SeqIO.read("Blat/CAG33136.1.fasta", "fasta")
         protein_alignments = []
-        alignments = Align.parse(path, "psl")
-        for i, alignment in enumerate(alignments):
-            alignment.sequences[0].seq = TestAlign_dnax_prot.read_dna(
-                "balAcu1", alignment.sequences[0]
-            )
-            self.assertEqual(alignment.sequences[1].id, protein.id)
-            alignment.sequences[1].seq = protein.seq
-            if i == 0 or i == 1:
-                # The alignment is on the forward strand of the DNA sequence:
+        with Align.parse(path, "psl") as alignments:
+            for i, alignment in enumerate(alignments):
+                alignment.sequences[0].seq = TestAlign_dnax_prot.read_dna(
+                    "balAcu1", alignment.sequences[0]
+                )
+                self.assertEqual(alignment.sequences[1].id, protein.id)
+                alignment.sequences[1].seq = protein.seq
+                if i == 0 or i == 1:
+                    # The alignment is on the forward strand of the DNA sequence:
+                    self.assertLess(
+                        alignment.coordinates[0, 0], alignment.coordinates[0, -1]
+                    )
+                elif i == 2:
+                    # The alignment is on the reverse strand of the DNA sequence:
+                    self.assertGreater(
+                        alignment.coordinates[0, 0], alignment.coordinates[0, -1]
+                    )
+                    # so we take the reverse complement:
+                    alignment.coordinates[0, :] = (
+                        len(alignment.sequences[0].seq) - alignment.coordinates[0, :]
+                    )
+                    alignment.sequences[0].seq = alignment.sequences[
+                        0
+                    ].seq.reverse_complement()
+                # The protein alignment is always in the forward orientation:
                 self.assertLess(
-                    alignment.coordinates[0, 0], alignment.coordinates[0, -1]
+                    alignment.coordinates[1, 0], alignment.coordinates[1, -1]
                 )
-            elif i == 2:
-                # The alignment is on the reverse strand of the DNA sequence:
-                self.assertGreater(
-                    alignment.coordinates[0, 0], alignment.coordinates[0, -1]
+                # Now extract the aligned sequences:
+                aligned_dna = ""
+                aligned_protein = ""
+                for start, end in alignment.aligned[0]:
+                    aligned_dna += alignment.sequences[0].seq[start:end]
+                for start, end in alignment.aligned[1]:
+                    aligned_protein += alignment.sequences[1].seq[start:end]
+                # Translate the aligned DNA sequence:
+                aligned_dna = Seq(aligned_dna)
+                aligned_dna_translated = Seq(aligned_dna.translate())
+                aligned_protein = Seq(aligned_protein)
+                # Create a new alignment including the aligned sequences only:
+                records = [
+                    SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
+                    SeqRecord(aligned_protein, id=alignment.sequences[1].id),
+                ]
+                coordinates = np.array(
+                    [[0, len(aligned_dna_translated)], [0, len(aligned_protein)]]
                 )
-                # so we take the reverse complement:
-                alignment.coordinates[0, :] = (
-                    len(alignment.sequences[0].seq) - alignment.coordinates[0, :]
-                )
-                alignment.sequences[0].seq = alignment.sequences[
-                    0
-                ].seq.reverse_complement()
-            # The protein alignment is always in the forward orientation:
-            self.assertLess(alignment.coordinates[1, 0], alignment.coordinates[1, -1])
-            # Now extract the aligned sequences:
-            aligned_dna = ""
-            aligned_protein = ""
-            for start, end in alignment.aligned[0]:
-                aligned_dna += alignment.sequences[0].seq[start:end]
-            for start, end in alignment.aligned[1]:
-                aligned_protein += alignment.sequences[1].seq[start:end]
-            # Translate the aligned DNA sequence:
-            aligned_dna = Seq(aligned_dna)
-            aligned_dna_translated = Seq(aligned_dna.translate())
-            aligned_protein = Seq(aligned_protein)
-            # Create a new alignment including the aligned sequences only:
-            records = [
-                SeqRecord(aligned_dna_translated, id=alignment.sequences[0].id),
-                SeqRecord(aligned_protein, id=alignment.sequences[1].id),
-            ]
-            coordinates = np.array(
-                [[0, len(aligned_dna_translated)], [0, len(aligned_protein)]]
-            )
-            protein_alignment = Alignment(records, coordinates)
-            protein_alignments.append(protein_alignment)
-            if i == 0:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                protein_alignment = Alignment(records, coordinates)
+                protein_alignments.append(protein_alignment)
+                if i == 0:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 KI537979          0 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEIFRTEEEEKIKSQG
                   0 ||||||||||||||||||||||||||||||||||||||||||||||.|||||||||||||
 CAG33136.         0 QFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEKYEVFRTEEEEKIKSQG
@@ -13657,11 +13663,11 @@ KI537979        180 DETLLEDAIEVCKKFMERDPDELRFNAIALSAA 213
                 180 ||||||||||||||||||||||||||||||||| 213
 CAG33136.       180 DETLLEDAIEVCKKFMERDPDELRFNAIALSAA 213
 """,
-                )
-            elif i == 1:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                    )
+                elif i == 1:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 KI538594          0 MEGQCWLPLEANPEVTNQLLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
                   0 ||||.|||||||||||||.|||||||||||||||||||||||||||||||||||||||||
 CAG33136.         0 MEGQRWLPLEANPEVTNQFLQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITEK
@@ -13678,11 +13684,11 @@ KI538594        180 ELDGWKPFPINHGETSDATLLRDAIEVFKKFRERDPDERRFNVIALSAA 229
                 180 ||||.||||||||||||.|||.|||||.|||.||||||.|||.|||||| 229
 CAG33136.       180 ELDGRKPFPINHGETSDETLLEDAIEVCKKFMERDPDELRFNAIALSAA 229
 """,
-                )
-            elif i == 2:
-                self.assertEqual(
-                    str(protein_alignment),
-                    """\
+                    )
+                elif i == 2:
+                    self.assertEqual(
+                        str(protein_alignment),
+                        """\
 KI537194          0 MESQRWLPLEANPEVTNQFLKQLGLHPNWQCVDVYGMDPELLSMVPRPVCAVLLLFPITE
                   0 ||.|||||||||||||||||||||||||||.|||||||||||||||||||||||||||||
 CAG33136.         0 MEGQRWLPLEANPEVTNQFLKQLGLHPNWQFVDVYGMDPELLSMVPRPVCAVLLLFPITE
@@ -13699,22 +13705,22 @@ KI537194        180 YELDAIEVCKKFMERDPDELRFNAIALSAA 210
                 180 |||||||||||||||||||||||||||||| 210
 CAG33136.       180 YELDAIEVCKKFMERDPDELRFNAIALSAA 210
 """,
-                )
-        # Write the protein alignments to a PSL file:
-        stream = StringIO()
-        n = Align.write(protein_alignments, stream, "psl", wildcard="X")
-        self.assertEqual(n, 3)
-        # Read the alignments back in:
-        alignments = Align.parse(path, "psl")
-        stream.seek(0)
-        protein_alignments = Align.parse(stream, "psl")
-        for alignment, protein_alignment in zip(alignments, protein_alignments):
-            # Confirm that the recalculated values for matches, misMatches,
-            # repMatches, and nCount are correct:
-            self.assertEqual(alignment.matches, protein_alignment.matches)
-            self.assertEqual(alignment.misMatches, protein_alignment.misMatches)
-            self.assertEqual(alignment.repMatches, protein_alignment.repMatches)
-            self.assertEqual(alignment.nCount, protein_alignment.nCount)
+                    )
+            # Write the protein alignments to a PSL file:
+            stream = StringIO()
+            n = Align.write(protein_alignments, stream, "psl", wildcard="X")
+            self.assertEqual(n, 3)
+            # Read the alignments back in:
+            stream.seek(0)
+            with Align.parse(path, "psl") as alignments:
+                protein_alignments = Align.parse(stream, "psl")
+                for alignment, protein_alignment in zip(alignments, protein_alignments):
+                    # Confirm that the recalculated values for matches, misMatches,
+                    # repMatches, and nCount are correct:
+                    self.assertEqual(alignment.matches, protein_alignment.matches)
+                    self.assertEqual(alignment.misMatches, protein_alignment.misMatches)
+                    self.assertEqual(alignment.repMatches, protein_alignment.repMatches)
+                    self.assertEqual(alignment.nCount, protein_alignment.nCount)
 
 
 class TestAlign_strand(unittest.TestCase):
