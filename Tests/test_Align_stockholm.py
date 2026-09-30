@@ -25,8 +25,8 @@ class TestStockholm_reading(unittest.TestCase):
     def test_reading_example(self):
         """Test parsing Pfam record HAT as the docstring example."""
         path = "Stockholm/example.sth"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertEqual(alignment.annotations["identifier"], "HAT")
         self.assertEqual(alignment.annotations["accession"], "PF02184.18")
         self.assertEqual(alignment.annotations["definition"], "HAT (Half-A-TPR) repeat")
@@ -6821,13 +6821,13 @@ AlignmentCounts object with
         # hmmalign -o globins45.ali globins4.hmm globins45.fa
         # in the HMMER 3.3.2 tutorial
         path = "Stockholm/globins45.ali"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
-        self.check_alignment_globins45(alignment)
-        alignments = iter(alignments)
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
+            self.check_alignment_globins45(alignment)
+            alignments = iter(alignments)
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         with Align.parse(path, "stockholm") as alignments:
             alignment = next(alignments)
             self.check_alignment_globins45(alignment)
@@ -6907,8 +6907,8 @@ AlignmentCounts object with
     def test_reading_writing_alignments_pfam1(self):
         """Test parsing Pfam record 120_Rick_ant."""
         path = "Stockholm/pfam1.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertTrue(
             np.array_equal(
                 np.array(alignment, "U"),
@@ -7013,8 +7013,8 @@ np.array([['L', 'A', 'E', 'Q', 'I', 'A', 'K', 'E', '-', '-', '-', '-', '-',
     def test_reading_writing_alignments_pfam2(self):
         """Test parsing Pfam record 7kD_DNA_binding."""
         path = "Stockholm/pfam2.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertTrue(
             np.array_equal(
                 np.array(alignment, "U"),
@@ -7073,9 +7073,9 @@ np.array([['K', 'I', 'K', 'F', 'K', 'Y', 'K', 'G', 'Q', 'D', 'L', 'E', 'V',
     def test_reading_writing_alignments_pfam3(self):
         """Test parsing Pfam record 12TM_1."""
         path = "Stockholm/pfam3.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam3(alignment)
         stream = StringIO()
         n = Align.write(alignment, stream, "stockholm")
@@ -7107,9 +7107,9 @@ np.array([['K', 'I', 'K', 'F', 'K', 'Y', 'K', 'G', 'Q', 'D', 'L', 'E', 'V',
     def test_reading_writing_alignments_pfam5(self):
         """Test parsing Pfam record ArsP_1."""
         path = "Stockholm/pfam5.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam5(alignment)
         stream = StringIO()
         n = Align.write(alignment, stream, "stockholm")
@@ -7123,9 +7123,9 @@ np.array([['K', 'I', 'K', 'F', 'K', 'Y', 'K', 'G', 'Q', 'D', 'L', 'E', 'V',
     def test_reading_writing_alignments_pfam6(self):
         """Test parsing Pfam record COX2_TM."""
         path = "Stockholm/pfam6.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam6(alignment)
         stream = StringIO()
         n = Align.write(alignment, stream, "stockholm")
@@ -7139,9 +7139,9 @@ np.array([['K', 'I', 'K', 'F', 'K', 'Y', 'K', 'G', 'Q', 'D', 'L', 'E', 'V',
     def test_reading_writing_alignments_pfam7(self):
         """Test parsing Pfam record Alpha_E1_glycop."""
         path = "Stockholm/pfam7.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with  Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam7(alignment)
         stream = StringIO()
         n = Align.write(alignment, stream, "stockholm")
@@ -7155,9 +7155,9 @@ np.array([['K', 'I', 'K', 'F', 'K', 'Y', 'K', 'G', 'Q', 'D', 'L', 'E', 'V',
     def test_reading_writing_alignments_pfam8(self):
         """Test parsing Pfam record Cyclin_N."""
         path = "Stockholm/pfam8.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam8(alignment)
         stream = StringIO()
         n = Align.write(alignment, stream, "stockholm")
@@ -7171,8 +7171,8 @@ np.array([['K', 'I', 'K', 'F', 'K', 'Y', 'K', 'G', 'Q', 'D', 'L', 'E', 'V',
     def test_reading_writing_alignments_pfam9(self):
         """Test parsing Pfam record SH3_11."""
         path = "Stockholm/pfam9.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertTrue(
             np.array_equal(
                 np.array(alignment, "U"),
@@ -7342,9 +7342,9 @@ np.array([['G', 'U', 'A', 'A', 'G', 'U', 'A', 'A', 'A', 'A', 'G', 'U', 'G',
     def test_reading_writing_alignments_rfam2(self):
         """Test parsing Rfam record SraC_RyeA."""
         path = "Stockholm/rfam2.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_rfam2(alignment)
         stream = StringIO()
         n = Align.write(alignment, stream, "stockholm")
@@ -7358,8 +7358,8 @@ np.array([['G', 'U', 'A', 'A', 'G', 'U', 'A', 'A', 'A', 'A', 'G', 'U', 'G',
     def test_reading_writing_alignments_rfam3(self):
         """Test parsing Rfam record McaS."""
         path = "Stockholm/rfam3.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertTrue(
             np.array_equal(
                 np.array(alignment, "U"),
@@ -7452,9 +7452,9 @@ np.array([['A', 'C', 'C', 'G', 'G', 'C', 'G', 'C', 'A', 'G', 'A', 'G', 'G',
     def test_reading_writing_alignments_rfam4(self):
         """Test parsing Rfam record IRES_KSHV."""
         path = "Stockholm/rfam4.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
-        self.assertRaises(StopIteration, next, alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
+            self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_rfam4(alignment)
         stream = StringIO()
         n = Align.write(alignment, stream, "stockholm")
@@ -7468,8 +7468,8 @@ np.array([['A', 'C', 'C', 'G', 'G', 'C', 'G', 'C', 'A', 'G', 'A', 'G', 'G',
     def test_reading_writing_alignments_rfam5(self):
         """Test parsing Rfam record BMV3_UPD-PK3."""
         path = "Stockholm/rfam5.seed.txt"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertTrue(
             np.array_equal(
                 np.array(alignment, "U"),
@@ -7506,8 +7506,8 @@ np.array([['A', 'C', 'U', 'U', 'U', 'G', 'G', 'C', 'U', 'A', 'A', 'G', 'U',
     def test_reading_alignments_cath1(self):
         """Test parsing CATH record 3.30.160.60/FF/004774."""
         path = "Stockholm/cath1.sth"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertTrue(
             np.array_equal(
                 np.array(alignment, "U"),
@@ -7540,8 +7540,8 @@ np.array([['G', 'E', 'K', 'P', 'Y', 'E', 'C', 'L', 'E', 'C', 'G', 'K', 'R',
     def test_reading_alignments_cath2(self):
         """Test parsing CATH record 2.105.10.10/FF/000002."""
         path = "Stockholm/cath2.sth"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertTrue(
             np.array_equal(
                 np.array(alignment, "U"),
@@ -7582,8 +7582,8 @@ np.array([['A', 'N', 'F', 'N', 'V', 'P', 'K', 'L', 'G', 'V', 'F', 'P', 'V',
     def test_reading_alignments_cath3(self):
         """Test parsing CATH record 1.10.275.10/FF/000026."""
         path = "Stockholm/cath3.sth"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertTrue(
             np.array_equal(
                 np.array(alignment, "U"),
@@ -7672,8 +7672,8 @@ np.array([['V', 'E', 'R', 'Y', 'S', 'L', 'S', 'P', 'M', 'K', 'D', 'L', 'W',
         # We write the alignment once to a stream and read it again to test
         # both inpiut and output.
         path = "Stockholm/example_nonstandardannotations.sth"
-        alignments = Align.parse(path, "stockholm")
-        alignment = next(alignments)
+        with Align.parse(path, "stockholm") as alignments:
+            alignment = next(alignments)
         self.assertNotIn("nonstandardgf", alignment.annotations.keys())
         stream = StringIO()
         Align.write(alignment, stream, "stockholm")
