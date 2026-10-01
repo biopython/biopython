@@ -831,7 +831,11 @@ class GenBankWriter(_InsdcWriter):
 
         assert len(units) == 2
         assert len(division) == 3
-        line = "LOCUS       %s %s    %s %s %s %s\n" % (
+
+        if not mol_type.startswith(("ss-", "ds-", "ms-")):
+            mol_type = f"   {mol_type}"
+
+        line = "LOCUS       %s %s %s    %s %s %s\n" % (
             name_length,
             units,
             mol_type.ljust(7),
