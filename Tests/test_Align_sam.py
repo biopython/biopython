@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Align.sam module."""
+
 import unittest
 from io import StringIO
 
@@ -1721,7 +1722,9 @@ AlignmentCounts object with
                     self.assertEqual(sam_alignment.target.id, psl_alignment.target.id)
                     self.assertEqual(sam_alignment.query.id, psl_alignment.query.id)
                     self.assertTrue(
-                        np.array_equal(sam_alignment.coordinates, psl_alignment.coordinates)
+                        np.array_equal(
+                            sam_alignment.coordinates, psl_alignment.coordinates
+                        )
                     )
 
     def test_writing(self):

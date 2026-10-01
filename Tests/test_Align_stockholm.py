@@ -3,6 +3,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Align.stockholm module."""
+
 import unittest
 from io import StringIO
 
@@ -7139,7 +7140,7 @@ np.array([['K', 'I', 'K', 'F', 'K', 'Y', 'K', 'G', 'Q', 'D', 'L', 'E', 'V',
     def test_reading_writing_alignments_pfam7(self):
         """Test parsing Pfam record Alpha_E1_glycop."""
         path = "Stockholm/pfam7.seed.txt"
-        with  Align.parse(path, "stockholm") as alignments:
+        with Align.parse(path, "stockholm") as alignments:
             alignment = next(alignments)
             self.assertRaises(StopIteration, next, alignments)
         self.check_alignment_pfam7(alignment)
