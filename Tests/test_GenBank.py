@@ -8158,6 +8158,92 @@ KEYWORDS    """,
                 gb = SeqIO.read(handle, "genbank")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
+    def test_genbank_locus_strandedness_export_alignment(self):
+        """Strandedness should be written to LOCUS line columnts 45-47.
+
+        As per the GenBank format definition specified in section 3.4.4.2 here: https://ftp.ncbi.nih.gov/genbank/gbrel.txt,
+        the strandedness belongs on positions 45-47 of the LOCUS line with values "   " (spaces if not known), "ss-", "ds-" or "ms-".
+        """
+        sequence_object = Seq("ATGC")
+        test_cases = [
+            "   NA  ",
+            "ss-NA  ",
+            "ds-NA  ",
+            "ms-NA  ",
+            "   DNA ",
+            "ss-DNA ",
+            "ds-DNA ",
+            "ms-DNA ",
+            "   RNA ",
+            "ss-RNA ",
+            "ds-RNA ",
+            "ms-RNA ",
+            "   tRNA",
+            "ss-tRNA",
+            "ds-tRNA",
+            "ms-tRNA",
+            "   rRNA",
+            "ss-rRNA",
+            "ds-rRNA",
+            "ms-rRNA",
+            "   mRNA",
+            "ss-mRNA",
+            "ds-mRNA",
+            "ms-mRNA",
+            "   uRNA",
+            "ss-uRNA",
+            "ds-uRNA",
+            "ms-uRNA",
+            "   cRNA",
+            "ss-cRNA",
+            "ds-cRNA",
+            "ms-cRNA",
+        ]
+
+        for padded_molecule_type in test_cases:
+            with self.subTest(molecule_type=padded_molecule_type.strip()):
+                record = SeqRecord(
+                    sequence_object,
+                    id="123456789",
+                    name="StrandednessAlignmentTest",
+                    description="Test for strandedness alignment in GenBankWriter locus line export",
+                    annotations={
+                        "topology": "linear",
+                        "molecule_type": padded_molecule_type.strip(),
+                    },
+                )
+                handle = StringIO()
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", BiopythonWarning)
+                    SeqIO.write(record, handle, "genbank")
+                handle.seek(0)
+                line = handle.readline()
+                handle.close()
+                self.assertEqual(
+                    len(line), 80, f"LOCUS line length is {len(line)} instead of 80"
+                )  # Check that the LOCUS line is exactly 80 characters long (79 plus the newline)
+                self.assertEqual(line[44:51], padded_molecule_type)
+
+    def test_genbank_na_molecule_type_is_valid(self):
+        """NA molecule type should be allowed and should not raise ValueError."""
+        try:
+            record = SeqIO.read("GenBank/example_NA.gb", "genbank")
+            handle = open("GenBank/example_NA_output.gb", "w")
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            # Write a record with a longer header to test the molecule type check for longer headers
+            # in the GenBankWriter _write_the_first_line method in InsdcIO.py
+            record.name = "NA_MoleculeTest_with_a_longer_header"
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                SeqIO.write(record, handle, "genbank")
+            handle.close()
+            os.remove("GenBank/example_NA_output.gb")
+        except ValueError:
+            self.fail("ValueError raised when using molecule_type NA")
+
     def test_longer_locus_line(self):
         """Check that we can read and write files with longer locus lines."""
         # Create example file from existing file
