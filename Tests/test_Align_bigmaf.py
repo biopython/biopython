@@ -12620,7 +12620,10 @@ np.array([['g', 'c', 'a', 'g', 'c', 't', 'g', 'a', 'a', 'a', 'a', 'c', 'a'],
 
     def test_search_region(self):
         path = "MAF/ucsc_mm9_chr10.bb"
-        alignments = Align.parse(path, "bigmaf")
+        with Align.parse(path, "bigmaf") as alignments:
+            self.check_search_region(alignments)
+
+    def check_search_region(self, alignments):
         self.assertEqual(len(alignments), 48)
         selected_alignments = alignments.search("mm9.chr10", 3014000, 3015000)
         alignment = next(selected_alignments)
@@ -12821,7 +12824,10 @@ ornAna1.c  40046122 -------------  40046122
 
     def test_search_position(self):
         path = "MAF/ucsc_mm9_chr10.bb"
-        alignments = Align.parse(path, "bigmaf")
+        with Align.parse(path, "bigmaf") as alignments:
+            self.check_search_position(alignments)
+
+    def check_search_position(self, alignments):
         self.assertEqual(len(alignments), 48)
         selected_alignments = alignments.search("mm9.chr10", 3015000)
         alignment = next(selected_alignments)

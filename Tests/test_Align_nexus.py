@@ -22,12 +22,12 @@ except ImportError:
 
 class TestNexusReading(unittest.TestCase):
     def check_reading_writing(self, path):
-        alignments = Align.parse(path, "nexus")
         stream = StringIO()
-        n = Align.write(alignments, stream, "nexus")
+        with Align.parse(path, "nexus") as alignments:
+            n = Align.write(alignments, stream, "nexus")
         self.assertEqual(n, 1)
-        alignments = Align.parse(path, "nexus")
-        alignments = list(alignments)
+        with Align.parse(path, "nexus") as alignments:
+            alignments = list(alignments)
         alignment = alignments[0]
         stream.seek(0)
         saved_alignments = Align.parse(stream, "nexus")
@@ -47,10 +47,10 @@ class TestNexusReading(unittest.TestCase):
 
     def test_nexus1(self):
         path = "Nexus/test_Nexus_input.nex"
-        alignments = Align.parse(path, "nexus")
-        self.check_nexus1(alignments)
-        alignments = iter(alignments)
-        self.check_nexus1(alignments)
+        with Align.parse(path, "nexus") as alignments:
+            self.check_nexus1(alignments)
+            alignments = iter(alignments)
+            self.check_nexus1(alignments)
         with Align.parse(path, "nexus") as alignments:
             self.check_nexus1(alignments)
         with self.assertRaises(AttributeError):
@@ -62,11 +62,11 @@ class TestNexusReading(unittest.TestCase):
         self.check_reading_writing(path)
         with open(path) as stream:
             data = stream.read()
-        stream = NamedTemporaryFile("w+t")
-        stream.write(data)
-        stream.seek(0)
-        alignments = Align.parse(stream, "nexus")
-        self.check_nexus1(alignments)
+        with NamedTemporaryFile("w+t") as stream:
+            stream.write(data)
+            stream.seek(0)
+            alignments = Align.parse(stream, "nexus")
+            self.check_nexus1(alignments)
 
     def check_nexus1(self, alignments):
         alignment = next(alignments)
@@ -297,7 +297,11 @@ AlignmentCounts object with
 
     def test_nexus2(self):
         path = "Nexus/codonposset.nex"
-        alignments = Align.parse(path, "nexus")
+        with Align.parse(path, "nexus") as alignments:
+            self.check_nexus2(alignments)
+        self.check_reading_writing(path)
+
+    def check_nexus2(self, alignments):
         alignment = next(alignments)
         self.assertEqual(len(alignment), 2)
         self.assertEqual(alignment.shape, (2, 22))
@@ -399,7 +403,6 @@ AlignmentCounts object with
         self.assertEqual(counts.mismatches, 9)
         with self.assertRaises(StopIteration):
             next(alignments)
-        self.check_reading_writing(path)
 
 
 class TestNexusBasic(unittest.TestCase):

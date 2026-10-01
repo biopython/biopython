@@ -28,10 +28,10 @@ except ImportError:
 class TestMSF(unittest.TestCase):
     def test_protein1(self):
         path = "msf/W_prot.msf"
-        alignments = Align.parse(path, "msf")
-        self.check_alignments(alignments)
-        alignments = iter(alignments)
-        self.check_alignments(alignments)
+        with Align.parse(path, "msf") as alignments:
+            self.check_alignments(alignments)
+            alignments = iter(alignments)
+            self.check_alignments(alignments)
         with Align.parse(path, "msf") as alignments:
             self.check_alignments(alignments)
         with self.assertRaises(AttributeError):
@@ -215,9 +215,9 @@ W*05:01          60 SKPTCREGGRSGSAKSLRMGRRGCSAQNPKDSHDPPPHL 99
     def test_protein2(self):
         path = "msf/DOA_prot.msf"
 
-        alignments = Align.parse(path, "msf")
-        with warnings.catch_warnings(record=True) as w:
-            alignment = next(alignments)
+        with Align.parse(path, "msf") as alignments:
+            with warnings.catch_warnings(record=True) as w:
+                alignment = next(alignments)
         self.assertEqual(len(w), 1)
         self.assertIsInstance(w[0].message, BiopythonParserWarning)
         self.assertEqual(

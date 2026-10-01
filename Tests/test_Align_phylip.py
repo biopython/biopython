@@ -25,12 +25,12 @@ except ImportError:
 
 class TestPhylipReading(unittest.TestCase):
     def check_reading_writing(self, path):
-        alignments = Align.parse(path, "phylip")
         stream = StringIO()
-        n = Align.write(alignments, stream, "phylip")
+        with Align.parse(path, "phylip") as alignments:
+            n = Align.write(alignments, stream, "phylip")
         self.assertEqual(n, 1)
-        alignments = Align.parse(path, "phylip")
-        alignment = next(alignments)
+        with Align.parse(path, "phylip") as alignments:
+            alignment = next(alignments)
         stream.seek(0)
         saved_alignments = Align.parse(stream, "phylip")
         saved_alignment = next(saved_alignments)
@@ -65,11 +65,11 @@ class TestPhylipReading(unittest.TestCase):
         self.check_reading_writing(path)
         with open(path) as stream:
             data = stream.read()
-        stream = NamedTemporaryFile("w+t")
-        stream.write(data)
-        stream.seek(0)
-        alignments = Align.parse(stream, "phylip")
-        self.check_one(alignments)
+        with NamedTemporaryFile("w+t") as stream:
+            stream.write(data)
+            stream.seek(0)
+            alignments = Align.parse(stream, "phylip")
+            self.check_one(alignments)
 
     def check_one(self, alignments):
         alignment = next(alignments)

@@ -49,7 +49,7 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
         """
         self.source = source
         try:
-            self._stream = open(source, "r" + self.mode)
+            stream = open(source, "r" + self.mode)
         except TypeError:  # not a path, assume we received a stream
             if self.mode == "t":
                 if source.read(0) != "":
@@ -63,9 +63,15 @@ class AlignmentIterator(AlignmentsAbstractBaseClass):
                     ) from None
             else:
                 raise ValueError(f"Unknown mode '{self.mode}'") from None
-            self._stream = source
+            stream = source
+        self._stream = stream
         self._index = 0
-        self._read_header(self._stream)
+        try:
+            self._read_header(stream)
+        except Exception as exc:
+            if stream is not source:
+                stream.close()
+            raise exc from None
 
     def __next__(self):
         """Return the next alignment."""
