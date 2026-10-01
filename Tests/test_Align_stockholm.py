@@ -5941,9 +5941,7 @@ AlignmentCounts object with
         )
         self.assertEqual(
             alignment.annotations["wikipedia"],
-            [
-                "Kaposi's_sarcoma-associated_herpesvirus_internal_ribosome_entry_site_(IRES)"
-            ],
+            ["Kaposi's_sarcoma-associated_herpesvirus_internal_ribosome_entry_site_(IRES)"],  # fmt: skip
         )
         self.assertEqual(len(alignment.sequences), 5)
         self.assertEqual(alignment.sequences[0].id, "AF148805.2/123462-123215")

@@ -13615,9 +13615,7 @@ AlignmentCounts object with
                     alignment.coordinates[0, :] = (
                         len(alignment.sequences[0].seq) - alignment.coordinates[0, :]
                     )
-                    alignment.sequences[0].seq = alignment.sequences[
-                        0
-                    ].seq.reverse_complement()
+                    alignment.sequences[0].seq = alignment.sequences[0].seq.reverse_complement()  # fmt: skip
                 # The protein alignment is always in the forward orientation:
                 self.assertLess(
                     alignment.coordinates[1, 0], alignment.coordinates[1, -1]
