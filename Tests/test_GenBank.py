@@ -8211,6 +8211,7 @@ KEYWORDS    """,
                     SeqIO.write(record, handle, "genbank")
                 handle.seek(0)
                 line = handle.readline()
+                handle.close()
                 self.assertEqual(
                     len(line), 80, f"LOCUS line length is {len(line)} instead of 80"
                 )  # Check that the LOCUS line is exactly 80 characters long (79 plus the newline)
@@ -8221,29 +8222,22 @@ KEYWORDS    """,
         Check that the NA molecule type is valid, as per the molecule types listed in section 3.4.4.2 here: https://ftp.ncbi.nih.gov/genbank/gbrel.txt
         NA molecule type should be allowed and should not raise ValueError.
         """
-        sequence_object = Seq("ATGC")
-        test_headers = ["NA_MoleculeTest", "NA_MoleculeTest-with-a-longer-header"]
-
-        # Testing with both a standard size LOCUS line (79 positions) and a longer one, as longer LOCUS line leads to another
-        # molecule type check in InsdcIO.py line 855.
-        def check_na_molecule_type():
-            for header in test_headers:
-                with self.subTest(header=header):
-                    record = SeqRecord(
-                        sequence_object,
-                        id="123456789",
-                        name=header,
-                        description="Test for NA molecule type validity in GenBank files",
-                        annotations={"topology": "linear", "molecule_type": "NA"},
-                    )
-                    handle = StringIO()
-                    with warnings.catch_warnings():
-                        warnings.simplefilter("ignore", BiopythonWarning)
-                        SeqIO.write(record, handle, "genbank")
-                    handle.seek(0)
 
         try:
-            check_na_molecule_type()
+            record = SeqIO.read("GenBank/example_NA.gb", "genbank")
+            handle = open("GenBank/example_NA_output.gb", "w")
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                SeqIO.write(record, handle, "genbank")
+            handle.seek(0)
+            # Write a record with a longer header to test the molecule type check for longer headers
+            # in the GenBankWriter _write_the_first_line method in InsdcIO.py
+            record.name = "NA_MoleculeTest_with_a_longer_header"
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", BiopythonWarning)
+                SeqIO.write(record, handle, "genbank")
+            handle.close()
+            os.remove("GenBank/example_NA_output.gb")
         except ValueError:
             self.fail("ValueError raised when using molecule_type NA")
 
