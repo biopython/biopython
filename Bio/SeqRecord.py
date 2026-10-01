@@ -411,10 +411,10 @@ class SeqRecord:
         return inst
 
     @overload
-    def __getitem__(self, index: int) -> str: ... # noqa: D105
+    def __getitem__(self, index: int) -> str: ...  # noqa: D105
 
     @overload
-    def __getitem__(self, index: slice) -> "SeqRecord": ... # noqa: D105
+    def __getitem__(self, index: slice) -> "SeqRecord": ...  # noqa: D105
 
     def __getitem__(self, index):
         """Return a sub-sequence or an individual letter.
