@@ -526,14 +526,14 @@ class StringMethodTests(unittest.TestCase):
         with self.assertRaises(UndefinedSequenceError) as cm:
             u.replace("AT", "ACGT")  # unequal length
         self.assertEqual(str(cm.exception), "Sequence content is undefined")
-        records = SeqIO.parse("TwoBit/sequence.littleendian.2bit", "twobit")
-        v = records["seq6"].seq  # ACGTacgtNNNNnn, lazy-loaded
-        s = Seq("xyzACGTacgtNNNNnnXYZ")
-        t = s.replace(v, "KLM")
-        self.assertEqual(t, "xyzKLMXYZ")
-        s = Seq("xyzKLMabcd")
-        t = s.replace("KLM", v)
-        self.assertEqual(t, "xyzACGTacgtNNNNnnabcd")
+        with SeqIO.parse("TwoBit/sequence.littleendian.2bit", "twobit") as records:
+            v = records["seq6"].seq  # ACGTacgtNNNNnn, lazy-loaded
+            s = Seq("xyzACGTacgtNNNNnnXYZ")
+            t = s.replace(v, "KLM")
+            self.assertEqual(t, "xyzKLMXYZ")
+            s = Seq("xyzKLMabcd")
+            t = s.replace("KLM", v)
+            self.assertEqual(t, "xyzACGTacgtNNNNnnabcd")
 
     def test_str_encode(self):
         """Check matches the python string encode method."""
@@ -966,7 +966,8 @@ class StringMethodTests(unittest.TestCase):
     def test_join_Seq_with_file(self):
         """Checks if Seq join correctly concatenates sequence from a file with the spacer."""
         filename = "Fasta/f003.fa"
-        seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
+        with SeqIO.parse(filename, "fasta") as records:
+            seqlist = [record.seq for record in records]
         seqlist_as_strings = [str(_) for _ in seqlist]
 
         spacer = Seq("NNNNN")
@@ -982,8 +983,9 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(seq_concatenated, ref_data)
         self.assertEqual(seq_concatenated1, ref_data1)
-        with self.assertRaises(TypeError):
-            spacer.join(SeqIO.parse(filename, "fasta"))
+        with SeqIO.parse(filename, "fasta") as records:
+            with self.assertRaises(TypeError):
+                spacer.join(records)
 
     def test_join_MutableSeq(self):
         """Checks if MutableSeq join correctly concatenates sequence with the spacer."""
@@ -1006,7 +1008,8 @@ class StringMethodTests(unittest.TestCase):
     def test_join_MutableSeq_with_file(self):
         """Checks if MutableSeq join correctly concatenates sequence from a file with the spacer."""
         filename = "Fasta/f003.fa"
-        seqlist = [record.seq for record in SeqIO.parse(filename, "fasta")]
+        with SeqIO.parse(filename, "fasta") as records:
+            seqlist = [record.seq for record in records]
         seqlist_as_strings = [str(_) for _ in seqlist]
 
         spacer = MutableSeq("NNNNN")
@@ -1022,8 +1025,9 @@ class StringMethodTests(unittest.TestCase):
 
         self.assertEqual(seq_concatenated, ref_data)
         self.assertEqual(seq_concatenated1, ref_data1)
-        with self.assertRaises(TypeError):
-            spacer.join(SeqIO.parse(filename, "fasta"))
+        with SeqIO.parse(filename, "fasta") as records:
+            with self.assertRaises(TypeError):
+                spacer.join(records)
 
     def test_equality(self):
         """Test equality when mixing types."""
@@ -1675,8 +1679,6 @@ class PartialSequenceTests(unittest.TestCase):
         u2 = Seq(None, length=9)
         p1 = Seq({3: "KLM", 11: "XYZ"}, length=17)
         p2 = Seq({0: "PQRST", 8: "HIJ"}, length=13)
-        records = SeqIO.parse("TwoBit/sequence.littleendian.2bit", "twobit")
-        t = records["seq6"].seq  # ACGTacgtNNNNnn, lazy-loaded
         self.assertEqual(s1 + s1, Seq("ABCDABCD"))
         self.assertEqual(s1 + s2, Seq("ABCDEFG"))
         self.assertEqual(repr(s1 + u1), "Seq({0: 'ABCD'}, length=11)")
@@ -1685,7 +1687,6 @@ class PartialSequenceTests(unittest.TestCase):
             repr(s1 + p1), "Seq({0: 'ABCD', 7: 'KLM', 15: 'XYZ'}, length=21)"
         )
         self.assertEqual(repr(s1 + p2), "Seq({0: 'ABCDPQRST', 12: 'HIJ'}, length=17)")
-        self.assertEqual(s1 + t, Seq("ABCDACGTacgtNNNNnn"))
         self.assertEqual(s2 + s1, Seq("EFGABCD"))
         self.assertEqual(s2 + s2, Seq("EFGEFG"))
         self.assertEqual(repr(s2 + u1), "Seq({0: 'EFG'}, length=10)")
@@ -1694,21 +1695,18 @@ class PartialSequenceTests(unittest.TestCase):
             repr(s2 + p1), "Seq({0: 'EFG', 6: 'KLM', 14: 'XYZ'}, length=20)"
         )
         self.assertEqual(repr(s2 + p2), "Seq({0: 'EFGPQRST', 11: 'HIJ'}, length=16)")
-        self.assertEqual(s2 + t, Seq("EFGACGTacgtNNNNnn"))
         self.assertEqual(repr(u1 + s1), "Seq({7: 'ABCD'}, length=11)")
         self.assertEqual(repr(u1 + s2), "Seq({7: 'EFG'}, length=10)")
         self.assertEqual(repr(u1 + u1), "Seq(None, length=14)")
         self.assertEqual(repr(u1 + u2), "Seq(None, length=16)")
         self.assertEqual(repr(u1 + p1), "Seq({10: 'KLM', 18: 'XYZ'}, length=24)")
         self.assertEqual(repr(u1 + p2), "Seq({7: 'PQRST', 15: 'HIJ'}, length=20)")
-        self.assertEqual(repr(u1 + t), "Seq({7: 'ACGTacgtNNNNnn'}, length=21)")
         self.assertEqual(repr(u2 + s1), "Seq({9: 'ABCD'}, length=13)")
         self.assertEqual(repr(u2 + s2), "Seq({9: 'EFG'}, length=12)")
         self.assertEqual(repr(u2 + u1), "Seq(None, length=16)")
         self.assertEqual(repr(u2 + u2), "Seq(None, length=18)")
         self.assertEqual(repr(u2 + p1), "Seq({12: 'KLM', 20: 'XYZ'}, length=26)")
         self.assertEqual(repr(u2 + p2), "Seq({9: 'PQRST', 17: 'HIJ'}, length=22)")
-        self.assertEqual(repr(u2 + t), "Seq({9: 'ACGTacgtNNNNnn'}, length=23)")
         self.assertEqual(
             repr(p1 + s1), "Seq({3: 'KLM', 11: 'XYZ', 17: 'ABCD'}, length=21)"
         )
@@ -1723,9 +1721,6 @@ class PartialSequenceTests(unittest.TestCase):
         self.assertEqual(
             repr(p1 + p2),
             "Seq({3: 'KLM', 11: 'XYZ', 17: 'PQRST', 25: 'HIJ'}, length=30)",
-        )
-        self.assertEqual(
-            repr(p1 + t), "Seq({3: 'KLM', 11: 'XYZ', 17: 'ACGTacgtNNNNnn'}, length=31)"
         )
         self.assertEqual(
             repr(p2 + s1), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ABCD'}, length=17)"
@@ -1743,31 +1738,43 @@ class PartialSequenceTests(unittest.TestCase):
             repr(p2 + p2),
             "Seq({0: 'PQRST', 8: 'HIJ', 13: 'PQRST', 21: 'HIJ'}, length=26)",
         )
+        q1 = Seq({3: "KLM", 11: "XYZ"}, length=14)
+        q2 = Seq({0: "PQRST", 8: "HIJ"}, length=11)
         self.assertEqual(
-            repr(p2 + t), "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ACGTacgtNNNNnn'}, length=27)"
-        )
-        self.assertEqual(t + s1, Seq("ACGTacgtNNNNnnABCD"))
-        self.assertEqual(t + s2, Seq("ACGTacgtNNNNnnEFG"))
-        self.assertEqual(repr(t + u1), "Seq({0: 'ACGTacgtNNNNnn'}, length=21)")
-        self.assertEqual(repr(t + u2), "Seq({0: 'ACGTacgtNNNNnn'}, length=23)")
-        self.assertEqual(
-            repr(t + p1), "Seq({0: 'ACGTacgtNNNNnn', 17: 'KLM', 25: 'XYZ'}, length=31)"
+            repr(q1 + q2), "Seq({3: 'KLM', 11: 'XYZPQRST', 22: 'HIJ'}, length=25)"
         )
         self.assertEqual(
-            repr(t + p2), "Seq({0: 'ACGTacgtNNNNnnPQRST', 22: 'HIJ'}, length=27)"
-        )
-        self.assertEqual(t + t, Seq("ACGTacgtNNNNnnACGTacgtNNNNnn"))
-        p1 = Seq({3: "KLM", 11: "XYZ"}, length=14)
-        p2 = Seq({0: "PQRST", 8: "HIJ"}, length=11)
-        self.assertEqual(
-            repr(p1 + p2), "Seq({3: 'KLM', 11: 'XYZPQRST', 22: 'HIJ'}, length=25)"
-        )
-        self.assertEqual(
-            repr(p2 + p1),
+            repr(q2 + q1),
             "Seq({0: 'PQRST', 8: 'HIJ', 14: 'KLM', 22: 'XYZ'}, length=25)",
         )
-        self.assertEqual(repr(p1 + s1), "Seq({3: 'KLM', 11: 'XYZABCD'}, length=18)")
-        self.assertEqual(repr(p1 + s2), "Seq({3: 'KLM', 11: 'XYZEFG'}, length=17)")
+        self.assertEqual(repr(q1 + s1), "Seq({3: 'KLM', 11: 'XYZABCD'}, length=18)")
+        self.assertEqual(repr(q1 + s2), "Seq({3: 'KLM', 11: 'XYZEFG'}, length=17)")
+        with SeqIO.parse("TwoBit/sequence.littleendian.2bit", "twobit") as records:
+            t = records["seq6"].seq  # ACGTacgtNNNNnn, lazy-loaded
+            self.assertEqual(s1 + t, Seq("ABCDACGTacgtNNNNnn"))
+            self.assertEqual(s2 + t, Seq("EFGACGTacgtNNNNnn"))
+            self.assertEqual(repr(u1 + t), "Seq({7: 'ACGTacgtNNNNnn'}, length=21)")
+            self.assertEqual(repr(u2 + t), "Seq({9: 'ACGTacgtNNNNnn'}, length=23)")
+            self.assertEqual(
+                repr(p1 + t),
+                "Seq({3: 'KLM', 11: 'XYZ', 17: 'ACGTacgtNNNNnn'}, length=31)",
+            )
+            self.assertEqual(
+                repr(p2 + t),
+                "Seq({0: 'PQRST', 8: 'HIJ', 13: 'ACGTacgtNNNNnn'}, length=27)",
+            )
+            self.assertEqual(t + s1, Seq("ACGTacgtNNNNnnABCD"))
+            self.assertEqual(t + s2, Seq("ACGTacgtNNNNnnEFG"))
+            self.assertEqual(repr(t + u1), "Seq({0: 'ACGTacgtNNNNnn'}, length=21)")
+            self.assertEqual(repr(t + u2), "Seq({0: 'ACGTacgtNNNNnn'}, length=23)")
+            self.assertEqual(
+                repr(t + p1),
+                "Seq({0: 'ACGTacgtNNNNnn', 17: 'KLM', 25: 'XYZ'}, length=31)",
+            )
+            self.assertEqual(
+                repr(t + p2), "Seq({0: 'ACGTacgtNNNNnnPQRST', 22: 'HIJ'}, length=27)"
+            )
+            self.assertEqual(t + t, Seq("ACGTacgtNNNNnnACGTacgtNNNNnn"))
 
     def test_multiplication(self):
         p1 = Seq({3: "KLM", 11: "XYZ"}, length=17)
