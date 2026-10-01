@@ -8158,6 +8158,64 @@ KEYWORDS    """,
                 gb = SeqIO.read(handle, "genbank")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
+    def test_genbank_locus_strandedness_export_alignment(self):
+        """
+        Check that the strandedness of the molecule type is aligned in the LOCUS line.
+        As per the GenBank format definition specified in section 3.4.4.2 here: https://ftp.ncbi.nih.gov/genbank/gbrel.txt,
+        the strandedness belongs on positions 45-47 of the LOCUS line with values "   " (spaces if not known), "ss-", "ds-" or "ms-".
+        """
+        sequence_object = Seq("ATGC")
+        test_cases = [
+            ("DNA", "   DNA "),
+            ("ss-DNA", "ss-DNA "),
+            ("ds-DNA", "ds-DNA "),
+            ("ms-DNA", "ms-DNA "),
+            ("RNA", "   RNA "),
+            ("ss-RNA", "ss-RNA "),
+            ("ds-RNA", "ds-RNA "),
+            ("ms-RNA", "ms-RNA "),
+            ("tRNA", "   tRNA"),
+            ("ss-tRNA", "ss-tRNA"),
+            ("ds-tRNA", "ds-tRNA"),
+            ("ms-tRNA", "ms-tRNA"),
+            ("rRNA", "   rRNA"),
+            ("ss-rRNA", "ss-rRNA"),
+            ("ds-rRNA", "ds-rRNA"),
+            ("ms-rRNA", "ms-rRNA"),
+            ("mRNA", "   mRNA"),
+            ("ss-mRNA", "ss-mRNA"),
+            ("ds-mRNA", "ds-mRNA"),
+            ("ms-mRNA", "ms-mRNA"),
+            ("uRNA", "   uRNA"),
+            ("ss-uRNA", "ss-uRNA"),
+            ("ds-uRNA", "ds-uRNA"),
+            ("ms-uRNA", "ms-uRNA"),
+            ("cRNA", "   cRNA"),
+            ("ss-cRNA", "ss-cRNA"),
+            ("ds-cRNA", "ds-cRNA"),
+            ("ms-cRNA", "ms-cRNA"),
+        ]
+
+        for molecule_type, expected_substring in test_cases:
+            with self.subTest(molecule_type=molecule_type):
+                record = SeqRecord(
+                    sequence_object,
+                    id="123456789",
+                    name="StrandednessAlignmentTest",
+                    description="Test for strandedness alignment in GenBankWriter locus line export",
+                    annotations={"topology": "linear", "molecule_type": molecule_type},
+                )
+                handle = StringIO()
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", BiopythonWarning)
+                    SeqIO.write(record, handle, "genbank")
+                handle.seek(0)
+                line = handle.readline()
+                self.assertEqual(
+                    len(line), 80, f"LOCUS line length is {len(line)} instead of 80"
+                )  # Check that the LOCUS line is exactly 80 characters long (79 plus the newline)
+                self.assertEqual(line[44:51], expected_substring)
+
     def test_genbank_na_molecule_type_is_valid(self):
         """
         Check that the NA molecule type is valid, as per the molecule types listed in section 3.4.4.2 here: https://ftp.ncbi.nih.gov/genbank/gbrel.txt
