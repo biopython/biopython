@@ -8158,6 +8158,37 @@ KEYWORDS    """,
                 gb = SeqIO.read(handle, "genbank")
             self.assertEqual(gb.annotations["date"], "01-JAN-1980")
 
+    def test_genbank_na_molecule_type_is_valid(self):
+        """
+        Check that the NA molecule type is valid, as per the molecule types listed in section 3.4.4.2 here: https://ftp.ncbi.nih.gov/genbank/gbrel.txt
+        NA molecule type should be allowed and should not raise ValueError.
+        """
+        sequence_object = Seq("ATGC")
+        test_headers = ["NA_MoleculeTest", "NA_MoleculeTest-with-a-longer-header"]
+
+        # Testing with both a standard size LOCUS line (79 positions) and a longer one, as longer LOCUS line leads to another
+        # molecule type check in InsdcIO.py line 855.
+        def check_na_molecule_type():
+            for header in test_headers:
+                with self.subTest(header=header):
+                    record = SeqRecord(
+                        sequence_object,
+                        id="123456789",
+                        name=header,
+                        description="Test for NA molecule type validity in GenBank files",
+                        annotations={"topology": "linear", "molecule_type": "NA"},
+                    )
+                    handle = StringIO()
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore", BiopythonWarning)
+                        SeqIO.write(record, handle, "genbank")
+                    handle.seek(0)
+
+        try:
+            check_na_molecule_type()
+        except ValueError:
+            self.fail("ValueError raised when using molecule_type NA")
+
     def test_longer_locus_line(self):
         """Check that we can read and write files with longer locus lines."""
         # Create example file from existing file
