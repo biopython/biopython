@@ -411,10 +411,10 @@ class SeqRecord:
         return inst
 
     @overload
-    def __getitem__(self, index: int) -> str: ...
+    def __getitem__(self, index: int) -> str: ... # noqa: D105
 
     @overload
-    def __getitem__(self, index: slice) -> "SeqRecord": ...
+    def __getitem__(self, index: slice) -> "SeqRecord": ... # noqa: D105
 
     def __getitem__(self, index):
         """Return a sub-sequence or an individual letter.
@@ -692,6 +692,7 @@ class SeqRecord:
         return char in self._seq
 
     def __bytes__(self) -> bytes:
+        """Return the sequence data as a bytes object."""
         if self._seq is None:
             raise ValueError("Seq in SeqRecord is None, can't convert to bytes")
         return bytes(self._seq)
