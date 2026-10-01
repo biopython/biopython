@@ -102,34 +102,44 @@ class SequenceDataAbstractBaseClass(ABC):
 
     @abstractmethod
     def __len__(self):
+        """Return the length of the sequence data."""
         pass
 
     @abstractmethod
     def __getitem__(self, key):
+        """Return the item at the specified key or slice."""
         pass
 
     def __bytes__(self):
+        """Return the sequence data as a bytes object."""
         return self[:]
 
     def __hash__(self):
+        """Return the hash value of the sequence data."""
         return hash(bytes(self))
 
     def __eq__(self, other):
+        """Check if the sequence data equals other sequence data."""
         return bytes(self) == other
 
     def __lt__(self, other):
+        """Check if the sequence data is less than other."""
         return bytes(self) < other
 
     def __le__(self, other):
+        """Check if the sequence data is less than or equal to other."""
         return bytes(self) <= other
 
     def __gt__(self, other):
+        """Check if the sequence data is greater than other."""
         return bytes(self) > other
 
     def __ge__(self, other):
+        """Check if the sequence data is greater than or equal to other."""
         return bytes(self) >= other
 
     def __add__(self, other):
+        """Concatenate sequence data with another sequence or bytes."""
         try:
             return bytes(self) + bytes(other)
         except UndefinedSequenceError:
@@ -138,12 +148,15 @@ class SequenceDataAbstractBaseClass(ABC):
             # by _PartiallyDefinedSequenceData.__radd__
 
     def __radd__(self, other):
+        """Concatenate sequence data to the right of other."""
         return other + bytes(self)
 
     def __mul__(self, other):
+        """Multiply sequence data by an integer."""
         return other * bytes(self)
 
     def __contains__(self, item):
+        """Check if an item or subsequence is contained in the sequence data."""
         return bytes(self).__contains__(item)
 
     def decode(self, encoding="utf-8"):
