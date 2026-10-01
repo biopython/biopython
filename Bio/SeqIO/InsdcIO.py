@@ -852,6 +852,7 @@ class GenBankWriter(_InsdcWriter):
                 splitline[3].strip() == "aa"
                 or "DNA" in splitline[4].strip().upper()
                 or "RNA" in splitline[4].strip().upper()
+                or "NA" == splitline[4].strip().upper()
             ):
                 raise ValueError(
                     "LOCUS line does not contain valid "
@@ -888,6 +889,7 @@ class GenBankWriter(_InsdcWriter):
                 line[47:54].strip() == ""
                 or "DNA" in line[47:54].strip().upper()
                 or "RNA" in line[47:54].strip().upper()
+                or "NA" == line[47:49].strip().upper()
             ):
                 raise ValueError(
                     "LOCUS line does not contain valid "
