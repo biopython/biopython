@@ -8166,6 +8166,10 @@ KEYWORDS    """,
         """
         sequence_object = Seq("ATGC")
         test_cases = [
+            ("NA", "   NA  "),
+            ("ss-NA", "ss-NA  "),
+            ("ds-NA", "ds-NA  "),
+            ("ms-NA", "ms-NA  "),
             ("DNA", "   DNA "),
             ("ss-DNA", "ss-DNA "),
             ("ds-DNA", "ds-DNA "),
