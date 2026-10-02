@@ -141,7 +141,7 @@ class SequenceDataAbstractBaseClass(ABC):
         return other + bytes(self)
 
     def __mul__(self, other):
-        """Multiply the sequence by an integer, repeating it."""
+        """Return a new sequence consisting of this sequence repeated a number of times."""
         return other * bytes(self)
 
     def __contains__(self, item):
