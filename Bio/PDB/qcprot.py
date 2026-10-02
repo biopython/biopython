@@ -142,6 +142,17 @@ def qcp(coords1, coords2, natoms):
     a42 = a24
     a43 = a34
     a44 = Szz - SxxpSyy - mxEigenV
+    # The 4x4 key matrix of the quaternion characteristic polynomial,
+    # with mxEigenV already subtracted. Used by the rotation extraction
+    # and its fallback below.
+    key_matrix = np.array(
+        [
+            [a11, a12, a13, a14],
+            [a12, a22, a23, a24],
+            [a13, a23, a33, a34],
+            [a14, a24, a34, a44],
+        ]
+    )
     a3344_4334 = a33 * a44 - a43 * a34
     a3244_4234 = a32 * a44 - a42 * a34
     a3243_4233 = a32 * a43 - a42 * a33
@@ -184,15 +195,32 @@ def qcp(coords1, coords2, natoms):
                 q4 = -a31 * a1223_1322 + a32 * a1123_1321 - a33 * a1122_1221
                 qsqr = q1 * q1 + q2 * q2 + q3 * q3 + q4 * q4
 
-                if qsqr < evecprec:
-                    rot = np.eye(3)
-                    return rmsd, rot, [q1, q2, q3, q4]
+            if qsqr < evecprec:
+                # The adjugate cascade failed to yield a usable quaternion
+                # (degenerate fits, e.g. rotations near exactly 180
+                # degrees). Fall back to an explicit eigendecomposition of
+                # the key matrix: its dominant eigenvector is the optimal
+                # quaternion.
+                key_eival, key_evec = np.linalg.eigh(key_matrix)
+                q1, q2, q3, q4 = key_evec[:, np.argmax(key_eival)]
 
     normq = qsqr**0.5
     q1 /= normq
     q2 /= normq
     q3 /= normq
     q4 /= normq
+
+    # Guard against a noise-dominated quaternion: at large coordinate
+    # spreads the adjugate cascade's rounding error can exceed the
+    # absolute evecprec threshold, silently yielding a vector that is not
+    # an eigenvector of the key matrix (e.g. rotations near exactly 180
+    # degrees; bug #5346). Validate the solution against the key equation
+    # and fall back to the eigendecomposition when it is not satisfied.
+    quat = np.array([q1, q2, q3, q4])
+    key_norm = np.linalg.norm(key_matrix)
+    if key_norm > 0 and np.linalg.norm(key_matrix @ quat) > 1e-8 * key_norm:
+        key_eival, key_evec = np.linalg.eigh(key_matrix)
+        q1, q2, q3, q4 = key_evec[:, np.argmax(key_eival)]
 
     a2 = q1 * q1
     x2 = q2 * q2
