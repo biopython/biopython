@@ -373,16 +373,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         return line
 
     def write_alignments(self, stream, alignments):
-        """Write alignments to the output file, and return the number of alignments.
-
-        TLEN values are calculated for alignments storing paired reads,
-        provided that reads belonging to the same template are name-grouped
-        (name-sorted or name-collated) in the input: read pairs are only
-        recognized if both mates are consecutive alignments with the same
-        query name, as is required by samtools fixmate.  Alignments with a
-        TLEN value stored as an attribute are written with that value; a TLEN
-        value of 0 is written if no TLEN value can be calculated.
-        """
+        """Write alignments to the output file, and return the number of alignments."""
         count = 0
         for group in self._group_by_name(alignments):
             tlens = self._calculate_tlens(group)
@@ -393,12 +384,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         return count
 
     def _calculate_tlens(self, alignments):
-        """Calculate TLEN values for consecutive alignments of the same template.
-
-        Return a dictionary mapping the index of each alignment in the group
-        to its TLEN value.  The dictionary is empty unless the group contains
-        exactly two alignments that are mates of each other.
-        """
+        """Calculate TLEN values for consecutive alignments of the same template."""
         tlens = {}
         records = []
         for index, alignment in enumerate(alignments):
