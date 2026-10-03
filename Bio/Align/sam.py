@@ -373,44 +373,57 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         return line
 
     def write_alignments(self, stream, alignments):
-        """Write alignments to the output file, and return the number of alignments."""
-        if not isinstance(alignments, (list, tuple)):
-            return super().write_alignments(stream, alignments)
-        tlens = self._calculate_tlens(alignments)
-        for index, alignment in enumerate(alignments):
-            line = self.format_alignment(alignment, tlen=tlens.get(index))
-            stream.write(line)
-        return len(alignments)
+        """Write alignments to the output file, and return the number of alignments.
+
+        TLEN values are calculated for alignments storing paired reads,
+        provided that reads belonging to the same template are name-grouped
+        (name-sorted or name-collated) in the input: read pairs are only
+        recognized if both mates are consecutive alignments with the same
+        query name, as is required by samtools fixmate.  Alignments with a
+        TLEN value stored as an attribute are written with that value; a TLEN
+        value of 0 is written if no TLEN value can be calculated.
+        """
+        count = 0
+        for group in self._group_by_name(alignments):
+            tlens = self._calculate_tlens(group)
+            for index, alignment in enumerate(group):
+                line = self.format_alignment(alignment, tlen=tlens.get(index))
+                stream.write(line)
+                count += 1
+        return count
 
     def _calculate_tlens(self, alignments):
-        """Calculate TLEN values for paired alignments."""
-        records = {}
+        """Calculate TLEN values for consecutive alignments of the same template.
+
+        Return a dictionary mapping the index of each alignment in the group
+        to its TLEN value.  The dictionary is empty unless the group contains
+        exactly two alignments that are mates of each other.
+        """
         tlens = {}
+        records = []
         for index, alignment in enumerate(alignments):
             if hasattr(alignment, "tlen"):
                 continue
             record = self._get_tlen_record(alignment)
             if record is None:
                 continue
-            qname, rname, pnext, t_start, t_end = record
-            records.setdefault(qname, []).append((index, rname, pnext, t_start, t_end))
-        for records_by_qname in records.values():
-            if len(records_by_qname) != 2:
-                continue
-            record1, record2 = records_by_qname
-            index1, rname1, pnext1, start1, end1 = record1
-            index2, rname2, pnext2, start2, end2 = record2
-            if rname1 != rname2 or pnext1 != start2 or pnext2 != start1:
-                continue
-            tlen = max(end1, end2) - min(start1, start2)
-            if tlen == 0:
-                continue
-            if start1 < start2 or (start1 == start2 and end1 <= end2):
-                tlens[index1] = tlen
-                tlens[index2] = -tlen
-            else:
-                tlens[index1] = -tlen
-                tlens[index2] = tlen
+            records.append((index,) + record)
+        if len(records) != 2:
+            return tlens
+        record1, record2 = records
+        index1, _, rname1, pnext1, start1, end1 = record1
+        index2, _, rname2, pnext2, start2, end2 = record2
+        if rname1 != rname2 or pnext1 != start2 or pnext2 != start1:
+            return tlens
+        tlen = max(end1, end2) - min(start1, start2)
+        if tlen == 0:
+            return tlens
+        if start1 < start2 or (start1 == start2 and end1 <= end2):
+            tlens[index1] = tlen
+            tlens[index2] = -tlen
+        else:
+            tlens[index1] = -tlen
+            tlens[index2] = tlen
         return tlens
 
     def _get_tlen_record(self, alignment):
@@ -448,6 +461,27 @@ class AlignmentWriter(interfaces.AlignmentWriter):
         if t_start == t_end:
             return None
         return qname, rname, pnext, t_start, t_end
+
+    def _group_by_name(self, alignments):
+        """Yield groups of consecutive alignments with the same query name.
+
+        Alignments for which the query name is not available are collected in
+        groups with name None.
+        """
+        group = []
+        previous = None
+        for alignment in alignments:
+            try:
+                name = alignment.sequences[1].id
+            except (AttributeError, IndexError):
+                name = None
+            if group and previous != name:
+                yield group
+                group = []
+            group.append(alignment)
+            previous = name
+        if group:
+            yield group
 
 
 class AlignmentIterator(interfaces.AlignmentIterator):
