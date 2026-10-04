@@ -77,6 +77,77 @@ class VectorTests(unittest.TestCase):
         v1[2] = 10
         self.assertEqual(v1.__getitem__(2), 10)
 
+    def test_angle_zero_length(self):
+        """Reject undefined angles before performing a division by zero."""
+        zero = Vector(0, 0, 0)
+        nonzero = Vector(1, 0, 0)
+        for first, second in ((zero, nonzero), (nonzero, zero), (zero, zero)):
+            with self.subTest(first=first, second=second):
+                with np.errstate(divide="raise", invalid="raise"):
+                    with self.assertRaisesRegex(ValueError, "zero-length vector"):
+                        first.angle(second)
+
+    def test_angle_roundoff(self):
+        """Clamp roundoff for parallel and antiparallel vectors."""
+        vector = Vector(1, 1, 1)
+        with np.errstate(invalid="raise"):
+            self.assertEqual(vector.angle(vector), 0.0)
+            self.assertEqual(vector.angle(-vector), np.pi)
+
+    def test_angle_nan(self):
+        """Do not turn an input NaN into a finite angle."""
+        vector = Vector(np.nan, 0, 0)
+        self.assertTrue(np.isnan(vector.angle(Vector(1, 0, 0))))
+        self.assertTrue(np.isnan(Vector(1, 0, 0).angle(vector)))
+
+    def test_calc_angle_coincident_points(self):
+        """Reject coincident connected points but allow a straight angle."""
+        origin = Vector(0, 0, 0)
+        other = Vector(1, 0, 0)
+        for points in ((origin, origin, other), (other, origin, origin)):
+            with self.subTest(points=points):
+                with self.assertRaises(ValueError):
+                    calc_angle(*points)
+        self.assertEqual(calc_angle(-other, origin, other), np.pi)
+
+    def test_calc_dihedral_undefined(self):
+        """Reject a dihedral if either of its defining planes is undefined."""
+        cases = (
+            ((0, 0, 0), (1, 0, 0), (2, 0, 0), (3, 0, 0)),
+            ((0, 0, 0), (1, 0, 0), (2, 0, 0), (2, 1, 0)),
+            ((0, 1, 0), (0, 0, 0), (1, 0, 0), (2, 0, 0)),
+            ((0, 0, 0), (0, 0, 0), (1, 0, 0), (1, 1, 0)),
+            ((0, 1, 0), (0, 0, 0), (0, 0, 0), (1, 1, 0)),
+            ((0, 1, 0), (0, 0, 0), (1, 0, 0), (1, 0, 0)),
+        )
+        for points in cases:
+            with self.subTest(points=points):
+                with np.errstate(divide="raise", invalid="raise"):
+                    with self.assertRaises(ValueError):
+                        calc_dihedral(*(Vector(point) for point in points))
+
+    def test_calc_dihedral_boundaries(self):
+        """Preserve signed angles and handle coplanar points without warnings."""
+        first = (Vector(0, 1, 0), Vector(0, 0, 0), Vector(1, 0, 0))
+        cases = (
+            ((1, 1, 0), 0.0),
+            ((1, -1, 0), np.pi),
+            ((1, 0, 1), np.pi / 2),
+            ((1, 0, -1), -np.pi / 2),
+        )
+        for last, expected in cases:
+            with self.subTest(last=last):
+                with np.errstate(divide="raise", invalid="raise"):
+                    self.assertAlmostEqual(
+                        calc_dihedral(*first, Vector(last)), expected
+                    )
+
+    def test_vector_to_axis_origin(self):
+        """Project the origin without calculating an undefined angle."""
+        with np.errstate(divide="raise", invalid="raise"):
+            result = vector_to_axis(Vector(1, 2, 3), Vector(0, 0, 0))
+        np.testing.assert_array_equal(result.get_array(), [0, 0, 0])
+
     def test_normalization(self):
         """Test Vector normalization."""
         v1 = Vector([2, 0, 0])

@@ -94,9 +94,7 @@ def vector_to_axis(line, point):
     :param point: vector defining the point
     """
     line = line.normalized()
-    norm_point = point.norm()
-    angle = line.angle(point)
-    return point - line ** (norm_point * math.cos(angle))
+    return point - line ** (point * line)
 
 
 def rotaxis2m(theta, vector):
@@ -217,6 +215,7 @@ def calc_angle(v1, v2, v3):
 
     :return: angle
     :rtype: float
+    :raises ValueError: if either pair of connected points coincides
     """
     v1 = v1 - v2
     v3 = v3 - v2
@@ -232,6 +231,8 @@ def calc_dihedral(v1, v2, v3, v4):
 
     :param v1, v2, v3, v4: the four points that define the dihedral angle
     :type v1, v2, v3, v4: L{Vector}
+    :raises ValueError: if either plane is undefined because its three
+        points are collinear or coincident
     """
     ab = v1 - v2
     cb = v3 - v2
@@ -241,12 +242,9 @@ def calc_dihedral(v1, v2, v3, v4):
     w = u**v
     angle = u.angle(v)
     # Determine sign of angle
-    try:
-        if cb.angle(w) > 0.001:
-            angle = -angle
-    except ZeroDivisionError:
-        # dihedral=pi
-        pass
+    # The scalar product also handles coplanar points, where w is zero.
+    if cb * w < 0:
+        angle = -angle
     return angle
 
 
@@ -352,13 +350,17 @@ class Vector:
         return v
 
     def angle(self, other):
-        """Return angle between two vectors."""
+        """Return angle between two vectors.
+
+        Raise ValueError if either vector has zero length.
+        """
         n1 = self.norm()
         n2 = other.norm()
+        if n1 == 0 or n2 == 0:
+            raise ValueError("Cannot calculate an angle with a zero-length vector")
         c = (self * other) / (n1 * n2)
         # Take care of roundoff errors
-        c = min(c, 1)
-        c = max(-1, c)
+        c = np.clip(c, -1, 1)
         return np.arccos(c)
 
     def get_array(self):

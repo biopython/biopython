@@ -18,6 +18,12 @@ Python 3.15 release candidate. It has also been tested on PyPy3.10 v7.3.19, as
 well as Python 3.11+ on Windows for ARM64. Python 3.10 is approaching end of
 life, our support for it is now deprecated.
 
+``Bio.PDB.vectors.Vector.angle`` now raises ``ValueError`` for zero-length
+vectors instead of returning an incorrect angle. This also affects
+``calc_angle`` and ``calc_dihedral`` when their defining points coincide or
+do not define the required planes. Valid planar dihedral angles remain
+supported, with an angle of 180 degrees returned as positive pi.
+
 6 August 2026: Biopython 1.88
 =============================
 
