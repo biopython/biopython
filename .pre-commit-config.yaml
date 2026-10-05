@@ -35,7 +35,7 @@ repos:
     -   id: black
         args: [--check,--target-version,py310]
 -   repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
+    rev: 7.4.1
     hooks:
     -   id: flake8
         additional_dependencies: [
@@ -54,7 +54,7 @@ repos:
         additional_dependencies: [black==24.10.0]
         exclude: ^.github/
 -   repo: https://github.com/rstcheck/rstcheck
-    rev: v6.2.5
+    rev: v6.3.0
     hooks:
     -   id: rstcheck
         args: [
@@ -75,7 +75,7 @@ repos:
         '--ignore=D000,D001,D002,D004'
     ]
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.4.2
+    rev: v2.4.3
     hooks:
     -   id: codespell
         files: \.(rst|md)$
