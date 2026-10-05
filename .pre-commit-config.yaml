@@ -15,7 +15,7 @@ repos:
     -   id: mixed-line-ending
         exclude: \.bb$
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.20
+    rev: v0.16.10
     hooks:
     # Run the Ruff linter.
     -   id: ruff-check
@@ -30,19 +30,19 @@ repos:
             '--config=lint.isort.order-by-type=false',
         ]
 -   repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.10.0
+    rev: 26.10.0
     hooks:
     -   id: black
         args: [--check,--target-version,py310]
 -   repo: https://github.com/PyCQA/flake8
-    rev: 7.3.0
+    rev: 7.4.1
     hooks:
     -   id: flake8
         additional_dependencies: [
             'flake8-rst-docstrings>=0.2.3',
         ]
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.16.1
+    rev: v2.4.0
     hooks:
     -   id: mypy
         # equivalent to "files" in .mypy.ini
@@ -54,7 +54,7 @@ repos:
         additional_dependencies: [black==24.10.0]
         exclude: ^.github/
 -   repo: https://github.com/rstcheck/rstcheck
-    rev: v6.2.5
+    rev: v6.3.0
     hooks:
     -   id: rstcheck
         args: [
@@ -75,7 +75,7 @@ repos:
         '--ignore=D000,D001,D002,D004'
     ]
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.4.2
+    rev: v2.4.3
     hooks:
     -   id: codespell
         files: \.(rst|md)$
