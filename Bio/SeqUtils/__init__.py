@@ -652,27 +652,34 @@ class CodonAdaptationIndex(dict):
         """Calculate and return the CAI (float) for the provided DNA sequence."""
         cai_value, cai_length = 0, 0
 
+        codons_per_aminoacid: dict[str, int] = {}
+        for codon, aminoacid in self._table.forward_table.items():
+            if aminoacid in codons_per_aminoacid:
+                codons_per_aminoacid[aminoacid] += 1
+            else:
+                codons_per_aminoacid[aminoacid] = 1
         try:
             sequence = sequence.seq  # SeqRecord
         except AttributeError:
             pass  # str, Seq, or MutableSeq
         sequence = sequence.upper()
-
         for i in range(0, len(sequence), 3):
             codon = sequence[i : i + 3]
-            if codon in ["ATG", "TGG"]:
-                # Exclude these two codons as their index is always one.
+            if codon in self._table.stop_codons:
+                continue
+            aminoacid = self._table.forward_table[codon]
+            if codons_per_aminoacid[aminoacid] == 1:
                 continue
             try:
                 cai_value += log(self[codon])
             except KeyError:
-                if codon in ["TGA", "TAA", "TAG"]:
-                    # Stop codon, which is valid but may be missing from the index.
-                    continue
                 raise TypeError(f"illegal codon in sequence: {codon}") from None
             else:
                 cai_length += 1
-
+        if cai_length == 0:
+            raise ValueError(
+                "Sequence not valid, no codon contributing to the calculation of CAI"
+            )
         return exp(cai_value / cai_length)
 
     def optimize(self, sequence, seq_type="DNA", strict=True):
