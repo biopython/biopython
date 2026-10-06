@@ -49,7 +49,7 @@ from .hsp import HSP
 from .hsp import HSPFragment
 from .query import QueryResult
 
-__all__ = ("QueryResult", "Hit", "HSP", "HSPFragment")
+__all__ = ("HSP", "HSPFragment", "Hit", "QueryResult")
 
 
 # if not used as a module, run the doctest

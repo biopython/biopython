@@ -26,12 +26,12 @@ from ._GraphSet import GraphSet
 from ._Track import Track
 
 __all__ = (
-    "Diagram",
-    "Track",
-    "FeatureSet",
-    "Feature",
-    "GraphSet",
-    "GraphData",
-    "CrossLink",
     "ColorTranslator",
+    "CrossLink",
+    "Diagram",
+    "Feature",
+    "FeatureSet",
+    "GraphData",
+    "GraphSet",
+    "Track",
 )

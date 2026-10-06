@@ -354,9 +354,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     value = "".join(map(str, value))
                 elif isinstance(value, np.array):
                     datatype = "B"
-                    if np.issubdtype(value.dtype, np.integer):
-                        pass
-                    elif np.issubdtype(value.dtype, float):
+                    if np.issubdtype(value.dtype, np.integer) or np.issubdtype(
+                        value.dtype, float
+                    ):
                         pass
                     else:
                         raise ValueError(

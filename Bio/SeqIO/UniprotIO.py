@@ -24,7 +24,8 @@ from Bio import SeqFeature
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from .Interfaces import SequenceIterator, _BytesIOSource
+from .Interfaces import _BytesIOSource
+from .Interfaces import SequenceIterator
 
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"
@@ -107,9 +108,10 @@ class UniprotIterator(SequenceIterator):
                     if (rec_name.tag == NS + "fullName") and not descr_set:
                         self._record.description = rec_name.text
                         descr_set = True
-            elif protein_element.tag == NS + "component":
-                pass  # not parsed
-            elif protein_element.tag == NS + "domain":
+            elif (
+                protein_element.tag == NS + "component"
+                or protein_element.tag == NS + "domain"
+            ):
                 pass  # not parsed
 
     def _append_to_annotations(self, key, value):

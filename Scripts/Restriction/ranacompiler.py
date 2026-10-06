@@ -533,11 +533,10 @@ class DictionaryBuilder:
             results.write("\n")
             for name in sorted(classdict):
                 results.write("rest_dict[%s] = {\n" % double_quote_repr(name))
-                for key, value in sorted(classdict[name].items()):
-                    results.write(
-                        "    %s: %s,\n"
-                        % (double_quote_repr(key), double_quote_repr(value))
-                    )
+                results.writelines(
+                    "    %s: %s,\n" % (double_quote_repr(key), double_quote_repr(value))
+                    for key, value in sorted(classdict[name].items())
+                )
                 results.write("}\n\n")
             print("OK.\n")
             print("Writing the dictionary containing the suppliers data...")
@@ -548,8 +547,10 @@ class DictionaryBuilder:
             results.write("\n")
             for name in sorted(suppliersdict):
                 results.write("suppliers[%s] = (\n" % double_quote_repr(name))
-                for value in suppliersdict[name]:
-                    results.write("    %s,\n" % double_quote_repr(value))
+                results.writelines(
+                    "    %s,\n" % double_quote_repr(value)
+                    for value in suppliersdict[name]
+                )
                 results.write(")\n\n")
             print("OK.\n")
             print("Writing the dictionary containing the Restriction types...")
@@ -558,8 +559,9 @@ class DictionaryBuilder:
             results.write("\n")
             for name in sorted(typedict):
                 results.write("typedict[%s] = (\n" % double_quote_repr(name))
-                for value in typedict[name]:
-                    results.write("    %s,\n" % double_quote_repr(value))
+                results.writelines(
+                    "    %s,\n" % double_quote_repr(value) for value in typedict[name]
+                )
                 results.write(")\n\n")
             results.write("# Turn black code style on\n# fmt: on\n")
             print("OK.\n")

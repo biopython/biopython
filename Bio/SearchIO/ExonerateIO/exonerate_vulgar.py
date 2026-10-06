@@ -11,7 +11,7 @@ from ._base import _BaseExonerateIndexer
 from ._base import _BaseExonerateParser
 from ._base import _STRAND_MAP
 
-__all__ = ("ExonerateVulgarParser", "ExonerateVulgarIndexer")
+__all__ = ("ExonerateVulgarIndexer", "ExonerateVulgarParser")
 
 
 # precompile regex

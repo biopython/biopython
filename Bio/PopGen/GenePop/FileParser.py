@@ -199,8 +199,7 @@ class FileRecord:
         old_rec = read(self.fname)
         with open(fname, "w") as f:
             f.write(self.comment_line + "\n")
-            for locus in old_rec.loci_list:
-                f.write(locus + "\n")
+            f.writelines(locus + "\n" for locus in old_rec.loci_list)
             curr_pop = 0
             l_parser = old_rec.get_individual()
             start_pop = True
@@ -244,8 +243,7 @@ class FileRecord:
             f.write(self.comment_line + "\n")
             loci_list = old_rec.loci_list
             del loci_list[pos]
-            for locus in loci_list:
-                f.write(locus + "\n")
+            f.writelines(locus + "\n" for locus in loci_list)
             l_parser = old_rec.get_individual()
             f.write("POP\n")
             while l_parser:
@@ -290,8 +288,7 @@ class FileRecord:
             for pos in positions:
                 del loci_list[pos]
                 posSet.add(pos)
-            for locus in loci_list:
-                f.write(locus + "\n")
+            f.writelines(locus + "\n" for locus in loci_list)
             l_parser = old_rec.get_individual()
             f.write("POP\n")
             while l_parser:

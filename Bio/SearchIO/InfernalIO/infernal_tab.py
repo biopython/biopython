@@ -7,15 +7,15 @@
 
 """Bio.SearchIO parser for Infernal tabular output format."""
 
+from Bio.File import _open_for_random_access
 from Bio.SearchIO._index import SearchIndexer
 from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult
 
 from ._base import _BaseInfernalParser
-from Bio.File import _open_for_random_access
 
-__all__ = ("InfernalTabParser", "InfernalTabIndexer")
+__all__ = ("InfernalTabIndexer", "InfernalTabParser")
 
 # tabular format column names
 _TAB_FORMAT = {

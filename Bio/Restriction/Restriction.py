@@ -440,9 +440,11 @@ class RestrictionType(type):
         """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
-        if len(cls) > len(other):
-            return True
-        elif cls.size == len(other) and cls.__name__ >= other.__name__:
+        if (
+            len(cls) > len(other)
+            or cls.size == len(other)
+            and cls.__name__ >= other.__name__
+        ):
             return True
         else:
             return False
@@ -458,9 +460,11 @@ class RestrictionType(type):
         """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
-        if len(cls) > len(other):
-            return True
-        elif cls.size == len(other) and cls.__name__ > other.__name__:
+        if (
+            len(cls) > len(other)
+            or cls.size == len(other)
+            and cls.__name__ > other.__name__
+        ):
             return True
         else:
             return False
@@ -476,9 +480,11 @@ class RestrictionType(type):
         """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
-        elif len(cls) < len(other):
-            return True
-        elif len(cls) == len(other) and cls.__name__ <= other.__name__:
+        elif (
+            len(cls) < len(other)
+            or len(cls) == len(other)
+            and cls.__name__ <= other.__name__
+        ):
             return True
         else:
             return False
@@ -494,9 +500,11 @@ class RestrictionType(type):
         """
         if not isinstance(other, RestrictionType):
             raise NotImplementedError
-        elif len(cls) < len(other):
-            return True
-        elif len(cls) == len(other) and cls.__name__ < other.__name__:
+        elif (
+            len(cls) < len(other)
+            or len(cls) == len(other)
+            and cls.__name__ < other.__name__
+        ):
             return True
         else:
             return False
@@ -1954,7 +1962,7 @@ class Not_available(AbstractCut):
     @staticmethod
     def suppliers():
         """Print a list of suppliers of the enzyme."""
-        return None
+        return
 
     @classmethod
     def supplier_list(cls):

@@ -557,9 +557,11 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 itemRgb = "."
             else:
                 colors = itemRgb.rstrip(",").split(",")
-                if len(colors) == 3 and all(0 <= int(color) < 256 for color in colors):
-                    pass
-                elif 0 <= int(itemRgb) < (2 << 32):
+                if (
+                    len(colors) == 3
+                    and all(0 <= int(color) < 256 for color in colors)
+                    or 0 <= int(itemRgb) < (2 << 32)
+                ):
                     pass
                 else:
                     raise ValueError(
@@ -645,8 +647,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             if itemIx == itemsPerSlot:
                 blockStartOffset = output.tell()
                 size = buffer.tell()
-                if size > maxBlockSize:
-                    maxBlockSize = size
+                maxBlockSize = max(maxBlockSize, size)
                 data = buffer.getvalue()
                 output.write(data)
                 buffer.seek(0)
@@ -1129,17 +1130,17 @@ class _ZippedBufferedStream(_BufferedStream):
 
 class _Header:
     __slots__ = (
+        "autoSqlOffset",
         "byteorder",
-        "zoomLevels",
         "chromosomeTreeOffset",
+        "definedFieldCount",
+        "extraIndicesOffset",
+        "fieldCount",
         "fullDataOffset",
         "fullIndexOffset",
-        "fieldCount",
-        "definedFieldCount",
-        "autoSqlOffset",
         "totalSummaryOffset",
         "uncompressBufSize",
-        "extraIndicesOffset",
+        "zoomLevels",
     )
 
     # Supplemental Table 5: Common header
@@ -1214,7 +1215,7 @@ class _Header:
 
 
 class _ExtraIndex:
-    __slots__ = ("indexField", "maxFieldSize", "fileOffset", "chunks", "get_value")
+    __slots__ = ("chunks", "fileOffset", "get_value", "indexField", "maxFieldSize")
 
     formatter = struct.Struct("=xxHQxxxxHxx")
 
@@ -1242,8 +1243,7 @@ class _ExtraIndex:
     def updateMaxFieldSize(self, alignment):
         value = self.get_value(alignment)
         size = len(value)
-        if size > self.maxFieldSize:
-            self.maxFieldSize = size
+        self.maxFieldSize = max(self.maxFieldSize, size)
 
     def addKeysFromRow(self, alignment, recordIx):
         value = self.get_value(alignment)
@@ -1296,7 +1296,7 @@ class _ExtraIndices(list):
 
 
 class _ZoomLevel:
-    __slots__ = ["reductionLevel", "dataOffset", "indexOffset", "formatter"]
+    __slots__ = ["dataOffset", "formatter", "indexOffset", "reductionLevel"]
 
     def __init__(self, byteorder="="):
         # Supplemental Table 6: The zoom header
@@ -1396,7 +1396,7 @@ class _ZoomLevels(list):
 
 
 class _Summary:
-    __slots__ = ("validCount", "minVal", "maxVal", "sumData", "sumSquares")
+    __slots__ = ("maxVal", "minVal", "sumData", "sumSquares", "validCount")
 
     formatter = struct.Struct("=Qdddd")
     size = formatter.size
@@ -1410,10 +1410,8 @@ class _Summary:
 
     def update(self, size, val):
         self.validCount += size
-        if val < self.minVal:
-            self.minVal = val
-        if val > self.maxVal:
-            self.maxVal = val
+        self.minVal = min(self.minVal, val)
+        self.maxVal = max(self.maxVal, val)
         self.sumData += val * size
         self.sumSquares += val * val * size
 
@@ -1428,7 +1426,7 @@ class _Summary:
 
 
 class _Region:
-    __slots__ = ("chromId", "start", "end", "offset")
+    __slots__ = ("chromId", "end", "offset", "start")
 
     def __init__(self, chromId, start, end):
         self.chromId = chromId
@@ -1487,13 +1485,13 @@ class _RegionSummary(_Summary):
 class _RTreeNode:
     __slots__ = [
         "children",
-        "parent",
-        "startChromId",
-        "startBase",
-        "endChromId",
         "endBase",
-        "startFileOffset",
+        "endChromId",
         "endFileOffset",
+        "parent",
+        "startBase",
+        "startChromId",
+        "startFileOffset",
     ]
 
     def __init__(self):
@@ -1510,7 +1508,7 @@ class _RTreeNode:
 
 
 class _RangeTree:
-    __slots__ = ("root", "n", "freeList", "stack", "chromId", "chromSize")
+    __slots__ = ("chromId", "chromSize", "freeList", "n", "root", "stack")
 
     def __init__(self, chromId, chromSize):
         self.root = None
@@ -1729,7 +1727,7 @@ class _RangeTree:
 
 
 class _Range:
-    __slots__ = ("next", "start", "end", "val")
+    __slots__ = ("end", "next", "start", "val")
 
     def __init__(self, start, end, val):
         self.start = start
@@ -1741,7 +1739,7 @@ class _Range:
 
 
 class _RedBlackTreeNode:
-    __slots__ = ("left", "right", "color", "item")
+    __slots__ = ("color", "item", "left", "right")
 
     def traverse(self):
         if self.left is not None:

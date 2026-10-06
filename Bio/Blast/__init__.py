@@ -490,12 +490,7 @@ class Record(list):
             lines.append(pattern % ("-" * 4, "-" * 5, "-" * 58))
             for idx, hit in enumerate(self):
                 n = len(hit)  # Number of HSPs
-                if idx < 30:
-                    hid_line = "%s  %s" % (hit.target.id, hit.target.description)
-                    if len(hid_line) > 58:
-                        hid_line = hid_line[:55] + "..."
-                    lines.append(pattern % (idx, len(hit), hid_line))
-                elif idx > len(self) - 4:
+                if idx < 30 or idx > len(self) - 4:
                     hid_line = "%s  %s" % (hit.target.id, hit.target.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
@@ -1250,9 +1245,11 @@ def qblast(
         request = Request(url_base, message, {"User-Agent": "BiopythonClient"})
         stream = urlopen(request)
         data = stream.peek()
-        if format_type == "HTML" and b"<title>NCBI Blast:</title>" in data:
-            continue
-        elif data.startswith(b"<!DOCTYPE html"):
+        if (
+            format_type == "HTML"
+            and b"<title>NCBI Blast:</title>" in data
+            or data.startswith(b"<!DOCTYPE html")
+        ):
             continue
         else:
             break

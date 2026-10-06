@@ -563,8 +563,7 @@ class Tree(Nodes.Chain):
         for n in self._walk(node):
             if self.node(n).data.support:
                 return True
-        else:
-            return False
+        return False
 
     def randomize(
         self,
@@ -598,8 +597,7 @@ class Tree(Nodes.Chain):
             if branchlength_sd:
                 for nt in new_terminals:
                     bl = random.gauss(branchlength, branchlength_sd)
-                    if bl < 0:
-                        bl = 0
+                    bl = max(bl, 0)
                     self.node(nt).data.branchlength = bl
             terminals.extend(new_terminals)
             terminals.remove(newsplit)

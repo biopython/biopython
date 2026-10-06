@@ -34,17 +34,17 @@ except ImportError:
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligncore  # type: ignore
+from Bio.Align import _alignmentcounts  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
-from Bio.Align import _alignmentcounts  # type: ignore
 from Bio.Align import substitution_matrices
 from Bio.Data import CodonTable
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
+from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError
-from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
@@ -429,8 +429,7 @@ class MultipleSeqAlignment:
         max_length = 0
 
         for record in self._records:
-            if len(record.seq) > max_length:
-                max_length = len(record.seq)
+            max_length = max(max_length, len(record.seq))
 
         return max_length
 

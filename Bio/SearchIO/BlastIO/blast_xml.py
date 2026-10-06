@@ -22,7 +22,7 @@ from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult
 
-__all__ = ("BlastXmlParser", "BlastXmlIndexer", "BlastXmlWriter")
+__all__ = ("BlastXmlIndexer", "BlastXmlParser", "BlastXmlWriter")
 
 
 # element - optional qresult attribute name mapping

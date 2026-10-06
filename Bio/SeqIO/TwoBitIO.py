@@ -103,7 +103,7 @@ class _TwoBitSequenceData(SequenceDataAbstractBaseClass):
     is loaded only if explicitly requested.
     """
 
-    __slots__ = ("stream", "offset", "length", "nBlocks", "maskBlocks")
+    __slots__ = ("length", "maskBlocks", "nBlocks", "offset", "stream")
 
     def __init__(self, stream, offset, length):
         """Initialize the file stream and file position of the sequence data."""

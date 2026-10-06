@@ -235,17 +235,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 elif operation == "I":  # Insertion
                     assert target_step == 0
                     step = query_step
-                elif operation == "U":  # Non-equivalenced (unaligned) region
-                    if target_step > 0:
-                        operation = "D"
-                        words.append(operation)
-                        words.append(str(target_step))
-                    if query_step > 0:
-                        operation = "I"
-                        words.append(operation)
-                        words.append(str(query_step))
-                    continue
-                elif operation == "S":  # Split codon
+                elif (
+                    operation == "U" or operation == "S"
+                ):  # Non-equivalenced (unaligned) region, or Split codon
                     if target_step > 0:
                         operation = "D"
                         words.append(operation)
@@ -333,16 +325,12 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                 target_step, query_step = step
                 if target_step == query_step:
                     operation = "M"
-                elif query_step == 0:
-                    operation = "G"  # Gap; exonerate definition
-                elif target_step == 0:
+                elif query_step == 0 or target_step == 0:
                     operation = "G"  # Gap; exonerate definition
                 elif (
                     query_molecule_type == "protein"
                     and target_molecule_type != "protein"
-                ):
-                    operation = "M"
-                elif (
+                ) or (
                     query_molecule_type != "protein"
                     and target_molecule_type == "protein"
                 ):
@@ -403,9 +391,9 @@ class AlignmentWriter(interfaces.AlignmentWriter):
                     operation = operations[i]
                     assert operation == "U"
                     operation = "N"  # Non-equivalenced region; exonerate definition
-                elif operation == "S":  # Split codon
-                    step = target_step
-                elif operation == "F":  # Frame shift
+                elif (
+                    operation == "S" or operation == "F"
+                ):  # Split codon, or Frame shift
                     step = target_step
                 else:
                     raise ValueError("Unknown operation %s" % operation)
@@ -584,9 +572,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                     operations[i] = ord(operation)
                     i += 1
                 continue
-            elif operation == "S":  # Split codon
-                pass
-            elif operation == "F":  # Frame shift
+            elif operation == "S" or operation == "F":  # Split codon, Frame shift
                 pass
             else:
                 raise ValueError("Unknown operation %s in vulgar string" % operation)

@@ -88,8 +88,7 @@ class Phyloxml(PhyloElement):
         for tree in self.phylogenies:
             if tree.name == index:
                 return tree
-        else:
-            raise KeyError(f"no phylogeny found with name {index!r}")
+        raise KeyError(f"no phylogeny found with name {index!r}")
 
     def __iter__(self):
         """Iterate through the phylogenetic trees in this object."""

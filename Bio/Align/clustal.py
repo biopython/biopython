@@ -74,8 +74,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             # calculate the number of letters to show, which will
             # be less if we are at the end of the alignment.
             stop = start + 50
-            if stop > length:
-                stop = length
+            stop = min(stop, length)
 
             for name, gapped_sequence in zip(names, gapped_sequences):
                 line = f"{name}{gapped_sequence[start:stop]}\n"

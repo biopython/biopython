@@ -11,7 +11,7 @@ from ._base import _BaseExonerateParser
 from ._base import _STRAND_MAP
 from .exonerate_vulgar import ExonerateVulgarIndexer
 
-__all__ = ("ExonerateCigarParser", "ExonerateCigarIndexer")
+__all__ = ("ExonerateCigarIndexer", "ExonerateCigarParser")
 
 
 # precompile regex

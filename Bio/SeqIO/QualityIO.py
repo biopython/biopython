@@ -359,24 +359,24 @@ are approximately equal.
 
 """
 
+import array
 import warnings
-from math import log
 from abc import abstractmethod
-from typing import Any
 from collections.abc import Callable
-from typing import IO
+from collections.abc import Iterable
 from collections.abc import Iterator
 from collections.abc import Mapping
-from typing import Optional
 from collections.abc import Sequence
-from typing import Union
-from collections.abc import Iterable
-import array
 from dataclasses import dataclass
+from math import log
+from typing import Any
+from typing import IO
+from typing import Optional
+from typing import Union
 
+from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
-from Bio import BiopythonDeprecationWarning
 from Bio import StreamModeError
 from Bio.File import as_handle
 from Bio.Seq import Seq
@@ -1009,13 +1009,11 @@ class FastqIteratorAbstractBaseClass(SequenceIterator[str]):
     @abstractmethod
     def q_mapping(self):
         """Dictionary that maps letters in the quality string to quality values."""
-        pass
 
     @property
     @abstractmethod
     def q_key(self):
         """Key name (string) of the quality values in record.letter_annotations."""
-        pass
 
     def __init__(self, source):
         """Iterate over FASTQ records as SeqRecord objects.

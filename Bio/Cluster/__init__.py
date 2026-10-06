@@ -27,17 +27,17 @@ from . import _cluster  # type: ignore
 
 __all__ = (
     "Node",
+    "Record",
     "Tree",
+    "clustercentroids",
+    "clusterdistance",
+    "distancematrix",
     "kcluster",
     "kmedoids",
-    "treecluster",
-    "somcluster",
-    "clusterdistance",
-    "clustercentroids",
-    "distancematrix",
     "pca",
-    "Record",
     "read",
+    "somcluster",
+    "treecluster",
 )
 
 
@@ -1160,23 +1160,20 @@ class Record:
             outputfile.write(self.uniqid)
             outputfile.write("\tNAME\tGWEIGHT")
             # Now add headers for data columns.
-            for j in expindex:
-                outputfile.write(f"\t{self.expid[j]}")
+            outputfile.writelines(f"\t{self.expid[j]}" for j in expindex)
             outputfile.write("\n")
             if aid:
                 outputfile.write("AID")
                 if gid:
                     outputfile.write("\t")
                 outputfile.write("\t\t")
-                for j in expindex:
-                    outputfile.write("\tARRY%dX" % j)
+                outputfile.writelines("\tARRY%dX" % j for j in expindex)
                 outputfile.write("\n")
             outputfile.write("EWEIGHT")
             if gid:
                 outputfile.write("\t")
             outputfile.write("\t\t")
-            for j in expindex:
-                outputfile.write(f"\t{eweight[j]:f}")
+            outputfile.writelines(f"\t{eweight[j]:f}" for j in expindex)
             outputfile.write("\n")
             for i in geneindex:
                 if gid:

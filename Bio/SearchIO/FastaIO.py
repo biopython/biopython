@@ -113,7 +113,7 @@ from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult
 
-__all__ = ("FastaM10Parser", "FastaM10Indexer")
+__all__ = ("FastaM10Indexer", "FastaM10Parser")
 
 
 # precompile regex patterns
@@ -258,7 +258,7 @@ def _get_aln_slice_coords(parsed_hsp):
         start = disp_start - start
         stop = disp_start - stop + 1
     stop += seq_stripped.count("-")
-    if not (0 <= start and start < stop and stop <= len(seq_stripped)):
+    if not (0 <= start < stop <= len(seq_stripped)):
         raise ValueError(
             "Problem with sequence start/stop,\n%s[%i:%i]\n%s"
             % (seq, start, stop, parsed_hsp)

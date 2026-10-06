@@ -342,7 +342,7 @@ class Scop:
     def getDomainFromSQL(self, sunid=None, sid=None):
         """Load a node from the SQL backend using sunid or sid."""
         if sunid is None and sid is None:
-            return None
+            return
 
         cur = self.db_handle.cursor()
 
@@ -350,7 +350,7 @@ class Scop:
             cur.execute("SELECT sunid FROM cla WHERE sid=%s", sid)
             res = cur.fetchone()
             if res is None:
-                return None
+                return
             sunid = res[0]
 
         cur.execute("SELECT * FROM des WHERE sunid=%s", sunid)

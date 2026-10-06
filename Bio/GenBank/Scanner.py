@@ -886,10 +886,8 @@ class EmblScanner(InsdcScanner):
             elif line_type == "RT":
                 # Remove the enclosing quotes and trailing semi colon.
                 # Note the title can be split over multiple lines.
-                if data.startswith('"'):
-                    data = data[1:]
-                if data.endswith('";'):
-                    data = data[:-2]
+                data = data.removeprefix('"')
+                data = data.removesuffix('";')
                 consumer.title(data)
             elif line_type == "RX":
                 # EMBL support three reference types at the moment:
@@ -908,8 +906,7 @@ class EmblScanner(InsdcScanner):
                 # Currently our reference object only supports PUBMED and MEDLINE
                 # (as these were in GenBank files?).
                 key, value = data.split(";", 1)
-                if value.endswith("."):
-                    value = value[:-1]
+                value = value.removesuffix(".")
                 value = value.strip()
                 if key == "PUBMED":
                     consumer.pubmed_id(value)

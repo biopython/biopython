@@ -203,7 +203,7 @@ from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult
 from Bio.SearchIO._utils import get_processor
 
-__all__ = ("read", "parse", "to_dict", "index", "index_db", "write", "convert")
+__all__ = ("convert", "index", "index_db", "parse", "read", "to_dict", "write")
 
 
 # dictionary of supported formats for parse() and read()

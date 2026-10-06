@@ -12,8 +12,8 @@ import string
 
 import numpy as np
 
-from Bio.File import as_handle
 from Bio.Align.substitution_matrices import _arraycore  # type: ignore
+from Bio.File import as_handle
 
 
 class Array(_arraycore.Array):
@@ -158,9 +158,12 @@ class Array(_arraycore.Array):
                     raise IndexError("Requesting truncated array")
             elif self.ndim == 1:
                 length = self.shape[0]
-                if value.shape[0] == length and value.shape[1] == 1:
-                    pass
-                elif value.shape[0] == 1 and value.shape[1] == length:
+                if (
+                    value.shape[0] == length
+                    and value.shape[1] == 1
+                    or value.shape[0] == 1
+                    and value.shape[1] == length
+                ):
                     pass
                 else:
                     raise IndexError("Requesting truncated array")
@@ -358,8 +361,7 @@ class Array(_arraycore.Array):
             value = self[key]
             word = fmt % value
             width = len(word)
-            if width > maxwidth:
-                maxwidth = width
+            maxwidth = max(maxwidth, width)
             words[i] = word
         fmt2 = " %" + str(maxwidth) + "s"
         for letter, word in zip(alphabet, words):
@@ -392,8 +394,7 @@ class Array(_arraycore.Array):
                 value = self[key]
                 word = fmt % value
                 width = len(word)
-                if width > maxwidth:
-                    maxwidth = width
+                maxwidth = max(maxwidth, width)
                 words[i][j] = word
             fmt2 = " %" + str(maxwidth) + "s"
             word = fmt2 % c2

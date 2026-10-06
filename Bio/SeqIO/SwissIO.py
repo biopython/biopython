@@ -109,9 +109,7 @@ class SwissIterator(SequenceIterator):
                         feature.pubmed_id = value
                     elif key == "MEDLINE":
                         feature.medline_id = value
-                    elif key == "DOI":
-                        pass
-                    elif key == "AGRICOLA":
+                    elif key == "DOI" or key == "AGRICOLA":
                         pass
                     else:
                         raise ValueError(f"Unknown key {key} found in references")

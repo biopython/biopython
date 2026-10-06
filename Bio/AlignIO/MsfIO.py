@@ -237,20 +237,12 @@ class MsfIterator(AlignmentIterator):
                                 i = int(words[1])
                             except ValueError:
                                 i = -1
-                        if i != (
-                            completed_length + 50
-                            if completed_length + 50 < aln_length
-                            else aln_length
-                        ):
+                        if i != (min(aln_length, completed_length + 50)):
                             raise ValueError(
                                 "Expected GCG MSF coordinate line %i to %i, got: %r"
                                 % (
                                     completed_length + 1,
-                                    (
-                                        completed_length + 50
-                                        if completed_length + 50 < aln_length
-                                        else aln_length
-                                    ),
+                                    (min(aln_length, completed_length + 50)),
                                     line,
                                 )
                             )

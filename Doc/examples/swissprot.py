@@ -23,4 +23,4 @@ for id in ids:
         print("title: %s" % ref.title)
 
     print("classification: %s" % record.organism_classification)
-    print("")
+    print()

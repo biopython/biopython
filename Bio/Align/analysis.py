@@ -151,12 +151,12 @@ def _count_site_NG86(codons, codon_table, k=1):
             for base in bases:
                 if nucleotide == base:
                     pass
-                elif nucleotide in purine and base in purine:
-                    codon_chars = list(codon)
-                    codon_chars[i] = base
-                    this_codon = "".join(codon_chars)
-                    neighbor_codon["transition"].append(this_codon)
-                elif nucleotide in pyrimidine and base in pyrimidine:
+                elif (
+                    nucleotide in purine
+                    and base in purine
+                    or nucleotide in pyrimidine
+                    and base in pyrimidine
+                ):
                     codon_chars = list(codon)
                     codon_chars[i] = base
                     this_codon = "".join(codon_chars)
@@ -365,16 +365,12 @@ def _diff_codon(codon1, codon2, fold_dict):
     for n, (nucleotide1, nucleotide2) in enumerate(zip(codon1, codon2)):
         if nucleotide1 == nucleotide2:
             pass
-        elif nucleotide1 in purine and nucleotide2 in purine:
-            if fold_num[n] == "0":
-                P0 += 1
-            elif fold_num[n] == "2":
-                P2 += 1
-            elif fold_num[n] == "4":
-                P4 += 1
-            else:
-                raise RuntimeError("Unexpected fold_num %d" % fold_num[n])
-        elif nucleotide1 in pyrimidine and nucleotide2 in pyrimidine:
+        elif (
+            nucleotide1 in purine
+            and nucleotide2 in purine
+            or nucleotide1 in pyrimidine
+            and nucleotide2 in pyrimidine
+        ):
             if fold_num[n] == "0":
                 P0 += 1
             elif fold_num[n] == "2":
@@ -525,9 +521,12 @@ def _get_TV(codons1, codons2, codon_table):
         for nucleotide1, nucleotide2 in zip(codon1, codon2):
             if nucleotide1 == nucleotide2:
                 pass
-            elif nucleotide1 in purine and nucleotide2 in purine:
-                TV[0] += 1
-            elif nucleotide1 in pyrimidine and nucleotide2 in pyrimidine:
+            elif (
+                nucleotide1 in purine
+                and nucleotide2 in purine
+                or nucleotide1 in pyrimidine
+                and nucleotide2 in pyrimidine
+            ):
                 TV[0] += 1
             else:
                 TV[1] += 1
@@ -607,9 +606,12 @@ def _count_site_YN00(codons1, codons2, pi, k, codon_table):
                 if neighbor_codon in stop:
                     continue
                 weight = pi[neighbor_codon]
-                if codon[pos] in pyrimidine and base in pyrimidine:
-                    weight *= k
-                elif codon[pos] in purine and base in purine:
+                if (
+                    codon[pos] in pyrimidine
+                    and base in pyrimidine
+                    or codon[pos] in purine
+                    and base in purine
+                ):
                     weight *= k
                 if codon_dict[codon] == codon_dict[neighbor_codon]:
                     S += weight
@@ -659,23 +661,32 @@ def _count_diff_YN00(codon1, codon2, P, codons, codon_table):
             stop = codon_table.stop_codons
             if codon1 in stop or codon2 in stop:
                 # stop codon is always considered as nonsynonymous
-                if codon1[diff] in purine and codon2[diff] in purine:
-                    return [0, 0, weight, 0]
-                elif codon1[diff] in pyrimidine and codon2[diff] in pyrimidine:
+                if (
+                    codon1[diff] in purine
+                    and codon2[diff] in purine
+                    or codon1[diff] in pyrimidine
+                    and codon2[diff] in pyrimidine
+                ):
                     return [0, 0, weight, 0]
                 else:
                     return [0, 0, 0, weight]
             elif dic[codon1] == dic[codon2]:
-                if codon1[diff] in purine and codon2[diff] in purine:
-                    return [weight, 0, 0, 0]
-                elif codon1[diff] in pyrimidine and codon2[diff] in pyrimidine:
+                if (
+                    codon1[diff] in purine
+                    and codon2[diff] in purine
+                    or codon1[diff] in pyrimidine
+                    and codon2[diff] in pyrimidine
+                ):
                     return [weight, 0, 0, 0]
                 else:
                     return [0, weight, 0, 0]
             else:
-                if codon1[diff] in purine and codon2[diff] in purine:
-                    return [0, 0, weight, 0]
-                elif codon1[diff] in pyrimidine and codon2[diff] in pyrimidine:
+                if (
+                    codon1[diff] in purine
+                    and codon2[diff] in purine
+                    or codon1[diff] in pyrimidine
+                    and codon2[diff] in pyrimidine
+                ):
                     return [0, 0, weight, 0]
                 else:
                     return [0, 0, 0, weight]
@@ -941,10 +952,12 @@ def _q(codon1, codon2, pi, k, w, codon_table):
         return 0
     if codon_table.forward_table[codon1] == codon_table.forward_table[codon2]:
         # synonymous substitution
-        if diff[0][1] in purine and diff[0][2] in purine:
-            # transition
-            return k * pi[codon2]
-        elif diff[0][1] in pyrimidine and diff[0][2] in pyrimidine:
+        if (
+            diff[0][1] in purine
+            and diff[0][2] in purine
+            or diff[0][1] in pyrimidine
+            and diff[0][2] in pyrimidine
+        ):
             # transition
             return k * pi[codon2]
         else:
@@ -952,10 +965,12 @@ def _q(codon1, codon2, pi, k, w, codon_table):
             return pi[codon2]
     else:
         # nonsynonymous substitution
-        if diff[0][1] in purine and diff[0][2] in purine:
-            # transition
-            return w * k * pi[codon2]
-        elif diff[0][1] in pyrimidine and diff[0][2] in pyrimidine:
+        if (
+            diff[0][1] in purine
+            and diff[0][2] in purine
+            or diff[0][1] in pyrimidine
+            and diff[0][2] in pyrimidine
+        ):
             # transition
             return w * k * pi[codon2]
         else:
@@ -1179,10 +1194,7 @@ def _dijkstra(graph, start, end):
         shortest = None
         node = ""
         for temp_node in unseen_nodes:
-            if shortest is None:
-                shortest = D[temp_node]
-                node = temp_node
-            elif D[temp_node] < shortest:
+            if shortest is None or D[temp_node] < shortest:
                 shortest = D[temp_node]
                 node = temp_node
         # Remove the selected node from unseen_nodes

@@ -339,7 +339,7 @@ class PDBList:
         except OSError as e:
             print(
                 "Desired structure not found or download failed."
-                f" '{pdb_code}': {str(e)}"
+                f" '{pdb_code}': {e!s}"
             )
             return None
         else:

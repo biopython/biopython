@@ -19,6 +19,8 @@ import os.path
 from collections import deque
 from xml.parsers import expat
 
+import numpy as np
+
 from Bio import Entrez
 from Bio.Align import Alignment
 from Bio.Blast import Hit
@@ -29,8 +31,6 @@ from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqFeature import SimpleLocation
 from Bio.SeqRecord import SeqRecord
-
-import numpy as np
 
 
 class DTDHandler:
@@ -158,26 +158,26 @@ class SchemaHandler:
 
 class _HSP_cache:
     __slots__ = (
-        "num",
-        "bit_score",
-        "score",
-        "evalue",
-        "identity",
-        "positive",
-        "query_from",
-        "query_to",
-        "query_frame",
-        "query_strand",
-        "hit_from",
-        "hit_to",
-        "hit_frame",
-        "hit_strand",
-        "qseq",
-        "hseq",
-        "gaps",
         "align_len",
+        "bit_score",
         "density",
+        "evalue",
+        "gaps",
+        "hit_frame",
+        "hit_from",
+        "hit_strand",
+        "hit_to",
+        "hseq",
+        "identity",
         "midline",
+        "num",
+        "positive",
+        "qseq",
+        "query_frame",
+        "query_from",
+        "query_strand",
+        "query_to",
+        "score",
     )
 
 
@@ -865,13 +865,15 @@ class XMLHandler:
     def _end_query_frame(self, name):
         query_frame = int(self._characters)
         program = self._program
-        if program in ("blastn", "megablast") and query_frame == 1:
-            pass
-        elif program in ("blastx", "tblastx") and query_frame in (-3, -2, -1, 1, 2, 3):
-            pass
-        elif (
-            program in ("blastp", "tblastn", "rpsblast", "psiblast")
-            and query_frame == 0
+        if (
+            program in ("blastn", "megablast")
+            and query_frame == 1
+            or program in ("blastx", "tblastx")
+            and query_frame in (-3, -2, -1, 1, 2, 3)
+            or (
+                program in ("blastp", "tblastn", "rpsblast", "psiblast")
+                and query_frame == 0
+            )
         ):
             pass
         else:
@@ -884,11 +886,14 @@ class XMLHandler:
     def _end_hit_frame(self, name):
         hit_frame = int(self._characters)
         program = self._program
-        if program in ("blastn", "megablast") and hit_frame in (-1, 1):
-            pass
-        elif program in ("blastp", "blastx", "rpsblast", "psiblast") and hit_frame == 0:
-            pass
-        elif program in ("tblastn", "tblastx") and hit_frame in (-3, -2, -1, 1, 2, 3):
+        if (
+            program in ("blastn", "megablast")
+            and hit_frame in (-1, 1)
+            or program in ("blastp", "blastx", "rpsblast", "psiblast")
+            and hit_frame == 0
+            or program in ("tblastn", "tblastx")
+            and hit_frame in (-3, -2, -1, 1, 2, 3)
+        ):
             pass
         else:
             raise ValueError(

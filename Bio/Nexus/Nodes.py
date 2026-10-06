@@ -108,8 +108,7 @@ class Chain:
             for sn in self.chain[parent].get_succ():
                 if self.is_parent_of(sn, grandchild):
                     return True
-            else:
-                return False
+            return False
 
     def trace(self, start, finish):
         """Return a list of all node_ids between two nodes (excluding start, including end)."""

@@ -137,7 +137,7 @@ class Parser:
                 for node in nodes:
                     node_id = node.attrib["id"]
                     this_node = node_dict[node_id] = {}
-                    if "otu" in node.attrib and node.attrib["otu"]:
+                    if node.attrib.get("otu"):
                         this_node["name"] = node.attrib["otu"]
                     if "root" in node.attrib and node.attrib["root"] == "true":
                         root = node_id

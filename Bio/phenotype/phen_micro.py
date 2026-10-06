@@ -47,12 +47,10 @@ _setupTime = "Setup Time"
 
 _platesPrefix = "PM"
 _platesPrefixMammalian = "PM-M"
-#
 
 # Json identifiers - hardcoded as they are set by the creators of opm
 _csvData = "csv_data"
 _measurements = "measurements"
-#
 
 
 class PlateRecord:

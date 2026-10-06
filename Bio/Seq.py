@@ -1346,8 +1346,7 @@ class _SeqAbstractBaseClass(ABC):
         except AttributeError:
             # Fall back for pre-Python 3.9
             data = self._data
-            if data.startswith(prefix):
-                data = data[len(prefix) :]
+            data = data.removeprefix(prefix)
         if inplace:
             if not isinstance(self._data, bytearray):
                 raise TypeError("Sequence is immutable")
@@ -1389,8 +1388,7 @@ class _SeqAbstractBaseClass(ABC):
         except AttributeError:
             # Fall back for pre-Python 3.9
             data = self._data
-            if data.endswith(suffix):
-                data = data[: -len(suffix)]
+            data = data.removesuffix(suffix)
         if inplace:
             if not isinstance(self._data, bytearray):
                 raise TypeError("Sequence is immutable")
@@ -2141,7 +2139,7 @@ class Seq(_SeqAbstractBaseClass):
                     if start < end:
                         raise ValueError("Sequence data are overlapping.")
                     elif start == end:
-                        _data[current] += seq  # noqa: F821
+                        _data[current] += seq
                     else:
                         _data[start] = seq
                         current = start
@@ -2468,7 +2466,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
     raised.
     """
 
-    __slots__ = ("_length", "_data")
+    __slots__ = ("_data", "_length")
 
     def __init__(self, length, data):
         """Initialize with the sequence length and defined sequence segments.
@@ -2540,7 +2538,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             raise IndexError("sequence index out of range")
         else:
             for start, seq in self._data.items():
-                if start <= key and key < start + len(seq):
+                if start <= key < start + len(seq):
                     return seq[key - start]
             raise UndefinedSequenceError("Sequence at position %d is undefined" % key)
 
@@ -3273,6 +3271,7 @@ def complement_rna(sequence, inplace=False):
 
 if __name__ == "__main__":
     from doctest import IGNORE_EXCEPTION_DETAIL
+
     from Bio._utils import run_doctest
 
     run_doctest(optionflags=IGNORE_EXCEPTION_DETAIL)

@@ -669,7 +669,7 @@ class TreeMixin:
         :returns: parent clade of the pruned target
 
         """
-        if "terminal" in kwargs and kwargs["terminal"]:
+        if kwargs.get("terminal"):
             raise ValueError("target must be terminal")
         path = self.get_path(target, terminal=True, **kwargs)
         if not path:

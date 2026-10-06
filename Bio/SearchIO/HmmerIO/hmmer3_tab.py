@@ -13,7 +13,7 @@ from Bio.SearchIO._model import HSP
 from Bio.SearchIO._model import HSPFragment
 from Bio.SearchIO._model import QueryResult
 
-__all__ = ("Hmmer3TabParser", "Hmmer3TabIndexer", "Hmmer3TabWriter")
+__all__ = ("Hmmer3TabIndexer", "Hmmer3TabParser", "Hmmer3TabWriter")
 
 
 class Hmmer3TabParser:

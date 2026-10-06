@@ -123,8 +123,7 @@ class CharBuffer:
                 found = "".join(self.buffer[:pos])
                 self.buffer = self.buffer[pos:]
                 return found
-        else:
-            return None
+        return None
 
     def peek_word(self, word):
         """Return a word stored in the buffer."""
@@ -676,8 +675,7 @@ class Nexus:
             else:
                 raise NexusError(f"Unrecognized input: {input[:100]} ...") from None
         file_contents = file_contents.strip()
-        if file_contents.startswith("#NEXUS"):
-            file_contents = file_contents[6:]
+        file_contents = file_contents.removeprefix("#NEXUS")
         commandlines = _get_command_lines(file_contents)
         # get rid of stupid 'NEXUS token - in merged treefiles, this might appear multiple times'
         for i, cl in enumerate(commandlines):
@@ -1705,9 +1703,12 @@ class Nexus:
                 if tset:
                     setsb.append(f"taxset {safename(n)} = {' '.join(tset)}")
         for n, p in self.charpartitions.items():
-            if not include_codons and n == CODONPOSITIONS:
-                continue
-            elif codons_only and n != CODONPOSITIONS:
+            if (
+                not include_codons
+                and n == CODONPOSITIONS
+                or codons_only
+                and n != CODONPOSITIONS
+            ):
                 continue
             # as characters have been excluded, the partitions must be adjusted
             # if a partition is empty, it will be omitted from the charpartition command
@@ -1781,8 +1782,10 @@ class Nexus:
         with open(filename, "w") as fh:
             for taxon in self.taxlabels:
                 fh.write(">" + safename(taxon) + "\n")
-                for i in range(0, len(str(self.matrix[taxon])), width):
-                    fh.write(str(self.matrix[taxon])[i : i + width] + "\n")
+                fh.writelines(
+                    str(self.matrix[taxon])[i : i + width] + "\n"
+                    for i in range(0, len(str(self.matrix[taxon])), width)
+                )
         return filename
 
     def export_phylip(self, filename=None):
@@ -1803,8 +1806,10 @@ class Nexus:
                 filename = self.filename + ".phy"
         with open(filename, "w") as fh:
             fh.write("%d %d\n" % (self.ntax, self.nchar))
-            for taxon in self.taxlabels:
-                fh.write(f"{safename(taxon)} {self.matrix[taxon]!s}\n")
+            fh.writelines(
+                f"{safename(taxon)} {self.matrix[taxon]!s}\n"
+                for taxon in self.taxlabels
+            )
         return filename
 
     def constant(self, matrix=None, delete=(), exclude=()):

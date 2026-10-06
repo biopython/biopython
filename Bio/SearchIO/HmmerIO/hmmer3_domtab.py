@@ -16,11 +16,11 @@ from .hmmer3_tab import Hmmer3TabIndexer
 from .hmmer3_tab import Hmmer3TabParser
 
 __all__ = (
-    "Hmmer3DomtabHmmhitParser",
-    "Hmmer3DomtabHmmqueryParser",
     "Hmmer3DomtabHmmhitIndexer",
-    "Hmmer3DomtabHmmqueryIndexer",
+    "Hmmer3DomtabHmmhitParser",
     "Hmmer3DomtabHmmhitWriter",
+    "Hmmer3DomtabHmmqueryIndexer",
+    "Hmmer3DomtabHmmqueryParser",
     "Hmmer3DomtabHmmqueryWriter",
 )
 

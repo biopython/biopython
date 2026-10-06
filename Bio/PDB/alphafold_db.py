@@ -5,8 +5,8 @@ See the `database website <https://alphafold.com/>`_ and the `API docs <https://
 
 import json
 import os
-from os import PathLike
 from collections.abc import Iterator
+from os import PathLike
 from typing import Optional
 from typing import Union
 from urllib.request import urlopen

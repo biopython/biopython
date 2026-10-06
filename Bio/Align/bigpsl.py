@@ -255,7 +255,7 @@ class AlignmentWriter(bigbed.AlignmentWriter):
             qSize = len(query)
             # fmt: off
             dnax = None  # set to True for translated DNA aligned to protein,
-            # and to False for DNA/RNA aligned to DNA/RNA  # noqa: E114, E116
+            # and to False for DNA/RNA aligned to DNA/RNA
             # fmt: on
             if coordinates[1, 0] > coordinates[1, -1]:
                 # DNA/RNA mapped to reverse strand of DNA/RNA

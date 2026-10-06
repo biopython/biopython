@@ -15,7 +15,7 @@ from Bio.SearchIO._utils import read_forward
 
 from ._base import _BaseHmmerTextIndexer
 
-__all__ = ("Hmmer3TextParser", "Hmmer3TextIndexer")
+__all__ = ("Hmmer3TextIndexer", "Hmmer3TextParser")
 
 
 # precompile regex patterns for faster processing

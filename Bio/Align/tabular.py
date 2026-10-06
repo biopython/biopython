@@ -157,9 +157,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                 annotations[field] = float(column)
             elif field == "alignment length":
                 alignment_length = int(column)
-            elif field == "mismatches":
-                annotations[field] = int(column)
-            elif field == "gap opens":
+            elif field == "mismatches" or field == "gap opens":
                 annotations[field] = int(column)
             elif field == "q. start":
                 query_start = int(column)
@@ -233,13 +231,9 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             elif field == "identical":
                 identical = int(column)
                 annotations[field] = identical
-            elif field == "positives":
+            elif field == "positives" or field == "gaps":
                 annotations[field] = int(column)
-            elif field == "gaps":
-                annotations[field] = int(column)
-            elif field == "% positives":
-                annotations[field] = float(column)
-            elif field == "% hsp coverage":
+            elif field == "% positives" or field == "% hsp coverage":
                 annotations[field] = float(column)
             elif field == "query/sbjct frames":
                 annotations[field] = column

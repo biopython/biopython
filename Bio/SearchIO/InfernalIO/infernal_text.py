@@ -19,7 +19,7 @@ from Bio.SearchIO._utils import read_forward
 
 from ._base import _BaseInfernalParser
 
-__all__ = ("InfernalTextParser", "InfernalTextIndexer")
+__all__ = ("InfernalTextIndexer", "InfernalTextParser")
 
 # precompile regex patterns for faster processing
 # program name

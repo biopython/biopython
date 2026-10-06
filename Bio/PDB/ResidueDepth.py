@@ -199,19 +199,28 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[1][typekey]
     elif resname == "ASN" and at_name == "ND2":
         return _atomic_radii[5][typekey]
-    elif resname == "ASN" and at_name.startswith("AD"):
-        return _atomic_radii[3][typekey]
-    elif resname == "ASP" and at_name.startswith(("OD", "ED")):
+    elif (
+        resname == "ASN"
+        and at_name.startswith("AD")
+        or resname == "ASP"
+        and at_name.startswith(("OD", "ED"))
+    ):
         return _atomic_radii[3][typekey]
     elif resname == "ASX" and at_name.startswith("OD1"):
         return _atomic_radii[1][typekey]
-    elif resname == "ASX" and at_name == "ND2":
+    elif (
+        resname == "ASX"
+        and at_name == "ND2"
+        or resname == "ASX"
+        and at_name.startswith(("OD", "AD"))
+    ):
         return _atomic_radii[3][typekey]
-    elif resname == "ASX" and at_name.startswith(("OD", "AD")):
-        return _atomic_radii[3][typekey]
-    elif resname in {"CYS", "CYX", "CYM"} and at_name == "SG":
-        return _atomic_radii[13][typekey]
-    elif resname in {"CYS", "MET"} and at_name.startswith("LP"):
+    elif (
+        resname in {"CYS", "CYX", "CYM"}
+        and at_name == "SG"
+        or resname in {"CYS", "MET"}
+        and at_name.startswith("LP")
+    ):
         return _atomic_radii[13][typekey]
     elif resname == "CUH" and at_name == "SG":
         return _atomic_radii[12][typekey]
@@ -236,9 +245,12 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[11][typekey]
     elif resname in {"HIS", "HID", "HIE", "HISL"} and at_name == "ND1":
         return _atomic_radii[14][typekey]
-    elif resname in {"HID", "HIP"} and at_name in {"ND1", "RD1"}:
-        return _atomic_radii[4][typekey]
-    elif resname in {"HIS", "HIE", "HIP"} and at_name in {"NE2", "RE2"}:
+    elif (
+        resname in {"HID", "HIP"}
+        and at_name in {"ND1", "RD1"}
+        or resname in {"HIS", "HIE", "HIP"}
+        and at_name in {"NE2", "RE2"}
+    ):
         return _atomic_radii[4][typekey]
     elif resname in {"HID", "HISL"} and at_name in {"NE2", "RE2"}:
         return _atomic_radii[14][typekey]
@@ -247,11 +259,14 @@ def _get_atom_radius(atom, rtype="united"):
     # More amino acids
     elif resname == "ILE" and at_name == "CG1":
         return _atomic_radii[8][typekey]
-    elif resname == "ILE" and at_name == "CG2":
-        return _atomic_radii[9][typekey]
-    elif resname == "ILE" and at_name in {"CD", "CD1"}:
-        return _atomic_radii[9][typekey]
-    elif resname == "LEU" and at_name.startswith("CD"):
+    elif (
+        resname == "ILE"
+        and at_name == "CG2"
+        or resname == "ILE"
+        and at_name in {"CD", "CD1"}
+        or resname == "LEU"
+        and at_name.startswith("CD")
+    ):
         return _atomic_radii[9][typekey]
     elif resname == "LYS" and at_name in {"CG", "CD", "CE"}:
         return _atomic_radii[8][typekey]
@@ -269,9 +284,7 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[9][typekey]
     elif resname == "CSO" and at_name.startswith("OD"):
         return _atomic_radii[3][typekey]
-    elif resname == "SER" and at_name == "OG":
-        return _atomic_radii[2][typekey]
-    elif resname == "THR" and at_name == "OG1":
+    elif resname == "SER" and at_name == "OG" or resname == "THR" and at_name == "OG1":
         return _atomic_radii[2][typekey]
     elif resname == "THR" and at_name == "CG2":
         return _atomic_radii[9][typekey]
@@ -281,9 +294,12 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[10][typekey]
     elif resname == "TRP" and at_name == "NE1":
         return _atomic_radii[4][typekey]
-    elif resname == "TRP" and at_name in {"CE3", "CZ2", "CZ3", "CH2"}:
-        return _atomic_radii[11][typekey]
-    elif resname == "TYR" and at_name in {"CD1", "CD2", "CE1", "CE2"}:
+    elif (
+        resname == "TRP"
+        and at_name in {"CE3", "CZ2", "CZ3", "CH2"}
+        or resname == "TYR"
+        and at_name in {"CD1", "CD2", "CE1", "CE2"}
+    ):
         return _atomic_radii[11][typekey]
     elif resname == "TYR" and at_name == "CZ":
         return _atomic_radii[10][typekey]
@@ -375,14 +391,18 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[2][typekey]
     elif resname in {"SO4", "SUL"} and at_name == "S":
         return _atomic_radii[13][typekey]
-    elif resname in {"SO4", "SUL", "PO4", "PHO"} and at_name in {
-        "O1",
-        "O2",
-        "O3",
-        "O4",
-    }:
-        return _atomic_radii[3][typekey]
-    elif resname == "PC " and at_name in {"O1", "O2", "O3", "O4"}:
+    elif (
+        resname in {"SO4", "SUL", "PO4", "PHO"}
+        and at_name
+        in {
+            "O1",
+            "O2",
+            "O3",
+            "O4",
+        }
+        or resname == "PC "
+        and at_name in {"O1", "O2", "O3", "O4"}
+    ):
         return _atomic_radii[3][typekey]
     elif resname == "PC " and at_name == "P1":
         return _atomic_radii[13][typekey]
@@ -421,17 +441,18 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[8][typekey]
     elif resname == "FMN" and at_name.startswith(("O2", "O3", "O4")):
         return _atomic_radii[2][typekey]
-    elif resname == "FMN" and at_name.startswith("O5"):
-        return _atomic_radii[3][typekey]
-    elif resname == "FMN" and at_name in {"OP1", "OP2", "OP3"}:
-        return _atomic_radii[3][typekey]
-    elif resname in {"ALK", "MYR"} and at_name == "OT1":
+    elif (
+        resname == "FMN"
+        and at_name.startswith("O5")
+        or resname == "FMN"
+        and at_name in {"OP1", "OP2", "OP3"}
+        or resname in {"ALK", "MYR"}
+        and at_name == "OT1"
+    ):
         return _atomic_radii[3][typekey]
     elif resname in {"ALK", "MYR"} and at_name == "C01":
         return _atomic_radii[10][typekey]
-    elif resname == "ALK" and at_name == "C16":
-        return _atomic_radii[9][typekey]
-    elif resname == "MYR" and at_name == "C14":
+    elif resname == "ALK" and at_name == "C16" or resname == "MYR" and at_name == "C14":
         return _atomic_radii[9][typekey]
     elif resname in {"ALK", "MYR"} and at_name.startswith("C"):
         return _atomic_radii[8][typekey]
@@ -455,10 +476,7 @@ def _get_atom_radius(atom, rtype="united"):
     # Others
     elif at_name == "SEG":
         return _atomic_radii[9][typekey]
-    elif at_name == "OXT":
-        return _atomic_radii[3][typekey]
-    # Catch-alls
-    elif at_name.startswith(("OT", "E")):
+    elif at_name == "OXT" or at_name.startswith(("OT", "E")):
         return _atomic_radii[3][typekey]
     elif at_name.startswith("S"):
         return _atomic_radii[13][typekey]
@@ -472,9 +490,7 @@ def _get_atom_radius(atom, rtype="united"):
         return _atomic_radii[4][typekey]
     elif at_name.startswith("K"):
         return _atomic_radii[6][typekey]
-    elif at_name in {"PA", "PB", "PC", "PD"}:
-        return _atomic_radii[13][typekey]
-    elif at_name.startswith("P"):
+    elif at_name in {"PA", "PB", "PC", "PD"} or at_name.startswith("P"):
         return _atomic_radii[13][typekey]
     elif resname in {"FAD", "NAD", "AMX", "APU"} and at_name.startswith("O"):
         return _atomic_radii[1][typekey]

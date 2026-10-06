@@ -792,10 +792,7 @@ def _align_shift_recs(recs):
     rf_num = [0] * len(recs)
     for k, rec in enumerate(recs):
         for i in rec.seq.get_full_rf_table():
-            if isinstance(i, int):
-                rf_num[k] += 1
-            # isinstance(i, float) should be True
-            elif rec.seq[int(i) : int(i) + 3] == "---":
+            if isinstance(i, int) or rec.seq[int(i) : int(i) + 3] == "---":
                 rf_num[k] += 1
     if len(set(rf_num)) != 1:
         raise RuntimeError("Number of alignable codons unequal in given records")

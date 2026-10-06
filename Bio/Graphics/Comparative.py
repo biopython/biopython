@@ -169,13 +169,9 @@ class ComparativeScatterPlot:
 
         for two_d_list in info:
             for x, y in two_d_list:
-                if x > x_max:
-                    x_max = x
-                if x < x_min:
-                    x_min = x
-                if y > y_max:
-                    y_max = y
-                if y < y_min:
-                    y_min = y
+                x_max = max(x_max, x)
+                x_min = min(x_min, x)
+                y_max = max(y_max, y)
+                y_min = min(y_min, y)
 
         return x_min, x_max, y_min, y_max

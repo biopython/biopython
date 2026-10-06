@@ -281,9 +281,7 @@ class KGMLCanvas:
             x1, y1 = graphics.coords[idx1]
             x2, y2 = graphics.coords[idx2]
             x, y = 0.5 * (x1 + x2), 0.5 * (y1 + y2)
-        elif graphics.type == "circle":
-            x, y = graphics.x, graphics.y
-        elif graphics.type in ("rectangle", "roundrectangle"):
+        elif graphics.type in ("circle", "rectangle", "roundrectangle"):
             x, y = graphics.x, graphics.y
         # How big so we want the text, and how many characters?
         if graphics._parent.type == "map":

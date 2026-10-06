@@ -51,7 +51,6 @@ class SequenceIterator(ABC, Generic[AnyStr]):
         is preferred), or "bt" (if both text and binary mode are accepted, but
         binary mode is preferred).
         """
-        pass
 
     def __init__(
         self,
@@ -176,7 +175,6 @@ class SequenceWriter(ABC, Generic[AnyStr]):
         is preferred), or "bt" (if both text and binary mode are accepted, but
         binary mode is preferred).
         """
-        pass
 
     def __init__(self, target: _IOSource) -> None:
         """Create the writer object."""

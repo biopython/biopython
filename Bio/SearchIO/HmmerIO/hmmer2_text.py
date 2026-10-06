@@ -15,7 +15,7 @@ from Bio.SearchIO._utils import read_forward
 
 from ._base import _BaseHmmerTextIndexer
 
-__all__ = ("Hmmer2TextParser", "Hmmer2TextIndexer")
+__all__ = ("Hmmer2TextIndexer", "Hmmer2TextParser")
 
 
 _HSP_ALIGN_LINE = re.compile(r"(\S+):\s+domain (\d+) of (\d+)")

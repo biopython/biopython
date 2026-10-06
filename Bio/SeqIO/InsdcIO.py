@@ -31,7 +31,8 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 """
 
 import warnings
-from datetime import datetime, date as datetime_date
+from datetime import date as datetime_date
+from datetime import datetime
 from string import ascii_letters
 from string import digits
 
@@ -979,7 +980,7 @@ class GenBankWriter(_InsdcWriter):
             padding = 0
             for key, data in comment.items():
                 for subkey, subdata in data.items():
-                    padding = len(subkey) if len(subkey) > padding else padding
+                    padding = max(padding, len(subkey))
             # Construct output
             for key, data in comment.items():
                 lines.append(f"##{key}{self.STRUCTURED_COMMENT_START}")
@@ -1301,9 +1302,7 @@ class EmblWriter(_InsdcWriter):
         ):
             warnings.warn(f"Non-standard molecule type: {mol_type}", BiopythonWarning)
         mol_type_upper = mol_type.upper()
-        if "DNA" in mol_type_upper:
-            units = "BP"
-        elif "RNA" in mol_type_upper:
+        if "DNA" in mol_type_upper or "RNA" in mol_type_upper:
             units = "BP"
         elif "PROTEIN" in mol_type_upper:
             mol_type = "PROTEIN"

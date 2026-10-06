@@ -29,7 +29,7 @@ _re_next_link = re.compile(r'<(.+)>; rel="next"')
 def _get_next_link(response: HTTPResponse) -> str | None:
     headers = response.headers
 
-    if "Link" in headers and headers["Link"]:
+    if headers.get("Link"):
         match = _re_next_link.match(headers["Link"])
         if match:
             return match.group(1)
@@ -44,7 +44,7 @@ def _get_results(response: HTTPResponse) -> list[dict]:
 def _get_search_result_count(response: HTTPResponse) -> int:
     headers = response.headers
 
-    if "x-total-results" in headers and headers["x-total-results"]:
+    if headers.get("x-total-results"):
         return int(headers["x-total-results"])
     else:
         return 0

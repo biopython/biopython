@@ -50,7 +50,7 @@ print("#########################################################################
 print()
 
 version = ""
-for line in open("gc.prt").readlines():
+for line in open("gc.prt"):
     if not version and line.startswith("--  Version"):
         version = line.split("Version", 1)[1].strip()
         print(f"# Data from NCBI genetic code table version {version}\n")
@@ -116,7 +116,7 @@ for line in open("gc.prt").readlines():
         ]
         print("    start_codons=%s," % repr(codons).replace("'", '"'))
         print(")")
-        print("")
+        print()
     elif line[:2] == "--" or line in ("\n", "}\n", "Genetic-code-table ::= {\n"):
         pass
     else:

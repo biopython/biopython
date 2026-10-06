@@ -296,9 +296,7 @@ def _read(handle):
         elif tag == "LOCUSLINK":
             record.locuslink = value
         elif tag == "HOMOL":
-            if value == "YES":
-                record.homol = True
-            elif value == "NO":
+            if value == "YES" or value == "NO":
                 record.homol = True
             else:
                 raise ValueError(f"Cannot parse HOMOL line {line}")

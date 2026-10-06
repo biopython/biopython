@@ -109,17 +109,11 @@ class AlignmentIterator(interfaces.AlignmentIterator):
                         break
             elif key == "Matrix":
                 annotations[key] = value.strip()
-            elif key == "Gap_penalty":
-                annotations[key] = float(value.strip())
-            elif key == "Extend_penalty":
+            elif key == "Gap_penalty" or key == "Extend_penalty":
                 annotations[key] = float(value.strip())
             elif key == "Length":
                 ncols = int(value.strip())
-            elif key == "Identity":
-                annotations[key] = int(value.strip().split("/")[0])
-            elif key == "Similarity":
-                annotations[key] = int(value.strip().split("/")[0])
-            elif key == "Gaps":
+            elif key == "Identity" or key == "Similarity" or key == "Gaps":
                 annotations[key] = int(value.strip().split("/")[0])
             elif key == "Score":
                 annotations[key] = float(value.strip())
@@ -128,13 +122,12 @@ class AlignmentIterator(interfaces.AlignmentIterator):
             # argument used. We could simply calculate them from the
             # alignment, but then we have to define what we mean by
             # "similar". For now, simply store them as an annotation.
-            elif key == "Longest_Identity":
-                annotations[key] = value.strip()
-            elif key == "Longest_Similarity":
-                annotations[key] = value.strip()
-            elif key == "Shortest_Identity":
-                annotations[key] = value.strip()
-            elif key == "Shortest_Similarity":
+            elif (
+                key == "Longest_Identity"
+                or key == "Longest_Similarity"
+                or key == "Shortest_Identity"
+                or key == "Shortest_Similarity"
+            ):
                 annotations[key] = value.strip()
             else:
                 raise ValueError("Failed to parse line '%s'" % line)

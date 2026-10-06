@@ -285,12 +285,7 @@ class QueryResult(_BaseSearchObject):
             lines.append(pattern % ("#", "# HSP", "ID + description"))
             lines.append(pattern % ("-" * 4, "-" * 5, "-" * 58))
             for idx, hit in enumerate(self.hits):
-                if idx < 30:
-                    hid_line = "%s  %s" % (hit.id, hit.description)
-                    if len(hid_line) > 58:
-                        hid_line = hid_line[:55] + "..."
-                    lines.append(pattern % (idx, len(hit), hid_line))
-                elif idx > len(self.hits) - 4:
+                if idx < 30 or idx > len(self.hits) - 4:
                     hid_line = "%s  %s" % (hit.id, hit.description)
                     if len(hid_line) > 58:
                         hid_line = hid_line[:55] + "..."
