@@ -18,6 +18,7 @@ from Bio.SeqUtils import GC_skew
 from Bio.SeqUtils import molecular_weight
 from Bio.SeqUtils import seq1
 from Bio.SeqUtils import seq3
+from Bio.SeqUtils.IsoelectricPoint import IsoelectricPoint
 from Bio.SeqUtils.CheckSum import crc32
 from Bio.SeqUtils.CheckSum import crc64
 from Bio.SeqUtils.CheckSum import gcg
@@ -432,6 +433,45 @@ TTT	0.886
         llc_lst = lcc_mult(record, len(record))
         self.assertEqual(len(llc_lst), 1)
         self.assertAlmostEqual(llc_lst[0], 0.9528, places=4)
+
+
+class IsoelectricPointTests(unittest.TestCase):
+    """The returned pI must leave the net charge (near) zero.
+
+    Bug #5312: the bisection bracket [4.05, 12] excluded the pI of strongly
+    acidic and strongly basic sequences, so pi() returned a bracket endpoint
+    where the charge is far from zero.
+    """
+
+    def test_pi_charge_is_zero_at_returned_ph(self):
+        for seq in (
+            "D",
+            "DD",
+            "DDDD",
+            "D" * 10,
+            "E" * 10,
+            "K" * 10,
+            "R" * 10,
+            "H" * 10,
+            "ACDEK",
+            "AAAA",
+        ):
+            with self.subTest(sequence=seq):
+                protein = IsoelectricPoint(seq)
+                pi = protein.pi()
+                self.assertAlmostEqual(protein.charge_at_pH(pi), 0.0, places=3)
+
+    def test_acidic_homopolymer_pI_below_old_bracket(self):
+        # Bug #5312 repro: poly-aspartate's pI lies below the old 4.05 bound
+        protein = IsoelectricPoint("D" * 10)
+        self.assertLess(protein.pi(), 4.05)
+        self.assertAlmostEqual(protein.pi(), 3.08, places=2)
+
+    def test_basic_homopolymer_pI_above_old_bracket(self):
+        # poly-arginine's pI lies above the old 12.0 bound
+        protein = IsoelectricPoint("R" * 10)
+        self.assertGreater(protein.pi(), 12.0)
+        self.assertAlmostEqual(protein.charge_at_pH(protein.pi()), 0.0, places=3)
 
 
 if __name__ == "__main__":
