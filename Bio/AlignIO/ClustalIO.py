@@ -113,6 +113,7 @@ class ClustalIterator(AlignmentIterator):
         # Whitelisted headers we know about
         known_headers = [
             "CLUSTAL",
+            "CLUSTALW",
             "PROBCONS",
             "MUSCLE",
             "MSAPROBS",

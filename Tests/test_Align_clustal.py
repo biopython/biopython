@@ -1076,6 +1076,23 @@ AlignmentCounts object with
         with self.assertRaises(ValueError):
             Align.parse(stream, "clustal")
 
+    def test_clustalw_header(self):
+        """Make sure we can parse a header using CLUSTALW as one word."""
+        stream = StringIO(
+            "CLUSTALW\n"
+            "\n"
+            "Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-\n"
+            "AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG\n"
+            "\n"
+        )
+        alignments = Align.parse(stream, "clustal")
+        self.assertEqual(alignments.metadata["Program"], "CLUSTALW")
+        self.assertNotIn("Version", alignments.metadata)
+        alignment = next(alignments)
+        self.assertEqual(len(alignment), 2)
+        self.assertEqual(alignment[0], "GCTGGGGATGGAGAGGGAACAGAGTT-")
+        self.assertEqual(alignment[1], "GCTGGGGATGGAGAGGGAACAGAGTAG")
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)

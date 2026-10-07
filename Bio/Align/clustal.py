@@ -107,6 +107,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
         words = line.split()
         known_programs = [
             "CLUSTAL",
+            "CLUSTALW",
             "PROBCONS",
             "MUSCLE",
             "MSAPROBS",
