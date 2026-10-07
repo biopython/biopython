@@ -21,6 +21,8 @@ import unittest
 import warnings
 from io import StringIO
 
+import numpy as np
+
 from Bio import Align
 from Bio import AlignIO
 
@@ -33,7 +35,6 @@ from Bio.Align import MultipleSeqAlignment
 from Bio.Align import PairwiseAligner
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-import numpy as np
 
 
 class TestBasics(unittest.TestCase):

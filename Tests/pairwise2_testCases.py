@@ -18,9 +18,9 @@ import warnings
 
 import numpy as np
 
+from Bio import Align
 from Bio import BiopythonWarning
 from Bio import pairwise2
-from Bio import Align
 from Bio.Align import substitution_matrices
 
 

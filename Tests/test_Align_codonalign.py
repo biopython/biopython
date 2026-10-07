@@ -20,8 +20,8 @@ except ImportError:
 from Bio import Align
 from Bio import SeqIO
 from Bio.Align import Alignment
-from Bio.Align import CodonAligner
 from Bio.Align import codon_align
+from Bio.Align import CodonAligner
 from Bio.Align.analysis import calculate_dn_ds
 from Bio.Align.analysis import calculate_dn_ds_matrix
 from Bio.Align.analysis import mktest

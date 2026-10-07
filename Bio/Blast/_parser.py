@@ -19,6 +19,8 @@ import os.path
 from collections import deque
 from xml.parsers import expat
 
+import numpy as np
+
 from Bio import Entrez
 from Bio.Align import Alignment
 from Bio.Blast import Hit
@@ -29,8 +31,6 @@ from Bio.Seq import Seq
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqFeature import SimpleLocation
 from Bio.SeqRecord import SeqRecord
-
-import numpy as np
 
 
 class DTDHandler:

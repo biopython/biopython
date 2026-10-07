@@ -13,13 +13,13 @@
 # In particular, the SeqRecord and BioSQL.BioSeq.DBSeqRecord classes
 # need to be in sync (this is the BioSQL "Database SeqRecord").
 import numbers
+from collections.abc import Iterator
+from collections.abc import Sequence
 from typing import Any
 from typing import cast
-from collections.abc import Iterator
 from typing import NoReturn
 from typing import Optional
 from typing import overload
-from collections.abc import Sequence
 from typing import TYPE_CHECKING
 from typing import Union
 

@@ -13,18 +13,17 @@
 You are expected to use this module via the Bio.SeqIO functions.
 """
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonDeprecationWarning
-
 
 from .Interfaces import _clean
 from .Interfaces import _get_seq_string
 from .Interfaces import _TextIOSource
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
-
-import warnings
 
 
 def SimpleFastaParser(handle):

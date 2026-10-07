@@ -14,7 +14,10 @@ from Bio.Restriction import AllEnzymes
 from Bio.Restriction import Analysis
 from Bio.Restriction import Asp718I
 from Bio.Restriction import BamHI
+from Bio.Restriction import BsaI
+from Bio.Restriction import BsaXI
 from Bio.Restriction import BsmBI
+from Bio.Restriction import BspCNI
 from Bio.Restriction import CommOnly
 from Bio.Restriction import EarI
 from Bio.Restriction import EcoRI
@@ -30,9 +33,6 @@ from Bio.Restriction import RestrictionBatch
 from Bio.Restriction import SmaI
 from Bio.Restriction import SnaI
 from Bio.Restriction import SphI
-from Bio.Restriction import BsaI
-from Bio.Restriction import BsaXI
-from Bio.Restriction import BspCNI
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 

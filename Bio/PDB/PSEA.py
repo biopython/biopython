@@ -20,7 +20,6 @@ import os
 import subprocess
 import tempfile
 
-
 from Bio.PDB.Polypeptide import is_aa
 
 

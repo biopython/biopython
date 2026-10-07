@@ -16,11 +16,12 @@ from Bio import Seq
 from Bio import SeqIO
 from Bio import SeqRecord
 from Bio.Data.CodonTable import TranslationError
-from Bio.SeqFeature import AfterPosition, Location
+from Bio.SeqFeature import AfterPosition
 from Bio.SeqFeature import BeforePosition
 from Bio.SeqFeature import BetweenPosition
 from Bio.SeqFeature import CompoundLocation
 from Bio.SeqFeature import ExactPosition
+from Bio.SeqFeature import Location
 from Bio.SeqFeature import OneOfPosition
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqFeature import SimpleLocation

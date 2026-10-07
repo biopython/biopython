@@ -10,7 +10,8 @@ import pickle
 import unittest
 from io import BytesIO
 from textwrap import dedent
-from unittest.mock import call, Mock
+from unittest.mock import call
+from unittest.mock import Mock
 
 from Bio import Entrez
 from Bio import StreamModeError

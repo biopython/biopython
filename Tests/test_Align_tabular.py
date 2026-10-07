@@ -9,8 +9,8 @@ import unittest
 from tempfile import NamedTemporaryFile
 
 from Bio import Align
-from Bio.Align import substitution_matrices
 from Bio import SeqIO
+from Bio.Align import substitution_matrices
 from Bio.Seq import Seq
 
 try:

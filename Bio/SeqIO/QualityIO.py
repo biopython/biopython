@@ -359,24 +359,24 @@ are approximately equal.
 
 """
 
+import array
 import warnings
-from math import log
 from abc import abstractmethod
-from typing import Any
 from collections.abc import Callable
-from typing import IO
+from collections.abc import Iterable
 from collections.abc import Iterator
 from collections.abc import Mapping
-from typing import Optional
 from collections.abc import Sequence
-from typing import Union
-from collections.abc import Iterable
-import array
 from dataclasses import dataclass
+from math import log
+from typing import Any
+from typing import IO
+from typing import Optional
+from typing import Union
 
+from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
-from Bio import BiopythonDeprecationWarning
 from Bio import StreamModeError
 from Bio.File import as_handle
 from Bio.Seq import Seq

@@ -19,11 +19,11 @@ except ImportError:
         "Install numpy if you want to use Bio.Align."
     ) from None
 
+from Bio import Align
 from Bio import BiopythonDeprecationWarning
 from Bio import BiopythonWarning
-from Bio import Align
-from Bio.Align.substitution_matrices import Array
 from Bio import SeqIO
+from Bio.Align.substitution_matrices import Array
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord

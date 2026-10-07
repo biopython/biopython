@@ -32,16 +32,16 @@ Similarly, when writing to this format, Biopython will ONLY record the record's
 example above.
 """
 
+import warnings
+
+from Bio import BiopythonDeprecationWarning
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-from Bio import BiopythonDeprecationWarning
 
 from .Interfaces import _clean
 from .Interfaces import _get_seq_string
 from .Interfaces import SequenceIterator
 from .Interfaces import SequenceWriter
-
-import warnings
 
 
 class TabIterator(SequenceIterator):
