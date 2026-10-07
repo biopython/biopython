@@ -980,7 +980,7 @@ class GenBankWriter(_InsdcWriter):
             padding = 0
             for key, data in comment.items():
                 for subkey, subdata in data.items():
-                    padding = len(subkey) if len(subkey) > padding else padding
+                    padding = max(padding, len(subkey))
             # Construct output
             for key, data in comment.items():
                 lines.append(f"##{key}{self.STRUCTURED_COMMENT_START}")
