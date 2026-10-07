@@ -371,7 +371,7 @@ class LinearDrawer(AbstractDrawer):
 
         Returns a drawing element that is the tick on the scale
         """
-        if self.start >= tickpos and tickpos >= self.end:
+        if self.start >= tickpos >= self.end:
             raise RuntimeError(
                 "Tick at %i, but showing %i to %i" % (tickpos, self.start, self.end)
             )
