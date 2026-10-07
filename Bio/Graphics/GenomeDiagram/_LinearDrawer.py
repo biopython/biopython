@@ -784,14 +784,10 @@ class LinearDrawer(AbstractDrawer):
         if not self.is_in_bounds(startB) and not self.is_in_bounds(endB):
             return None
 
-        if startA < self.start:
-            startA = self.start
-        if startB < self.start:
-            startB = self.start
-        if self.end < endA:
-            endA = self.end
-        if self.end < endB:
-            endB = self.end
+        startA = max(startA, self.start)
+        startB = max(startB, self.start)
+        endA = min(endA, self.end)
+        endB = min(endB, self.end)
 
         trackobjA = cross_link._trackA(list(self._parent.tracks.values()))
         trackobjB = cross_link._trackB(list(self._parent.tracks.values()))

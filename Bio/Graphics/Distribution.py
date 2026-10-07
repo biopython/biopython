@@ -180,10 +180,12 @@ class BarChartDistribution:
         bar_chart.valueAxis.valueMin = min(self.display_info[0])
         bar_chart.valueAxis.valueMax = max(self.display_info[0])
         for data_set in self.display_info[1:]:
-            if min(data_set) < bar_chart.valueAxis.valueMin:
-                bar_chart.valueAxis.valueMin = min(data_set)
-            if max(data_set) > bar_chart.valueAxis.valueMax:
-                bar_chart.valueAxis.valueMax = max(data_set)
+            bar_chart.valueAxis.valueMin = min(
+                bar_chart.valueAxis.valueMin, min(data_set)
+            )
+            bar_chart.valueAxis.valueMax = max(
+                bar_chart.valueAxis.valueMax, max(data_set)
+            )
 
         # set other formatting options
         if len(self.display_info) == 1:

@@ -173,8 +173,7 @@ class MMCIFIO(StructureIO):
                 m = 0
                 # Find the maximum key length
                 for i in key_list:
-                    if len(i) > m:
-                        m = len(i)
+                    m = max(m, len(i))
                 for i in key_list:
                     # If the value is a single item list, just take the value
                     if isinstance(sample_val, str):
@@ -201,8 +200,7 @@ class MMCIFIO(StructureIO):
                             val
                         ):
                             len_val += 2
-                        if len_val > col_widths[i]:
-                            col_widths[i] = len_val
+                        col_widths[i] = max(col_widths[i], len_val)
                 # Technically the max of the sum of the column widths is 2048
 
                 # Write the values as rows

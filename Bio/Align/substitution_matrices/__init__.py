@@ -358,8 +358,7 @@ class Array(_arraycore.Array):
             value = self[key]
             word = fmt % value
             width = len(word)
-            if width > maxwidth:
-                maxwidth = width
+            maxwidth = max(maxwidth, width)
             words[i] = word
         fmt2 = " %" + str(maxwidth) + "s"
         for letter, word in zip(alphabet, words):
@@ -392,8 +391,7 @@ class Array(_arraycore.Array):
                 value = self[key]
                 word = fmt % value
                 width = len(word)
-                if width > maxwidth:
-                    maxwidth = width
+                maxwidth = max(maxwidth, width)
                 words[i][j] = word
             fmt2 = " %" + str(maxwidth) + "s"
             word = fmt2 % c2

@@ -429,8 +429,7 @@ class MultipleSeqAlignment:
         max_length = 0
 
         for record in self._records:
-            if len(record.seq) > max_length:
-                max_length = len(record.seq)
+            max_length = max(max_length, len(record.seq))
 
         return max_length
 
