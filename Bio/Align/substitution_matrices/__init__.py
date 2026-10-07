@@ -12,8 +12,8 @@ import string
 
 import numpy as np
 
-from Bio.File import as_handle
 from Bio.Align.substitution_matrices import _arraycore  # type: ignore
+from Bio.File import as_handle
 
 
 class Array(_arraycore.Array):

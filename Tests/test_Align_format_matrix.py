@@ -24,9 +24,12 @@ styles and substitution matrices.
 """
 
 import unittest
+
 import numpy as np
+
 from Bio.Align import PairwiseAligner
-from Bio.Align.substitution_matrices import load, Array
+from Bio.Align.substitution_matrices import Array
+from Bio.Align.substitution_matrices import load
 
 
 class TestFormatMatrix(unittest.TestCase):

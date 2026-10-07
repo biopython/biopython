@@ -18,8 +18,8 @@ import numpy as np
 from Bio.Data import IUPACData
 from Bio.PDB.Entity import DisorderedEntityWrapper
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio.PDB.vectors import Vector
 from Bio.PDB.Residue import Residue
+from Bio.PDB.vectors import Vector
 
 _AtomT = TypeVar("_AtomT", bound="Atom")
 

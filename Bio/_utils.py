@@ -8,8 +8,8 @@
 """Common utility functions for various Bio submodules."""
 
 import os
-from typing import Any
 from collections.abc import Callable
+from typing import Any
 from typing import cast
 from typing import Optional
 from typing import Protocol

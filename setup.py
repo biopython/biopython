@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """Freely available tools for computational molecular biology."""
 
-from setuptools import setup
-
 import sys
 import warnings
+
+from setuptools import setup
 
 _DEPRECATION_MESSAGE = (
     "Invoking setup.py is deprecated and will be removed in a future release of Biopython.\n"

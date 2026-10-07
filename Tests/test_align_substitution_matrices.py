@@ -24,7 +24,6 @@ from Bio import SeqIO
 from Bio.Align import substitution_matrices
 from Bio.Data import IUPACData
 
-
 nucleotide_alphabet = IUPACData.unambiguous_dna_letters
 protein_alphabet = IUPACData.protein_letters
 

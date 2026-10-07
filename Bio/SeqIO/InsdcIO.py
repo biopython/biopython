@@ -31,7 +31,8 @@ http://www.ebi.ac.uk/imgt/hla/docs/manual.html
 """
 
 import warnings
-from datetime import datetime, date as datetime_date
+from datetime import date as datetime_date
+from datetime import datetime
 from string import ascii_letters
 from string import digits
 

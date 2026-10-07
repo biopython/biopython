@@ -15,14 +15,14 @@ import warnings
 
 from Bio import Align
 from Bio import AlignIO
-from Bio.Align import PairwiseAligner
 from Bio.Align import MultipleSeqAlignment
+from Bio.Align import PairwiseAligner
 from Bio.Data import PDBData
 from Bio.PDB import PDBParser
 from Bio.PDB import StructureAlignment
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
-from Bio.PDB.Selection import unfold_entities
 from Bio.PDB.Polypeptide import is_aa
+from Bio.PDB.Selection import unfold_entities
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
