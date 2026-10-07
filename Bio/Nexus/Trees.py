@@ -598,8 +598,7 @@ class Tree(Nodes.Chain):
             if branchlength_sd:
                 for nt in new_terminals:
                     bl = random.gauss(branchlength, branchlength_sd)
-                    if bl < 0:
-                        bl = 0
+                    bl = max(bl, 0)
                     self.node(nt).data.branchlength = bl
             terminals.extend(new_terminals)
             terminals.remove(newsplit)

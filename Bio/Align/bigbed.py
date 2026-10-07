@@ -645,8 +645,7 @@ class AlignmentWriter(interfaces.AlignmentWriter):
             if itemIx == itemsPerSlot:
                 blockStartOffset = output.tell()
                 size = buffer.tell()
-                if size > maxBlockSize:
-                    maxBlockSize = size
+                maxBlockSize = max(maxBlockSize, size)
                 data = buffer.getvalue()
                 output.write(data)
                 buffer.seek(0)
@@ -1242,8 +1241,7 @@ class _ExtraIndex:
     def updateMaxFieldSize(self, alignment):
         value = self.get_value(alignment)
         size = len(value)
-        if size > self.maxFieldSize:
-            self.maxFieldSize = size
+        self.maxFieldSize = max(self.maxFieldSize, size)
 
     def addKeysFromRow(self, alignment, recordIx):
         value = self.get_value(alignment)
@@ -1410,10 +1408,8 @@ class _Summary:
 
     def update(self, size, val):
         self.validCount += size
-        if val < self.minVal:
-            self.minVal = val
-        if val > self.maxVal:
-            self.maxVal = val
+        self.minVal = min(self.minVal, val)
+        self.maxVal = max(self.maxVal, val)
         self.sumData += val * size
         self.sumSquares += val * val * size
 
