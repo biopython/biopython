@@ -272,7 +272,7 @@ def _calc_millibad(psl, is_protein):
         return 0
 
     size_dif = qali_size - tali_size
-    size_dif = 0 if size_dif < 0 else size_dif
+    size_dif = max(size_dif, 0)
 
     total = size_mul * (psl["matches"] + psl["repmatches"] + psl["mismatches"])
     if total != 0:
