@@ -7794,11 +7794,25 @@ KEYWORDS    """,
             """
 DBLINK      BioProject: PRJNA39555
             Sequence Read Archive: SRX001885, SRX001121, SRX001531, SRX001530, SRX001529
-KEYWORDS    """
-            in gb,
+KEYWORDS    """ in gb,
             gb,
         )
         self.assertIn("XX\nPR   Project:PRJNA39555;\nXX\n", embl)
+
+    def test_dblink_colon_wrap(self):
+        """Parse GenBank record with DBLINK continuations containing colons."""
+        path = "GenBank/dblink_colon_wrap.gb"
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", BiopythonWarning)
+            record = SeqIO.read(path, "gb")
+        self.assertEqual(
+            record.dbxrefs,
+            [
+                "BioProject:PRJNA39555",
+                "Sequence Read Archive:SRX001885, SRX001121, SRX001531:extra, SRX001530, SRX001529",
+                "ProbeDB:ProbeDB:GEN00000000001234, ProbeDB:GEN00000000005678",
+            ],
+        )
 
     def test_dbline_gb_embl(self):
         """Parse GenBank/EMBL paired records with PR project entry: GenBank."""

@@ -1661,14 +1661,19 @@ class GenBankScanner(InsdcScanner):
                     while True:
                         next_line = next(line_iter)
                         if next_line[: self.GENBANK_INDENT] == self.GENBANK_SPACER:
-                            # No new tag on next line, continue to add dbrefs
-                            if next_line.count(":") == 0:
-                                # This is a continuation of previous dbref
-                                line += " " + next_line.strip()
-                            else:
-                                # Add this continuation to the data string
+                            # No new tag on next line, continue to add dbrefs.
+                            # A new entry looks like "Database: accession"
+                            # (a colon followed by a space). A wrapped value
+                            # can contain a colon mid-token, e.g. a wrapped
+                            # accession list like "SRX001531:extra", which
+                            # must be treated as a continuation (github #5335).
+                            if re.match(r"[^,:]+: ", next_line.strip()):
+                                # This is a new dbref entry
                                 consumer.dblink(line.strip())
                                 line = next_line
+                            else:
+                                # This is a continuation of previous dbref
+                                line += " " + next_line.strip()
                             continue
                         else:
                             # Add this continuation to the data string

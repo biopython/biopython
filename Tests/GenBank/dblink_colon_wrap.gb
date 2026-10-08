@@ -1,0 +1,20 @@
+LOCUS       SCU49845     5028 bp    DNA             PLN       21-JUN-1999
+DEFINITION  Saccharomyces cerevisiae TCP1-beta gene, partial cds, and Axl2p
+            (AXL2) and Rev7p (REV7) genes, complete cds.
+ACCESSION   U49845
+VERSION     U49845.1
+DBLINK      BioProject: PRJNA39555
+            Sequence Read Archive: SRX001885, SRX001121, SRX001531:extra,
+            SRX001530, SRX001529
+            ProbeDB: ProbeDB:GEN00000000001234,
+            ProbeDB:GEN00000000005678
+KEYWORDS    .
+SOURCE      Saccharomyces cerevisiae (baker's yeast)
+  ORGANISM  Saccharomyces cerevisiae
+            Eukaryota; Fungi; Ascomycota; Saccharomycotina; Saccharomycetes;
+            Saccharomycetales; Saccharomycetaceae; Saccharomyces.
+FEATURES             Location/Qualifiers
+     source          1..5028
+ORIGIN
+        1 gatcctccat atacaacggt atctccacct caggtttaga tctcaacaac ggaaccattg
+//
