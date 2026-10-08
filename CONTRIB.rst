@@ -39,6 +39,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Andrew Sczesnak <https://github.com/polyatail>
 - Andrey Raspopov <https://github.com/Andrey-Raspopov>
 - Andrius Merkys <https://github.com/merkys>
+- Angus Barlow <https://github.com/barlowa124>
 - Anil Tuncel <https://github.com/anilbey>
 - Anne Pajon <ap one two at sanger ac uk>
 - Anthony Bradley <https://github.com/abradle>
@@ -52,7 +53,6 @@ please open an issue on GitHub or mention it on the mailing list.
 - Arup Ghosh <https://github.com/arupgsh>
 - Austin Varela <https://github.com/austinv11>
 - Aziz Khan <https://github.com/asntech>
-- Angus Barlow <https://github.com/barlowa124>
 - Barbara Mühlemann <https://github.com/bamueh>
 - Bart de Koning <bratdaking gmail>
 - Bartek Wilczynski <bartek at domain rezolwenta.eu.org>
