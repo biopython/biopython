@@ -1,0 +1,19 @@
+LOCUS       Exported                   4 bp    NA      linear   UNA 05-NOV-2024
+DEFINITION  natural linear DNA
+ACCESSION   .
+VERSION     .
+KEYWORDS    .
+SOURCE      natural DNA sequence
+  ORGANISM  unspecified
+REFERENCE   1  (bases 1 to 4)
+  AUTHORS   EGF
+  TITLE     Direct Submission
+  JOURNAL   Exported Tuesday, Nov 5, 2024 from SnapGene 5.0.8
+            https://www.snapgene.com
+FEATURES             Location/Qualifiers
+     source          1..4
+                     /organism="unspecified"
+                     /mol_type="genomic DNA"
+ORIGIN
+        1 atcg
+//
