@@ -513,12 +513,12 @@ class DistanceCalculator:
         max_score = 0
         if self.scoring_matrix is None:
             # Score by character identity, not skipping any special letters
-            score = sum(
-                l1 == l2
-                for l1, l2 in zip(seq1, seq2)
-                if l1 not in self.skip_letters and l2 not in self.skip_letters
-            )
-            max_score = len(seq1)
+            for l1, l2 in zip(seq1, seq2):
+                if l1 in self.skip_letters or l2 in self.skip_letters:
+                    continue
+                max_score += 1
+                if l1 == l2:
+                    score += 1
         else:
             max_score1 = 0
             max_score2 = 0

@@ -203,6 +203,20 @@ class DistanceCalculatorTest(unittest.TestCase):
         self.assertEqual(dmat["Alpha", "Alpha"], 0.0)
         self.assertAlmostEqual(dmat["Alpha", "Gamma"], 4.0 / 5.0)
 
+    def test_identity_skip_letters(self):
+        # Identical sequences containing gap columns; skipped positions
+        # must not inflate the distance (github issue #5332).
+        aln = AlignIO.read(StringIO(">Alpha\nAC--GT\n>Gamma\nAC--GT"), "fasta")
+        calculator = DistanceCalculator("identity", skip_letters=("-", "*"))
+        self.assertEqual(calculator.get_distance(aln)["Alpha", "Gamma"], 0.0)
+        # A gap column should count the same as no gap column.
+        ungapped = AlignIO.read(StringIO(">Alpha\nACGT\n>Gamma\nACGA"), "fasta")
+        gapped = AlignIO.read(StringIO(">Alpha\nAC--GT\n>Gamma\nAC--GA"), "fasta")
+        self.assertEqual(
+            calculator.get_distance(ungapped)["Alpha", "Gamma"],
+            calculator.get_distance(gapped)["Alpha", "Gamma"],
+        )
+
 
 class DistanceTreeConstructorTest(unittest.TestCase):
     """Test DistanceTreeConstructor."""
