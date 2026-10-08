@@ -45,6 +45,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Antonio Jesús Gálvez Muñoz <https://github.com/PyCreatine>
 - Antonio Trande <https://github.com/sagitter>
 - Antony Lee <https://github.com/anntzer>
+- Angus Barlow <https://github.com/barlowa124>
 - Anuj Sharma <https://github.com/xulesc>
 - Ariel Aptekmann <https://github.com/aralap>
 - Arpan Sahoo <https://github.com/arpansahoo>
@@ -52,7 +53,6 @@ please open an issue on GitHub or mention it on the mailing list.
 - Arup Ghosh <https://github.com/arupgsh>
 - Austin Varela <https://github.com/austinv11>
 - Aziz Khan <https://github.com/asntech>
-- Angus Barlow <https://github.com/barlowa124>
 - Barbara Mühlemann <https://github.com/bamueh>
 - Bart de Koning <bratdaking gmail>
 - Bartek Wilczynski <bartek at domain rezolwenta.eu.org>

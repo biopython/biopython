@@ -7794,7 +7794,8 @@ KEYWORDS    """,
             """
 DBLINK      BioProject: PRJNA39555
             Sequence Read Archive: SRX001885, SRX001121, SRX001531, SRX001530, SRX001529
-KEYWORDS    """ in gb,
+KEYWORDS    """
+            in gb,
             gb,
         )
         self.assertIn("XX\nPR   Project:PRJNA39555;\nXX\n", embl)
