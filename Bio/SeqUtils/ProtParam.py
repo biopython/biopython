@@ -210,7 +210,7 @@ class ProteinAnalysis:
         For a window of size 9 and edge 0.4 you get a list of
         [0.4, 0.55, 0.7, 0.85].
         """
-        unit = 2 * (1.0 - edge) / (window - 1)
+        unit = 2 * (1.0 - edge) / (window - 1) if window > 1 else 0.0
         weights = [0.0] * (window // 2)
 
         for i in range(window // 2):
@@ -260,8 +260,9 @@ class ProteinAnalysis:
         scores = []
 
         # the score in each Window is divided by the sum of weights
-        # (* 2 + 1) since the weight list is one sided:
-        sum_of_weights = sum(weights) * 2 + 1
+        # (* 2 + 1) since the weight list is one sided. An even window
+        # has no single center position, so its weights sum to 2*weights.
+        sum_of_weights = sum(weights) * 2 + (window % 2)
 
         for i in range(self.length - window + 1):
             subsequence = self.sequence[i : i + window]
@@ -282,11 +283,16 @@ class ProteinAnalysis:
                     )
 
             # Now add the middle value, which always has a weight of 1.
-            middle = subsequence[window // 2]
-            if middle in param_dict:
-                score += param_dict[middle]
-            else:
-                sys.stderr.write(f"warning: {middle} is not a standard amino acid.\n")
+            # For an even window there is no middle position: the two
+            # center residues are covered by the innermost mirrored pair.
+            if window % 2 == 1:
+                middle = subsequence[window // 2]
+                if middle in param_dict:
+                    score += param_dict[middle]
+                else:
+                    sys.stderr.write(
+                        f"warning: {middle} is not a standard amino acid.\n"
+                    )
 
             scores.append(score / sum_of_weights)
 
