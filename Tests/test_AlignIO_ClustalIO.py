@@ -198,6 +198,14 @@ gi|671626|emb|CAA85685.1|           ------------------
 
 """
 
+aln_example6 = """\
+CLUSTALW
+
+Test1seq             GCTGGGGATGGAGAGGGAACAGAGTT-
+AT3G20900.1-SEQ      GCTGGGGATGGAGAGGGAACAGAGTAG
+
+"""
+
 
 class TestClustalIO(unittest.TestCase):
     def test_one(self):
@@ -284,6 +292,11 @@ class TestClustalIO(unittest.TestCase):
         alignment = next(ClustalIterator(StringIO(aln_example5)))
         self.assertEqual(2, len(alignment))
         self.assertEqual(alignment._version, "1.80.dev0")
+
+    def test_clustalw_header(self):
+        """Make sure we can parse a header using CLUSTALW as one word."""
+        alignment = next(ClustalIterator(StringIO(aln_example6)))
+        self.assertEqual(2, len(alignment))
 
 
 if __name__ == "__main__":

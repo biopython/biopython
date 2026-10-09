@@ -269,6 +269,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Mike Poidinger <Michael.Poidinger at domain eBioinformatics.com>
 - Mikel Martinez Goikoetxea <https://github.com/Mikel-MG>
 - Milind Luthra <https://github.com/milindl>
+- Mohit Arvind Khakharia <https://github.com/Mohit-Ak>
 - morrme <https://github.com/morrme>
 - Mustafa Anil Tuncel <https://github.com/anilbey>
 - Nader Morshed <https://github.com/naderm>
