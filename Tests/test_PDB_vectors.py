@@ -7,6 +7,7 @@
 """Tests for the vector code in Bio.PDB."""
 
 import unittest
+import warnings
 
 try:
     import numpy as np
@@ -79,6 +80,40 @@ class VectorTests(unittest.TestCase):
         self.assertEqual(v1.normsq(), 1.0)
         v1[2] = 10
         self.assertEqual(v1.__getitem__(2), 10)
+
+    def test_dihedral_collinear_points_return_nan_without_warnings(self):
+        """Collinear points have an undefined dihedral; return NaN quietly.
+
+        Bug #5342: calc_dihedral used to emit an invalid-value RuntimeWarning
+        (only on the first call, since numpy warns once per location) and then
+        silently return -pi — a valid-looking angle for an input that has no
+        dihedral.
+        """
+        v1 = Vector(0, 0, 0)
+        v2 = Vector(1, 0, 0)
+        v3 = Vector(2, 0, 0)
+        v4 = Vector(3, 0, 0)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")  # any warning fails the test
+            angle = calc_dihedral(v1, v2, v3, v4)
+            self.assertTrue(np.isnan(angle))
+            # deterministic: a repeated call behaves identically
+            self.assertTrue(np.isnan(calc_dihedral(v1, v2, v3, v4)))
+
+    def test_dihedral_coplanar_zero_angle_no_warning(self):
+        """A perfectly coplanar set (dihedral 0 or pi) must not warn either.
+
+        The sign check divides by |w|, which vanishes for these inputs.
+        """
+        a = Vector(0, 1, 0)
+        b = Vector(0, 0, 0)
+        c = Vector(1, 0, 0)
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            self.assertAlmostEqual(calc_dihedral(a, b, c, Vector(1, 1, 0)), 0.0)
+            self.assertAlmostEqual(abs(calc_dihedral(a, b, c, Vector(1, -1, 0))), np.pi)
 
     def test_normalization(self):
         """Test Vector normalization."""

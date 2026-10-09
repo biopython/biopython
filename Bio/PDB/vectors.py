@@ -230,6 +230,9 @@ def calc_dihedral(v1, v2, v3, v4):
     representing 4 connected points. The angle is in
     ]-pi, pi].
 
+    Returns NaN when the four points are collinear (or coincident): the
+    dihedral angle is undefined there, and no angle value can be trusted.
+
     :param v1, v2, v3, v4: the four points that define the dihedral angle
     :type v1, v2, v3, v4: L{Vector}
     """
@@ -238,11 +241,20 @@ def calc_dihedral(v1, v2, v3, v4):
     db = v4 - v3
     u = ab**cb
     v = db**cb
+    if u.norm() == 0.0 or v.norm() == 0.0:
+        # Collinear (or coincident) points: the cross products vanish and the
+        # dihedral angle is undefined. Return NaN deterministically instead of
+        # letting the division below emit an invalid-value warning once and
+        # silently return an arbitrary angle (bug #5342).
+        return float("nan")
     w = u**v
     angle = u.angle(v)
     # Determine sign of angle
     try:
-        if cb.angle(w) > 0.001:
+        # w is the zero vector when the dihedral is exactly 0 or pi; the
+        # sign is meaningless there, so skip the check instead of dividing
+        # by zero.
+        if w.norm() != 0.0 and cb.angle(w) > 0.001:
             angle = -angle
     except ZeroDivisionError:
         # dihedral=pi
