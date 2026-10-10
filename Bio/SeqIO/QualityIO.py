@@ -835,6 +835,97 @@ def _get_solexa_quality_str(record: SeqRecord) -> str:
     )
 
 
+def FastqHeaderParser(source: _TextIOSource) -> Iterator[str]:
+    """Iterate over Fastq records yielding only headers (titles).
+
+    Arguments:
+     - source - input stream opened in text mode, or a path to a file
+
+    For each record a single string is returned: the FASTQ header line
+    (without the leading '@' character).
+
+    Sequence and quality blocks are bypassed natively. We only tally
+    the integer length of the block to ensure correct boundary detection
+    (because FASTQ allows '@' characters inside quality strings), completely
+    preventing any memory buffering or sequence evaluations. This makes
+    it extremely fast for counting or extracting sequence IDs.
+
+    >>> with open("Quality/tricky.fastq") as handle:
+    ...     for title in FastqHeaderParser(handle):
+    ...         print(title)
+    ...
+    071113_EAS56_0053:1:1:998:236
+    071113_EAS56_0053:1:1:182:712
+    071113_EAS56_0053:1:1:153:10
+    071113_EAS56_0053:1:3:990:501
+
+    """
+    with as_handle(source) as handle:
+        if handle.read(0) != "":
+            raise StreamModeError("Fastq files must be opened in text mode") from None
+
+        line = handle.readline()
+        if line == "":
+            return  # Premature end of file, or just empty?
+
+        while True:
+            if line[0] != "@":
+                raise ValueError(
+                    "Records in Fastq files should start with '@' character"
+                )
+            title_line = line[1:].rstrip()
+            yield title_line
+
+            seq_len = 0
+            # There will now be one or more sequence lines; keep going until we
+            # find the "+" marking the quality line:
+            for line in handle:
+                if line[0] == "+":
+                    break
+                sline = line.rstrip()
+                if " " in sline or "\t" in sline:
+                    raise ValueError("Whitespace is not allowed in the sequence.")
+                seq_len += len(sline)
+            else:
+                if seq_len:
+                    raise ValueError("End of file without quality information.")
+                else:
+                    raise ValueError("Unexpected end of file")
+
+            # The title here is optional, but if present must match!
+            second_title = line[1:].rstrip()
+            if second_title and second_title != title_line:
+                raise ValueError("Sequence and quality captions differ.")
+
+            # There will now be at least one line of quality data, followed by
+            # another sequence, or EOF
+            line = None
+            q_len = 0
+            for line in handle:
+                if line[0] == "@":
+                    # This COULD be the start of a new sequence. However, it MAY just
+                    # be a line of quality data which starts with a "@" character.  We
+                    # should be able to check this by looking at the sequence length
+                    # and the amount of quality data found so far.
+                    if q_len >= seq_len:
+                        break
+                    # Continue - its just some (more) quality data.
+                q_len += len(line.rstrip())
+            else:
+                if line is None:
+                    raise ValueError("Unexpected end of file")
+                line = None
+
+            if seq_len != q_len:
+                raise ValueError(
+                    "Lengths of sequence and quality values differs for %s (%i and %i)."
+                    % (title_line, seq_len, q_len)
+                )
+
+            if line is None:
+                break
+
+
 # TODO - Default to nucleotide or even DNA?
 def FastqGeneralIterator(source: _TextIOSource) -> Iterator[tuple[str, str, str]]:
     """Iterate over Fastq records as string tuples (not as SeqRecord objects).

@@ -107,6 +107,60 @@ _pir_mol_type = {
 }
 
 
+def PirHeaderParser(handle, block_size=65536):
+    """Iterate over PIR records yielding only headers (titles).
+
+    Arguments:
+     - handle - input stream opened in text mode
+     - block_size - interval payload chunk size
+
+    For each record a single string is returned: the PIR header line
+    (without the leading '>' character). Sequence and description lines
+    are instantly skipped using block reading, making this parser
+    extremely fast for metadata extraction.
+
+    Examples
+    --------
+    >>> with open("NBRF/DMB_prot.pir") as handle:
+    ...     for title in PirHeaderParser(handle):
+    ...         print(title)
+    ...
+    P1;HLA:HLA00489
+    P1;HLA:HLA00490
+    P1;HLA:HLA00491
+    P1;HLA:HLA00492
+    P1;HLA:HLA00493
+    P1;HLA:HLA01083
+
+    """
+    first_char = handle.read(1)
+    if not first_char:
+        return
+
+    buffer = first_char
+    while True:
+        chunk = handle.read(block_size)
+        if not chunk:
+            break
+        buffer += chunk
+
+        parts = buffer.split("\n>")
+        buffer = parts.pop()
+
+        for part in parts:
+            title, _, _ = part.partition("\n")
+            if title.startswith(">"):
+                title = title[1:]
+            yield title.rstrip()
+
+    if buffer:
+        title, _, _ = buffer.partition("\n")
+        if title.startswith(">"):
+            title = title[1:]
+        if title:
+            yield title.rstrip()
+
+
 class PirIterator(SequenceIterator):
     """Parser for PIR files."""
 
