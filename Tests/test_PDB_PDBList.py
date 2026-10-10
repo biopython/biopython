@@ -20,6 +20,28 @@ from Bio.PDB.PDBList import PDBList
 requires_internet.check()
 
 
+class TestPDBListHelpers(unittest.TestCase):
+    """Test helper methods for obsolete file handling."""
+
+    def test_get_obsolete_filename(self):
+        """Test correct filename mapping for obsolete structures."""
+        self.assertEqual(
+            PDBList._get_obsolete_filename("1abc", "pdb"), "pdb1abc.ent"
+        )
+        self.assertEqual(
+            PDBList._get_obsolete_filename("1abc", "mmCif"), "1abc.cif"
+        )
+        self.assertEqual(
+            PDBList._get_obsolete_filename("1abc", "xml"), "1abc.xml"
+        )
+        self.assertIsNone(
+            PDBList._get_obsolete_filename("1abc", "mmtf")
+        )
+        self.assertIsNone(
+            PDBList._get_obsolete_filename("1abc", "bundle")
+        )
+
+
 class TestPBDListGetList(unittest.TestCase):
     """Test methods responsible for getting lists of entries."""
 
