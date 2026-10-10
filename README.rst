@@ -48,6 +48,9 @@ file summarises the changes in each release of Biopython, alongside the
 <https://github.com/biopython/biopython/blob/master/DEPRECATED.rst>`_
 file which notes API breakages.
 
+The ``CONTRIBUTING.rst`` file is aimed at potential and current contributors,
+with information on things like our coding style and no-AI policy.
+
 The Biopython package is open source software made available under generous
 terms. Please see the `LICENSE
 <https://github.com/biopython/biopython/blob/master/LICENSE.rst>`_ file for

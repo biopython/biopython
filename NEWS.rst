@@ -26,6 +26,11 @@ possible, especially the following contributors:
 
 - Mohit Arvind Khakharia (first contribution)
 
+Biopython has adopted an explicit **No AI** policy, rejecting changes written
+using large language models (LLM) or generative artificial intelligence
+(GenAI) like Claude, or ChatGPT. Please see our ``CONTRIBUTING.rst`` file for
+full details.
+
 6 August 2026: Biopython 1.88
 =============================
 
