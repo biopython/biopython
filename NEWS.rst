@@ -21,6 +21,10 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+When guessing an element from a PDB atom name, ``Bio.PDB`` now treats four
+character names like ``HNZ1`` the same way as ``HE21``, giving hydrogen rather
+than the unknown element ``X``.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
