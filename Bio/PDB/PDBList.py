@@ -44,6 +44,7 @@ import re
 import shutil
 import sys
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from typing import Optional
 from urllib.request import Request
 from urllib.request import urlcleanup
@@ -130,6 +131,18 @@ class PDBList:
             )
             return "mmCif"
         return file_format
+
+    @staticmethod
+    def _final_structure_filename(pdb_code, file_format):
+        """Return the final local filename for a structure (PRIVATE)."""
+        final = {
+            "pdb": f"pdb{pdb_code}.ent",
+            "mmCif": f"{pdb_code}.cif",
+            "xml": f"{pdb_code}.xml",
+            "mmtf": f"{pdb_code}.mmtf",
+            "bundle": f"{pdb_code}-pdb-bundle.tar",
+        }
+        return final[file_format]
 
     @staticmethod
     def get_status_list(url):
@@ -314,14 +327,9 @@ class PDBList:
         if not os.access(path, os.F_OK):
             os.makedirs(path)
         filename = os.path.join(path, archive)
-        final = {
-            "pdb": f"pdb{pdb_code}.ent",
-            "mmCif": f"{pdb_code}.cif",
-            "xml": f"{pdb_code}.xml",
-            "mmtf": f"{pdb_code}.mmtf",
-            "bundle": f"{pdb_code}-pdb-bundle.tar",
-        }
-        final_file = os.path.join(path, final[file_format])
+        final_file = os.path.join(
+            path, self._final_structure_filename(pdb_code, file_format)
+        )
 
         # Skip download if the file already exists
         if not overwrite:
@@ -373,7 +381,7 @@ class PDBList:
                     assemblies = self.get_all_assemblies()
                     for a_pdb_code, assembly_num in assemblies:
                         if a_pdb_code == pdb_code:
-                            pl.retrieve_assembly_file(
+                            self.retrieve_assembly_file(
                                 pdb_code,
                                 assembly_num,
                                 file_format=file_format,
@@ -384,33 +392,37 @@ class PDBList:
                 # you can insert here some more log notes that
                 # something has gone wrong.
 
-        # Move the obsolete files to a special folder
-        # NOTE: This should be updated to handle multiple file types and
-        # assemblies. As of now, it only looks for PDB-formatted files.
-        # Using pathlib will be probably the best approach here, to build
-        # and index of which files we have efficiently (or glob them).
+        # Move obsolete files to a special folder, including assemblies.
         for pdb_code in obsolete:
+            structure_name = self._final_structure_filename(pdb_code, file_format)
             if self.flat_tree:
-                old_file = os.path.join(self.local_pdb, f"pdb{pdb_code}.{file_format}")
-                new_dir = self.obsolete_pdb
+                old_dir = Path(self.local_pdb)
+                new_dir = Path(self.obsolete_pdb)
             else:
-                old_file = os.path.join(
-                    self.local_pdb, pdb_code[1:3], f"pdb{pdb_code}.{file_format}"
-                )
-                new_dir = os.path.join(self.obsolete_pdb, pdb_code[1:3])
-            new_file = os.path.join(new_dir, f"pdb{pdb_code}.{file_format}")
-            if os.path.isfile(old_file):
-                os.makedirs(new_dir, exist_ok=True)
-                try:
-                    shutil.move(old_file, new_file)
-                except Exception:
-                    print(f"Could not move {old_file} to obsolete folder")
-            elif os.path.isfile(new_file):
+                old_dir = Path(self.local_pdb) / pdb_code[1:3]
+                new_dir = Path(self.obsolete_pdb) / pdb_code[1:3]
+
+            structure_file = old_dir / structure_name
+            files_to_move = [structure_file]
+            files_to_move.extend(old_dir.glob(f"{pdb_code}.pdb*"))
+            files_to_move.extend(old_dir.glob(f"{pdb_code}-assembly*.cif"))
+
+            moved = False
+            for old_file in set(files_to_move):
+                if old_file.is_file():
+                    new_dir.mkdir(parents=True, exist_ok=True)
+                    try:
+                        shutil.move(str(old_file), str(new_dir / old_file.name))
+                        moved = True
+                    except Exception:
+                        print(f"Could not move {old_file} to obsolete folder")
+
+            if not moved and (new_dir / structure_name).is_file():
                 if self._verbose:
-                    print(f"Obsolete file {old_file} already moved")
+                    print(f"Obsolete file {structure_file} already moved")
             else:
-                if self._verbose:
-                    print(f"Obsolete file {old_file} is missing")
+                if self._verbose and not moved:
+                    print(f"Obsolete file {structure_file} is missing")
 
     def download_pdb_files(
         self,
