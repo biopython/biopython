@@ -19,6 +19,7 @@ except ImportError:
 
 from Bio.PDB import CEAligner
 from Bio.PDB import MMCIFParser
+from Bio.PDB.ccealign import run_cealign
 
 
 class CEAlignerTests(unittest.TestCase):
@@ -104,6 +105,56 @@ class CEAlignerTests(unittest.TestCase):
         aligner.align(s2)
 
         self.assertAlmostEqual(aligner.rms, 0.0, places=3)
+
+
+class RunCEAlignArgumentTests(unittest.TestCase):
+    """run_cealign rejects malformed arguments instead of crashing (#5269).
+
+    Every case here used to take the interpreter down (SIGSEGV) or raise
+    SystemError from inside the C layer, because PyList_GetItem returned NULL
+    on an out-of-range or non-list argument and the result was passed straight
+    to Py_INCREF.
+    """
+
+    @staticmethod
+    def _coords(n=40):
+        return [[float(i), 0.0, 0.0] for i in range(n)]
+
+    def test_rejects_zero_fragment_size(self):
+        coords = self._coords()
+        with self.assertRaises(ValueError):
+            run_cealign(coords, coords, 0, 30)
+
+    def test_rejects_negative_fragment_size(self):
+        coords = self._coords()
+        with self.assertRaises(ValueError):
+            run_cealign(coords, coords, -3, 30)
+
+    def test_rejects_short_coordinate_entries(self):
+        with self.assertRaises(ValueError):
+            run_cealign([[0.0, 0.0]] * 40, [[0.0, 0.0]] * 40, 8, 30)
+
+    def test_rejects_non_numeric_coordinate_entries(self):
+        coords = self._coords()
+        coords[0] = ["a", "b", "c"]
+        with self.assertRaises(TypeError):
+            run_cealign(coords, coords, 8, 30)
+
+    def test_rejects_tuples(self):
+        coords = tuple(map(tuple, self._coords()))
+        with self.assertRaises(TypeError):
+            run_cealign(coords, coords, 8, 30)
+
+    def test_rejects_sequences_shorter_than_a_fragment(self):
+        coords = self._coords(6)
+        with self.assertRaises(ValueError):
+            run_cealign(coords, coords, 8, 30)
+
+    def test_accepts_well_formed_input(self):
+        """The validation must not reject a legitimate call."""
+        coords = [[float(i), float(i * i), 1.0] for i in range(40)]
+        result = run_cealign(coords, coords, 8, 30)
+        self.assertTrue(result)
 
 
 if __name__ == "__main__":

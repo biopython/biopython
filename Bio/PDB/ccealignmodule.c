@@ -372,31 +372,33 @@ getCoords(PyObject *L, int length)
     // Make space for the current coords
     pcePoint coords = (pcePoint)PyMem_RawMalloc(sizeof(cePoint) * length);
 
-    if (!coords)
+    if (!coords) {
+        PyErr_NoMemory();
         return NULL;
+    }
 
     // loop through the arguments, pulling out the
     // XYZ coordinates.
     for (int i = 0; i < length; i++) {
         PyObject *curCoord = PyList_GetItem(L, i);
-        Py_INCREF(curCoord);
+        if (!curCoord || !PyList_Check(curCoord) || PyList_Size(curCoord) < 3) {
+            PyMem_RawFree(coords);
+            PyErr_SetString(PyExc_ValueError,
+                            "each coordinate must be a list of at least three numbers");
+            return NULL;
+        }
 
-        PyObject *curVal = PyList_GetItem(curCoord, 0);
-        Py_INCREF(curVal);
-        coords[i].x = PyFloat_AsDouble(curVal);
-        Py_DECREF(curVal);
+        double *xyz[3] = {&coords[i].x, &coords[i].y, &coords[i].z};
 
-        curVal = PyList_GetItem(curCoord, 1);
-        Py_INCREF(curVal);
-        coords[i].y = PyFloat_AsDouble(curVal);
-        Py_DECREF(curVal);
-
-        curVal = PyList_GetItem(curCoord, 2);
-        Py_INCREF(curVal);
-        coords[i].z = PyFloat_AsDouble(curVal);
-
-        Py_DECREF(curVal);
-        Py_DECREF(curCoord);
+        for (int j = 0; j < 3; j++) {
+            PyObject *curVal = PyList_GetItem(curCoord, j);
+            double value = PyFloat_AsDouble(curVal);
+            if (value == -1.0 && PyErr_Occurred()) {
+                PyMem_RawFree(coords);
+                return NULL;
+            }
+            *xyz[j] = value;
+        }
     }
 
     return coords;
@@ -681,16 +683,38 @@ PyCealign(PyObject *Py_UNUSED(self), PyObject *args)
 
     PyObject *listA, *listB, *result;
 
-    /* Unpack the arguments from Python */
-    PyArg_ParseTuple(args, "OO|ii", &listA, &listB, &fragmentSize, &gapMax);
+    /* Unpack the arguments from Python. The coordinate containers must be
+       lists: PyList_Size and PyList_GetItem are called on them below, and both
+       fail on any other sequence type. */
+    if (!PyArg_ParseTuple(args, "O!O!|ii", &PyList_Type, &listA, &PyList_Type, &listB,
+                          &fragmentSize, &gapMax))
+        return NULL;
+
+    if (fragmentSize < 1) {
+        PyErr_SetString(PyExc_ValueError, "fragmentSize must be a positive integer");
+        return NULL;
+    }
 
     /* Get the list lengths */
     const int lenA = (int)PyList_Size(listA);
     const int lenB = (int)PyList_Size(listB);
 
+    if (lenA < fragmentSize || lenB < fragmentSize) {
+        PyErr_SetString(PyExc_ValueError,
+                        "each coordinate list must hold at least fragmentSize residues");
+        return NULL;
+    }
+
     /* get the coodinates from the Python objects */
     pcePoint coordsA = (pcePoint)getCoords(listA, lenA);
+    if (!coordsA)
+        return NULL;
+
     pcePoint coordsB = (pcePoint)getCoords(listB, lenB);
+    if (!coordsB) {
+        PyMem_RawFree(coordsA);
+        return NULL;
+    }
 
     /* calculate the distance matrix for each protein */
     double **dA = (double **)calcDM(coordsA, lenA);
