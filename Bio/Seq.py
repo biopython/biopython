@@ -2101,6 +2101,19 @@ class Seq(_SeqAbstractBaseClass):
         Seq('ACGT')
         >>> print(my_partially_defined_sequence[3:7])
         ACGT
+
+        An empty dictionary describes a sequence of known length with no
+        defined region at all, and is therefore equivalent to passing None:
+
+        >>> my_undefined_sequence = Seq({}, 10)
+        >>> my_undefined_sequence
+        Seq(None, length=10)
+        >>> len(my_undefined_sequence)
+        10
+        >>> print(my_undefined_sequence)
+        Traceback (most recent call last):
+        ...
+        Bio.Seq.UndefinedSequenceError: Sequence content is undefined
         """
         if data is None:
             if length is None:
@@ -2146,7 +2159,11 @@ class Seq(_SeqAbstractBaseClass):
                         _data[start] = seq
                         current = start
                     end = start + len(seq)
-                if end > length:
+                if not data:
+                    # An empty dictionary describes a sequence of known length
+                    # with no defined region, exactly like None does.
+                    self._data = _UndefinedSequenceData(length)
+                elif end > length:
                     raise ValueError(
                         "Provided sequence data extend beyond sequence length."
                     )

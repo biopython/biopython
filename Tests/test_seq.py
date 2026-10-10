@@ -1333,6 +1333,28 @@ class TestSeqDefined(unittest.TestCase):
             self.assertTrue(seq.defined, msg=repr(seq))
             self.assertEqual(seq.defined_ranges, (), msg=repr(seq))
 
+    def test_empty_dict_is_fully_undefined(self):
+        """An empty dict describes a sequence of known length with no defined
+        region, and must behave exactly like passing None (issue #5329)."""
+        for seq in [Seq.Seq({}, length=4), Seq.Seq(None, length=4)]:
+            self.assertEqual(repr(seq), "Seq(None, length=4)")
+            self.assertEqual(len(seq), 4)
+            self.assertFalse(seq.defined)
+            self.assertEqual(seq.defined_ranges, ())
+            with self.assertRaises(Seq.UndefinedSequenceError):
+                print(seq)
+
+    def test_empty_dict_concatenation(self):
+        left = Seq.Seq({}, length=4) + Seq.Seq("ACGT")
+        right = Seq.Seq("ACGT") + Seq.Seq({}, length=4)
+        self.assertEqual(repr(left), "Seq({4: 'ACGT'}, length=8)")
+        self.assertEqual(repr(right), "Seq({0: 'ACGT'}, length=8)")
+
+    def test_empty_dict_multiplication_matches_none(self):
+        for seq in [Seq.Seq({}, length=4), Seq.Seq(None, length=4)]:
+            with self.assertRaises(Seq.UndefinedSequenceError):
+                seq * 2
+
     def test_undefined(self):
         seq = Seq.Seq(None, length=1)
         self.assertFalse(seq.defined)
