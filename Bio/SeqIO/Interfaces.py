@@ -20,16 +20,27 @@ from typing import IO
 from typing import Optional
 from typing import Union
 
+
 from Bio import StreamModeError
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+
+from typing_extensions import TypeAlias
+from typing import Callable
+from _typeshed import FileDescriptorOrPath
+
+
+_Opener: TypeAlias = Callable[[str, int], int]
 
 # https://docs.python.org/3/glossary.html#term-path-like-object
 _PathLikeTypes = (PathLike, str, bytes)
 _IOSource = IO[AnyStr] | PathLike | str | bytes
 _TextIOSource = _IOSource[str]
 _BytesIOSource = _IOSource[bytes]
+# _OpenKwargs = dict[str, Union[str, int, bool, _Opener, None]]
+_OpenKwargs: TypeAlias = dict[str, Optional[Union[str, int, bool, _Opener]]]
+_Handleish = Union[FileDescriptorOrPath, IO]
 
 
 class SequenceIterator(ABC, Generic[AnyStr]):
