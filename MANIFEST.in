@@ -61,6 +61,7 @@ include Bio/py.typed
 include BioSQL/py.typed
 
 # Make sure the required data files are included.
+include Bio/PDB/rotamers/*  # Include rotamer data files for Mutate
 include Bio/Entrez/DTDs/*.dtd  # Include DTD files for Entrez
 include Bio/Entrez/DTDs/*.ent  # Include DTD files for Entrez
 include Bio/Entrez/DTDs/*.mod  # Include DTD files for Entrez
