@@ -144,12 +144,26 @@ class IsoelectricPoint:
          - pH: the pH at which the current charge of the protein is computed.
            This pH lies at the centre of the interval (mean of `min_` and `max_`).
          - min\_: the minimum of the interval. Initial value defaults to 4.05,
-           which is below the theoretical minimum, when the protein is composed
-           exclusively of aspartate.
+           and is lowered automatically towards 0 when the pI lies below it
+           (strongly acidic sequences, e.g. composed exclusively of aspartate).
          - max\_: the maximum of the the interval. Initial value defaults to 12,
-           which is above the theoretical maximum, when the protein is composed
-           exclusively of arginine.
+           and is raised automatically towards 14 when the pI lies above it
+           (strongly basic sequences, e.g. composed exclusively of arginine).
         """
+        # The default bracket may exclude the pI entirely: strongly acidic
+        # sequences (poly-aspartate: pI ~3) sit below 4.05, strongly basic
+        # ones (poly-arginine: pI ~13) sit above 12, and bisection inside an
+        # invalid bracket converges to an endpoint. The charge is
+        # monotonically decreasing in pH, so widen the bracket once until the
+        # charge is positive at min_ and negative at max_.
+        while self.charge_at_pH(min_) < 0.0 and min_ > 0.0:
+            min_ = max(0.0, min_ - 1.0)
+        while self.charge_at_pH(max_) > 0.0 and max_ < 14.0:
+            max_ = min(14.0, max_ + 1.0)
+        return self._pi_bisect(pH, min_, max_)
+
+    def _pi_bisect(self, pH, min_, max_):
+        """Bisect within a bracket that contains a charge sign change."""
         charge = self.charge_at_pH(pH)
         if max_ - min_ > 0.0001:
             if charge > 0.0:
@@ -157,7 +171,7 @@ class IsoelectricPoint:
             else:
                 max_ = pH
             next_pH = (min_ + max_) / 2
-            return self.pi(next_pH, min_, max_)
+            return self._pi_bisect(next_pH, min_, max_)
         return pH
 
 
