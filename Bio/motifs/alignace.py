@@ -47,7 +47,8 @@ def read(handle):
             record.sequences = []
         elif line[:5] == "Motif":
             words = line.split()
-            assert words[0] == "Motif"
+            if words[0] != "Motif":
+                raise ValueError(f"Unexpected line format in AlignACE output: {line!r}")
             number = int(words[1])
             instances = []
         elif line[:3] == "MAP":
