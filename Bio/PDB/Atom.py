@@ -283,19 +283,30 @@ class Atom:
         :return: Whether the atoms are strictly equal
         :rtype: bool
         """
-        if not isinstance(other, type(self)):
+        if not isinstance(other, type(self)) or self.name != other.name:
+            return False
+
+        if self.bfactor is None:
+            if other.bfactor is not None:
+                return False
+        elif other.bfactor is None or not np.allclose(self.bfactor, other.bfactor):
+            return False
+
+        if self.occupancy is None:
+            if other.occupancy is not None:
+                return False
+        elif other.occupancy is None or not np.allclose(
+            self.occupancy, other.occupancy
+        ):
             return False
 
         return (
-            self.name == other.name
-            and np.isclose(self.bfactor, other.bfactor)
-            and np.isclose(self.occupancy, other.occupancy)
-            and self.altloc == other.altloc
+            self.altloc == other.altloc
             and self.fullname == other.fullname
             and (np.allclose(self.coord, other.coord) if compare_coordinates else True)
-            and getattr(self, "element", None) == getattr(self, "element", None)
-            and getattr(self, "pqr_charge", None) == getattr(self, "pqr_charge", None)
-            and getattr(self, "radius", None) == getattr(self, "radius", None)
+            and getattr(self, "element", None) == getattr(other, "element", None)
+            and getattr(self, "pqr_charge", None) == getattr(other, "pqr_charge", None)
+            and getattr(self, "radius", None) == getattr(other, "radius", None)
         )
 
     # set methods
