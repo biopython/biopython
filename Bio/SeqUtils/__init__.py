@@ -179,13 +179,16 @@ def GC123(seq):
         try:
             n = d["G"][i] + d["C"][i] + d["T"][i] + d["A"][i]
             gc[i] = (d["G"][i] + d["C"][i]) * 100.0 / n
-        except Exception:  # TODO - ValueError?
+        except ZeroDivisionError:
             gc[i] = 0
 
         gcall = gcall + d["G"][i] + d["C"][i]
         nall = nall + n
 
-    gcall = 100.0 * gcall / nall
+    if nall == 0:
+        gcall = 0
+    else:
+        gcall = 100.0 * gcall / nall
     return gcall, gc[0], gc[1], gc[2]
 
 
