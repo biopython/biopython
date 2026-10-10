@@ -1,0 +1,37 @@
+>Feature Sc_16
+1    7000    REFERENCE
+                        PubMed         8849441
+<1    1050    mRNA
+                        product        acid trehalase
+<1    1050    gene
+                        gene           ATH1
+<1    1009    CDS
+                        product        acid trehalase
+                        product        Ath1p
+                        codon_start    2
+[offset=2000]
+1253    420    mRNA
+                        product        Ypr027cp
+1253    420    gene
+                        gene           YPR027C
+1253    420    CDS
+                        product        Ypr027cp
+                        note           hypothetical protein
+2626    2535    gene
+                        gene           trnF
+2626    2590    tRNA
+2570    2535
+                        product        tRNA-Phe
+2570    2535    exon
+                        number         1
+2626    2590    exon
+                        number         2
+3450    3572    mRNA
+3706    4536
+                        product        Yip2p
+3450    4536    gene
+                        gene           YIP2
+3522    3572    CDS
+3706    4197
+                        product        Yip2p
+                        note      similar to human polyposis locus protein 1 (YPD)
