@@ -179,6 +179,71 @@ class QCPSuperimposerTest(unittest.TestCase):
         rms_fitted = np.sqrt(((ref - mob_fitted) ** 2).sum() / ref.shape[0])
         self.assertAlmostEqual(rms, rms_fitted, places=6)
 
+    def test_exact_180_degree_rotation_of_wide_spread_coords(self):
+        """A wide-spread set rotated by exactly 180 degrees must fit back.
+
+        Bug #5346: the adjugate cascade could return a noise-dominated
+        quaternion for these inputs, reporting the correct RMSD (which
+        depends only on the converged eigenvalue) while the fitted
+        coordinates were completely misaligned.
+        """
+        rng = np.random.default_rng(0)
+        ref = rng.uniform(-100.0, 100.0, size=(30, 3))
+        axis = rng.normal(size=3)
+        axis = axis / np.linalg.norm(axis)
+        K = np.array(
+            [
+                [0, -axis[2], axis[1]],
+                [axis[2], 0, -axis[0]],
+                [-axis[1], axis[0], 0],
+            ]
+        )
+        rot180 = np.eye(3) + np.sin(np.pi) * K + (1 - np.cos(np.pi)) * (K @ K)
+        mob = ref @ rot180
+
+        sup = QCPSuperimposer()
+        sup.set(ref, mob)
+        sup.run()
+        rot, tran = sup.get_rotran()
+        fitted = mob @ rot + tran
+        rms_fitted = np.sqrt(((ref - fitted) ** 2).sum(1).mean())
+
+        self.assertLess(sup.get_rms(), 0.5)
+        self.assertLess(rms_fitted, 0.5)
+        self.assertAlmostEqual(sup.get_rms(), rms_fitted, places=6)
+
+    def test_collinear_reference_set(self):
+        """A rank-deficient (collinear) reference set must still fit back.
+
+        Bug #5309: three collinear reference points rotated rigidly made the
+        adjugate cascade return the identity rotation while reporting
+        RMSD = 0. The 4x4 key matrix is singular here, so the eigh fallback
+        must take over and recover the true rotation.
+        """
+        ref = np.array([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [2.0, 0.0, 0.0]])
+        theta = 0.9
+        axis = np.array([1.0, 2.0, 3.0])
+        axis = axis / np.linalg.norm(axis)
+        K = np.array(
+            [
+                [0, -axis[2], axis[1]],
+                [axis[2], 0, -axis[0]],
+                [-axis[1], axis[0], 0],
+            ]
+        )
+        rot = np.eye(3) + np.sin(theta) * K + (1 - np.cos(theta)) * (K @ K)
+        mob = ref @ rot.T + np.array([5.0, -2.0, 7.0])
+
+        sup = QCPSuperimposer()
+        sup.set(ref, mob)
+        sup.run()
+        rot_qcp, tran = sup.get_rotran()
+        fitted = mob @ rot_qcp + tran
+        rms_fitted = np.sqrt(((ref - fitted) ** 2).sum(1).mean())
+
+        self.assertLess(rms_fitted, 1e-6)
+        self.assertAlmostEqual(sup.get_rms(), rms_fitted, places=6)
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
