@@ -199,7 +199,6 @@ PathGenerator_next(PathGenerator* self)
     if (M[0][0].path == DONE) return NULL;
     for (j = 0; j <= nB; j++) {
         path = M[0][j].path;
-        fprintf(stderr, "i = %d j = %d path = %d\n", i, j, path);
         if (path) {
             /* We already have a path. Prune the path to see if there are
              * any alternative paths. */
@@ -266,14 +265,6 @@ PathGenerator_next(PathGenerator* self)
         i--;
         M[i][j].path = path;
     }
-    fprintf(stderr, "nA = %d, nB = %d\n", nA, nB);
-    for (i = 0; i <= nA; i++) {
-        for (j = 0; j <= nB; j++) {
-            fprintf(stderr, "%i\t", M[i][j].trace);
-        }
-        fprintf(stderr, "\n");
-    }
-    fflush(stderr);
     return PathGenerator_create_path(self, j);
 }
 
@@ -1018,6 +1009,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
             M[i][j].trace = trace;
             row[j] = score;
         }
+        row[0] = -DBL_MAX;
     }
     score = -DBL_MAX;
     for (j = 0; j <= nB; j++) {
