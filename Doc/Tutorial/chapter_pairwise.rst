@@ -2371,8 +2371,8 @@ for this region. Note the +1 frameshift event after Leu-25:
 
    >>> from Bio.Seq import Seq
    >>> from Bio.Align import codon_align
-   >>> nuc_ecoli = Seq('TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT')
-   >>> pro_ecoli = Seq('SDVLRGYLDYDAKKER')
+   >>> nuc_ecoli = Seq("TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT")
+   >>> pro_ecoli = Seq("SDVLRGYLDYDAKKER")
    >>> alignments = codon_align(pro_ecoli, nuc_ecoli)
    >>> len(alignments)
    1
@@ -2428,12 +2428,14 @@ in which no frame shift occurs:
    >>> from Bio.Seq import Seq
    >>> from Bio.SeqRecord import SeqRecord
    >>> from Bio.Align import codon_align, global_align
-   >>> nuc_ecoli = SeqRecord(Seq('TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT'),
-   ...                       id="E.coli")
-   >>> nuc_shigella = SeqRecord(Seq('TCCGACGTTCTTAGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT'),
-   ...                       id="Shigella")
-   >>> pro_ecoli = SeqRecord(Seq('SDVLRGYLDYDAKKER'), id="E.coli")
-   >>> pro_shigella = SeqRecord(Seq('SDVLRGIFDYDAKKER'), id="Shigella")
+   >>> nuc_ecoli = SeqRecord(
+   ...     Seq("TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT"), id="E.coli"
+   ... )
+   >>> nuc_shigella = SeqRecord(
+   ...     Seq("TCCGACGTTCTTAGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT"), id="Shigella"
+   ... )
+   >>> pro_ecoli = SeqRecord(Seq("SDVLRGYLDYDAKKER"), id="E.coli")
+   >>> pro_shigella = SeqRecord(Seq("SDVLRGIFDYDAKKER"), id="Shigella")
    >>> protein_alignment = global_align(pro_ecoli, pro_shigella)[0]
    >>> print(protein_alignment)
    E.coli            0 SDVLRGYLDYDAKKER 16
