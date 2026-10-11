@@ -2415,6 +2415,48 @@ The ``codon_align`` convenience function accepts optional
 keyword arguments, which are passed to the ``CodonAligner``
 constructor as is (see :ref:`sec:codon-aligner`).
 
+You can also use this convenience function to align nucleotide sequences
+to each other, given the corresponding protein alignment. For this purpose,
+supply a protein alignment as the first argument, and nucleotide sequences
+as the second argument, with each nucleotide sequence corresponding with
+one amino acid sequence in the protein alignment. The ``codon_align``
+convenience function first creates a ``CodonAligner`` object and uses it
+to align each protein sequence to the corresponding nucleotide sequence.
+It then uses the ``mapall`` function (as described below) to generate a
+nucleotide alignment based on the protein alignment and the alignment of
+each protein sequence to the corresopnding nucleotide sequence.
+
+This is an example with a protein alignment of two proteins, and the
+corresponding nucleotide sequences. A frame shift occurs in the first
+sequence, but not in the second sequence:
+
+.. doctest . lib:numpy
+
+.. code:: pycon
+
+   >>> from Bio.Align import Alignment, codon_align
+   >>> nuc1 = "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG"
+   >>> nuc2 = "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG"
+   >>> aa1 = "SGTSRTKRLLLLAALGAAGGALE"
+   >>> aa2 = "SGTARTKLLLLLAALCAAGGALE"
+   >>> protein_alignment = Alignment([aa1, aa2])
+   >>> print(protein_alignment)
+   target            0 SGTSRTKRLLLLAALGAAGGALE 23
+                     0 |||.|||.|||||||.||||||| 23
+   query             0 SGTARTKLLLLLAALCAAGGALE 23
+   <BLANKLINE>
+   >>> alignment = codon_align(protein_alignment, [nuc1, nuc2])
+   >>> print(alignment)
+   target            0 TCAGGGACTTCGAGAACCAAGCGC 24
+                     0 |||||||||.||||||||||||..
+   query             0 TCAGGGACTGCGAGAACCAAGCTA 24
+   <BLANKLINE>
+   target           23 CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG 68
+                    24 ||.||||||||||||||||||.|||||||||||||.||.|||||| 69
+   query            24 CTGCTGCTGCTGGCTGCGCTCTGCGCCGCAGGTGGGGCGCTGGAG 69
+   <BLANKLINE>
+
+
 .. _`sec:codon-aligner`:
 
 Aligning a nucleotide sequence to an amino acid sequence
