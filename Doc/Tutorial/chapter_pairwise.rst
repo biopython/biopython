@@ -2428,10 +2428,12 @@ in which no frame shift occurs:
    >>> from Bio.Seq import Seq
    >>> from Bio.SeqRecord import SeqRecord
    >>> from Bio.Align import codon_align, global_align
-   >>> nuc_ecoli = SeqRecord(Seq("TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT"),
-   ...                       id="E.coli")
-   >>> nuc_shigella = SeqRecord(Seq("TCCGACGTTCTTAGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT"),
-   ...                       id="Shigella")
+   >>> nuc_ecoli = SeqRecord(
+   ...     Seq("TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT"), id="E.coli"
+   ... )
+   >>> nuc_shigella = SeqRecord(
+   ...     Seq("TCCGACGTTCTTAGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT"), id="Shigella"
+   ... )
    >>> pro_ecoli = SeqRecord(Seq("SDVLRGYLDYDAKKER"), id="E.coli")
    >>> pro_shigella = SeqRecord(Seq("SDVLRGIFDYDAKKER"), id="Shigella")
    >>> protein_alignment = global_align(pro_ecoli, pro_shigella)[0]
