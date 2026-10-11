@@ -954,7 +954,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     M = paths->M;
     for (i = 1; i <= nA; i++) {
         cA = sA[i-1];
-        for (j = (int)nB; j > 0; j--) {
+        for (j = (int)nB; j >= 0; j--) {
             score = -DBL_MAX;
             trace = 0;
             if (j >= 3) {
@@ -1009,7 +1009,6 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
             M[i][j].trace = trace;
             row[j] = score;
         }
-        row[0] = -DBL_MAX;
     }
     score = -DBL_MAX;
     for (j = 0; j <= nB; j++) {
