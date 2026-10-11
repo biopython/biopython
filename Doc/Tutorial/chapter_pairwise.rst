@@ -2424,7 +2424,7 @@ convenience function first creates a ``CodonAligner`` object and uses it
 to align each protein sequence to the corresponding nucleotide sequence.
 It then uses the ``mapall`` function (as described below) to generate a
 nucleotide alignment based on the protein alignment and the alignment of
-each protein sequence to the corresopnding nucleotide sequence.
+each protein sequence to the corresponding nucleotide sequence.
 
 This is an example with a protein alignment of two proteins, and the
 corresponding nucleotide sequences. A frame shift occurs in the first
