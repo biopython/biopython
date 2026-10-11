@@ -5256,10 +5256,46 @@ def codon_align(seqA, seqB, codon_table=None, **kwargs):
     query            20 CGTGTATGCCCTAAGCTGAGCCCGTCG 47
     <BLANKLINE>
 
+    You can also use this function to generate a nucleotide
+    alignment, given a protein alignment and the nucleotide
+    sequences corresponding to each protein:
+
+    >>> dna1 = "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGC"
+    >>> dna2 = "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGC"
+    >>> pro1 = "SGTSRTKRLLLLAALG"
+    >>> pro2 = "SGTARTKLLLLLAALC"
+    >>> protein_alignment = Alignment([pro1, pro2])
+    >>> print(protein_alignment)
+    target            0 SGTSRTKRLLLLAALG 16
+                      0 |||.|||.|||||||. 16
+    query             0 SGTARTKLLLLLAALC 16
+    <BLANKLINE>
+    >>> alignment = codon_align(protein_alignment, [dna1, dna2])
+    >>> print(alignment)
+    target            0 TCAGGGACTTCGAGAACCAAGCGC 24
+                      0 |||||||||.||||||||||||..
+    query             0 TCAGGGACTGCGAGAACCAAGCTA 24
+    <BLANKLINE>
+    target           23 CTCCTGCTGCTGGCTGCGCTCGGC 47
+                     24 ||.||||||||||||||||||.|| 48
+    query            24 CTGCTGCTGCTGGCTGCGCTCTGC 48
+    <BLANKLINE>
+
     """
     aligner = CodonAligner(codon_table=codon_table, **kwargs)
-    alignments = aligner.align(seqA, seqB)
-    return alignments
+    if isinstance(seqA, Alignment):
+        protein_alignment = seqA
+        protein_sequences = protein_alignment.sequences
+        nucleotide_sequences = seqB
+        alignments = []
+        for pro_seq, nuc_seq in zip(protein_sequences, nucleotide_sequences):
+            alignment = codon_align(pro_seq, nuc_seq)[0]
+            alignments.append(alignment)
+        codon_alignment = protein_alignment.mapall(alignments)
+        return codon_alignment
+    else:
+        alignments = aligner.align(seqA, seqB)
+        return alignments
 
 
 # fmt: off

@@ -2360,40 +2360,30 @@ alignments.and then use this object to perform the alignments (see section
 to align many sequences. However, if you want to align just a few sequences,
 you may want to use the ``codon_align`` convenience function. This function
 creates a ``CodonAligner`` object, using the provided arguments to set the
-alignment parameters, and then aligns the two sequences to each other:
+alignment parameters, and then aligns the two sequences to each other. As an
+example, here we align the amino acid sequence around Leu-25 of peptide chain
+release factor RF2 of Escherichia coli against the corresponding genome sequence
+for this region. Note the +1 frameshift event after Leu-25:
 
 .. doctest . lib:numpy
 
 .. code:: pycon
 
+   >>> from Bio.Seq import Seq
    >>> from Bio.Align import codon_align
-   >>> nuc = "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG"
-   >>> aa = "SGTSRTKRLLLLAALGAAGGALE"
-   >>> alignments = codon_align(aa, nuc)
+   >>> nuc_ecoli = Seq("TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT")
+   >>> pro_ecoli = Seq("SDVLRGYLDYDAKKER")
+   >>> alignments = codon_align(pro_ecoli, nuc_ecoli)
    >>> len(alignments)
    1
    >>> alignment = alignments[0]
    >>> print(alignment)
-   target            0 S  G  T  S  R  T  K  R   8
-   query             0 TCAGGGACTTCGAGAACCAAGCGC 24
-   <BLANKLINE>
-   target            8 L  L  L  L  A  A  L  G  A  A  G  G  A  L  E   23
-   query            23 CTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG 68
+   target            0 S  D  V  L  R  G  Y  L  -D  Y  D  A  K  K  E  R   16
+   query             0 TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT 49
    <BLANKLINE>
 
-Note that the length of the nucleotide sequence (68) is one less than expected
-(:math:`3 \times 23 = 69`) due to a frameshift event. You can see this frame
-shift by printing out the original sequence and the aligned sequence:
-
-.. blacken-docs:off
-
-.. cont-doctest
-
-.. code:: pycon
-
-   >>> print(alignment[1]); print(nuc)
-   TCAGGGACTTCGAGAACCAAGCGCCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG
-   TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGCGCCGCAGGTGGAGCACTGGAG
+Note that the length of the nucleotide sequence (49) is one greater than expected
+(:math:`3 \times 16 = 48`) due to a frameshift event.
 
 .. blacken-docs:on
 
@@ -2404,16 +2394,61 @@ The alignment coordinates will tell you where exactly the frameshift occurs:
 .. code:: pycon
 
    >>> alignment.coordinates
-   array([[ 0,  8,  8, 23],
-          [ 0, 24, 23, 68]])
+   array([[ 0,  8,  8, 16],
+          [ 0, 24, 25, 49]])
+
 
 The first row shows the alignment coordinates for the amino acid sequence.
 The alignment coordinates for the nucleotide sequence, in the second row,
-shows a frameshift of -1 after 24 nucleotides.
+shows a frameshift of +1 after 24 nucleotides.
 
 The ``codon_align`` convenience function accepts optional
 keyword arguments, which are passed to the ``CodonAligner``
 constructor as is (see :ref:`sec:codon-aligner`).
+
+You can also use this convenience function to align nucleotide sequences
+to each other, given the corresponding protein alignment. For this purpose,
+supply a protein alignment as the first argument, and nucleotide sequences
+as the second argument, with each nucleotide sequence corresponding with
+one amino acid sequence in the protein alignment. The ``codon_align``
+convenience function first creates a ``CodonAligner`` object and uses it
+to align each protein sequence to the corresponding nucleotide sequence.
+It then uses the ``mapall`` function (as described below) to generate a
+nucleotide alignment based on the protein alignment and the alignment of
+each protein sequence to the corresponding nucleotide sequence.
+
+This is an example for an amino acid alignment of the same protein region
+of peptide chain release factor RF2 in Escherichia coli and Shigella dysenteriae,
+in which no frame shift occurs:
+
+.. doctest . lib:numpy
+
+.. code:: pycon
+
+   >>> from Bio.Seq import Seq
+   >>> from Bio.SeqRecord import SeqRecord
+   >>> from Bio.Align import codon_align, global_align
+   >>> nuc_ecoli = SeqRecord(
+   ...     Seq("TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT"), id="E.coli"
+   ... )
+   >>> nuc_shigella = SeqRecord(
+   ...     Seq("TCCGACGTTCTTAGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT"), id="Shigella"
+   ... )
+   >>> pro_ecoli = SeqRecord(Seq("SDVLRGYLDYDAKKER"), id="E.coli")
+   >>> pro_shigella = SeqRecord(Seq("SDVLRGIFDYDAKKER"), id="Shigella")
+   >>> protein_alignment = global_align(pro_ecoli, pro_shigella)[0]
+   >>> print(protein_alignment)
+   E.coli            0 SDVLRGYLDYDAKKER 16
+                     0 ||||||..|||||||| 16
+   Shigella          0 SDVLRGIFDYDAKKER 16
+   <BLANKLINE>
+   >>> alignment = codon_align(protein_alignment, [nuc_ecoli, nuc_shigella])
+   >>> print(alignment)
+   E.coli            0 TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT 49
+                     0 |||||||||||||||||.....||-|||||||||||||||||||||||| 49
+   Shigella          0 TCCGACGTTCTTAGGGGTATCTTT-GACTACGACGCCAAGAAAGAGCGT 48
+   <BLANKLINE>
+
 
 .. _`sec:codon-aligner`:
 
