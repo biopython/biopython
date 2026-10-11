@@ -1018,10 +1018,12 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
             M[i][j].trace = trace;
             row[j] = score;
         }
-        for (j = 2; j >= 0; j--) {
-            M[i][j].trace = 0;
-            row[j] = -DBL_MAX;
-        }
+        M[i][2].trace = 0;
+        row[2] = -DBL_MAX;
+        M[i][1].trace = 0;
+        row[1] = -DBL_MAX;
+        M[i][0].trace = 0;
+        row[0] = -DBL_MAX;
     }
     score = -DBL_MAX;
     for (j = 0; j <= nB; j++) {
