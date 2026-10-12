@@ -178,8 +178,47 @@ class SffTrimedRandomAccess(SffRandomAccess):
 ###################
 
 
+def _is_bgzf_handle(handle):
+    """Return True if handle is a BGZF reader (PRIVATE).
+
+    BGZF (Blocked GNU Zip Format) handles return virtual file offsets
+    from tell() that encode both the compressed block position and the
+    offset within the decompressed block.  These virtual offsets cannot
+    be computed by summing decompressed line lengths, so callers must
+    use tell() at every potential record boundary rather than computing
+    offsets arithmetically.
+    """
+    try:
+        from Bio.bgzf import BgzfReader
+
+        return isinstance(handle, BgzfReader)
+    except ImportError:
+        return False
+
+
 class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
-    """Random access to a simple sequential sequence file."""
+    """Random access to a simple sequential sequence file.
+
+    Performance notes
+    -----------------
+    The ``__iter__`` method uses two optimisations to reduce overhead
+    when scanning non-header (e.g. sequence) lines:
+
+    1. **First-byte short-circuit**: before invoking the compiled regex
+       ``marker_re``, the first byte of each line is compared against
+       the first byte of the record marker.  For FASTA files (marker
+       ``b">"``) this rejects every sequence line (starting with
+       A/C/G/T/…) in a single byte comparison, avoiding the regex
+       engine entirely on ~99 % of input lines.
+
+    2. **Arithmetic offset tracking**: for plain (non-BGZF) files the
+       offset of the *next* record is computed as
+       ``start_offset + length`` instead of calling ``handle.tell()``
+       on every line.  This eliminates one ``lseek(2)`` syscall per
+       line.  BGZF files still use ``tell()`` because their virtual
+       offsets encode both compressed-block position and intra-block
+       offset and cannot be computed from decompressed byte counts.
+    """
 
     def __init__(self, filename, format):
         """Initialize the class."""
@@ -201,32 +240,48 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
         self._marker_re = re.compile(b"^" + marker)
 
     def __iter__(self):
-        """Return (id, offset, length) tuples."""
+        """Return (id, offset, length) tuples.
+
+        Scans the file line-by-line in binary mode, yielding one tuple
+        per record.  Two optimisations reduce per-line overhead:
+
+        - A single-byte guard (``line[0:1] == marker_first``) rejects
+          non-header lines before the regex is invoked.
+        - For non-BGZF files, ``handle.tell()`` is called only at
+          record boundaries; intermediate offsets are computed from
+          cumulative ``len(line)`` sums.
+        """
         marker_offset = len(self._marker)
         marker_re = self._marker_re
+        marker_first = self._marker[0:1]  # first byte for short-circuit
         handle = self._handle
         handle.seek(0)
+        use_tell = _is_bgzf_handle(handle)
         # Skip any header before first record
         while True:
             start_offset = handle.tell()
             line = handle.readline()
-            if marker_re.match(line) or not line:
+            if (line[0:1] == marker_first and marker_re.match(line)) or not line:
                 break
         # Should now be at the start of a record, or end of the file
-        while marker_re.match(line):
+        while line[0:1] == marker_first and marker_re.match(line):
             # Here we can assume the record.id is the first word after the
             # marker. This is generally fine... but not for GenBank, EMBL, Swiss
             id = line[marker_offset:].strip().split(None, 1)[0]
             length = len(line)
             while True:
-                end_offset = handle.tell()
+                if use_tell:
+                    end_offset = handle.tell()
                 line = handle.readline()
-                if marker_re.match(line) or not line:
+                if not line or (line[0:1] == marker_first and marker_re.match(line)):
+                    if not use_tell:
+                        end_offset = start_offset + length
                     yield id.decode(), start_offset, length
                     start_offset = end_offset
                     break
                 else:
-                    # Track this explicitly as can't do file offset difference on BGZF
+                    # Track this explicitly as can't do file offset
+                    # difference on BGZF
                     length += len(line)
         assert not line, repr(line)
 
@@ -235,11 +290,12 @@ class SequentialSeqFileRandomAccess(SeqFileRandomAccess):
         # For non-trivial file formats this must be over-ridden in the subclass
         handle = self._handle
         marker_re = self._marker_re
+        marker_first = self._marker[0:1]
         handle.seek(offset)
         lines = [handle.readline()]
         while True:
             line = handle.readline()
-            if marker_re.match(line) or not line:
+            if not line or (line[0:1] == marker_first and marker_re.match(line)):
                 # End of file, or start of next record => end of this record
                 break
             lines.append(line)
