@@ -8,11 +8,11 @@ In the Biopython directory, install the required packages for building the docum
 
     pip install -r .circleci/requirements-sphinx.txt
 
-ReStructered Text Markup Language
+reStructuredText Markup Language
 ---------------------------------
 
-The tutorials are written in `ReStructered Text <https://en.m.wikipedia.org/wiki/ReStructuredText>`_ format.
-Read the `Sphix reST Primer <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#hyperlinks>`_ to learn how to use this format.
+The tutorials are written in `reStructuredText <https://en.m.wikipedia.org/wiki/ReStructuredText>`_ format.
+Read the `Sphinx reST Primer <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#hyperlinks>`_ to learn how to use this format.
 
 Building the documentation
 --------------------------
