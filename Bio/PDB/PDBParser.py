@@ -184,7 +184,15 @@ class PDBParser:
                     serial_number = int(line[6:11])
                 except Exception:
                     serial_number = 0
-                resseq = int(line[22:26].split()[0])  # sequence identifier
+                try:
+                    resseq = int(line[22:26].split()[0])  # sequence identifier
+                except IndexError:
+                    resseq = 0
+                    warnings.warn(
+                        "Empty residue sequence identifier in PDB file; defaulting "
+                        "residue sequence number to 0"
+                    )
+
                 icode = line[26]  # insertion code
                 if record_type == "HETATM":  # hetero atom flag
                     if resname == "HOH" or resname == "WAT":
