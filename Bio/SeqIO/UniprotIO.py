@@ -24,7 +24,8 @@ from Bio import SeqFeature
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-from .Interfaces import SequenceIterator, _BytesIOSource
+from .Interfaces import _BytesIOSource
+from .Interfaces import SequenceIterator
 
 NS = "{http://uniprot.org/uniprot}"
 REFERENCE_JOURNAL = "%(name)s %(volume)s:%(first)s-%(last)s(%(pub_date)s)"

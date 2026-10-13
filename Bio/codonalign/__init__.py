@@ -59,6 +59,10 @@ def build(
     >>> pro1 = SeqRecord(Seq('MSR'), id='pro1')
     >>> pro2 = SeqRecord(Seq('M-R'), id='pro2')
     >>> aln = MultipleSeqAlignment([pro1, pro2])
+    >>> print(aln)
+    Alignment with 2 rows and 3 columns
+    MSR pro1
+    M-R pro2
     >>> codon_aln = build(aln, [seq1, seq2])
     >>> print(codon_aln)
     CodonAlignment with 2 rows and 9 columns (3 codons)
@@ -68,42 +72,38 @@ def build(
     Using the newer codon aligner in Bio.Align, this analysis can be performed
     as follows:
 
-    >>> from Bio.Align import PairwiseAligner, CodonAligner
-    >>> seq1 = SeqRecord(Seq('ATGTCTCGT'), id='pro1')
-    >>> seq2 = SeqRecord(Seq('ATGCGT'), id='pro2')
-    >>> pro1 = SeqRecord(Seq('MSR'), id='pro1')
-    >>> pro2 = SeqRecord(Seq('MR'), id='pro2')
-    >>> aligner = PairwiseAligner()
-    >>> protein_alignment = aligner.align(pro1, pro2)[0]
+    >>> from Bio.Align import codon_align
+    >>> protein_alignment = aln.alignment  # Convert to a new-style Alignment object
     >>> print(protein_alignment)
     pro1              0 MSR 3
                       0 |-| 3
     pro2              0 M-R 2
     <BLANKLINE>
-    >>> codon_aligner = CodonAligner()
-    >>> alignment1 = codon_aligner.align(pro1, seq1)[0]
-    >>> alignment2 = codon_aligner.align(pro2, seq2)[0]
-    >>> print(alignment1)
-    pro1              0 M  S  R   3
-    pro1              0 ATGTCTCGT 9
-    <BLANKLINE>
-    >>> print(alignment2)
-    pro2              0 M  R   2
-    pro2              0 ATGCGT 6
-    <BLANKLINE>
-    >>> codon_alignment = protein_alignment.mapall([alignment1, alignment2])
+    >>> codon_alignment = codon_align(protein_alignment, [seq1, seq2])
     >>> print(codon_alignment)
     pro1              0 ATGTCTCGT 9
                       0 |||---||| 9
     pro2              0 ATG---CGT 6
     <BLANKLINE>
-    >>> naive_alignment = aligner.align(seq1, seq2)[0]
-    >>> print(naive_alignment)
+
+    For comparison, this is what you get if you directly align the nucleotide
+    sequences to each other:
+
+    >>> from Bio.Align import global_align
+    >>> naive_alignments = global_align(seq1, seq2)
+    >>> for naive_alignment in naive_alignments:
+    ...     print(naive_alignment)
     pro1              0 ATGTCTCGT 9
                       0 |||-|--|| 9
     pro2              0 ATG-C--GT 6
     <BLANKLINE>
+    pro1              0 ATGTCTCGT 9
+                      0 |||---||| 9
+    pro2              0 ATG---CGT 6
+    <BLANKLINE>
 
+    i.e. the correct alignment as well as an incorrect alignment with
+    incomplete codons.
     """
     # TODO
     # add an option to allow the user to specify the returned object?

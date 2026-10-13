@@ -7,10 +7,12 @@
 
 """Map residues of two structures to each other based on a FASTA alignment."""
 
-from typing import Optional
 import warnings
+from typing import Optional
 
-from Bio.Align import Alignment, MultipleSeqAlignment, PairwiseAligner
+from Bio.Align import Alignment
+from Bio.Align import MultipleSeqAlignment
+from Bio.Align import PairwiseAligner
 from Bio.Data import PDBData
 from Bio.PDB import Selection
 from Bio.PDB.Model import Model

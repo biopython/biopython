@@ -8,10 +8,10 @@ import copy
 import gzip
 import unittest
 import warnings
+from contextlib import ExitStack
 from io import BytesIO
 from io import StringIO
 from tempfile import NamedTemporaryFile
-from contextlib import ExitStack
 
 from Bio import AlignIO
 from Bio import BiopythonParserWarning

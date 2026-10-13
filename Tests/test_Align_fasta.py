@@ -17,12 +17,12 @@ substitution_matrix = substitution_matrices.load("BLOSUM62")
 
 class TestFASTAReadingWriting(unittest.TestCase):
     def check_reading_writing(self, path):
-        alignments = Align.parse(path, "fasta")
         stream = StringIO()
-        n = Align.write(alignments, stream, "fasta")
+        with Align.parse(path, "fasta") as alignments:
+            n = Align.write(alignments, stream, "fasta")
         self.assertEqual(n, 1)
-        alignments = Align.parse(path, "fasta")
-        alignment = next(alignments)
+        with Align.parse(path, "fasta") as alignments:
+            alignment = next(alignments)
         stream.seek(0)
         saved_alignments = Align.parse(stream, "fasta")
         saved_alignment = next(saved_alignments)

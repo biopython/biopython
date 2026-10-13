@@ -22,6 +22,14 @@ life, our support for it is now deprecated.
 longer than three characters, preventing residue names from disrupting PDB
 column formatting (issue #5370).
 
+The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
+header line starts with ``CLUSTALW`` as a single word, as written by some tools.
+
+Many thanks to the Biopython developers and community for making this release
+possible, especially the following contributors:
+
+- Mohit Arvind Khakharia (first contribution)
+
 6 August 2026: Biopython 1.88
 =============================
 

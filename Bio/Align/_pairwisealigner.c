@@ -4619,7 +4619,7 @@ static struct fogsaa_queue_node fogsaa_queue_pop(struct fogsaa_queue *queue) {
     } \
     kA = sA[nA-1]; \
     temp = row[0]; \
-    row[0] = nA * right_gap_extend_B; \
+    row[0] = nA * left_gap_extend_B; \
     for (j = 1; j < nB; j++) { \
         kB = sB[j-1]; \
         SELECT_SCORE_GLOBAL(temp + (align_score), \

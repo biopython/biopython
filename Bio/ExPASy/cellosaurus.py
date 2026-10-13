@@ -40,6 +40,10 @@ advance and open it (see the comment below).
     ...
     #15310-LN
     #W7079
+    (HeLa S3 ATG2 DKO) + p40PX-EGFP
+    (HeLa S3 ATG2 DKO) + p40PX-EGFP + mCherry-LC3B
+    (HeLa S3) + p40PX-EGFP
+    (HeLa S3) + p40PX-EGFP + mCherry-LC3B
     (L)PC6
     0.5alpha
     ...

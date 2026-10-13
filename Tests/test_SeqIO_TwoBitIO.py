@@ -14,8 +14,8 @@ class Parsing(unittest.TestCase):
 
     def setUp(self):
         path = "TwoBit/sequence.fa"
-        records = SeqIO.parse(path, "fasta")
-        self.records = list(records)
+        with SeqIO.parse(path, "fasta") as records:
+            self.records = list(records)
 
     def test_littleendian(self, step=5):
         path = "TwoBit/sequence.littleendian.2bit"
@@ -74,9 +74,9 @@ class TestComparisons(unittest.TestCase):
         self.seq1a = record1.seq
         self.seq2a = record2.seq
         path = "TwoBit/sequence.fa"
-        records = SeqIO.parse(path, "fasta")
-        record1 = next(records)
-        record2 = next(records)
+        with SeqIO.parse(path, "fasta") as records:
+            record1 = next(records)
+            record2 = next(records)
         self.seq1b = record1.seq
         self.seq2b = record2.seq
 
@@ -286,10 +286,10 @@ class TestBaseClassMethods(unittest.TestCase):
         self.record2_twobit = next(records)
         self.seq2_twobit = self.record2_twobit.seq
         path = "TwoBit/sequence.fa"
-        records = SeqIO.parse(path, "fasta")
-        self.record1_fasta = next(records)
+        with SeqIO.parse(path, "fasta") as records:
+            self.record1_fasta = next(records)
+            self.record2_fasta = next(records)
         self.seq1_fasta = self.record1_fasta.seq
-        self.record2_fasta = next(records)
         self.seq2_fasta = self.record2_fasta.seq
 
     def tearDown(self):

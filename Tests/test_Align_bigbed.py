@@ -44,27 +44,27 @@ class TestAlign_dna_rna(unittest.TestCase):
 
     def setUp(self):
         data = {}
-        records = SeqIO.parse("Blat/dna.fa", "fasta")
-        for record in records:
-            name, start_end = record.id.split(":")
-            assert name == "chr3"
-            start, end = start_end.split("-")
-            start = int(start)
-            end = int(end)
-            sequence = str(record.seq)
-            assert len(sequence) == end - start
-            data[start] = sequence
+        with SeqIO.parse("Blat/dna.fa", "fasta") as records:
+            for record in records:
+                name, start_end = record.id.split(":")
+                assert name == "chr3"
+                start, end = start_end.split("-")
+                start = int(start)
+                end = int(end)
+                sequence = str(record.seq)
+                assert len(sequence) == end - start
+                data[start] = sequence
         self.dna = Seq(data, length=198295559)  # hg38 chr3
-        records = SeqIO.parse("Blat/rna.fa", "fasta")
-        self.rna = {record.id: record.seq for record in records}
+        with SeqIO.parse("Blat/rna.fa", "fasta") as records:
+            self.rna = {record.id: record.seq for record in records}
 
     def test_reading(self):
         """Test parsing dna_rna.bb."""
         path = "Blat/dna_rna.bb"
-        alignments = Align.parse(path, "bigbed")
-        self.check_alignments(alignments)
-        alignments = iter(alignments)
-        self.check_alignments(alignments)
+        with Align.parse(path, "bigbed") as alignments:
+            self.check_alignments(alignments)
+            alignments = iter(alignments)
+            self.check_alignments(alignments)
         with Align.parse(path, "bigbed") as alignments:
             self.check_alignments(alignments)
         with self.assertRaises(AttributeError):
@@ -76,9 +76,9 @@ class TestAlign_dna_rna(unittest.TestCase):
 
     def test_writing(self):
         """Test writing dna_rna.bb."""
-        alignments = Align.parse(self.path, "bigbed")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigbed")
+            with Align.parse(self.path, "bigbed") as alignments:
+                Align.write(alignments, output, "bigbed")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
@@ -2027,15 +2027,15 @@ AlignmentCounts object with
     def test_reading_psl_34_001(self):
         """Test reading psl_34_001.bb."""
         path = "Blat/psl_34_001.bb"
-        alignments = Align.parse(path, "bigbed")
-        self.check_alignments_psl_34_001(alignments)
+        with Align.parse(path, "bigbed") as alignments:
+            self.check_alignments_psl_34_001(alignments)
 
     def test_writing_psl_34_001(self):
         """Test writing psl_34_001.bb."""
         path = "Blat/psl_34_001.bb"
-        alignments = Align.parse(path, "bigbed")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigbed")
+            with Align.parse(path, "bigbed") as alignments:
+                Align.write(alignments, output, "bigbed")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
@@ -2283,15 +2283,15 @@ AlignmentCounts object with
     def test_reading_psl_34_003(self):
         """Test reading psl_34_003.bb."""
         path = "Blat/psl_34_003.bb"
-        alignments = Align.parse(path, "bigbed")
-        self.check_alignments_psl_34_003(alignments)
+        with Align.parse(path, "bigbed") as alignments:
+            self.check_alignments_psl_34_003(alignments)
 
     def test_writing_psl_34_003(self):
         """Test writing psl_34_003.bb."""
         path = "Blat/psl_34_003.bb"
-        alignments = Align.parse(path, "bigbed")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigbed")
+            with Align.parse(path, "bigbed") as alignments:
+                Align.write(alignments, output, "bigbed")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
@@ -3657,15 +3657,15 @@ AlignmentCounts object with
     def test_reading_psl_34_004(self):
         """Test reading psl_34_004.bb."""
         path = "Blat/psl_34_004.bb"
-        alignments = Align.parse(path, "bigbed")
-        self.check_alignments_psl_34_004(alignments)
+        with Align.parse(path, "bigbed") as alignments:
+            self.check_alignments_psl_34_004(alignments)
 
     def test_writing_psl_34_004(self):
         """Test writing psl_34_004.bb."""
         path = "Blat/psl_34_004.bb"
-        alignments = Align.parse(path, "bigbed")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigbed")
+            with Align.parse(path, "bigbed") as alignments:
+                Align.write(alignments, output, "bigbed")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
@@ -5238,15 +5238,15 @@ AlignmentCounts object with
     def test_reading_psl_34_005(self):
         """Test reading psl_34_005.bb."""
         path = "Blat/psl_34_005.bb"
-        alignments = Align.parse(path, "bigbed")
-        self.check_alignments_psl_34_005(alignments)
+        with Align.parse(path, "bigbed") as alignments:
+            self.check_alignments_psl_34_005(alignments)
 
     def test_writing_psl_34_005(self):
         """Test writing psl_34_005.bb."""
         path = "Blat/psl_34_005.bb"
-        alignments = Align.parse(path, "bigbed")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigbed")
+            with Align.parse(path, "bigbed") as alignments:
+                Align.write(alignments, output, "bigbed")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
@@ -5837,14 +5837,14 @@ AlignmentCounts object with
 
     def test_reading_psl_35_001(self):
         """Test parsing psl_35_001.bb."""
-        alignments = Align.parse(self.path, "bigbed")
-        self.check_alignments(alignments)
+        with Align.parse(self.path, "bigbed") as alignments:
+            self.check_alignments(alignments)
 
     def test_writing_psl_35_001(self):
         """Test writing psl_35_001.bb."""
-        alignments = Align.parse(self.path, "bigbed")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigbed")
+            with Align.parse(self.path, "bigbed") as alignments:
+                Align.write(alignments, output, "bigbed")
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
@@ -6121,19 +6121,19 @@ table bed
         for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
             filename = "bed%d.bb" % bedN
             path = os.path.join("Blat", filename)
-            alignments = Align.parse(path, "bigbed")
             msg = "bed%d" % bedN
-            self.check_autosql(alignments.declaration, bedN, msg)
-            self.check_alignments(alignments, bedN, msg)
+            with Align.parse(path, "bigbed") as alignments:
+                self.check_autosql(alignments.declaration, bedN, msg)
+                self.check_alignments(alignments, bedN, msg)
 
     def test_writing(self):
         """Test Writing alignments in file formats BED3 through BED12."""
         for bedN in (3, 4, 5, 6, 7, 8, 9, 12):
             filename = "bed%d.bb" % bedN
             path = os.path.join("Blat", filename)
-            alignments = Align.parse(path, "bigbed")
             with tempfile.TemporaryFile() as output:
-                Align.write(alignments, output, "bigbed", bedN=bedN)
+                with Align.parse(path, "bigbed") as alignments:
+                    Align.write(alignments, output, "bigbed", bedN=bedN)
                 output.flush()
                 output.seek(0)
                 alignments = Align.parse(output, "bigbed")
@@ -6163,13 +6163,13 @@ class TestAlign_extended_bed(unittest.TestCase):
     def test_reading(self):
         """Test parsing bigbed_extended.bb."""
         path = "Blat/bigbed_extended.littleendian.bb"
-        alignments = Align.parse(path, "bigbed")
-        self.assertEqual(alignments.byteorder, "<")
-        self.check_alignments(alignments)
+        with Align.parse(path, "bigbed") as alignments:
+            self.assertEqual(alignments.byteorder, "<")
+            self.check_alignments(alignments)
         path = "Blat/bigbed_extended.bigendian.bb"
-        alignments = Align.parse(path, "bigbed")
-        self.assertEqual(alignments.byteorder, ">")
-        self.check_alignments(alignments)
+        with Align.parse(path, "bigbed") as alignments:
+            self.assertEqual(alignments.byteorder, ">")
+            self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
         self.assertEqual(
@@ -6901,35 +6901,35 @@ AlignmentCounts object with
         path = f"Blat/bigbed_extended.{byteorder}endian.bb"
         with open(path, "rb") as stream:
             correct = stream.read()
-        alignments = Align.parse(path, "bigbed")
         with open("Blat/bedExample2.as") as stream:
             autosql_data = stream.read()
         declaration = bigbed.AutoSQLTable.from_string(autosql_data)
         with tempfile.TemporaryFile() as output:
-            Align.write(
-                alignments,
-                output,
-                "bigbed",
-                bedN=9,
-                declaration=declaration,
-                extraIndex=["name", "geneSymbol"],
-            )
+            with Align.parse(path, "bigbed") as alignments:
+                Align.write(
+                    alignments,
+                    output,
+                    "bigbed",
+                    bedN=9,
+                    declaration=declaration,
+                    extraIndex=["name", "geneSymbol"],
+                )
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
             self.check_alignments(alignments)
-        alignments = Align.parse(path, "bigbed")
-        targets = alignments.targets
         with tempfile.TemporaryFile() as output:
-            Align.write(
-                alignments,
-                output,
-                "bigbed",
-                bedN=9,
-                declaration=declaration,
-                targets=targets,
-                extraIndex=["name", "geneSymbol"],
-            )
+            with Align.parse(path, "bigbed") as alignments:
+                targets = alignments.targets
+                Align.write(
+                    alignments,
+                    output,
+                    "bigbed",
+                    bedN=9,
+                    declaration=declaration,
+                    targets=targets,
+                    extraIndex=["name", "geneSymbol"],
+                )
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
@@ -7470,24 +7470,24 @@ AlignmentCounts object with
 
     def test_reading(self):
         """Test reading bigbedtest.bb."""
-        alignments = Align.parse(self.path, "bigbed")
-        self.check_alignments(alignments)
+        with Align.parse(self.path, "bigbed") as alignments:
+            self.check_alignments(alignments)
 
     def test_writing(self):
         """Test writing bigbedtest.bb."""
-        alignments = Align.parse(self.path, "bigbed")
         with tempfile.TemporaryFile() as output:
-            Align.write(alignments, output, "bigbed", bedN=6)
+            with Align.parse(self.path, "bigbed") as alignments:
+                Align.write(alignments, output, "bigbed", bedN=6)
             output.flush()
             output.seek(0)
             alignments = Align.parse(output, "bigbed")
             self.check_alignments(alignments)
 
     def test_search_chromosome(self):
-        alignments = Align.parse(self.path, "bigbed")
-        self.assertEqual(
-            str(alignments.declaration),
-            """\
+        with Align.parse(self.path, "bigbed") as alignments:
+            self.assertEqual(
+                str(alignments.declaration),
+                """\
 table bed
 "Browser Extensible Data"
 (
@@ -7499,77 +7499,77 @@ table bed
    char[1] strand;        "+ or - for strand"
 )
 """,
-        )
-        selected_alignments = alignments.search("chr2")
-        names = [alignment.query.id for alignment in selected_alignments]
+            )
+            selected_alignments = alignments.search("chr2")
+            names = [alignment.query.id for alignment in selected_alignments]
         self.assertEqual(names, ["name4", "name5", "name6", "name7"])
 
     def test_search_region(self):
-        alignments = Align.parse(self.path, "bigbed")
-        selected_alignments = alignments.search("chr2", 105, 1000)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name5", "name6", "name7"])
-        selected_alignments = alignments.search("chr2", 110, 1000)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name6", "name7"])
-        selected_alignments = alignments.search("chr2", 40, 50)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4"])
-        selected_alignments = alignments.search("chr2", 50, 50)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4"])
-        selected_alignments = alignments.search("chr2", 50, 200)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name4", "name5"])
-        selected_alignments = alignments.search("chr2", 200, 220)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name6", "name7"])
-        selected_alignments = alignments.search("chr2", 220, 220)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name7"])
+        with Align.parse(self.path, "bigbed") as alignments:
+            selected_alignments = alignments.search("chr2", 105, 1000)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name5", "name6", "name7"])
+            selected_alignments = alignments.search("chr2", 110, 1000)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name6", "name7"])
+            selected_alignments = alignments.search("chr2", 40, 50)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name4"])
+            selected_alignments = alignments.search("chr2", 50, 50)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name4"])
+            selected_alignments = alignments.search("chr2", 50, 200)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name4", "name5"])
+            selected_alignments = alignments.search("chr2", 200, 220)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name6", "name7"])
+            selected_alignments = alignments.search("chr2", 220, 220)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name7"])
 
     def test_search_position(self):
-        alignments = Align.parse(self.path, "bigbed")
-        selected_alignments = alignments.search("chr1", 250)
-        names = [alignment.query.id for alignment in selected_alignments]
-        self.assertEqual(names, ["name3"])
+        with Align.parse(self.path, "bigbed") as alignments:
+            selected_alignments = alignments.search("chr1", 250)
+            names = [alignment.query.id for alignment in selected_alignments]
+            self.assertEqual(names, ["name3"])
 
     def test_three_iterators(self):
         """Create three iterators and use them concurrently."""
-        alignments1 = Align.parse(self.path, "bigbed")
-        alignments2 = alignments1.search("chr2")
-        alignments3 = alignments1.search("chr2", 110, 1000)
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name1")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name2")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name4")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name5")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name6")
-        alignment3 = next(alignments3)
-        self.assertEqual(alignment3.query.id, "name6")
-        alignment3 = next(alignments3)
-        self.assertEqual(alignment3.query.id, "name7")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name3")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name4")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name5")
-        alignment2 = next(alignments2)
-        self.assertEqual(alignment2.query.id, "name7")
-        self.assertRaises(StopIteration, next, alignments2)
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name6")
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name7")
-        self.assertRaises(StopIteration, next, alignments3)
-        alignment1 = next(alignments1)
-        self.assertEqual(alignment1.query.id, "name8")
-        self.assertRaises(StopIteration, next, alignments1)
+        with Align.parse(self.path, "bigbed") as alignments1:
+            alignments2 = alignments1.search("chr2")
+            alignments3 = alignments1.search("chr2", 110, 1000)
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name1")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name2")
+            alignment2 = next(alignments2)
+            self.assertEqual(alignment2.query.id, "name4")
+            alignment2 = next(alignments2)
+            self.assertEqual(alignment2.query.id, "name5")
+            alignment2 = next(alignments2)
+            self.assertEqual(alignment2.query.id, "name6")
+            alignment3 = next(alignments3)
+            self.assertEqual(alignment3.query.id, "name6")
+            alignment3 = next(alignments3)
+            self.assertEqual(alignment3.query.id, "name7")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name3")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name4")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name5")
+            alignment2 = next(alignments2)
+            self.assertEqual(alignment2.query.id, "name7")
+            self.assertRaises(StopIteration, next, alignments2)
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name6")
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name7")
+            self.assertRaises(StopIteration, next, alignments3)
+            alignment1 = next(alignments1)
+            self.assertEqual(alignment1.query.id, "name8")
+            self.assertRaises(StopIteration, next, alignments1)
 
 
 class BinaryTestBaseClass(unittest.TestCase):

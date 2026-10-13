@@ -14,8 +14,8 @@ as this offers more than just accessing the alignment or its
 sequences as SeqRecord objects.
 """
 
-from typing import IO
 from collections.abc import Iterator
+from typing import IO
 from typing import Optional
 
 from Bio.Align import MultipleSeqAlignment

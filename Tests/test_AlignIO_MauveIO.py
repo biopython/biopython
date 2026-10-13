@@ -85,9 +85,7 @@ class TestMauveIO(unittest.TestCase):
                     # seqs 0, 1 are ids 1, 2
                     actual = seqs[int(record.name) - 1].seq
                     # Slice out portion mentioned in file
-                    actual = actual[
-                        record.annotations["start"] : record.annotations["end"]
-                    ]
+                    actual = actual[record.annotations["start"] : record.annotations["end"]]  # fmt: skip
 
                     if record.annotations["strand"] < 0:
                         actual = actual.reverse_complement()

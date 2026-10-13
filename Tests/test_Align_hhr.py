@@ -19,10 +19,10 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhblits.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
-        self.check_alignments(alignments)
-        alignments = iter(alignments)
-        self.check_alignments(alignments)
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_alignments(alignments)
+            alignments = iter(alignments)
+            self.check_alignments(alignments)
         with Align.parse(self.path, "hhr") as alignments:
             self.check_alignments(alignments)
         with self.assertRaises(AttributeError):
@@ -33,11 +33,11 @@ class Align_hhr_2uvo_hhblits(unittest.TestCase):
             alignments._stream
         with open(self.path) as stream:
             data = stream.read()
-        stream = NamedTemporaryFile("w+t")
-        stream.write(data)
-        stream.seek(0)
-        alignments = Align.parse(stream, "hhr")
-        self.check_alignments(alignments)
+        with NamedTemporaryFile("w+t") as stream:
+            stream.write(data)
+            stream.seek(0)
+            alignments = Align.parse(stream, "hhr")
+            self.check_alignments(alignments)
 
     def check_alignments(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))
@@ -4429,7 +4429,10 @@ class Align_hhr_2uvo_hhsearch(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhsearch.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_reading(alignments)
+
+    def check_reading(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1, 4))
         self.assertAlmostEqual(alignments.metadata["Neff"], 1.0)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 38388)
@@ -8852,7 +8855,10 @@ class Align_hhr_allx(unittest.TestCase):
     path = os.path.join("HHsuite", "allx.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_reading(alignments)
+
+    def check_reading(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (1, 1))
         self.assertAlmostEqual(alignments.metadata["Neff"], 1.0)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 38388)
@@ -9984,9 +9990,9 @@ class Align_hhr_allx_badtotal_q(unittest.TestCase):
     path = os.path.join("HHsuite", "allx_badtotal_q.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
-        with self.assertRaises(ValueError) as cm:
-            next(alignments)
+        with Align.parse(self.path, "hhr") as alignments:
+            with self.assertRaises(ValueError) as cm:
+                next(alignments)
         self.assertEqual(str(cm.exception), "Failed to parse total length 39")
 
 
@@ -9994,9 +10000,9 @@ class Align_hhr_allx_badtotal_qconsensus(unittest.TestCase):
     path = os.path.join("HHsuite", "allx_badtotal_qconsensus.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
-        with self.assertRaises(ValueError) as cm:
-            next(alignments)
+        with Align.parse(self.path, "hhr") as alignments:
+            with self.assertRaises(ValueError) as cm:
+                next(alignments)
         self.assertEqual(str(cm.exception), "Failed to parse total length 39")
 
 
@@ -10004,9 +10010,9 @@ class Align_hhr_allx_badtotal_t(unittest.TestCase):
     path = os.path.join("HHsuite", "allx_badtotal_t.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
-        with self.assertRaises(ValueError) as cm:
-            next(alignments)
+        with Align.parse(self.path, "hhr") as alignments:
+            with self.assertRaises(ValueError) as cm:
+                next(alignments)
         self.assertEqual(str(cm.exception), "Failed to parse total length 30")
 
 
@@ -10014,9 +10020,9 @@ class Align_hhr_allx_badtotal_tconsensus(unittest.TestCase):
     path = os.path.join("HHsuite", "allx_badtotal_tconsensus.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
-        with self.assertRaises(ValueError) as cm:
-            next(alignments)
+        with Align.parse(self.path, "hhr") as alignments:
+            with self.assertRaises(ValueError) as cm:
+                next(alignments)
         self.assertEqual(str(cm.exception), "Failed to parse total length 30")
 
 
@@ -10024,7 +10030,10 @@ class Align_hhr_4p79_hhsearch_server_NOssm(unittest.TestCase):
     path = os.path.join("HHsuite", "4p79_hhsearch_server_NOssm.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_reading(alignments)
+
+    def check_reading(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (110, 1051))
         self.assertAlmostEqual(alignments.metadata["Neff"], 10.453)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 46616)
@@ -11400,7 +11409,10 @@ class Align_hhr_4y9h_hhsearch_server_NOssm(unittest.TestCase):
     path = os.path.join("HHsuite", "4y9h_hhsearch_server_NOssm.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_reading(alignments)
+
+    def check_reading(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (141, 1242))
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.55177)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 46616)
@@ -16511,7 +16523,10 @@ class Align_hhr_hhpred_9590198(unittest.TestCase):
     path = os.path.join("HHsuite", "hhpred_9590198.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_reading(alignments)
+
+    def check_reading(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (157, 584))
         self.assertAlmostEqual(alignments.metadata["Neff"], 6.82639)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 64707)
@@ -21290,7 +21305,10 @@ class Align_hhr_hhsearch_q9bsu1_uniclust_w_ss_pfamA_30(unittest.TestCase):
     path = os.path.join("HHsuite", "hhsearch_q9bsu1_uniclust_w_ss_pfamA_30.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_reading(alignments)
+
+    def check_reading(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (149, 573))
         self.assertAlmostEqual(alignments.metadata["Neff"], 6.62119)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 16712)
@@ -23525,7 +23543,10 @@ class Align_hhr_2uvo_hhblits_emptytable(unittest.TestCase):
     path = os.path.join("HHsuite", "2uvo_hhblits_emptytable.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_reading(alignments)
+
+    def check_reading(self, alignments):
         self.assertEqual(alignments.metadata["Match_columns"], 171)
         self.assertEqual(alignments.metadata["No_of_seqs"], (1560, 4005))
         self.assertAlmostEqual(alignments.metadata["Neff"], 8.3)
@@ -23547,7 +23568,8 @@ class Align_hhr_2uvo_hhblits_onlyheader(unittest.TestCase):
 
     def test_reading(self):
         with self.assertRaises(ValueError) as cm:
-            alignments = Align.parse(self.path, "hhr")
+            with Align.parse(self.path, "hhr") as alignments:
+                pass
         self.assertEqual(str(cm.exception), "Truncated file.")
 
 
@@ -23555,7 +23577,10 @@ class Align_hhr_7rbx_A_hhsearch_trunc(unittest.TestCase):
     path = os.path.join("HHsuite", "7rbx_A_hhsearch_trunc.hhr")
 
     def test_reading(self):
-        alignments = Align.parse(self.path, "hhr")
+        with Align.parse(self.path, "hhr") as alignments:
+            self.check_reading(alignments)
+
+    def check_reading(self, alignments):
         self.assertEqual(alignments.metadata["No_of_seqs"], (336, 10000))
         self.assertAlmostEqual(alignments.metadata["Neff"], 5.31565)
         self.assertEqual(alignments.metadata["Searched_HMMs"], 90139)

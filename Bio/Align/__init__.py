@@ -34,17 +34,17 @@ except ImportError:
 
 from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligncore  # type: ignore
+from Bio.Align import _alignmentcounts  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
 from Bio.Align import _pairwisealigner  # type: ignore
-from Bio.Align import _alignmentcounts  # type: ignore
 from Bio.Align import substitution_matrices
 from Bio.Data import CodonTable
 from Bio.Seq import MutableSeq
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
+from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.Seq import translate
 from Bio.Seq import UndefinedSequenceError
-from Bio.Seq import SequenceDataAbstractBaseClass
 from Bio.SeqRecord import _RestrictedDict
 from Bio.SeqRecord import SeqRecord
 
@@ -429,8 +429,7 @@ class MultipleSeqAlignment:
         max_length = 0
 
         for record in self._records:
-            if len(record.seq) > max_length:
-                max_length = len(record.seq)
+            max_length = max(max_length, len(record.seq))
 
         return max_length
 
@@ -4318,8 +4317,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
         substitution matrix and gap scores for BLASTN, MEGABLAST, or BLASTP,
         respectively.
 
-        Loops over the remaining keyword arguments and sets them as attributes
-        on the object.
+        Any further keyword arguments are set as attributes on the object.
         """
         super().__init__()
         if scoring is None:
@@ -4980,13 +4978,14 @@ class CodonAligner(_codonaligner.CodonAligner):
     sequence to an amino acid sequence.
     """
 
-    def __init__(self, codon_table=None):
+    def __init__(self, codon_table=None, **kwargs):
         """Initialize a CodonAligner for a specific genetic code.
 
         Arguments:
          - codon_table - a CodonTable object representing the genetic code.
            If codon_table is None, the standard genetic code is used.
 
+        Any further keyword arguments are set as attributes on the object.
         """
         super().__init__()
         if codon_table is None:
@@ -4994,6 +4993,23 @@ class CodonAligner(_codonaligner.CodonAligner):
         elif not isinstance(codon_table, CodonTable.CodonTable):
             raise TypeError("Input table is not a CodonTable object")
         self.codon_table = codon_table
+        for name, value in kwargs.items():
+            if name == "m":
+                match_score, mismatch_score = value
+                self.match_score = match_score
+                self.mismatch_score = mismatch_score
+                continue
+            if name == "f":
+                name = "frameshift_score"
+            elif name == "n":  # negative
+                name = "frameshift_minus_score"
+            elif name == "p":
+                name = "frameshift_plus_score"
+            elif name == "o":
+                name = "frameshift_one_score"
+            elif name == "t":
+                name = "frameshift_two_score"
+            setattr(self, name, value)
 
     def score(self, seqA, seqB):
         """Return the alignment score of a protein sequence and nucleotide sequence.
@@ -5178,6 +5194,108 @@ class CodonAligner(_codonaligner.CodonAligner):
         alignments = PairwiseAlignments(seqA, seqB, score, paths)
         return alignments
         # alignment.column_annotations = {"consensus": consensus}
+
+
+def codon_align(seqA, seqB, codon_table=None, **kwargs):
+    """Return the optimal alignment of a nucleotide sequence to an amino acid sequence.
+
+    This function creates a CodonAligner object and uses it to find the
+    optimal codon alignment of a nucleotide seqeuence seqA and an amino
+    acid sequence seqB using a dynamic programming algorithm.
+
+    Arguments:
+     - seqA        - the amino acid sequence (plain string, Seq, MutableSeq, or
+       SeqRecord).
+     - seqB        - the nucleotide sequence (plain string, Seq, MutableSeq, or
+       SeqRecord); both DNA and RNA sequences are accepted.
+     - codon_table - a CodonTable object representing the genetic code.
+       If codon_table is None, the standard genetic code is used.
+
+    Other keyword arguments are passed to the CodonAligner initializer (see
+    the CodonAligner documentation for details).  This includes the following
+    mnemonics:
+
+    * m: (match_score, mismatch_score).
+    * f: frameshift_score.
+    * n: frameshift_minus_score  # negative
+    * p: frameshift_plus_score
+    * o: frameshift_one_score
+    * t: frameshift_two_score
+
+    Returns an iterator of Alignment objects.
+
+    >>> from Bio.Seq import Seq
+    >>> from Bio.SeqRecord import SeqRecord
+    >>> from Bio.Align import codon_align
+    >>> dna = SeqRecord(Seq('ATGTCTCGT'), id='dna')
+    >>> pro = SeqRecord(Seq('MSR'), id='pro')
+    >>> alignments = codon_align(pro, dna)
+    >>> alignment = alignments[0]
+    >>> print(alignment)
+    pro               0 M  S  R   3
+    dna               0 ATGTCTCGT 9
+    <BLANKLINE>
+    >>> rna = SeqRecord(Seq('AUGUCUCGU'), id='rna')
+    >>> alignments = codon_align(pro, rna)
+    >>> alignment = alignments[0]
+    >>> print(alignment)
+    pro               0 M  S  R   3
+    rna               0 AUGUCUCGU 9
+    <BLANKLINE>
+
+    This is an example with a frame shift in the DNA sequence:
+
+    >>> dna = "ATGCTGGGCTCGAACGAGTCCGTGTATGCCCTAAGCTGAGCCCGTCG"
+    >>> pro = "MLGSNESRVCPKLSPS"
+    >>> alignments = codon_align(pro, dna)
+    >>> print(alignments[0])
+    target            0 M  L  G  S  N  E  S   7
+    query             0 ATGCTGGGCTCGAACGAGTCC 21
+    <BLANKLINE>
+    target            7 R  V  C  P  K  L  S  P  S   16
+    query            20 CGTGTATGCCCTAAGCTGAGCCCGTCG 47
+    <BLANKLINE>
+
+    You can also use this function to generate a nucleotide
+    alignment, given a protein alignment and the nucleotide
+    sequences corresponding to each protein:
+
+    >>> dna1 = "TCAGGGACTTCGAGAACCAAGCGCTCCTGCTGCTGGCTGCGCTCGGC"
+    >>> dna2 = "TCAGGGACTGCGAGAACCAAGCTACTGCTGCTGCTGGCTGCGCTCTGC"
+    >>> pro1 = "SGTSRTKRLLLLAALG"
+    >>> pro2 = "SGTARTKLLLLLAALC"
+    >>> protein_alignment = Alignment([pro1, pro2])
+    >>> print(protein_alignment)
+    target            0 SGTSRTKRLLLLAALG 16
+                      0 |||.|||.|||||||. 16
+    query             0 SGTARTKLLLLLAALC 16
+    <BLANKLINE>
+    >>> alignment = codon_align(protein_alignment, [dna1, dna2])
+    >>> print(alignment)
+    target            0 TCAGGGACTTCGAGAACCAAGCGC 24
+                      0 |||||||||.||||||||||||..
+    query             0 TCAGGGACTGCGAGAACCAAGCTA 24
+    <BLANKLINE>
+    target           23 CTCCTGCTGCTGGCTGCGCTCGGC 47
+                     24 ||.||||||||||||||||||.|| 48
+    query            24 CTGCTGCTGCTGGCTGCGCTCTGC 48
+    <BLANKLINE>
+
+    """
+    aligner = CodonAligner(codon_table=codon_table, **kwargs)
+    if isinstance(seqA, Alignment):
+        protein_alignment = seqA
+        protein_sequences = protein_alignment.sequences
+        nucleotide_sequences = seqB
+        alignments = []
+        for pro_seq, nuc_seq in zip(protein_sequences, nucleotide_sequences):
+            alignment = codon_align(pro_seq, nuc_seq)[0]
+            alignments.append(alignment)
+        codon_alignment = protein_alignment.mapall(alignments)
+        return codon_alignment
+    else:
+        alignments = aligner.align(seqA, seqB)
+        return alignments
 
 
 # fmt: off
