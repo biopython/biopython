@@ -211,7 +211,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kai Blin <https://github.com/kblin>
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
 - Karthikeyan Singaravelan <https://github.com/tirkarthi>
-- Kaustav5505g
+- Kaustav5505g<https://github.com/Kaustav5505g>
 - Katharine Lindner <katel at domain worldpath.net>
 - Kevin Jacobs <jacobs at bioinformed dot com>
 - Kevin Wu <https://github.com/kevinwuhoo>
