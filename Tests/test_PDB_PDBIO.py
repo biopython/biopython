@@ -120,8 +120,23 @@ class WriteTest(unittest.TestCase):
             "Residue name \\('ABCDE'\\) exceeds PDB format limit of 3 characters",
         ):
             self.io.save(filename)
-        residue.resname = original_resname
         self.assertFalse(os.path.exists(filename))
+
+        blurb = "This is not an empty file\n"
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        with open(filename, "w+") as handle:
+            handle.write(blurb)
+            with self.assertRaisesRegex(
+                PDBIOException,
+                "Residue name \\('ABCDE'\\) exceeds PDB format limit of 3 characters",
+            ):
+                self.io.save(handle)
+            handle.seek(0)
+            self.assertEqual(handle.read(), blurb)
+        residue.resname = original_resname
+        self.assertTrue(os.path.exists(filename))
+        os.remove(filename)
 
         # Residue id
         het, ori, ins = structure[0]["A"][152].id
