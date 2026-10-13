@@ -6,12 +6,28 @@
 # as part of this package.
 """Tests the basic functionality of the KEGG parsers."""
 
+import io
 import unittest
+from unittest.mock import Mock, patch
 
 from Bio.KEGG import Compound
 from Bio.KEGG import Enzyme
 from Bio.KEGG import Map
 from Bio.Pathway import System
+import test_KEGG_online as KEGGOnline
+
+
+def pseudo_urlopen(url):
+    pseudo_io = io.BytesIO()
+    pseudo_io.url = url
+    return pseudo_io
+
+
+@patch("Bio.KEGG.REST.urlopen", new=Mock(side_effect=pseudo_urlopen))
+class PseudoOnlineTests(KEGGOnline.KEGGTests):
+    """Test for Bio.KEGG.REST only building URL correctly."""
+
+    pass
 
 
 class EnzymeTests(unittest.TestCase):
