@@ -18,6 +18,10 @@ Python 3.15 release candidate. It has also been tested on PyPy3.10 v7.3.19, as
 well as Python 3.11+ on Windows for ARM64. Python 3.10 is approaching end of
 life, our support for it is now deprecated.
 
+``Bio.PDB.PDBIO`` now raises ``PDBIOException`` when writing a residue name
+longer than three characters, preventing residue names from disrupting PDB
+column formatting (issue #5370).
+
 6 August 2026: Biopython 1.88
 =============================
 
