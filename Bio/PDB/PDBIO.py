@@ -424,6 +424,15 @@ class PDBIO(StructureIO):
                         continue
                     hetfield, resseq, icode = residue.id
                     resname = residue.resname
+                    if len(resname) > 3:
+                        if isinstance(file, str):
+                            self._revert_write(fhandle, delete_file=True)
+                        else:
+                            self._revert_write(fhandle, truncate_to=fd_position)
+                        raise PDBIOException(
+                            f"Residue name ('{resname}') exceeds PDB format limit of 3 characters"
+                        )
+
                     segid = residue.segid
                     resid = residue.id[1]
                     if resid > 9999:
