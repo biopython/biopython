@@ -251,6 +251,12 @@ class TestClustalIO(unittest.TestCase):
         """Checking empty file."""
         self.assertEqual(0, len(list(ClustalIterator(StringIO("")))))
 
+    def test_blank_first_line(self):
+        """A blank first line should raise ValueError, not IndexError."""
+        for text in ("\nCLUSTAL W (1.81) multiple sequence alignment\n", "   \n"):
+            with self.assertRaises(ValueError):
+                list(ClustalIterator(StringIO(text)))
+
     def test_write_read(self):
         """Checking write/read."""
         alignments = (
