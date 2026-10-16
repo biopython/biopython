@@ -21,7 +21,7 @@
 #
 # (c) 2016 Wiktoria Karwicka & Jacek Smietanski
 #   - updated and Python 3.x compatible code
-#   - new options to enable download PDBx/mmCif, PDBML and mmtf formatted
+#   - new options to enable download PDBx/mmCif and PDBML formatted
 #       files as well as large PDB bundles
 #   - unit tests for the module
 #
@@ -64,7 +64,7 @@ class PDBList:
     To use it properly, prepare a directory /pdb or the like,
     where PDB files are stored.
 
-    All available file formats (PDB, PDBx/mmCif, PDBML, mmtf) are supported.
+    All available file formats (PDB, PDBx/mmCif, PDBML) are supported.
     Please note that large structures (containing >62 chains
     and/or 99999 ATOM lines) are no longer stored as a single PDB file
     and by default (when PDB format selected) are not downloaded.
@@ -236,9 +236,9 @@ class PDBList:
             File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
+            * "bcif" (BinaryCIF format),
             * "pdb" (format PDB),
             * "xml" (PDBML/XML format),
-            * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure)
 
         :type file_format: string
@@ -249,8 +249,7 @@ class PDBList:
         :param obsolete:
             Has a meaning only for obsolete structures. If True, download the obsolete structure
             to 'obsolete' folder, otherwise download won't be performed.
-            This option doesn't work for mmtf format as obsoleted structures aren't stored in mmtf.
-            Also doesn't have meaning when parameter pdir is specified.
+            This option doesn't have meaning when parameter pdir is specified.
             Note: make sure that you are about to download the really obsolete structure.
             Trying to download non-obsolete structure into obsolete folder will not work
             and you face the "structure doesn't exists" error.
@@ -272,12 +271,17 @@ class PDBList:
         archive_dict = {
             "pdb": f"pdb{pdb_code}.ent.gz",
             "mmCif": f"{pdb_code}.cif.gz",
+            "bcif": f"{pdb_code}.bcif.gz",
             "xml": f"{pdb_code}.xml.gz",
-            "mmtf": f"{pdb_code}",
             "bundle": f"{pdb_code}-pdb-bundle.tar.gz",
         }
 
-        if file_format not in archive_dict:
+        if file_format == "mmtf":
+            raise ValueError(
+                f"The MMTF format is deprecated and no longer available. "
+                f"Please use one of the following: {', '.join(archive_dict)}"
+            )
+        elif file_format not in archive_dict:
             raise ValueError(
                 f"Specified file_format {file_format} does not exist or is not supported. "
                 f"Please use one of the following: {', '.join(archive_dict)}."
@@ -302,7 +306,11 @@ class PDBList:
                 + f"/pub/pdb/compatible/pdb_bundle/{pdb_code[1:3]}/{pdb_code}/{archive}"
             )
         else:
-            url = f"http://mmtf.rcsb.org/v1.0/full/{pdb_code}"
+            assert file_format == "bcif"
+            assert (
+                not obsolete
+            ), "PDBList cannot retrieve obsolete structures in BinaryCIF format."
+            url = f"https://models.rcsb.org/{archive}"
 
         # Where does the final PDB file get saved?
         if pdir is None:
@@ -317,8 +325,8 @@ class PDBList:
         final = {
             "pdb": f"pdb{pdb_code}.ent",
             "mmCif": f"{pdb_code}.cif",
+            "bcif": f"{pdb_code}.bcif",
             "xml": f"{pdb_code}.xml",
-            "mmtf": f"{pdb_code}.mmtf",
             "bundle": f"{pdb_code}-pdb-bundle.tar",
         }
         final_file = os.path.join(path, final[file_format])
@@ -429,7 +437,6 @@ class PDBList:
             Has a meaning only for obsolete structures.
             If True, download the obsolete structure to 'obsolete' folder.
             Otherwise, the download won't be performed.
-            This option doesn't work for mmtf format as obsolete structures are not available as mmtf.
             (default: ``False``)
 
         :param pdir: Put the file in this directory. By default, create a PDB-style directory tree.
@@ -437,9 +444,9 @@ class PDBList:
         :param file_format: File format. Available options:
 
             * "mmCif" (default, PDBx/mmCif file),
+            * "bcif" (BinaryCIF format),
             * "pdb" (format PDB),
             * "xml" (PMDML/XML format),
-            * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure).
 
         :param overwrite: If set to true, existing structure files will be overwritten. (default: ``False``)
@@ -626,7 +633,6 @@ class PDBList:
             * "mmCif" (default, PDBx/mmCif file),
             * "pdb" (format PDB),
             * "xml" (PMDML/XML format),
-            * "mmtf" (highly compressed),
             * "bundle" (PDB formatted archive for large structure)
 
         :param max_num_threads: The maximum number of threads to use while downloading PDB entries
@@ -711,7 +717,6 @@ if __name__ == "__main__":
      -o       Overwrite existing structure files.
      -pdb     Downloads structures in PDB format
      -xml     Downloads structures in PDBML (XML) format
-     -mmtf    Downloads structures in mmtf format
      -with-assemblies    Downloads assemblies along with regular entries.
 
     Maximum one format can be specified simultaneously (if more selected, only
@@ -733,7 +738,7 @@ if __name__ == "__main__":
                     pl.flat_tree = True
                 elif option == "-o":
                     overwrite = True
-                elif option in ("-pdb", "-xml", "-mmtf"):
+                elif option in ("-pdb", "-xml"):
                     file_format = option[1:]
                 # Allow for download of assemblies alongside ASU
                 elif option == "-with-assemblies":
