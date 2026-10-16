@@ -70,6 +70,11 @@ def calculate_dn_ds(alignment, method="NG86", codon_table=None, k=1, cfreq=None)
     for block1, block2 in zip(aligned1, aligned2):
         start1, end1 = block1
         start2, end2 = block2
+        n1 = end1 - start1
+        n2 = end2 - start2
+        assert n1 == n2
+        if n1 < 3:  # frameshift event, not a codon
+            continue
         codons1.extend(sequence1[i : i + 3] for i in range(start1, end1, 3))
         codons2.extend(sequence2[i : i + 3] for i in range(start2, end2, 3))
     bases = {"A", "T", "C", "G"}
