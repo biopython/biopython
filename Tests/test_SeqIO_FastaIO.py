@@ -218,6 +218,20 @@ class TestFastaWithComments(unittest.TestCase):
         self.assertEqual(expected.description, record.description)
         self.assertEqual(expected.seq, record.seq)
 
+    def test_fasta_blast_multiple_records(self):
+        """FastaBlastIterator must not reuse the first record's id/description (Issue 5377)."""
+        from io import StringIO
+
+        data = ">first desc one\nACGT\n>second desc two\nTTAA\n"
+        records = list(SeqIO.parse(StringIO(data), "fasta-blast"))
+        self.assertEqual(2, len(records))
+        self.assertEqual("first", records[0].id)
+        self.assertEqual("first desc one", records[0].description)
+        self.assertEqual("ACGT", str(records[0].seq))
+        self.assertEqual("second", records[1].id)
+        self.assertEqual("second desc two", records[1].description)
+        self.assertEqual("TTAA", str(records[1].seq))
+
     def test_valueerrors(self):
         """Test if ValueErrors are raised if comments are found unexpectedly."""
 
