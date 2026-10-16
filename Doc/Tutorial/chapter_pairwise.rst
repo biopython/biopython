@@ -812,7 +812,7 @@ For convenience, ``PairwiseAligner`` objects have additional attributes
 that refer to a number of these values collectively, as shown
 (hierarchically) in Table :ref:`table:align-meta-attributes`.
 
-.. table:: Meta-attributes of the pairwise aligner objects.
+.. table:: Meta-attributes of the pairwise aligner objects
    :name: table:align-meta-attributes
 
    +--------------------------------+--------------------------------------+
@@ -2351,17 +2351,17 @@ Starting from the nucleotide sequences and their corresponding amino acid
 sequences, a codon alignment can be generated in three steps:
 
 1. Create a protein multiple sequence alignment by aligning the amino acid sequences using a multiple sequence aligner such as ClustalW.
-2. Perform a pairwise sequence alignment of each nucleotide sequence against its corresponding amino acid sequence. Such an alignment is non-trivial if frameshifts occur during translation.
+2. Perform a pairwise sequence alignment of each nucleotide sequence against its corresponding amino acid sequence; this is non-trivial if frameshifts occur during translation. The ``CodonAligner`` class provided in ``Bio.Align`` can be used to perform such alignments between a nucleotide sequence and an amino acid sequence.
 3. Use the pairwise sequence alignments to convert the protein multiple sequence alignment to a nucleotide multiple sequence alignment.
 
-The ``CodonAligner`` class provided in ``Bio.Align`` can align an amino acid sequence to a nucleotide sequence (step 2 above), allowing for frameshifts (see :ref:`sec:codon-aligner`).  A codon alignment can be generated (step 3) by calling the ``mapall`` method of the ``Alignment`` object storing the protein multiple sequence alignment (step 1 above), using the pairwise sequence alignments generated in step 2 as the argument (see :ref:`sec:msa_codons`). These steps are explained in detail in the sections below. The ``Bio.Align`` module also provides a ``codon_align`` convenience function to perform codon alignments more easily (see :ref:`sec:codon_align`)
+These steps are explained in detail in the sections below. The ``Bio.Align`` module also provides a ``codon_align`` convenience function to perform codon alignments more easily (see :ref:`sec:codon_align`).
 
 .. _`sec:codon-aligner`:
 
 The ``CodonAligner`` object
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Similar to a ``PairwiseAligner`` object (see :ref:`sec:pairwise-aligner`), a ``CodonAligner`` object stores the alignment parameters used to align an amino acid sequence to a nucleotide sequence. In most cases, the default values for the alignment parameters will work fine:
+Similar to a ``PairwiseAligner`` object (see :ref:`sec:pairwise-aligner`), a ``CodonAligner`` object stores the alignment parameters used to align an amino acid sequence to a nucleotide sequence. In most cases, the default values for the alignment parameters will work fine, and you can simply create a ``CodonAligner`` as follows:
 
 .. doctest
 
@@ -2395,13 +2395,9 @@ specified by the ``frameshift_minus_two_score``,
 ``frameshift_plus_two_score`` parameters are added to the alignment
 score whenever a -2, -1, +1, or +2 frame shift, respectively, occurs in
 the alignment. By default, the frame shift scores are set to -3.0.
-Similar to the ``PairwiseAligner`` class
-(Table :ref:`table:align-meta-attributes`), the ``CodonAligner``
-class defines additional attributes that refer to a number of these
-values collectively, as shown in
-Table :ref:`table:codonalign-meta-attributes`.
+The ``CodonAligner`` class defines additional attributes that refer to a number of these values collectively, as shown in Table :ref:`table:codonalign-meta-attributes`.
 
-.. table:: Meta-attributes of CodonAligner objects.
+.. table:: Meta-attributes of CodonAligner objects
    :name: table:codonalign-meta-attributes
 
    +----------------------------+---------------------------------+
@@ -2425,7 +2421,7 @@ Table :ref:`table:codonalign-meta-attributes`.
    |                            | ``frameshift_plus_two_score``   |
    +----------------------------+---------------------------------+
 
-You can also use the following mnemonics:
+These parameters can be used as keyword arguments when creating the ``CodonAligner`` object; you can also use the following mnemonics shown in table :ref:`table:align-mnemonics`. The parameter values can also be set afterwards as attributes to the ``CodonAligner`` object.
 
 .. table:: Mnemonics to set codon alignment parameters
    :name: table:codonalign-mnemonics
@@ -2450,7 +2446,7 @@ You can also use the following mnemonics:
 Using a ``CodonAligner`` to align a nucleotide sequence to an amino acid sequence
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As an example, let's consider the coding sequence of the Gag and Gag-Pol proteina of HIV-1:
+As an example, let's consider this section of the coding sequence of the Gag and Gag-Pol proteina of HIV-1:
 
 .. cont-doctest
 
@@ -2548,7 +2544,20 @@ The alignment score for the Gag-Pol alignment is
 
 which is equal to the number of alignment amino acids (10) multiplied by the match score (1.0), minus the penalty for a -1 frameshift (-3.0).
 
-As an example of a positive frameshift, here we align the amino acid sequence around Leu-25 of PrfB (peptide chain release factor RF2) of Escherichia coli against the corresponding genome sequence.
+By extracting rows of the alignment, you can obtain the aligned amino acid sequence and nucleotide sequence:
+
+.. cont-doctest
+
+.. code:: pycon
+
+   >>> alignment[0]
+   'QANFLREDLA'
+   >>> alignment[1]
+   'CAGGCUAAUUUUUUAAGGGAAGAUCUGGCC'
+   >>> len(alignment[1])
+   30
+
+As an example of a positive frameshift, here we align the amino acid sequence around Leu-25 of PrfB (peptide chain release factor RF2) of *Escherichia coli* against the corresponding genome sequence.
 
 .. cont-doctest
 
@@ -2628,8 +2637,23 @@ To calculate the alignment score without calculating the alignment itself, the
    >>> print(score)
    13.0
 
+As before, you can obtain the aligned amino acid sequence and nucleotide sequence by
+extracting rows from the alignment. Note that the A nucleotide read twice due to the
+-1 frameshift is included in the aligned nucleotide sequence:
 
-The orthologous sequence in Shigella dysenteriae does not undergo a frame shift:
+.. cont-doctest
+
+.. code:: pycon
+
+
+   >>> alignment[0]
+   'QANFLREDLA'
+   >>> alignment[1]
+   'CAGGCUAAUUUUUUAAGGGAAGAUCUGGCC'
+   >>> len(alignment[1])
+   30
+
+The orthologous sequence in *Shigella dysenteriae* does not undergo a frame shift:
 
 .. cont-doctest
 
@@ -2664,7 +2688,7 @@ Generating a multiple sequence alignment of codon sequences
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We will generate a multiple sequence alignment of codon sequences
-for the Escherichia coli and Shigella dysenteriae nucleotide sequences
+for the *Escherichia coli* and *Shigella dysenteriae* nucleotide sequences
 for the PrfB sequence region.
 
 First, we use the pairwise sequence aligner (see Section :ref:`sec:pairwise-aligner`)
@@ -2746,85 +2770,67 @@ If you want to perform many codon alignments, then creating a ``CodonAligner``
 object first and reusing it is fastest (see section
 :ref:`sec:codon-aligner` above).
 If you want to align just a few sequences, you may want to use the
-``codon_align`` convenience function instead. When called with an amino acid
-sequence and a nucleotide sequence as arguments, this function creates a
-``CodonAligner`` object, aligns the two sequences to each other, and returns
-an iterator over the alignments found.
+``codon_align`` convenience function instead. This function can be used in
+two ways:
 
-As an example, here we align the amino acid sequence of the PrfB protein region
-in Bacillus subtilis against its corresponding genome sequence:
+    1. With an amino acid sequence and a nucleotide sequence as the first and second rguments, respectively, this function creates a ``CodonAligner`` object, aligns the two sequences to each other, and returns an iterator over the alignments found.
 
-.. cont-doctest
+       For example, you can use ``codon_align`` as follows to align the amino acid sequence of the PrfB protein region in *Bacillus subtilis* against its corresponding genome sequence:
 
-.. code:: pycon
+       .. cont-doctest
 
-   >>> from Bio.Align import codon_align
-   >>> nuc_bacillus = SeqRecord(
-   ...     Seq("TTAGCGGACTTTAGGGGGTCTCTTTGACCTCGAATCAAAGGAGGCCCGC"), id="Bacillus"
-   ... )
-   >>> pro_bacillus = SeqRecord(Seq("LADFRGSLDLESKEAR"), id="Bacillus")
-   >>> alignments_bacillus = codon_align(pro_bacillus, nuc_bacillus)
-   >>> len(alignments_bacillus)
-   1
-   >>> alignment_bacillus = alignments_bacillus[0]
-   >>> print(alignment_bacillus)
-   Bacillus          0 L  A  D  F  R  G  S  L  -D  L  E  S  K  E  A  R   16
-   Bacillus          0 TTAGCGGACTTTAGGGGGTCTCTTTGACCTCGAATCAAAGGAGGCCCGC 49
-   <BLANKLINE>
+       .. code:: pycon
 
-showing that a +1 frameshift occurs after the leucine.
+          >>> from Bio.Align import codon_align
+          >>> nuc_bacillus = SeqRecord(
+          ...     Seq("TTAGCGGACTTTAGGGGGTCTCTTTGACCTCGAATCAAAGGAGGCCCGC"), id="Bacillus"
+          ... )
+          >>> pro_bacillus = SeqRecord(Seq("LADFRGSLDLESKEAR"), id="Bacillus")
+          >>> alignments_bacillus = codon_align(pro_bacillus, nuc_bacillus)
+          >>> len(alignments_bacillus)
+          1
+          >>> alignment_bacillus = alignments_bacillus[0]
+          >>> print(alignment_bacillus)
+          Bacillus          0 L  A  D  F  R  G  S  L  -D  L  E  S  K  E  A  R   16
+          Bacillus          0 TTAGCGGACTTTAGGGGGTCTCTTTGACCTCGAATCAAAGGAGGCCCGC 49
+          <BLANKLINE>
 
-.. blacken-docs:on
+       showing that a +1 frameshift occurs after the leucine.
 
-The ``codon_align`` convenience function accepts optional
-keyword arguments, which are passed to the ``CodonAligner``
-constructor as is (see :ref:`sec:codon-aligner`).
+    2. With a protein alignment as the first argument and nucleotide sequences as the second argument, with each nucleotide sequence corresponding with one amino acid sequence in the protein alignment, it will generate a nucleotide alignment consistent with the protein alignment. First, a ``CodonAligner`` object is created. Using this aligner, each protein sequence is aligned to the corresponding nucleotide sequence.  Next, the ``mapall`` function (described above) is applied to generate the nucleotide alignment, based on the protein alignment and the alignment of each protein sequence to the corresponding nucleotide sequence.
 
-You can also use this convenience function to align nucleotide sequences
-to each other, given the corresponding protein alignment. For this purpose,
-supply a protein alignment as the first argument, and nucleotide sequences
-as the second argument, with each nucleotide sequence corresponding with
-one amino acid sequence in the protein alignment. The ``codon_align``
-convenience function first creates a ``CodonAligner`` object and uses it
-to align each protein sequence to the corresponding nucleotide sequence.
-It then uses the ``mapall`` function (as described below) to generate a
-nucleotide alignment based on the protein alignment and the alignment of
-each protein sequence to the corresponding nucleotide sequence.
+       This is an example for an amino acid alignment of the same protein region of PrfB in *Escherichia coli*, *Shigella dysenteriae*, and *Bacillus subtilis*.  First, we create the protein alignment by hand:
 
-This is an example for an amino acid alignment of the same protein region
-of PrfB in Escherichia coli, Shigella dysenteriae, and Bacillus subtilis.
-First, we create the protein alignment by hand:
+       .. cont-doctest
 
-.. cont-doctest
+       .. code:: pycon
 
-.. code:: pycon
+          >>> from Bio.Align import Alignment
+          >>> protein_alignment = Alignment([pro_ecoli, pro_shigella, pro_bacillus])
+          >>> print(protein_alignment)
+          Ecoli pro         0 SDVLRGYLDYDAKKER 16
+          Shigella          0 SDVLRGIFDYDAKKER 16
+          Bacillus          0 LADFRGSLDLESKEAR 16
+          <BLANKLINE>
 
-   >>> from Bio.Align import Alignment
-   >>> protein_alignment = Alignment([pro_ecoli, pro_shigella, pro_bacillus])
-   >>> print(protein_alignment)
-   Ecoli pro         0 SDVLRGYLDYDAKKER 16
-   Shigella          0 SDVLRGIFDYDAKKER 16
-   Bacillus          0 LADFRGSLDLESKEAR 16
-   <BLANKLINE>
+       Next, we call ``codon_align`` with this protein alignment as the first argument, and the nucleotide sequences as the second argument;
 
+       .. cont-doctest
 
-.. cont-doctest
+       .. code:: pycon
 
-.. code:: pycon
+          >>> codon_alignment = codon_align(
+          ...     protein_alignment, [nuc_ecoli, nuc_shigella, nuc_bacillus]
+          ... )
+          >>> print(codon_alignment)
+          Ecoli DNA         0 TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT 49
+          Shigella          0 TCCGACGTTCTTAGGGGTATCTTT-GACTACGACGCCAAGAAAGAGCGT 48
+          Bacillus          0 TTAGCGGACTTTAGGGGGTCTCTTTGACCTCGAATCAAAGGAGGCCCGC 49
+          <BLANKLINE>
 
-   >>> codon_alignment = codon_align(
-   ...     protein_alignment, [nuc_ecoli, nuc_shigella, nuc_bacillus]
-   ... )
-   >>> print(codon_alignment)
-   Ecoli DNA         0 TCCGACGTTCTTAGGGGGTATCTTTGACTACGACGCCAAGAAAGAGCGT 49
-   Shigella          0 TCCGACGTTCTTAGGGGTATCTTT-GACTACGACGCCAAGAAAGAGCGT 48
-   Bacillus          0 TTAGCGGACTTTAGGGGGTCTCTTTGACCTCGAATCAAAGGAGGCCCGC 49
-   <BLANKLINE>
+       showing that the +1 frameshift occurs in *Escherichia coli* and *Bacillus subtilis*, with a highly conserved nucleotide sequence in the frameshift region, but not in *Shigella dysenteriae*, although evolutionarily *Escherichia coli* and *Shigella dysenteriae* are much closer to each other than to *Bacillus subtilis*.
 
-showing that the +1 frameshift occurs in Escherichia coli and Bacillus subtilis,
-with a highly conserved nucleotide sequence in the frameshift region, but not
-in Shigella dysenteriae, although Escherichia coli and Shigella dysenteriae are
-much closer to each other evolutionarily than to Bacillus subtilis.
+The ``codon_align`` convenience function accepts optional keyword arguments, which are passed to the ``CodonAligner`` constructor as is (see :ref:`sec:codon-aligner`).
 
 Analyzing a codon alignment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
