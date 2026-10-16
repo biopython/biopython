@@ -19,6 +19,69 @@ from Bio.SeqRecord import SeqRecord
 from .Interfaces import SequenceIterator
 
 
+def IgHeaderParser(handle):
+    """Iterate over IntelliGenetics records yielding only headers (titles).
+
+    Arguments:
+     - handle - input stream opened in text mode
+
+    The optional free format file header lines (starting with ';;') and
+    record commentary lines (starting with ';') are ignored. Only the title
+    line of each record is yielded. Sequence data is bypassed natively without
+    string buffering.
+
+    Examples
+    --------
+    >>> with open("IntelliGenetics/TAT_mase_nuc.txt") as handle:
+    ...     for title in IgHeaderParser(handle):
+    ...         print(title)
+    ...
+    A_U455
+    B_HXB2R
+    C_UG268A
+    D_ELI
+    F_BZ163A
+    O_ANT70
+    O_MVP5180
+    CPZGAB
+    CPZANT
+    A_ROD
+    B_EHOA
+    D_MM251
+    STM_STM
+    VER_AGM3
+    GRI_AGM677
+    SAB_SAB1C
+    SYK_SYK
+
+    """
+    for line in handle:
+        if not line.startswith(";;"):
+            break
+    else:
+        line = None
+
+    while line is not None:
+        if line[0] != ";":
+            raise ValueError(f"Records should start with ';' and not:\n{line!r}")
+
+        while line.startswith(";"):
+            line = handle.readline()
+            if not line:
+                break
+
+        if not line:
+            break
+
+        yield line.rstrip()
+
+        for line in handle:
+            if line[0] == ";":
+                break
+        else:
+            line = None
+
+
 class IgIterator(SequenceIterator):
     """Parser for IntelliGenetics files."""
 
