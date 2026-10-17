@@ -104,6 +104,14 @@ class Exposure(unittest.TestCase):
         self.assertEqual(23, residues[-1].xtra["EXP_HSE_B_D"])
         self.assertEqual(15, residues[-1].xtra["EXP_HSE_B_U"])
 
+    def test_HSExposureCB_gly_missing_atom(self):
+        """HSExposureCB skips a GLY with a missing backbone atom (#4708)."""
+        gly = self.a_residues[3]
+        self.assertEqual("GLY", gly.get_resname())
+        gly.detach_child("N")
+        _ = HSExposureCB(self.model, self.radius)
+        self.assertEqual(0, len(gly.xtra))
+
     def test_ExposureCN(self):
         """HSExposureCN."""
         _ = ExposureCN(self.model, self.radius)
