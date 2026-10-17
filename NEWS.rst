@@ -21,10 +21,14 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+``Bio.PDB.PDBIO.save`` has a new ``write_ter`` option. Setting it to ``False``
+omits the TER records normally written after each chain.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Mohit Arvind Khakharia (first contribution)
+- Shubhodeep Chatterjee (first contribution)
 
 6 August 2026: Biopython 1.88
 =============================
