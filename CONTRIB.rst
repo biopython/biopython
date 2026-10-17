@@ -130,6 +130,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Erik Weßels <https://github.com/BioNij>
 - Erik Whiting <https://github.com/erik-whiting>
 - Ernesto Rodriguez <https://github.com/netogallo>
+- Eryx-Z <https://github.com/Eryx-Z>
 - Fabian Egli <https://github.com/fabianegli>
 - Fabio Zanini <https://github.com/iosonofabio>
 - Farhan Khan <https://github.com/BabaYaga1221>
