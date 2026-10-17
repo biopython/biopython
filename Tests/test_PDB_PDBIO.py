@@ -387,6 +387,36 @@ class WriteTest(unittest.TestCase):
         finally:
             os.remove(filename)
 
+    def test_pdbio_write_ter(self):
+        """Test the write_ter option of PDBIO.save."""
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", PDBConstructionWarning)
+            # Three models, each with three chains
+            struct = self.parser.get_structure("1lcd", "PDB/1LCD.pdb")
+
+        def save_lines(**kwargs):
+            self.io.set_structure(struct)
+            filenumber, filename = tempfile.mkstemp()
+            os.close(filenumber)
+            try:
+                self.io.save(filename, **kwargs)
+                with open(filename) as handle:
+                    return handle.readlines()
+            finally:
+                os.remove(filename)
+
+        with_ter = save_lines()
+        without_ter = save_lines(write_ter=False)
+
+        # Default is unchanged: one TER per chain per model
+        self.assertEqual(sum(line.startswith("TER") for line in with_ter), 9)
+        self.assertEqual(sum(line.startswith("TER") for line in without_ter), 0)
+        # Only the TER lines differ, so atom numbering and the MODEL/ENDMDL
+        # and END records are unaffected
+        self.assertEqual(
+            [line for line in with_ter if not line.startswith("TER")], without_ter
+        )
+
     def test_pdbio_write_x_element(self):
         """Write a structure with atomic element X with PDBIO."""
         struct1 = self.structure
