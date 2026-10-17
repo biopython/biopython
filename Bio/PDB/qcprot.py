@@ -115,8 +115,9 @@ def qcp(coords1, coords2, natoms):
         f = a * mxEigenV + C0
         f_prime = 2.0 * x2 * mxEigenV + b + a
 
-        delta = f / (f_prime + evalprec)  # avoid division by zero
-        mxEigenV = abs(mxEigenV - delta)
+        if f <= 0.0 or f_prime <= 0.0:
+            break  # E0 is already the largest root (perfect fit)
+        mxEigenV -= f / f_prime
         if abs(mxEigenV - oldg) < (evalprec * mxEigenV):
             break  # convergence
     else:
