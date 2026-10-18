@@ -18,6 +18,9 @@ Python 3.15 release candidate. It has also been tested on PyPy3.10 v7.3.19, as
 well as Python 3.11+ on Windows for ARM64. Python 3.10 is approaching end of
 life, our support for it is now deprecated.
 
+* ``Bio.PDB.PDBIO`` now raises ``PDBIOException`` when writing a modern residue
+  name longer than the legacy PDB format three character limit.
+
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
