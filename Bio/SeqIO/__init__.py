@@ -577,6 +577,10 @@ def write(
      - sequences - A list (or iterator) of SeqRecord objects, or a single
        SeqRecord.
      - handle    - File handle object to write to, or filename as string.
+                   If a filename string is provided, existing files will be
+                   overwritten. If an open file handle is provided, records
+                   can be appended sequentially (for formats with no global
+                   header/footer, such as FASTA, FASTQ, or GenBank).
      - format    - lower case string describing the file format to write.
 
     Note if providing a file handle, your code should close the handle
