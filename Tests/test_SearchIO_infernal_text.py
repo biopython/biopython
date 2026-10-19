@@ -7,9 +7,9 @@
 
 """Tests for SearchIO InfernalIO infernal-text parser."""
 
+import itertools
 import os
 import unittest
-import itertools
 
 from Bio.SearchIO import parse
 

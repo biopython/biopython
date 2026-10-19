@@ -185,7 +185,11 @@ def qcp(coords1, coords2, natoms):
                 qsqr = q1 * q1 + q2 * q2 + q3 * q3 + q4 * q4
 
                 if qsqr < evecprec:
-                    rot = np.eye(3)
+                    u, _s, vt = np.linalg.svd(A)
+                    rot = np.dot(u, vt)
+                    if np.linalg.det(rot) < 0.0:
+                        u[:, -1] *= -1.0
+                        rot = np.dot(u, vt)
                     return rmsd, rot, [q1, q2, q3, q4]
 
     normq = qsqr**0.5

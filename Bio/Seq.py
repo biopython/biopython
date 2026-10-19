@@ -2540,7 +2540,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
             raise IndexError("sequence index out of range")
         else:
             for start, seq in self._data.items():
-                if start <= key and key < start + len(seq):
+                if start <= key < start + len(seq):
                     return seq[key - start]
             raise UndefinedSequenceError("Sequence at position %d is undefined" % key)
 
@@ -3273,6 +3273,7 @@ def complement_rna(sequence, inplace=False):
 
 if __name__ == "__main__":
     from doctest import IGNORE_EXCEPTION_DETAIL
+
     from Bio._utils import run_doctest
 
     run_doctest(optionflags=IGNORE_EXCEPTION_DETAIL)

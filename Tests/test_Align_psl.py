@@ -9,15 +9,15 @@ from io import StringIO
 from tempfile import NamedTemporaryFile
 
 from Bio import Align
-from Bio.Align import substitution_matrices
+from Bio import SeqIO
 from Bio.Align import Alignment
+from Bio.Align import substitution_matrices
 from Bio.Seq import reverse_complement
 from Bio.Seq import Seq
 from Bio.SeqFeature import CompoundLocation
 from Bio.SeqFeature import ExactPosition
 from Bio.SeqFeature import SimpleLocation
 from Bio.SeqRecord import SeqRecord
-from Bio import SeqIO
 
 try:
     import numpy as np

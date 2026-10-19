@@ -9,7 +9,8 @@ import os
 import warnings
 
 from Bio.Data.IUPACData import atom_weights
-from Bio.PDB.PDBExceptions import PDBIOException, PDBIOWarning
+from Bio.PDB.PDBExceptions import PDBIOException
+from Bio.PDB.PDBExceptions import PDBIOWarning
 from Bio.PDB.StructureBuilder import StructureBuilder
 
 _ATOM_FORMAT_STRING = "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f%s%s      %4s%2s%2s\n"
@@ -424,6 +425,15 @@ class PDBIO(StructureIO):
                         continue
                     hetfield, resseq, icode = residue.id
                     resname = residue.resname
+                    if len(resname) > 3:
+                        if isinstance(file, str):
+                            self._revert_write(fhandle, delete_file=True)
+                        else:
+                            self._revert_write(fhandle, truncate_to=fd_position)
+                        raise PDBIOException(
+                            f"Residue name ('{resname}') exceeds PDB format limit of 3 characters"
+                        )
+
                     segid = residue.segid
                     resid = residue.id[1]
                     if resid > 9999:

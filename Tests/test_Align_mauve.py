@@ -626,8 +626,7 @@ AlignmentCounts object with
         for alignment in saved_alignments:
             for record in alignment.sequences:
                 index = int(record.id)
-                if index > maxindex:
-                    maxindex = index
+                maxindex = max(maxindex, index)
         n = maxindex + 1
         self.assertEqual(n, 3)
         lengths = [0] * n
@@ -635,8 +634,7 @@ AlignmentCounts object with
             for record in alignment.sequences:
                 index = int(record.id)
                 length = len(record.seq)
-                if length > lengths[index]:
-                    lengths[index] = length
+                lengths[index] = max(lengths[index], length)
         self.assertEqual(lengths[0], 50)
         self.assertEqual(lengths[1], 41)
         self.assertEqual(lengths[2], 49)
@@ -989,8 +987,7 @@ AlignmentCounts object with
             for record in alignment.sequences:
                 filename = record.id
                 length = len(record.seq)
-                if length > lengths[filename]:
-                    lengths[filename] = length
+                lengths[filename] = max(lengths[filename], length)
         self.assertEqual(lengths["equCab1.fa"], 50)
         self.assertEqual(lengths["canFam2.fa"], 49)
         self.assertEqual(lengths["mm9.fa"], 41)

@@ -531,8 +531,7 @@ class DSSP(AbstractResiduePropertyMap):
                 # Invalid value for resname
                 rel_acc = "NA"
             else:
-                if rel_acc > 1.0:
-                    rel_acc = 1.0
+                rel_acc = min(rel_acc, 1.0)
             res.xtra["EXP_DSSP_RASA"] = rel_acc
             # Verify if AA in DSSP == AA in Structure
             # Something went wrong if this is not true!

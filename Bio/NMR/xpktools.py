@@ -268,10 +268,8 @@ def data_table(fn_list, datalabel, keyatom):
     maxr = dict_list[0]["maxres"]
 
     for dictionary in dict_list:
-        if maxr < dictionary["maxres"]:
-            maxr = dictionary["maxres"]
-        if minr > dictionary["minres"]:
-            minr = dictionary["minres"]
+        maxr = max(maxr, dictionary["maxres"])
+        minr = min(minr, dictionary["minres"])
 
     res = minr
     while res <= maxr:  # s.t. res numbers

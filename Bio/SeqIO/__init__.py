@@ -372,7 +372,8 @@ making up each alignment as SeqRecords.
 #
 # --Peter
 
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 from collections.abc import Callable
 from collections.abc import Iterable
 from typing import Union
@@ -400,7 +401,10 @@ from Bio.SeqIO import UniprotIO
 from Bio.SeqIO import XdnaIO
 from Bio.SeqRecord import SeqRecord
 
-from .Interfaces import _IOSource, _TextIOSource, SequenceIterator, SequenceWriter
+from .Interfaces import _IOSource
+from .Interfaces import _TextIOSource
+from .Interfaces import SequenceIterator
+from .Interfaces import SequenceWriter
 
 # Convention for format names is "mainname-subtype" in lower case.
 # Please use the same names as BioPerl or EMBOSS where possible.
