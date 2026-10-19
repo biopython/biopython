@@ -386,6 +386,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Yiming Qu <https://github.com/whatever60>
 - Yogesh Kulkarni <https://https://github.com/yogeshhk>
 - Yu Huang <krocea at domain yahoo.com.cn>
+- Yuxuan Luo <https://github.com/Oblivionis028>
 - Yves Bastide <ybastide at domain irisa.fr>
 - Zachary Sailer <https://github.com/Zsailer>
 - Zaid Ur-Rehman <https://github.com/zaidurrehman>

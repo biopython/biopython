@@ -28,6 +28,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Mohit Arvind Khakharia (first contribution)
+- Yuxuan Luo (first contribution)
 
 6 August 2026: Biopython 1.88
 =============================
