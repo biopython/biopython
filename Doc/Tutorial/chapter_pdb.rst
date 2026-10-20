@@ -1713,6 +1713,48 @@ module ``Bio.PDB.kdtrees``), making it very fast. It also includes a
 fast method to find all point pairs within a certain distance of each
 other.
 
+Create a ``NeighborSearch`` object from a list of atoms, for example all
+atoms of a structure:
+
+.. doctest ../Tests/PDB lib:numpy
+
+.. code:: pycon
+
+   >>> from Bio.PDB import PDBParser, NeighborSearch
+   >>> parser = PDBParser(QUIET=True)
+   >>> structure = parser.get_structure("1A8O", "1A8O.pdb")
+   >>> ns = NeighborSearch(list(structure.get_atoms()))
+
+The ``search`` method takes a center point (a coordinate) and a radius in
+Ångström. To find the residues near a given residue, use the coordinates of
+one of its atoms as the center. With ``level="R"``, it returns every residue
+with at least one atom within the radius, instead of individual atoms
+(``"C"`` and ``"M"`` return chains and models):
+
+.. cont-doctest ../Tests/PDB lib:numpy
+
+.. code:: pycon
+
+   >>> residue = structure[0]["A"][152]
+   >>> residue
+   <Residue ASP het=  resseq=152 icode= >
+   >>> close_residues = ns.search(residue["CA"].coord, 5.0, level="R")
+   >>> sorted(res.id[1] for res in close_residues)
+   [151, 152, 153, 1001, 1027, 1035, 1054]
+
+The result includes the residue itself and, in this case, some water
+molecules. The ``search_all`` method finds all pairs of entities within a
+given radius of each other. For example, all pairs of residues that have
+atoms within 4 Å of each other:
+
+.. cont-doctest ../Tests/PDB lib:numpy
+
+.. code:: pycon
+
+   >>> residue_pairs = ns.search_all(4.0, level="R")
+   >>> len(residue_pairs)
+   525
+
 
 Calculating the Half Sphere Exposure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
