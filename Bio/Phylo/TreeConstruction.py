@@ -7,13 +7,14 @@
 
 """Classes and methods for tree construction."""
 
-import itertools
 import copy
+import itertools
 import numbers
-from Bio.Phylo import BaseTree
-from Bio.Align import Alignment, MultipleSeqAlignment
-from Bio.Align import substitution_matrices
 
+from Bio.Align import Alignment
+from Bio.Align import MultipleSeqAlignment
+from Bio.Align import substitution_matrices
+from Bio.Phylo import BaseTree
 
 # flake8: noqa
 

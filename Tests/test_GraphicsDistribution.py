@@ -9,7 +9,6 @@ ability to create graphics to show the distribution of information about
 BACs/chromosomes/etc.
 """
 
-# standard library
 import os
 import random
 import unittest
@@ -25,10 +24,8 @@ except ImportError:
         "Install reportlab if you want to use Bio.Graphics."
     ) from None
 
-# local stuff
-from Bio.Graphics.Distribution import BarChartDistribution
-
 # TODO from Bio.Graphics.Distribution import LineDistribution
+from Bio.Graphics.Distribution import BarChartDistribution
 from Bio.Graphics.Distribution import DistributionPage
 
 

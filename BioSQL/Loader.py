@@ -25,8 +25,6 @@ from time import strftime
 from Bio import Entrez
 from Bio.Seq import UndefinedSequenceError
 from Bio.SeqFeature import UnknownPosition
-
-# biopython
 from Bio.SeqUtils.CheckSum import crc64
 
 
