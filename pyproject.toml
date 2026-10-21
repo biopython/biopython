@@ -39,6 +39,26 @@ Documentation = "https://biopython.org/wiki/Documentation"
 Source = "https://github.com/biopython/biopython/"
 Tracker = "https://github.com/biopython/biopython/issues"
 
+[tool.isort]
+force_single_line=true
+order_by_type=false
+
+[tool.ruff.lint]
+isort.force-single-line=true
+isort.order-by-type=false
+extend-select=["B","C4","D","ISC","UP","S307"]
+extend-ignore=[
+    # Core flake8 including pydocstyle
+    "E501","F401","F841","D105","D2","D4",
+    # Bugbear
+    "B007","B009","B010","B018","B028","B904","B905",
+    # Others
+    "N999","RUF022","RUF023","UP031","UP031"
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"Tests/*.py"=["D101","D102","D103","B015"]
+
 [tool.setuptools]
 include-package-data = true
 zip-safe = false
