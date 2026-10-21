@@ -49,9 +49,9 @@ from .DSSP import make_dssp_dict
 
 # Kolodny et al.'s backbone libraries
 from .FragmentMapper import FragmentMapper
-from .HSExposure import ExposureCN
 
-# Calculation of Half Sphere Solvent Exposure
+# Calculation of (Half Sphere) Solvent Exposure
+from .HSExposure import ExposureCN
 from .HSExposure import HSExposureCA
 from .HSExposure import HSExposureCB
 from .mmcifio import MMCIFIO
@@ -69,17 +69,17 @@ from .PDBIO import Select
 from .PDBList import PDBList
 from .PDBMLParser import PDBMLParser
 from .PDBParser import PDBParser
+
+# Find connected polypeptides in a Structure
 from .Polypeptide import CaPPBuilder
 from .Polypeptide import is_aa
 from .Polypeptide import is_nucleic
-
-# Find connected polypeptides in a Structure
 from .Polypeptide import PPBuilder
 from .Polypeptide import standard_aa_names
-from .ResidueDepth import get_surface
 
 # Residue depth:
 # distance of residue atoms from solvent accessible surface
+from .ResidueDepth import get_surface
 from .ResidueDepth import ResidueDepth
 
 # Alignment module
@@ -87,6 +87,8 @@ from .StructureAlignment import StructureAlignment
 
 # Superimpose atom sets
 from .Superimposer import Superimposer
+
+# 3D vector class
 from .vectors import calc_angle
 from .vectors import calc_dihedral
 from .vectors import m2rotaxis
@@ -94,8 +96,6 @@ from .vectors import refmat
 from .vectors import rotaxis
 from .vectors import rotaxis2m
 from .vectors import rotmat
-
-# 3D vector class
 from .vectors import Vector
 from .vectors import vector_to_axis
 
