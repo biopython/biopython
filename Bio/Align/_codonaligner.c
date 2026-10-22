@@ -897,7 +897,7 @@ Aligner_align(Aligner* self, PyObject* args, PyObject* keywords)
     double temp;
     unsigned char trace;
     double* row = NULL;
-    PathGenerator* paths;
+    PathGenerator* paths = NULL;
 
     static char *kwlist[] = {"sA", "sB0", "sB1", "sB2", NULL};
 
