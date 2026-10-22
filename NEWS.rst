@@ -24,6 +24,11 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+``Bio.PDB.qcprot.QCPSuperimposer`` now reports an RMSD of zero for a perfect
+fit of collinear points (for example two points, or points along a helix axis),
+where it previously returned a large spurious value and warned that the
+Newton-Raphson iteration had not converged.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
