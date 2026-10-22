@@ -13,11 +13,7 @@ from urllib.error import HTTPError
 import requires_internet
 
 from Bio import Medline
-
-# In order to check any sequences returned
 from Bio import SeqIO
-
-# We want to test these:
 from Bio import TogoWS
 from Bio.SeqUtils.CheckSum import seguid
 
