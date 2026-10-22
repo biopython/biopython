@@ -1,12 +1,17 @@
 <!--- Please read each of the following items and confirm by replacing
  !--the [ ] with a [X] --->
 
-- [ ] I hereby agree to dual licence this and any previous contributions under both
+- [ ] I hereby agree to dual license this and any previous contributions under both
 the _Biopython License Agreement_ **AND** the _BSD 3-Clause License_.
 
-- [ ] I have read the ``CONTRIBUTING.rst`` file, have run ``pre-commit``
-locally, and understand that continuous integration checks will be used to
-confirm the Biopython unit tests and style checks pass with these changes.
+- [ ] I have read the ``CONTRIBUTING.rst`` file, have declared any usage of
+Large Language Models (LLM) or generative artificial intelligence (AI) tools.
+Other than translation into English (which must still be declared), I have
+not used such tools to *write* the changes and message in this pull request.
+
+- [ ] I have run ``pre-commit`` locally, and understand that continuous
+integration checks will be used to confirm the Biopython unit tests and style
+checks pass with these changes.
 
 - [ ] I have added my name to the alphabetical contributors listings in the files
 ``NEWS.rst`` and ``CONTRIB.rst`` as part of this pull request, am listed
