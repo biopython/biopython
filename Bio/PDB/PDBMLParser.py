@@ -30,7 +30,7 @@ def _parse_resolution_from(
         "PDBx:em_3d_reconstructionCategory/PDBx:em_3d_reconstruction/PDBx:resolution",
     ]:
         element = tree.find(candidate, namespaces)
-        if element:
+        if element is not None:
             text = element.text
             if text:
                 return float(text)
