@@ -850,8 +850,13 @@ class Tree(TreeElement, TreeMixin):
             if len(outgroup_path) == 1:
                 # No nodes between the original root and outgroup to rearrange.
                 # Most of the code below will be skipped, but we still need
-                # 'new_parent' pointing at the new root.
+                # 'new_parent' pointing at the new root. The outgroup was a
+                # direct child of the old root, so the remaining part of its
+                # original branch still has to be reduced by the new outgroup
+                # branch length (the equivalent bookkeeping happens in the
+                # else branch below).
                 new_parent = new_root
+                prev_blen -= outgroup.branch_length
             else:
                 parent = outgroup_path.pop(-2)
                 # First iteration of reversing the path to the outgroup
