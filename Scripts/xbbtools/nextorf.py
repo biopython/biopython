@@ -12,13 +12,14 @@
 
 """Find next open reading frame in sequence data."""
 
+import getopt
 import re
 import sys
-import getopt
 
 from Bio import SeqIO
+from Bio.Data import CodonTable
+from Bio.Data import IUPACData
 from Bio.Seq import Seq
-from Bio.Data import IUPACData, CodonTable
 
 
 class MissingTable:

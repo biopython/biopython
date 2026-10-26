@@ -25,8 +25,6 @@ import numpy as np
 
 from Bio import Align
 from Bio import AlignIO
-
-# biopython
 from Bio import BiopythonDeprecationWarning
 from Bio import motifs
 from Bio.Align import AlignInfo
@@ -919,7 +917,6 @@ EAS54_6_R         0 GTTGCTTCTGGCGTGGGTGGGGGGG 25
 
 
 class TestFromAlignmentsWithSameReference(unittest.TestCase):
-
     def test_pwas_built_with_strings(self):
         """Test that from_alignments_with_same_reference creates the correct Alignment when PWA inputs were built with strings"""
         aligner = PairwiseAligner()
