@@ -493,6 +493,36 @@ class WriteTest(unittest.TestCase):
 
         test_b_factor(_MAX_B_FACTOR + 10, _MAX_B_FACTOR, assert_warn=True)
 
+    def test_pdbio_write_ter(self):
+        """Test TER records fit in 80 columns and take their own serial."""
+        structure = self.parser.get_structure("1ssu_mod", "PDB/1SSU_mod.pdb")
+        self.io.set_structure(structure)
+        filenumber, filename = tempfile.mkstemp()
+        os.close(filenumber)
+        try:
+            self.io.save(filename)
+            with open(filename) as handle:
+                lines = handle.read().splitlines()
+        finally:
+            os.remove(filename)
+
+        for line in lines:
+            self.assertLessEqual(len(line), 80, line)
+        ter_lines = [line for line in lines if line.startswith("TER")]
+        self.assertEqual(len(ter_lines), 4)
+        for line in ter_lines:
+            self.assertEqual(len(line), 80)
+        # Two models of two chains with one atom each, numbering restarts
+        # on each model and the atom after a TER does not reuse its serial
+        records = [
+            (line[:6], int(line[6:11]))
+            for line in lines
+            if line.startswith(("ATOM", "TER"))
+        ]
+        model = [("ATOM  ", 1), ("TER   ", 2), ("ATOM  ", 3), ("TER   ", 4)]
+        self.assertEqual(records, model * 2)
+        self.assertEqual(ter_lines[1].rstrip(), "TER       4      ASP B   1")
+
     def test_pdbio_write_formatting(self):
         structure = self.parser.get_structure("format_test", "PDB/1A8O.pdb")
         self.io.set_structure(structure)

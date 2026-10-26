@@ -21,6 +21,10 @@ life, our support for it is now deprecated.
 * ``Bio.PDB.PDBIO`` now raises ``PDBIOException`` when writing a modern residue
   name longer than the legacy PDB format three character limit.
 
+* ``Bio.PDB.PDBIO`` now writes ``TER`` records within the 80 columns of the PDB
+  format (they were padded to 81) and with their own serial number, which was
+  reused for the first atom of the next chain.
+
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
@@ -28,6 +32,7 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Mohit Arvind Khakharia (first contribution)
+- Rubén Chaves (first contribution)
 - Yuxuan Luo (first contribution)
 
 6 August 2026: Biopython 1.88

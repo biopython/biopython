@@ -19,9 +19,8 @@ _PQR_ATOM_FORMAT_STRING = (
     "%s%5i %-4s%c%3s %c%4i%c   %8.3f%8.3f%8.3f %7s  %6s      %2s\n"
 )
 
-_TER_FORMAT_STRING = (
-    "TER   %5i      %3s %c%4i%c                                                      \n"
-)
+# Columns 1-27 padded to the 80 columns of a PDB record
+_TER_FORMAT_STRING = "TER   %5i      %3s %c%4i%c" + " " * 53 + "\n"
 
 _MAX_B_FACTOR_2DP = 1_000
 _MAX_B_FACTOR_1DP = 10_000
@@ -374,6 +373,13 @@ class PDBIO(StructureIO):
         written out, 0 otherwise.
 
         Typically select is a subclass of L{Select}.
+
+        :param preserve_atom_numbering: write each atom with its stored
+            serial number (``atom.serial_number``) instead of numbering the
+            atoms from 1 in each model. Each TER record takes the serial
+            following the last atom of its chain, so the stored numbers
+            should leave room for it, as in files read with PDBParser.
+        :type preserve_atom_numbering: bool
         """
         if isinstance(file, str):
             fhandle = open(file, "w")
@@ -485,6 +491,8 @@ class PDBIO(StructureIO):
                         _TER_FORMAT_STRING
                         % (atom_number, resname, chain_id, resseq, icode)
                     )
+                    # TER takes its own serial number, the next atom follows it
+                    atom_number += 1
 
             if model_flag and model_residues_written:
                 fhandle.write("ENDMDL\n")
