@@ -1,0 +1,27 @@
+LOCUS       name                     136 bp    DNA     linear   UNK 01-JAN-1980
+DEFINITION  description.
+ACCESSION   id
+VERSION     id
+KEYWORDS    .
+SOURCE      .
+  ORGANISM  .
+            .
+BASE COUNT     1284 a   1068 c   1078 g   1308 t
+FEATURES             Location/Qualifiers
+     protein_bind    1..34
+                     /label="loxP"
+     protein_bind    35..68
+                     /label="lox66"
+     protein_bind    complement(69..102)
+                     /label="lox66"
+     protein_bind    69..102
+                     /label="lox71"
+     protein_bind    complement(35..68)
+                     /label="lox71"
+     protein_bind    103..136
+                     /label="loxP_mutant"
+ORIGIN
+        1 ataacttcgt atattttatt ttatacgaag ttatataact tcgtatattt tattttatac
+       61 gaacggtata ccgttcgtat attttatttt atacgaagtt attaccgttc gtatatttta
+      121 ttttatacga acggta
+//
