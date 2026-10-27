@@ -107,7 +107,7 @@ class TestEmblRewrite(SeqRecordTestBaseClass):
         old.dbxrefs = []
         old.annotations["accessions"] = old.annotations["accessions"][:1]
         del old.annotations["references"]
-
+        del old.annotations["date"]
         buffer = StringIO()
         self.assertEqual(1, SeqIO.write(old, buffer, "embl"))
         buffer.seek(0)
