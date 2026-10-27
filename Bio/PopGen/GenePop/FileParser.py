@@ -348,3 +348,176 @@ class FileRecord:
         self.remove_loci_by_position(positions, fname)
         # If here than locus not existent... Maybe raise exception?
         #   Although it should be Ok... Just a boolean return, maybe?
+    
+    def _fmt_marker_tuple(marker, marker_len=3):
+    out = []
+    for al in marker:
+        s = "0" if al is None else str(al)
+        while len(s) < marker_len:
+            s = "0" + s
+        out.append(s)
+    return "".join(out)
+
+    def make_subpopulation(self,
+                       out_fname,
+                       pop_indices=None,
+                       loci=None,
+                       genotypes=None,
+                       rule="AND",
+                       only_subpop=False,
+                       marker_len=3):
+    """Create a subpopulation from selected populations based on locus genotypes.
+
+    This scans specified populations, filters individuals by genotype criteria
+    at the given locus/loci, and writes a new GenePop file. By default, the
+    new subpopulation is appended as an extra 'POP' block at the end. If
+    only_subpop is True, the output file contains only the constructed
+    subpopulation.
+
+    Arguments:
+     - out_fname     - Output file name to write the resulting GenePop file.
+     - pop_indices   - Iterable of population indices (0-based) to search.
+                       If None, all populations are scanned.
+     - loci          - Iterable of locus specifiers to check. Each element is
+                       either an integer index (0-based) into loci_list or a
+                       locus name string. Required if genotypes is given.
+     - genotypes     - Iterable of genotype specs, one per locus in 'loci'.
+                       Each spec can be:
+                         * a tuple/list of alleles (e.g., (100,101) or (105,))
+                           which must match exactly; or
+                         * a callable: f(geno_tuple) -> bool, where geno_tuple
+                           is the individual's genotype at that locus, e.g.
+                           (100,101), (101,101), (None,103), or (105,) for haploid.
+                       Required if loci is given.
+     - rule          - Combination rule across multiple loci. "AND" requires
+                       the individual to satisfy all locus conditions; "OR"
+                       accepts individuals satisfying at least one. Default "AND".
+     - only_subpop   - If True, write only the constructed subpopulation.
+                       If False (default), write the entire original file and
+                       then append the subpopulation as a new 'POP' block.
+     - marker_len    - Allele width to use when writing (default 3), following
+                       this class's writer conventions.
+
+    Notes:
+     - Population indices are zero-based and follow the streaming order.
+     - Genotype tuple matching is exact (ordered) by default. If you need
+       unordered matching or more complex logic (e.g., "has allele 101"),
+       pass a callable for that locus in 'genotypes'.
+     - Memory usage is proportional to the number of matched individuals.
+    """
+    # ---- validate inputs ----
+    if genotypes is None:
+        raise ValueError("'genotypes' is required.")
+
+    if loci is None:
+        loci = range(len(self.loci_list)) # scan all loci by default
+
+    loci = list(loci)
+    genotypes = list(genotypes)
+    if len(loci) != len(genotypes):
+        raise ValueError("'loci' and 'genotypes' must have the same length.")
+
+    # resolve locus specifiers to indices
+    name_to_idx = {name: idx for idx, name in enumerate(self.loci_list)}
+    locus_idx = []
+    for spec in loci:
+        if isinstance(spec, int):
+            locus_idx.append(spec)
+        else:
+            if spec not in name_to_idx:
+                raise ValueError(f"Locus '{spec}' not found in loci_list.")
+            locus_idx.append(name_to_idx[spec])
+
+    # normalize population filter
+    pop_filter = None if pop_indices is None else set(int(x) for x in pop_indices)
+
+    # helper: format genotype tuple for writing
+    def _fmt(marker):
+        parts = []
+        for al in marker:
+            s = "0" if al is None else str(al)
+            while len(s) < marker_len:
+                s = "0" + s
+            parts.append(s)
+        return "".join(parts)
+
+    # helper: test one locus condition (exact tuple or callable)
+    def _matches(geno, spec):
+        if callable(spec):
+            return bool(spec(geno))
+        # exact match (ordered)
+        try:
+            return tuple(geno) == tuple(spec)
+        except TypeError:
+            raise ValueError(f"Invalid genotype spec: {spec!r} (expected tuple/list or callable)")
+
+    combine_and = (rule.upper() == "AND")
+    if rule.upper() not in ("AND", "OR"):
+        raise ValueError("rule must be 'AND' or 'OR'.")
+
+    # ---- PASS 1: collect matched individuals ----
+    matched = []  # list of (name, markers)
+    scan = read(self.fname)
+    p = -1
+    i = 0
+    item = scan.get_individual()
+    while item:
+        if item is True:
+            p += 1
+            i = 0
+        else:
+            name, markers = item
+            if (pop_filter is None) or (p in pop_filter):
+                outcomes = []
+                for idx, spec in zip(locus_idx, genotypes):
+                    if idx < 0 or idx >= len(markers):
+                        raise IndexError(f"Locus index {idx} out of range (n_loci={len(markers)}).")
+                    outcomes.append(_matches(markers[idx], spec))
+                ok = all(outcomes) if combine_and else any(outcomes)
+                if ok:
+                    matched.append((name, markers))
+            i += 1
+        item = scan.get_individual()
+
+    # ---- PASS 2: write output ----
+    src2 = read(self.fname)
+    with open(out_fname, "w") as f:
+        # comment + loci header (one name per line to match this class)
+        f.write(self.comment_line + "\n")
+        for locus in src2.loci_list:
+            f.write(locus + "\n")
+
+        if only_subpop:
+            # Only the constructed subpopulation
+            f.write("POP\n")
+            for nm, mk in matched:
+                f.write(nm + ",")
+                for lm in mk:
+                    f.write(" " + _fmt(lm))
+                f.write("\n")
+            return
+
+        # Write original pops unchanged
+        f.write("POP\n")
+        item = src2.get_individual()
+        while item:
+            if item is True:
+                f.write("POP\n")
+            else:
+                name, markers = item
+                f.write(name + ",")
+                for lm in markers:
+                    f.write(" " + _fmt(lm))
+                f.write("\n")
+            item = src2.get_individual()
+
+        # Append subpopulation as new block
+        f.write("POP\n")
+        for nm, mk in matched:
+            f.write(nm + ",")
+            for lm in mk:
+                f.write(" " + _fmt(lm))
+            f.write("\n")
+
+
+    
