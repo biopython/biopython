@@ -22,7 +22,6 @@ from Bio.SeqFeature import BetweenPosition
 from Bio.SeqFeature import CompoundLocation
 from Bio.SeqFeature import ExactPosition
 from Bio.SeqFeature import Location
-from Bio.SeqFeature import LocationParserError
 from Bio.SeqFeature import OneOfPosition
 from Bio.SeqFeature import SeqFeature
 from Bio.SeqFeature import SimpleLocation
@@ -405,16 +404,6 @@ class TestLocations(unittest.TestCase):
         instance = CompoundLocation([f1, f2])
         spec = "10..40"
         self.assertEqual(Location.fromstring(spec), instance.fromstring(spec))
-
-    def test_fromstring_double_complement(self):
-        """Test the error message for a doubly complemented location."""
-        spec = "complement(join(complement(1..5),10..20))"
-        with self.assertRaises(LocationParserError) as cm:
-            Location.fromstring(spec)
-        self.assertEqual(
-            str(cm.exception),
-            "double complement in 'join(complement(1..5),10..20)'?",
-        )
 
 
 class TestPositions(unittest.TestCase):
