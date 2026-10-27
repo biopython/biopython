@@ -45,14 +45,17 @@ def read(handle):
     record = Record()
     _read_version(record, handle)
     _read_alphabet(record, handle)
-    _read_background(record, handle)
+    read_motif_line, line = _read_background(record, handle)
 
     while True:
-        for line in handle:
-            if line.startswith("MOTIF"):
-                break
+        if read_motif_line is True:
+            read_motif_line = False
         else:
-            return record
+            for line in handle:
+                if line.startswith("MOTIF"):
+                    break
+            else:
+                return record
         name = line.split()[1]
         motif_number += 1
         length, num_occurrences, evalue = _read_motif_statistics(handle)
@@ -96,6 +99,8 @@ class Record(list):
 
 def _read_background(record, handle):
     """Read background letter frequencies (PRIVATE)."""
+    background_freqs = [0.25, 0.25, 0.25, 0.25]
+    read_motif_line = False
     for line in handle:
         if line.startswith("Background letter frequencies"):
             background_freqs = []
@@ -116,11 +121,11 @@ def _read_background(record, handle):
                     "Unexpected end of stream: Expected to find line starting background frequencies."
                 )
             break
-    else:
-        raise ValueError(
-            "Improper input file. File should contain a line starting background frequencies."
-        )
+        if line.startswith("MOTIF"):
+            read_motif_line = True
+            break
     record.background = dict(zip(record.alphabet, background_freqs))
+    return read_motif_line, line
 
 
 def _read_version(record, handle):
