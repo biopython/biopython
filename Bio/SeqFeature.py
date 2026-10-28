@@ -709,7 +709,7 @@ class Location(ABC):
                 break
             if loc.strand == -1:
                 if strand == -1:
-                    raise LocationParserError("double complement in '{text}'?")
+                    raise LocationParserError(f"double complement in '{text}'?")
             else:
                 loc.strand = strand
             locs.extend(loc.parts)
