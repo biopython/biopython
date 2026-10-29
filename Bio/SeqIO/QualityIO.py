@@ -1657,25 +1657,6 @@ class FastqPhredWriter(SequenceWriter):
         self.handle.write(self.to_string(record))
 
 
-def as_fastq(record: SeqRecord) -> str:
-    """Turn a SeqRecord into a Sanger FASTQ formatted string, and return it."""
-    warnings.warn(
-        """\
-QualityIO.as_fastq is deprecated.
-
-Instead of
-
-QualityIO.as_fastq(record)
-
-please use
-
-format(record, "fastq")
-""",
-        DeprecationWarning,
-    )
-    return FastqPhredWriter.to_string(record)
-
-
 class QualPhredWriter(SequenceWriter):
     """Class to write QUAL format files (using PHRED quality scores).
 
@@ -1823,25 +1804,6 @@ class QualPhredWriter(SequenceWriter):
             handle.write(data + "\n")
 
 
-def as_qual(record: SeqRecord) -> str:
-    """Turn a SeqRecord into a QUAL formatted string."""
-    warnings.warn(
-        """\
-QualityIO.as_qual is deprecated.
-
-Instead of
-
-QualityIO.as_qual(record)
-
-please use
-
-format(record, "qual")
-""",
-        DeprecationWarning,
-    )
-    return QualPhredWriter.to_string(record)
-
-
 class FastqSolexaWriter(SequenceWriter):
     r"""Write old style Solexa/Illumina FASTQ format files (with Solexa qualities).
 
@@ -1925,25 +1887,6 @@ class FastqSolexaWriter(SequenceWriter):
         self.handle.write(self.to_string(record))
 
 
-def as_fastq_solexa(record: SeqRecord) -> str:
-    """Turn a SeqRecord into a Solexa FASTQ formatted string."""
-    warnings.warn(
-        """\
-QualityIO.as_fastq_solexa is deprecated.
-
-Instead of
-
-QualityIO.as_fastq_solexa(record)
-
-please use
-
-format(record, "fastq-solexa")
-""",
-        DeprecationWarning,
-    )
-    return FastqSolexaWriter.to_string(record)
-
-
 class FastqIlluminaWriter(SequenceWriter):
     r"""Write Illumina 1.3+ FASTQ format files (with PHRED quality scores).
 
@@ -2001,25 +1944,6 @@ class FastqIlluminaWriter(SequenceWriter):
     def write_record(self, record: SeqRecord) -> None:
         """Write a single FASTQ record to the file."""
         self.handle.write(self.to_string(record))
-
-
-def as_fastq_illumina(record: SeqRecord) -> str:
-    """Turn a SeqRecord into an Illumina FASTQ formatted string."""
-    warnings.warn(
-        """\
-QualityIO.as_fastq_illumina is deprecated.
-
-Instead of
-
-QualityIO.as_fastq_illumina(record)
-
-please use
-
-format(record, "fastq-illumina")
-""",
-        DeprecationWarning,
-    )
-    return FastqIlluminaWriter.to_string(record)
 
 
 def PairedFastaQualIterator(

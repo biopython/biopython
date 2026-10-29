@@ -18,7 +18,6 @@ import importlib
 import numbers
 import sys
 import types
-import warnings
 from abc import ABC
 from abc import abstractmethod
 from itertools import zip_longest
@@ -32,7 +31,6 @@ except ImportError:
         "Please install NumPy if you want to use Bio.Align. See http://www.numpy.org/"
     ) from None
 
-from Bio import BiopythonDeprecationWarning
 from Bio.Align import _aligncore  # type: ignore
 from Bio.Align import _alignmentcounts  # type: ignore
 from Bio.Align import _codonaligner  # type: ignore
@@ -4397,103 +4395,13 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                 name = "substitution_matrix"
             setattr(self, name, value)
 
-    _new_keys = {
-        "target_internal_open_gap_score": "open_internal_insertion_score",
-        "target_internal_extend_gap_score": "extend_internal_insertion_score",
-        "target_internal_gap_score": "internal_insertion_score",
-        "target_left_open_gap_score": "open_left_insertion_score",
-        "target_left_extend_gap_score": "extend_left_insertion_score",
-        "target_left_gap_score": "left_insertion_score",
-        "target_right_open_gap_score": "open_right_insertion_score",
-        "target_right_extend_gap_score": "extend_right_insertion_score",
-        "target_right_gap_score": "right_insertion_score",
-        "query_internal_open_gap_score": "open_internal_deletion_score",
-        "query_internal_extend_gap_score": "extend_internal_deletion_score",
-        "query_left_open_gap_score": "open_left_deletion_score",
-        "query_left_extend_gap_score": "extend_left_deletion_score",
-        "query_right_open_gap_score": "open_right_deletion_score",
-        "query_right_extend_gap_score": "extend_right_deletion_score",
-        "target_gap_function": "insertion_score_function",
-        "query_gap_function": "deletion_score_function",
-        "internal_open_gap_score": "open_internal_gap_score",
-        "internal_extend_gap_score": "extend_internal_gap_score",
-        "left_open_gap_score": "open_left_gap_score",
-        "left_extend_gap_score": "extend_left_gap_score",
-        "right_open_gap_score": "open_right_gap_score",
-        "right_extend_gap_score": "extend_right_gap_score",
-        "end_open_gap_score": "open_end_gap_score",
-        "end_extend_gap_score": "extend_end_gap_score",
-        "target_gap_score": "insertion_score",
-        "target_open_gap_score": "open_insertion_score",
-        "target_extend_gap_score": "extend_insertion_score",
-        "target_end_gap_score": "end_insertion_score",
-        "target_end_open_gap_score": "open_end_insertion_score",
-        "target_end_extend_gap_score": "extend_end_insertion_score",
-        "query_gap_score": "deletion_score",
-        "query_open_gap_score": "open_deletion_score",
-        "query_extend_gap_score": "extend_deletion_score",
-        "query_end_gap_score": "end_deletion_score",
-        "query_end_open_gap_score": "open_end_deletion_score",
-        "query_end_extend_gap_score": "extend_end_deletion_score",
-        "query_internal_gap_score": "internal_deletion_score",
-        "query_left_gap_score": "left_deletion_score",
-        "query_right_gap_score": "right_deletion_score",
-    }
-
     def __setattr__(self, key, value):
-        try:
-            new_key = self._new_keys[key]
-        except KeyError:
-            if key == "alphabet":
-                warnings.warn(
-                    "The alphabet property is deprecated. The current "
-                    "implementation stores the alphabet, but does not use it.",
-                    BiopythonDeprecationWarning,
-                )
-                _pairwisealigner.PairwiseAligner.__setattr__(self, key, value)
-                return
-            if key not in dir(_pairwisealigner.PairwiseAligner):
-                # To prevent confusion, don't allow users to create new attributes.
-                # On CPython, __slots__ can be used for this, but currently
-                # __slots__ does not behave the same way on PyPy at least.
-                raise AttributeError(
-                    "'PairwiseAligner' object has no attribute '%s'" % key
-                )
-        else:
-            warnings.warn(
-                """\
-The attribute '%s' was renamed to '%s'. This was done to be consistent with the
-AlignmentCounts object returned by the .counts method of an Alignment object."""
-                % (key, new_key),
-                BiopythonDeprecationWarning,
-            )
-            key = new_key
+        if key not in dir(_pairwisealigner.PairwiseAligner):
+            # To prevent confusion, don't allow users to create new attributes.
+            # On CPython, __slots__ can be used for this, but currently
+            # __slots__ does not behave the same way on PyPy at least.
+            raise AttributeError("'PairwiseAligner' object has no attribute '%s'" % key)
         _pairwisealigner.PairwiseAligner.__setattr__(self, key, value)
-
-    def __getattr__(self, key):
-        try:
-            new_key = self._new_keys[key]
-        except KeyError:
-            if key == "alphabet":
-                warnings.warn(
-                    "The alphabet property is deprecated. The current "
-                    "implementation stores the alphabet, but does not use it.",
-                    BiopythonDeprecationWarning,
-                )
-                try:
-                    return _pairwisealigner.PairwiseAligner.__getattr__(self, key)
-                except AttributeError:
-                    return None
-        else:
-            warnings.warn(
-                """\
-The attribute '%s' was renamed to '%s'. This was done to be consistent with the
-AlignmentCounts object returned by the .counts method of an Alignment object."""
-                % (key, new_key),
-                BiopythonDeprecationWarning,
-            )
-            key = new_key
-        return _pairwisealigner.PairwiseAligner.__getattribute__(self, key)
 
     def align(self, seqA, seqB, strand="+"):
         """Return the alignments of two sequences using PairwiseAligner."""
