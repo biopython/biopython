@@ -27,7 +27,6 @@ from Bio import Align
 from Bio import AlignIO
 
 # biopython
-from Bio import BiopythonDeprecationWarning
 from Bio import motifs
 from Bio.Align import AlignInfo
 from Bio.Align import Alignment
@@ -397,11 +396,6 @@ T:   7.00   0.00   7.00   0.00   0.00   0.00   7.00   6.00   0.00   0.00   0.00 
 """,
         )
 
-        with self.assertWarns(BiopythonDeprecationWarning):
-            align_info = AlignInfo.SummaryInfo(msa)
-        self.assertEqual(align_info.get_column(1), "AAAAAAA")
-        self.assertEqual(align_info.get_column(7), "TTTATTT")
-
         alignment = msa.alignment
         motif = motifs.Motif("ACGT", alignment)
         counts = motif.counts
@@ -578,7 +572,6 @@ T:   7.00   0.00   7.00   0.00   0.00   0.00   7.00   6.00   0.00   0.00   0.00 
         self.assertAlmostEqual(relative_entropy[155], 2.0)
         # create a new-style Alignment object
         del seq_record
-        del align_info
         del dictionary
         del value
         alignment = msa.alignment

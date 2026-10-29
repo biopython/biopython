@@ -133,25 +133,6 @@ class TabWriter(SequenceWriter):
         self.handle.write(self.to_string(record))
 
 
-def as_tab(record):
-    """Return record as tab separated (id(tab)seq) string."""
-    warnings.warn(
-        """\
-TabIO.as_tab is deprecated.
-
-Instead of
-
-TabIO.as_tab(record)
-
-please use
-
-format(record, "tab")
-""",
-        DeprecationWarning,
-    )
-    return TabWriter.to_string(record)
-
-
 if __name__ == "__main__":
     from Bio._utils import run_doctest
 
