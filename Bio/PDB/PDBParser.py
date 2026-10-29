@@ -190,7 +190,8 @@ class PDBParser:
                     resseq = 0
                     warnings.warn(
                         "Empty residue sequence identifier in PDB file; defaulting "
-                        "residue sequence number to 0"
+                        "residue sequence number to 0",
+                        PDBConstructionWarning,
                     )
 
                 icode = line[26]  # insertion code
