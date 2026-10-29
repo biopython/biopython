@@ -28,7 +28,6 @@ from Bio import AlignIO
 
 # biopython
 from Bio import motifs
-from Bio.Align import AlignInfo
 from Bio.Align import Alignment
 from Bio.Align import MultipleSeqAlignment
 from Bio.Align import PairwiseAligner
