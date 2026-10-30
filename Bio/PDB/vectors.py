@@ -529,11 +529,12 @@ def coord_space(
     """Generate transformation matrix to coordinate space defined by 3 points.
 
     New coordinate space will have:
-        acs[0] on XZ plane
-        acs[1] origin
-        acs[2] on +Z axis
+        a0 on XZ plane
+        a1 origin
+        a2 on +Z axis
 
-    :param NumPy column array x3 acs: X,Y,Z column input coordinates x3
+    :param a0, a1, a2: X,Y,Z column input coordinates
+    :type a0, a1, a2: NumPy column array
     :param bool rev: if True, also return reverse transformation matrix
         (to return from coord_space)
     :returns: 4x4 NumPy array, x2 if rev=True
@@ -629,7 +630,6 @@ def coord_space(
 def multi_rot_Z(angle_rads: np.ndarray) -> np.ndarray:
     """Create [entries] NumPy Z rotation matrices for [entries] angles.
 
-    :param entries: int number of matrices generated.
     :param angle_rads: NumPy array of angles
     :returns: entries x 4 x 4 homogeneous rotation matrices
     """
@@ -644,7 +644,6 @@ def multi_rot_Z(angle_rads: np.ndarray) -> np.ndarray:
 def multi_rot_Y(angle_rads: np.ndarray) -> np.ndarray:
     """Create [entries] NumPy Y rotation matrices for [entries] angles.
 
-    :param entries: int number of matrices generated.
     :param angle_rads: NumPy array of angles
     :returns: entries x 4 x 4 homogeneous rotation matrices
     """
@@ -665,9 +664,9 @@ def multi_coord_space(a3: np.ndarray, dLen: int, rev: bool = False) -> np.ndarra
         acs[1] origin
         acs[2] on +Z axis
 
-    :param NumPy array [entries]x3x3 [entries] XYZ coords for 3 atoms
+    :param NumPy array a3: [entries]x3x3 [entries] XYZ coords for 3 atoms
     :param bool rev: if True, also return reverse transformation matrix
-    (to return from coord_space)
+        (to return from coord_space)
     :returns: [entries] 4x4 NumPy arrays, x2 if rev=True
 
     """
