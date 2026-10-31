@@ -24,6 +24,9 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+Parsing long NEXUS commands (for example large charsets or ``TRANSLATE``
+blocks) in ``Bio.Nexus`` is now linear rather than quadratic in their length.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
