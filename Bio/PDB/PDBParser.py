@@ -183,16 +183,19 @@ class PDBParser:
                 try:
                     serial_number = int(line[6:11])
                 except Exception:
+                    self._handle_PDB_exception(
+                        "Empty or invalid atom serial number; defaulting it to 0",
+                        global_line_counter,
+                    )
                     serial_number = 0
                 try:
                     resseq = int(line[22:26].split()[0])  # sequence identifier
                 except IndexError:
-                    resseq = 0
-                    warnings.warn(
-                        "Empty residue sequence identifier in PDB file; defaulting "
-                        "residue sequence number to 0",
-                        PDBConstructionWarning,
+                    self._handle_PDB_exception(
+                        "Empty residue sequence identifier; defaulting it to 0",
+                        global_line_counter,
                     )
+                    resseq = 0
 
                 icode = line[26]  # insertion code
                 if record_type == "HETATM":  # hetero atom flag
