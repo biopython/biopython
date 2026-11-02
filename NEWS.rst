@@ -24,6 +24,8 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+Fixed a typo in the minimum signal label in ``Bio.phenotype`` (issue #5396).
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
