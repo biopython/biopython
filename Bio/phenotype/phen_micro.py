@@ -94,7 +94,7 @@ class PlateRecord:
     Plate ID: PM01
     Well ID: B03
     Time points: 384
-    Minum signal 0.00 at time 11.00
+    Minimum signal 0.00 at time 11.00
     Maximum signal 76.25 at time 18.00
     WellRecord('(0.0, 11.0), (0.25, 11.0), (0.5, 11.0), (0.75, 11.0), (1.0, 11.0), ..., (95.75, 11.0)')
 
@@ -820,7 +820,7 @@ class WellRecord:
         Plate ID: PM01
         Well ID: A05
         Time points: 384
-        Minum signal 0.25 at time 13.00
+        Minimum signal 0.25 at time 13.00
         Maximum signal 19.50 at time 23.00
         WellRecord('(0.0, 14.0), (0.25, 13.0), (0.5, 15.0), (0.75, 15.0), (1.0, 16.0), ..., (95.75, 16.0)')
 
@@ -832,7 +832,7 @@ class WellRecord:
         if self.id:
             lines.append(f"Well ID: {self.id}")
         lines.append("Time points: %i" % len(self))
-        lines.append("Minum signal %.2f at time %.2f" % min(self, key=lambda x: x[1]))
+        lines.append("Minimum signal %.2f at time %.2f" % min(self, key=lambda x: x[1]))
         lines.append("Maximum signal %.2f at time %.2f" % max(self, key=lambda x: x[1]))
         lines.append(repr(self))
         return "\n".join(lines)
