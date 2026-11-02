@@ -245,7 +245,7 @@ class TestPhenoMicro(unittest.TestCase):
         )
         self.assertEqual(
             str(w),
-            "Well ID: A10\nTime points: 384\nMinum signal 0.25 at time 29.00\n"
+            "Well ID: A10\nTime points: 384\nMinimum signal 0.25 at time 29.00\n"
             "Maximum signal 16.75 at time 313.00\n"
             "WellRecord('(0.0, 37.0), (0.25, 29.0), (0.5, 32.0), (0.75, 30.0), "
             "(1.0, 29.0), ..., (95.75, 217.0)')",
