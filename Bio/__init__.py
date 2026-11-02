@@ -12,9 +12,6 @@ of freely available Python tools for computational molecular biology.
 https://biopython.org
 """
 
-import os
-import warnings
-
 __version__ = "1.89.dev0"
 
 
@@ -111,37 +108,3 @@ class BiopythonExperimentalWarning(BiopythonWarning):
     If all goes well, experimental code would be promoted to stable in
     a subsequent release, and this warning removed from it.
     """
-
-
-_parent_dir = os.path.dirname(os.path.dirname(__file__))
-if os.path.exists(os.path.join(_parent_dir, "pyproject.toml")):
-    # Looks like we are running from our source directory,
-    # a bad idea except if installed in development mode.
-    #
-    # See https://setuptools.readthedocs.io/en/latest/userguide/development_mode.html
-    # Do we have .../site-packages/biopython.egg-link present?
-    #
-    # Note "pip install -e ." currently calls setuptools internally
-    import site
-
-    _dev_mode = False
-    for _p in site.getsitepackages():
-        if os.path.isfile(os.path.join(_p, "biopython.egg-link")):
-            _dev_mode = True
-            break
-    # Also check the user specific site packages
-    if not _dev_mode and os.path.isfile(
-        os.path.join(site.getusersitepackages(), "biopython.egg-link")
-    ):
-        _dev_mode = True
-    if not _dev_mode:
-        warnings.warn(
-            "You may be importing Biopython from inside the source tree."
-            " This is bad practice and might lead to downstream issues."
-            " In particular, you might encounter ImportErrors due to"
-            " missing compiled C extensions. We recommend that you"
-            " try running your code from outside the source tree."
-            " If you are outside the source tree then you have a"
-            " pyproject.toml file in an unexpected directory: " + _parent_dir,
-            BiopythonWarning,
-        )

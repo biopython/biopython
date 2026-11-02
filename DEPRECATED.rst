@@ -107,20 +107,21 @@ format accepted by BLAST, treating any lines starting with '#', ';', or '!' as
 comment lines and ignoring them.
 
 The functions ``as_fasta`` and ``as_fasta_2line`` in ``Bio.SeqIO.FastaIO`` were
-deprecated in release 1.86. Please use ``format(record, "fasta")`` or
-``format(record, "fasta-2line")`` instead.
+deprecated in release 1.86, and removed in release 1.89. Please use
+``format(record, "fasta")`` or ``format(record, "fasta-2line")`` instead.
 
 Bio.SeqIO.qualityIO
 -------------------
 The functions ``as_fastq``, ``as_fastq_solexa``, ``as_fastq_illumina``, and
-``as_qual`` in ``Bio.SeqIO.QualityIO`` were deprecated in release 1.86.
-Please use ``format(record, "fastq")``, ``format(record, "fastq-solexa")``, 
-``format(record, "fastq-illumina")``, or ``format(record, "qual")`` instead.
+``as_qual`` in ``Bio.SeqIO.QualityIO`` were deprecated in release 1.86, and
+removed in release 1.89.  Please use ``format(record, "fastq")``,
+``format(record, "fastq-solexa")``, ``format(record, "fastq-illumina")``, or
+``format(record, "qual")`` instead.
 
 Bio.SeqIO.TabIO
 -------------------
-The function ``as_tab`` in ``Bio.SeqIO.TabIO`` was deprecated in release 1.86.
-Please use ``format(record, "tab")`` instead.
+The function ``as_tab`` in ``Bio.SeqIO.TabIO`` was deprecated in release 1.86,
+and removed in release 1.89.  Please use ``format(record, "tab")`` instead.
 
 Bio.SeqIO.UniprotIO
 -------------------
@@ -147,10 +148,10 @@ Bio.AlignInfo
 -------------
 The ``pos_specific_score_matrix`` method of the ``SummaryInfo`` class and the
 ``PSSM`` class were deprecated in release 1.82, and removed in release 1.85.
-The ``SummaryInfo`` class itself was deprecated in release 1.86.  As an
-alternative, please use the ``alignment`` property of a ``MultipleSeqAlignment``
-object to obtains a new-style ``Alignment`` object, and use it to create a
-``Bio.motifs.Motif`` object. For example,
+The ``SummaryInfo`` class itself was deprecated in release 1.86, and removed
+in release 1.89.  As an alternative, please use the ``alignment`` property of a
+``MultipleSeqAlignment`` object to obtains a new-style ``Alignment`` object,
+and use it to create a ``Bio.motifs.Motif`` object. For example,
 
 >>> alignment = msa.alignment
 >>> from Bio.motifs import Motif
@@ -189,6 +190,7 @@ class were deprecated in release 1.82, and removed in release 1.86.
 
 The ``print_info_content`` function in ``Bio.Align.AlignInfo`` was deprecated
 in release 1.82, and removed in release 1.86.
+
 
 Bio.kNN
 -------
@@ -675,6 +677,7 @@ Release 1.82. Please use the new Alignment class instead.
 
 Attributes of the PairwiseAligner class referring to gap scores were renamed in
 Release 1.86, with the original name still available with a deprecation warning.
+In Release 1.89, the old names for the attributes were removed.
 These attributes were renamed to be consistent with the AlignmentCounts class
 and with the common nomenclature in the literature.
 
@@ -694,8 +697,7 @@ With the new default parameter for the gap score, only the first alignment is
 returned.
 
 The ``alphabet`` attribute of the PairwiseAligner class was deprecated in
-Release 1.86. The attribute is still being stored, but it is not used in any
-way.
+Release 1.86, and removed in Release 1.89.
 
 Bio.Align.Generic
 -----------------

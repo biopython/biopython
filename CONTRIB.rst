@@ -212,6 +212,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Kamil Slowikowski <k no dot slowikowski at gmail dot com>
 - Karthikeyan Singaravelan <https://github.com/tirkarthi>
 - Katharine Lindner <katel at domain worldpath.net>
+- Kaustav Paul <https://github.com/Kaustav5505g>
 - Kevin Jacobs <jacobs at bioinformed dot com>
 - Kevin Wu <https://github.com/kevinwuhoo>
 - Kian Ho <https://github.com/kianho>
@@ -385,6 +386,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Yiming Qu <https://github.com/whatever60>
 - Yogesh Kulkarni <https://https://github.com/yogeshhk>
 - Yu Huang <krocea at domain yahoo.com.cn>
+- Yuxuan Luo <https://github.com/Oblivionis028>
 - Yves Bastide <ybastide at domain irisa.fr>
 - Zachary Sailer <https://github.com/Zsailer>
 - Zaid Ur-Rehman <https://github.com/zaidurrehman>

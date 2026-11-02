@@ -641,44 +641,6 @@ class FastaTwoLineWriter(FastaWriter):
         return f">{title}\n{data}\n"
 
 
-def as_fasta(record):
-    """Turn a SeqRecord into a FASTA formatted string."""
-    warnings.warn(
-        """\
-FastaIO.as_fasta is deprecated.
-
-Instead of
-
-FastaIO.as_fasta(record)
-
-please use
-
-format(record, "fasta")
-""",
-        DeprecationWarning,
-    )
-    return FastaWriter.to_string(record)
-
-
-def as_fasta_2line(record):
-    """Turn a SeqRecord into a two-line FASTA formatted string."""
-    warnings.warn(
-        """\
-FastaIO.as_fasta_2line is deprecated.
-
-Instead of
-
-FastaIO.as_fasta_2line(record)
-
-please use
-
-format(record, "fasta-2line")
-""",
-        DeprecationWarning,
-    )
-    return FastaTwoLineWriter.to_string(record)
-
-
 if __name__ == "__main__":
     from Bio._utils import run_doctest
 
