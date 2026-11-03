@@ -203,6 +203,16 @@ class DistanceCalculatorTest(unittest.TestCase):
         self.assertEqual(dmat["Alpha", "Alpha"], 0.0)
         self.assertAlmostEqual(dmat["Alpha", "Gamma"], 4.0 / 5.0)
 
+    def test_identity_skip_letters_excludes_columns_from_distance(self):
+        for alignment in (
+            AlignIO.read(StringIO(">Alpha\nAC--GT\n>Gamma\nAC--GT"), "fasta"),
+            Align.read(StringIO(">Alpha\nAC--GT\n>Gamma\nAC--GT"), "fasta"),
+        ):
+            dmat = DistanceCalculator("identity", skip_letters=("-", "*")).get_distance(
+                alignment
+            )
+            self.assertEqual(dmat["Alpha", "Gamma"], 0.0)
+
 
 class DistanceTreeConstructorTest(unittest.TestCase):
     """Test DistanceTreeConstructor."""
