@@ -6,6 +6,10 @@ the _Biopython License Agreement_ **AND** the _BSD 3-Clause License_.
 
 - [ ] I have read the ``CONTRIBUTING.rst`` file, and declared any usage of
 Large Language Models (LLM) or generative artificial intelligence (AI) tools.
+Biopython is currently debating a no AI policy (#5241) versus an AI permissive
+policy (#5388), but in either case we'd want AI usage to be declared and all
+communications to by human written (unless machine translated to English
+accepted if declared).
 
 - [ ] I have run ``pre-commit`` locally, and understand that continuous
 integration checks will be used to confirm the Biopython unit tests and style
