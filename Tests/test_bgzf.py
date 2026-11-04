@@ -11,6 +11,7 @@ See also the doctests in bgzf.py which are called via run_tests.py
 import gzip
 import io
 import os
+import random
 import tempfile
 import unittest
 from random import shuffle
@@ -399,6 +400,15 @@ class BgzfTests(unittest.TestCase):
             h.seek(offset1)
             self.assertEqual(offset1, h.tell())
             self.assertEqual(h.read(5), "Magic")
+
+    def test_write_random_data(self):
+        """Check writing incompressible data handles the BGZF block size limit."""
+        data = random.randbytes(65536)
+        with bgzf.BgzfWriter(self.temp_file, "wb") as writer:
+            writer.write(data)
+
+        with gzip.open(self.temp_file, "rb") as reader:
+            self.assertEqual(reader.read(), data)
 
     def test_append_mode(self):
         with bgzf.open(self.temp_file, "wb") as h:
