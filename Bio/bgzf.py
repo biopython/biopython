@@ -831,10 +831,13 @@ class BgzfWriter:
         )
         compressed = c.compress(block) + c.flush()
         del c
-        if len(compressed) > 65536:
-            raise RuntimeError(
-                "TODO - Didn't compress enough, try less data in this block"
-            )
+        if len(compressed) + 25 > 65535:
+            if len(block) < 2:
+                raise RuntimeError("Unable to fit data into a BGZF block")
+            midpoint = len(block) // 2
+            self._write_block(block[:midpoint])
+            self._write_block(block[midpoint:])
+            return
         bsize = struct.pack("<H", len(compressed) + 25)  # includes -1
         crc = struct.pack("<I", zlib.crc32(block) & 0xFFFFFFFF)
         uncompressed_length = struct.pack("<I", len(block))
