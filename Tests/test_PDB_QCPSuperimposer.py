@@ -136,6 +136,29 @@ class QCPSuperimposerTest(unittest.TestCase):
         self.assertAlmostEqual(rms_fitted, 0.0, places=12)
         self.assertTrue(np.allclose(fitted, ref, atol=1e-12))
 
+    def test_collinear_reported_rmsd(self):
+        """Report the RMSD of the returned fit for degenerate point sets."""
+        direction = np.array([5.0, 5.0, 2.0]) / np.sqrt(54)
+        ref = np.array([-30 * direction, 0 * direction, 30 * direction])
+        for reference, mobile in [
+            (ref, ref.copy()),
+            (ref[[0, 2]], ref[[0, 2]].copy()),
+            (ref, ref + np.array([2.0, -5.0, 7.0])),
+        ]:
+            with self.subTest(reference=reference, mobile=mobile):
+                sup = QCPSuperimposer()
+                sup.set(reference, mobile)
+                sup.run()
+                fitted_rmsd = np.sqrt(
+                    ((reference - sup.get_transformed()) ** 2).sum(1).mean()
+                )
+                svd_sup = SVDSuperimposer()
+                svd_sup.set(reference, mobile)
+                svd_sup.run()
+                self.assertAlmostEqual(sup.get_rms(), 0.0, places=9)
+                self.assertAlmostEqual(sup.get_rms(), fitted_rmsd, places=9)
+                self.assertAlmostEqual(sup.get_rms(), svd_sup.get_rms(), places=9)
+
     def test_get_transformed(self):
         """Test transformation of coordinates after QCP."""
         sup = QCPSuperimposer()
