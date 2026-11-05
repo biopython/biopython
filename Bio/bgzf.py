@@ -831,9 +831,9 @@ class BgzfWriter:
         )
         compressed = c.compress(block) + c.flush()
         del c
+        # 25 is the BGZF header/extra fields and CRC32/ISIZE footer (26 bytes,
+        # minus one because BSIZE stores total block size minus one).
         if len(compressed) + 25 > 65535:
-            if len(block) < 2:
-                raise RuntimeError("Unable to fit data into a BGZF block")
             midpoint = len(block) // 2
             self._write_block(block[:midpoint])
             self._write_block(block[midpoint:])
