@@ -403,12 +403,16 @@ class BgzfTests(unittest.TestCase):
 
     def test_write_random_data(self):
         """Check writing incompressible data handles the BGZF block size limit."""
-        data = random.randbytes(65536)
+        data = random.Random(0).randbytes(65536)
         with bgzf.BgzfWriter(self.temp_file, "wb") as writer:
             writer.write(data)
 
         with gzip.open(self.temp_file, "rb") as reader:
             self.assertEqual(reader.read(), data)
+
+        with open(self.temp_file, "rb") as handle:
+            blocks = list(bgzf.BgzfBlocks(handle))
+        self.assertEqual([block[3] for block in blocks[:-1]], [32768, 32768])
 
     def test_append_mode(self):
         with bgzf.open(self.temp_file, "wb") as h:
