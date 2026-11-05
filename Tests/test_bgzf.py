@@ -412,7 +412,7 @@ class BgzfTests(unittest.TestCase):
 
         with open(self.temp_file, "rb") as handle:
             blocks = list(bgzf.BgzfBlocks(handle))
-        self.assertEqual([block[3] for block in blocks[:-1]], [32768, 32768])
+        self.assertEqual([block[3] for block in blocks], [32768, 32768, 0])
 
     def test_append_mode(self):
         with bgzf.open(self.temp_file, "wb") as h:
