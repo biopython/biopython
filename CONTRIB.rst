@@ -119,6 +119,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Diana Jaunzeikare
 - Diego Brouard <diego at domain conysis.com>
 - Dimitris Kalafatis <https://github.com/dimi1729>
+- Dresden Goehner <https://github.com/DresdenGman>
 - Edward Haigh <lambda at edwardhaigh dot com>
 - Edward Liaw <https://github.com/edliaw>
 - Ee Shan Shirley Liau <https://github.com/shirleyliau>
