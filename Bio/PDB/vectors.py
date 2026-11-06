@@ -534,7 +534,6 @@ def coord_space(
         a2 on +Z axis
 
     :param a0, a1, a2: X,Y,Z column input coordinates
-    :type a0, a1, a2: NumPy column array
     :param bool rev: if True, also return reverse transformation matrix
         (to return from coord_space)
     :returns: 4x4 NumPy array, x2 if rev=True
