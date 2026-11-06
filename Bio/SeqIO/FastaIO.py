@@ -372,7 +372,7 @@ class FastaBlastIterator(SequenceIterator):
             if line[0] in "#!;":
                 pass
             elif line[0] == ">":
-                self_line = line
+                self._line = line
                 break
             else:
                 lines.append(line.rstrip())
