@@ -831,16 +831,13 @@ class BgzfWriter:
         )
         compressed = c.compress(block) + c.flush()
         del c
-        if len(compressed) > 65536:
-            raise RuntimeError(
-                "TODO - Didn't compress enough, try less data in this block"
-            )
-        crc = zlib.crc32(block)
-        # Should cope with a mix of Python platforms...
-        if crc < 0:
-            crc = struct.pack("<i", crc)
-        else:
-            crc = struct.pack("<I", crc)
+        # 25 is the BGZF header/extra fields and CRC32/ISIZE footer (26 bytes,
+        # minus one because BSIZE stores total block size minus one).
+        if len(compressed) + 25 > 65535:
+            midpoint = len(block) // 2
+            self._write_block(block[:midpoint])
+            self._write_block(block[midpoint:])
+            return
         bsize = struct.pack("<H", len(compressed) + 25)  # includes -1
         crc = struct.pack("<I", zlib.crc32(block) & 0xFFFFFFFF)
         uncompressed_length = struct.pack("<I", len(block))
@@ -880,8 +877,8 @@ class BgzfWriter:
     def flush(self):
         """Flush data explicitally."""
         while len(self._buffer) >= 65536:
-            self._write_block(self._buffer[:65535])
-            self._buffer = self._buffer[65535:]
+            self._write_block(self._buffer[:65536])
+            self._buffer = self._buffer[65536:]
         self._write_block(self._buffer)
         self._buffer = b""
         self._handle.flush()
