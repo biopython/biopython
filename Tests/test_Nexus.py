@@ -1602,6 +1602,52 @@ end;
             NexusWriter(handle).write_file([a, a])
 
 
+class TestCharBuffer(unittest.TestCase):
+    """Tests for the internal NEXUS tokenizer."""
+
+    def test_words_and_rest(self):
+        buf = Nexus.CharBuffer("  foo = 'a b''c' [x] tail; ")
+        self.assertEqual(buf.peek_nonwhitespace(), "f")
+        self.assertEqual(buf.next_word(), "foo")
+        self.assertEqual(buf.next_word(), "=")
+        self.assertEqual(buf.next_word(), "'a b'c'")
+        self.assertEqual(buf.next_nonwhitespace(), "[")
+        self.assertEqual(buf.next_until("]"), "x")
+        self.assertEqual(next(buf), "]")
+        self.assertTrue(buf.peek_word(" tail"))
+        self.assertEqual(buf.rest(), " tail; ")
+        buf.skip_whitespace()
+        self.assertEqual(buf.peek(), "t")
+        self.assertIsNone(buf.next_until("#"))
+        self.assertEqual(buf.next_word(), "tail")
+        self.assertEqual(buf.next_word(), ";")
+        self.assertIsNone(buf.next_word())
+        self.assertIsNone(buf.peek())
+        self.assertIsNone(next(buf))
+        self.assertEqual(buf.rest(), "")
+
+    def test_empty(self):
+        for text in ("", None):
+            buf = Nexus.CharBuffer(text)
+            self.assertIsNone(buf.peek())
+            self.assertIsNone(buf.peek_nonwhitespace())
+            self.assertIsNone(buf.next_word())
+            self.assertEqual(buf.rest(), "")
+            self.assertRaises(IndexError, buf.skip_whitespace)
+
+    def test_long_charset(self):
+        # Used to be quadratic in the length of the command
+        n = 20000
+        nex = Nexus.Nexus()
+        nex.nchar = n
+        name, indices = nex._get_indices(
+            "big = " + " ".join(str(i) for i in range(1, n + 1)),
+            set_type=Nexus.CHARSET,
+        )
+        self.assertEqual(name, "big")
+        self.assertEqual(indices, list(range(n)))
+
+
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
     unittest.main(testRunner=runner)

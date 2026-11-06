@@ -70,30 +70,36 @@ class CharBuffer:
 
     def __init__(self, string):
         """Initialize the class."""
-        if string:
-            self.buffer = list(string)
-        else:
-            self.buffer = []
+        # Keep the text plus a read position; popping from the front of a
+        # list made each read O(n), so parsing a long command was O(n^2).
+        self._text = string or ""
+        self._pos = 0
 
     def peek(self):
         """Return the first character from the buffer."""
-        if self.buffer:
-            return self.buffer[0]
+        if self._pos < len(self._text):
+            return self._text[self._pos]
         else:
             return None
 
     def peek_nonwhitespace(self):
         """Return the first character from the buffer, do not include spaces."""
-        b = "".join(self.buffer).strip()
-        if b:
-            return b[0]
+        text = self._text
+        pos = self._pos
+        # str.isspace matches what str.strip() removes
+        while pos < len(text) and text[pos].isspace():
+            pos += 1
+        if pos < len(text):
+            return text[pos]
         else:
             return None
 
     def __next__(self):
         """Iterate over NEXUS characters in the file."""
-        if self.buffer:
-            return self.buffer.pop(0)
+        if self._pos < len(self._text):
+            c = self._text[self._pos]
+            self._pos += 1
+            return c
         else:
             return None
 
@@ -109,26 +115,23 @@ class CharBuffer:
 
     def skip_whitespace(self):
         """Skip whitespace characters in NEXUS file."""
-        while self.buffer[0] in WHITESPACE:
-            self.buffer = self.buffer[1:]
+        while self._text[self._pos] in WHITESPACE:
+            self._pos += 1
 
     def next_until(self, target):
         """Iterate over the NEXUS file until a target character is reached."""
         for t in target:
-            try:
-                pos = self.buffer.index(t)
-            except ValueError:
-                pass
-            else:
-                found = "".join(self.buffer[:pos])
-                self.buffer = self.buffer[pos:]
+            pos = self._text.find(t, self._pos)
+            if pos != -1:
+                found = self._text[self._pos : pos]
+                self._pos = pos
                 return found
         else:
             return None
 
     def peek_word(self, word):
         """Return a word stored in the buffer."""
-        return "".join(self.buffer[: len(word)]) == word
+        return self._text[self._pos : self._pos + len(word)] == word
 
     def next_word(self):
         """Return the next NEXUS word from a string.
@@ -170,7 +173,7 @@ class CharBuffer:
 
     def rest(self):
         """Return the rest of the string without parsing."""
-        return "".join(self.buffer)
+        return self._text[self._pos :]
 
 
 class StepMatrix:
