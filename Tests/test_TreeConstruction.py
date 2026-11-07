@@ -24,6 +24,7 @@ from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
 from Bio.Phylo.TreeConstruction import NNITreeSearcher
 from Bio.Phylo.TreeConstruction import ParsimonyScorer
 from Bio.Phylo.TreeConstruction import ParsimonyTreeConstructor
+from Bio.Seq import Seq
 
 temp_dir = tempfile.mkdtemp()
 
@@ -202,6 +203,14 @@ class DistanceCalculatorTest(unittest.TestCase):
         dmat = DistanceCalculator().get_distance(aln)
         self.assertEqual(dmat["Alpha", "Alpha"], 0.0)
         self.assertAlmostEqual(dmat["Alpha", "Gamma"], 4.0 / 5.0)
+
+    def test_negative_score_distance_bounded(self):
+        # The alignment score can be negative with blastn; the distance
+        # must still lie within [0, 1] (issue #5341).
+        calculator = DistanceCalculator("blastn")
+        distance = calculator._pairwise(Seq("GAGATCTCCGCCC"), Seq("AACGTGGCCACAT"))
+        self.assertGreaterEqual(distance, 0.0)
+        self.assertLessEqual(distance, 1.0)
 
 
 class DistanceTreeConstructorTest(unittest.TestCase):
