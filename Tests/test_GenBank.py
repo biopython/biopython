@@ -17,10 +17,9 @@ import warnings
 from datetime import datetime
 from io import StringIO
 
+# GenBank stuff to test:
 from Bio import BiopythonParserWarning
 from Bio import BiopythonWarning
-
-# GenBank stuff to test:
 from Bio import GenBank
 from Bio import SeqIO
 from Bio.Seq import Seq

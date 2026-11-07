@@ -21,8 +21,6 @@ from common_BioSQL import destroy_database
 
 from Bio import BiopythonWarning
 from Bio import Entrez
-
-# local stuff
 from Bio import MissingExternalDependencyError
 from Bio import SeqIO
 from Bio.Seq import MutableSeq

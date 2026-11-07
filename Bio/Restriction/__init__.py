@@ -55,7 +55,6 @@ Examples
 
 from Bio.Restriction.Restriction import *  # noqa (legacy module arrangement)
 
-
 #
 #   OK can't put the following code in Bio.Restriction.__init__ unless
 #   I put everything from Restriction in here.

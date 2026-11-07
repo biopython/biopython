@@ -10,6 +10,7 @@ repos:
     -   id: check-executables-have-shebangs
         files: \.(py|sh)$
     -   id: check-json
+    -   id: check-toml
     -   id: end-of-file-fixer
         files: \.py$
     -   id: mixed-line-ending
@@ -21,13 +22,6 @@ repos:
     -   id: ruff-check
         args: [
             '--fix',
-            '--extend-select=B,C4,D,ISC,UP,S307',
-            '--extend-ignore=E501,F401,F841,D105,D2,D4',
-            '--extend-ignore=B007,B009,B010,B018,B028,B904,B905,N999,RUF022,RUF023,UP031,UP031',
-            '--extend-per-file-ignores=Tests/*.py:D101,Tests/*.py:D102,Tests/*.py:D103',
-            '--extend-per-file-ignores=Tests/*.py:B015',
-            '--config=lint.isort.force-single-line=true',
-            '--config=lint.isort.order-by-type=false',
         ]
 -   repo: https://github.com/psf/black-pre-commit-mirror
     rev: 24.10.0
