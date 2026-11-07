@@ -258,6 +258,16 @@ class TreeTests(unittest.TestCase):
             for node in list(tree.find_clades()):
                 tree.root_with_outgroup(node)
                 self.assertAlmostEqual(orig_tree_len, tree.total_branch_length())
+        # A non-zero outgroup branch length on a direct child of the root must
+        # split the existing branch rather than be added to it.
+        tree = Phylo.read(StringIO("(A:1.0,B:2.0);"), "newick")
+        tree.root_with_outgroup("A", outgroup_branch_length=0.5)
+        self.assertAlmostEqual(tree.total_branch_length(), 3.0)
+        self.assertAlmostEqual(tree.distance("A", "B"), 3.0)
+        tree = Phylo.read(StringIO("(A:1.0,(B:1.0,C:1.0):1.0);"), "newick")
+        tree.root_with_outgroup("A", outgroup_branch_length=0.5)
+        self.assertAlmostEqual(tree.total_branch_length(), 4.0)
+        self.assertAlmostEqual(tree.distance("A", "B"), 3.0)
 
     def test_root_at_midpoint(self):
         """Tree.root_at_midpoint: reroot at the tree's midpoint."""
@@ -277,6 +287,22 @@ class TreeTests(unittest.TestCase):
             deep_dist_0 = max(tree.clade[0].depths().values())
             deep_dist_1 = max(tree.clade[1].depths().values())
             self.assertAlmostEqual(deep_dist_0, deep_dist_1)
+        # The midpoint can lie on a branch adjacent to the root; splitting
+        # that branch must not inflate the tree or any pairwise distance.
+        tree = Phylo.read(StringIO("(A:1.0,B:2.0);"), "newick")
+        tree.root_at_midpoint()
+        self.assertAlmostEqual(tree.total_branch_length(), 3.0)
+        self.assertAlmostEqual(tree.distance("A", "B"), 3.0)
+        self.assertEqual(len(tree.root.clades), 2)
+        lengths = sorted(c.branch_length for c in tree.root.clades)
+        self.assertAlmostEqual(lengths[0], 1.5)
+        self.assertAlmostEqual(lengths[1], 1.5)
+        tree = Phylo.read(StringIO("(t3:0,(t0:0,t2:1):2);"), "newick")
+        tree.root_at_midpoint()
+        self.assertAlmostEqual(tree.total_branch_length(), 3.0)
+        self.assertAlmostEqual(tree.distance("t0", "t3"), 2.0)
+        self.assertAlmostEqual(tree.distance("t0", "t2"), 1.0)
+        self.assertAlmostEqual(tree.distance("t2", "t3"), 3.0)
 
     # Magic method
     def test_str(self):

@@ -21,6 +21,11 @@ life, our support for it is now deprecated.
 * ``Bio.PDB.PDBIO`` now raises ``PDBIOException`` when writing a modern residue
   name longer than the legacy PDB format three character limit.
 
+* ``Bio.Phylo`` now preserves the total branch length and all pairwise tip
+  distances when ``root_with_outgroup(..., outgroup_branch_length=...)`` is
+  called on a direct child of the root, and consequently when
+  ``root_at_midpoint()`` places the new root on a root-adjacent branch.
+
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
