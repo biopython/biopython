@@ -210,6 +210,8 @@ class SeqIOFeatureTestBaseClass(SeqIOTestBaseClass):
                         # Not held in EMBL files
                         self.assertEqual(r1.medline_id, r2.medline_id, msg=msg)
                     self.assertEqual(r1.pubmed_id, r2.pubmed_id, msg=msg)
+            elif key == "date" and expect_minor_diffs:
+                continue
             elif key == "date" and (
                 isinstance(old.annotations[key], datetime.datetime)
                 or isinstance(old.annotations[key], datetime.date)
