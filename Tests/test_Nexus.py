@@ -1601,6 +1601,26 @@ end;
         with self.assertRaises(ValueError):
             NexusWriter(handle).write_file([a, a])
 
+    def test_translate_dashed_taxon_names(self):
+        # Unquoted taxon labels containing a hyphen must be preserved in the
+        # TRANSLATE block instead of raising "Missing ','" (issue #1022).
+        handle = StringIO(
+            """#NEXUS
+        begin trees;
+        translate
+        1 dog-cat,
+        2 mouse-rat,
+        3 foo-bar
+        ;
+        tree t1 = [&U] (1,(2,3));
+        end;
+        """
+        )
+        nexus = Nexus.Nexus(handle)
+        self.assertEqual(
+            nexus.translate, {1: "dog-cat", 2: "mouse-rat", 3: "foo-bar"}
+        )
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
