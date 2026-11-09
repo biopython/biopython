@@ -168,3 +168,10 @@ sources = ["Bio/SeqIO/_twoBitIO.c"]
 dev = [
     "setuptools>=74.1.0",
 ]
+
+[tool.black]
+# Pinned to 24.10.0 because newer versions aggressively strip trailing 
+# whitespace inside doctests, causing Biopython tests to fail.
+# See commit 1b5e9ccef56f253bf0b1badf92be127c93f7136b / Issue updates.
+required-version = "24.10.0"
+target-version = ["py310"]
