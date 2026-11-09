@@ -18,7 +18,7 @@ from Bio.PDB import Selection
 from Bio.PDB.PDBExceptions import PDBConstructionWarning
 
 SCRIPT = os.path.join(os.path.dirname(__file__), "..", "Scripts", "PDB", "hsexpo.py")
-PDB_FILENAME = "PDB/a_structure.pdb"
+PDB_FILENAME = os.path.join("PDB", "a_structure.pdb")
 RADIUS = 13.0  # default radius used by the script
 
 
