@@ -349,16 +349,14 @@ class Entity(Generic[_Parent, _Child]):
         for o in self.get_list():
             o.transform(rot, tran)
 
-    def center_of_mass(self, geometric=False):
-        """Return the center of mass of the Entity as a numpy array.
+    def _get_atoms(self):
+        """Return all Atom children, unpacking disordered residues (PRIVATE).
 
-        If geometric is True, returns the center of geometry instead.
+        Recursively walks the entity hierarchy until only atom-level children
+        remain, unpacking disordered residues/atoms so every alternative is
+        represented.  Shared by :meth:`center_of_mass` and
+        :meth:`radius_of_gyration`.
         """
-        # Recursively iterate through children until we get all atom coordinates
-
-        if not len(self):
-            raise ValueError(f"{self} does not have children")
-
         maybe_disordered = {"R", "C"}  # to know when to use get_unpacked_list
         only_atom_level = {"A"}
 
@@ -370,10 +368,19 @@ class Entity(Generic[_Parent, _Child]):
             else:
                 entities += e.child_list
 
-            elevels = {e.level for e in entities}
-            if elevels == only_atom_level:
+            if {e.level for e in entities} == only_atom_level:
                 break  # nothing else to unpack
+        return entities
 
+    def center_of_mass(self, geometric=False):
+        """Return the center of mass of the Entity as a numpy array.
+
+        If geometric is True, returns the center of geometry instead.
+        """
+        if not len(self):
+            raise ValueError(f"{self} does not have children")
+
+        entities = self._get_atoms()
         coords = np.asarray([a.coord for a in entities], dtype=np.float32)
         if geometric:
             masses = None
@@ -381,6 +388,36 @@ class Entity(Generic[_Parent, _Child]):
             masses = np.asarray([a.mass for a in entities], dtype=np.float32)
 
         return np.average(coords, axis=0, weights=masses)
+
+    def radius_of_gyration(self, geometric=False):
+        """Return the radius of gyration of the Entity as a float (Angstrom).
+
+        The radius of gyration (Rg) is the root-mean-square distance of the
+        atoms from their center of mass, weighted by atomic mass.  If
+        geometric is True, all atoms are weighted equally instead.
+
+        Examples
+        --------
+        >>> from Bio.PDB import PDBParser
+        >>> parser = PDBParser(QUIET=True)
+        >>> structure = parser.get_structure("1gbt", "PDB/1GBT.cif")  # doctest: +SKIP
+        >>> round(structure.radius_of_gyration(), 2)  # doctest: +SKIP
+        10.34
+
+        """
+        if not len(self):
+            raise ValueError(f"{self} does not have children")
+
+        entities = self._get_atoms()
+        coords = np.asarray([a.coord for a in entities], dtype=np.float32)
+        if geometric:
+            masses = np.ones(len(coords), dtype=np.float32)
+        else:
+            masses = np.asarray([a.mass for a in entities], dtype=np.float32)
+
+        center = np.average(coords, axis=0, weights=masses)
+        sq_dist = ((coords - center) ** 2).sum(axis=1)
+        return float(np.sqrt(np.average(sq_dist, weights=masses)))
 
     def copy(self):
         """Copy entity recursively."""
