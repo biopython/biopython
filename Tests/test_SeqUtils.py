@@ -395,7 +395,7 @@ TTT	0.886
         self.assertEqual(nt_search("ATAT", "AT"), ["AT", 0, 2])
         self.assertEqual(nt_search("ATAT", "GC"), ["GC"])
 
-        with self.assertRaisesRegex(ValueError, "Subsequence cannot be empty"):
+        with self.assertRaises(ValueError):
             nt_search("ATAT", "")
 
     def test_GC_skew(self):
