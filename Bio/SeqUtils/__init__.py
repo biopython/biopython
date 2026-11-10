@@ -280,6 +280,9 @@ def nt_search(seq, subseq):
     Use ambiguous values (like N = A or T or C or G, R = A or G etc.),
     searches only on forward strand.
     """
+    if not subseq:
+        raise ValueError("Subsequence cannot be empty")
+
     pattern = ""
     for nt in subseq:
         value = IUPACData.ambiguous_dna_values[nt]
