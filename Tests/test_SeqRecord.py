@@ -219,9 +219,9 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
 
     def test_SeqRecord_format_invalid(self):
         record = SeqRecord(Seq("ATGC"))
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "Unknown format 'nope'"):
             record.format("nope")
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "Unknown format 'nope'"):
             f"{record:nope}"
 
     def test_format_str_binary(self):

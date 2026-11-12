@@ -864,7 +864,7 @@ class SeqRecord:
         try:
             cls = SeqIO._FormatToWriter[format_spec]
         except KeyError:
-            raise ValueError(f"Unknown format {format_spec!r} for SeqRecord") from None
+            raise ValueError(f"Unknown format '{format_spec}'") from None
         try:
             return cls.to_string(self)  # type: ignore
         except StreamModeError:
