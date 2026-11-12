@@ -1,0 +1,7 @@
+>Feature Invalid2
+1	1000	gene
+			gene	one
+[offset=a]
+1500	2000	gene
+			gene	two
+
