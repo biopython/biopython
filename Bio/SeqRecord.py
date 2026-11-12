@@ -861,7 +861,10 @@ class SeqRecord:
             return str(self)
         from Bio import SeqIO
 
-        cls = SeqIO._FormatToWriter[format_spec]
+        try:
+            cls = SeqIO._FormatToWriter[format_spec]
+        except KeyError:
+            raise ValueError(f"Unknown format {format_spec!r} for SeqRecord") from None
         try:
             return cls.to_string(self)  # type: ignore
         except StreamModeError:
