@@ -217,6 +217,13 @@ Seq('ABCDEFGHIJKLMNOPQRSTUVWZYX')"""
         expected = ">TestID TestDescr\nABCDEFGHIJKLMNOPQRSTUVWZYX\n"
         self.assertEqual(expected, f"{self.record:fasta}")
 
+    def test_SeqRecord_format_invalid(self):
+        record = SeqRecord(Seq("ATGC"))
+        with self.assertRaisesRegex(ValueError, "Unknown format 'nope'"):
+            record.format("nope")
+        with self.assertRaisesRegex(ValueError, "Unknown format 'nope'"):
+            f"{record:nope}"
+
     def test_format_str_binary(self):
         with self.assertRaisesRegex(
             ValueError, "Binary format sff cannot be used with SeqRecord format method"
