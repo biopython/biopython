@@ -167,9 +167,11 @@ class ProtParamTest(unittest.TestCase):
     def test_isoelectric_point_homopolymers(self):
         """pi() returns a pH at which charge_at_pH(pH) is ~0 for homopolymers."""
         from Bio.SeqUtils.IsoelectricPoint import IsoelectricPoint as IP
+
         for seq in ("D" * 10, "E" * 10, "K" * 10, "R" * 10, "H" * 10):
             pi = IP(seq).pi()
             self.assertLessEqual(abs(IP(seq).charge_at_pH(pi)), 1e-3)
+
     def test_secondary_structure_fraction(self):
         """Calculate secondary structure fractions."""
         for analysis in self.analyses:
