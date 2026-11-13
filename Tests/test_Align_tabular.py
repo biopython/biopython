@@ -4,6 +4,7 @@
 # license.  Please see the LICENSE file that should have been included
 # as part of this package.
 """Tests for Bio.Align.tabular module."""
+
 import os
 import unittest
 from tempfile import NamedTemporaryFile
@@ -1493,6 +1494,17 @@ AlignmentCounts object with
         self.assertEqual(counts.positives, 25)
         with self.assertRaises(StopIteration):
             next(alignments)
+
+    def test_m8CB_program_version(self):
+        path = "Fasta/protein_m8CB_program_version.txt"
+        with open(path) as stream:
+            self.assertRaisesRegex(
+                ValueError,
+                "Expected FASTA program/version line starting with '#'",
+                Align.parse,
+                stream,
+                "tabular",
+            )
 
     def test_m8CC(self):
         # Alignment file obtained by running
