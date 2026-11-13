@@ -135,7 +135,11 @@ class ContentHandler(handler.ContentHandler):
 
     def endElement(self, name):
         """Define the end of the search record."""
-        assert name == self.element.pop()
+        expected = self.element.pop()
+        if name != expected:
+            raise ValueError(
+                f"Unexpected XML end element {name!r} (expected {expected!r})"
+            )
         if self.element == ["scanprosite_response", "matchset", "match"]:
             match = self.record[-1]
             if name in ContentHandler.integers:
