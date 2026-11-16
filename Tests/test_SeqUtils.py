@@ -16,6 +16,7 @@ from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils import gc_fraction
 from Bio.SeqUtils import GC_skew
 from Bio.SeqUtils import molecular_weight
+from Bio.SeqUtils import nt_search
 from Bio.SeqUtils import seq1
 from Bio.SeqUtils import seq3
 from Bio.SeqUtils.CheckSum import crc32
@@ -388,6 +389,14 @@ TTT	0.886
 
         with self.assertRaises(ValueError):
             gc_fraction(seq, "other string")
+
+    def test_nt_search(self):
+        """Test nt_search returns matching positions and rejects empty subsequences."""
+        self.assertEqual(nt_search("ATAT", "AT"), ["AT", 0, 2])
+        self.assertEqual(nt_search("ATAT", "GC"), ["GC"])
+
+        with self.assertRaises(ValueError):
+            nt_search("ATAT", "")
 
     def test_GC_skew(self):
         s = "A" * 50
