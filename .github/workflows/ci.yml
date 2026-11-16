@@ -176,7 +176,7 @@ jobs:
 
     # Start MySQL server: required for some tests.
     - run: |
-        sudo /etc/init.d/mysql start
+        sudo systemctl start mysql.service
 
     - uses: actions/checkout@v7
 
