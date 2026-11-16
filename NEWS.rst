@@ -27,7 +27,9 @@ header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Brandon Mokrytzki (first contribution)
 - Mohit Arvind Khakharia (first contribution)
+- Peter Cock
 - Yuxuan Luo (first contribution)
 
 6 August 2026: Biopython 1.88
@@ -49,7 +51,6 @@ Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
 - Al Fattah Suyadi (first contribution)
-- Brandon Mokrytzki (first contribution)
 - Laura Piñero Roig (first contribution)
 - Marcus Campbell (first contribution)
 - Michiel de Hoon
