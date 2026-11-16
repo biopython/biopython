@@ -1428,7 +1428,8 @@ _python_make_score_matrix_fast = _make_score_matrix_fast
 _python_rint = rint
 
 try:
-    from .cpairwise2 import rint, _make_score_matrix_fast  # noqa
+    from .cpairwise2 import _make_score_matrix_fast  # noqa
+    from .cpairwise2 import rint
 except ImportError:
     warnings.warn(
         "Import of C module failed. Falling back to pure Python "

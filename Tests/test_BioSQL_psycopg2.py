@@ -6,11 +6,10 @@
 
 import unittest
 
+# Import these explicitly to avoid flake8 F405
 # Really do want "import *" to get all the test classes:
 from common_BioSQL import *  # noqa: F403
 from common_BioSQL import check_config
-
-# Import these explicitly to avoid flake8 F405
 from common_BioSQL import load_biosql_ini
 
 DBDRIVER = "psycopg2"
