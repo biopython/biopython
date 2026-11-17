@@ -71,6 +71,12 @@ class MMCIF2Dict(dict):
 
     def _splitline(self, line):
         # See https://www.iucr.org/resources/cif/spec/version1.1/cifsyntax for the syntax
+
+        # Use split if possible, for a major performance improvement
+        if "'" not in line and '"' not in line and "#" not in line:
+            yield from line.split()
+            return
+
         in_token = False
         # quote character of the currently open quote, or None if no quote open
         quote_open_char = None
