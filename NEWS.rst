@@ -21,6 +21,14 @@ life, our support for it is now deprecated.
 * ``Bio.PDB.PDBIO`` now raises ``PDBIOException`` when writing a modern residue
   name longer than the legacy PDB format three character limit.
 
+* ``Bio.Phylo``'s ``is_monophyletic`` now accepts a keyword-only
+  ``unrooted`` option: with ``unrooted=True``, a group of terminals is
+  judged monophyletic if a single branch separates it from all the other
+  terminals (one side of a split), rather than only if it forms a clade
+  under the stored root. The default behaviour is unchanged, and the
+  tree's ``rooted`` attribute is not consulted, as it cannot be relied
+  on to say whether a tree is meant to be rooted.
+
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 

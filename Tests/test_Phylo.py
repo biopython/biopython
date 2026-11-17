@@ -441,6 +441,73 @@ class MixinTests(unittest.TestCase):
         # Alternate argument form
         self.assertEqual(tree.is_monophyletic(*abcd), tree.root)
 
+    def test_is_monophyletic_unrooted(self):
+        """TreeMixin: is_monophyletic(unrooted=True), issue #589."""
+        # Unrooted tree from the issue: (A,(B,C),(D,(E,(F,G))))
+        tree = Phylo.read(
+            StringIO(
+                "('A':0.00000038,('B':0.00821118,'C':0.00000042):0.00403718,"
+                "('D':0.01222625,('E':0.01294865,('F':0.00867815,"
+                "'G':0.01183804):0.00914763):0.00270692):0.03399160);"
+            ),
+            "newick",
+        )
+        terms = {t.name: t for t in tree.get_terminals()}
+        efg = [terms[n] for n in "EFG"]
+        abc = [terms[n] for n in "ABC"]
+        abcd = [terms[n] for n in "ABCD"]
+        ab = [terms[n] for n in "AB"]
+        defg = [terms[n] for n in "DEFG"]
+        # Default path is unchanged: groups straddling the stored root
+        # are not clades under that root.
+        self.assertFalse(tree.is_monophyletic(abc))
+        self.assertFalse(tree.is_monophyletic(abcd))
+        self.assertEqual(tree.is_monophyletic(efg), tree.common_ancestor(*efg))
+        # With unrooted=True, a group is monophyletic if it is one side
+        # of a split: ABC is separated from the rest by the branch leading
+        # to DEFG, and ABCD is separated by the branch leading to EFG.
+        # The returned clade is the common ancestor of the remaining
+        # terminals (the targets themselves have no clade of their own).
+        self.assertEqual(
+            tree.is_monophyletic(abc, unrooted=True),
+            tree.common_ancestor(*defg),
+        )
+        self.assertEqual(
+            tree.is_monophyletic(abcd, unrooted=True),
+            tree.common_ancestor(*efg),
+        )
+        # AB is not one side of any split, nor is its complement.
+        self.assertFalse(tree.is_monophyletic(ab, unrooted=True))
+        # Edge cases: all terminals, a single terminal, unknown and
+        # empty targets.
+        self.assertEqual(
+            tree.is_monophyletic(tree.get_terminals(), unrooted=True),
+            tree.root,
+        )
+        self.assertEqual(tree.is_monophyletic([terms["A"]], unrooted=True), terms["A"])
+        other = Phylo.read(StringIO("(Z);"), "newick").get_terminals()[0]
+        self.assertFalse(tree.is_monophyletic([other], unrooted=True))
+        self.assertFalse(tree.is_monophyletic([], unrooted=True))
+        # The unrooted answer does not depend on where the root is stored:
+        # re-root the same topology with DEFG as the outgroup and the
+        # verdicts for ABC and DEFG are unchanged.
+        tree2 = Phylo.read(
+            StringIO(
+                "('A':0.00000038,('B':0.00821118,'C':0.00000042):0.00403718,"
+                "('D':0.01222625,('E':0.01294865,('F':0.00867815,"
+                "'G':0.01183804):0.00914763):0.00270692):0.03399160);"
+            ),
+            "newick",
+        )
+        terms2 = {t.name: t for t in tree2.get_terminals()}
+        tree2.root_with_outgroup(*[terms2[n] for n in "DEFG"])
+        self.assertTrue(
+            tree2.is_monophyletic([terms2[n] for n in "ABC"], unrooted=True)
+        )
+        self.assertTrue(
+            tree2.is_monophyletic([terms2[n] for n in "DEFG"], unrooted=True)
+        )
+
     def test_total_branch_length(self):
         """TreeMixin: total_branch_length() method."""
         tree = self.phylogenies[1]
