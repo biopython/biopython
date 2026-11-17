@@ -520,7 +520,7 @@ class TreeMixin:
             return True
         return False
 
-    def is_monophyletic(self, terminals, *more_terminals):
+    def is_monophyletic(self, terminals, *more_terminals, unrooted=False):
         """MRCA of terminals if they comprise a complete subclade, or False.
 
         I.e., there exists a clade such that its terminals are the same set as
@@ -537,6 +537,19 @@ class TreeMixin:
         targets if they are monophyletic (instead of the value True), and False
         otherwise.
 
+        With ``unrooted=True``, the targets are instead tested as one side of
+        a split of an unrooted tree: they are monophyletic if removing a
+        single branch separates them from all the other terminals, i.e. if
+        the remaining terminals form a clade. If the targets already form a
+        clade under the stored root, that clade is returned as before; only
+        when they do not is the complement tested, in which case the common
+        ancestor of the remaining terminals is returned (the targets
+        themselves have no clade of their own). The default ``unrooted=False``
+        path is unchanged. Note that the tree's ``rooted`` attribute is not
+        consulted here, as it cannot be relied on to say whether a tree is
+        meant to be rooted (e.g. trees read from Newick files are unrooted
+        by default, even when the file describes a rooted tree).
+
         :returns: common ancestor if terminals are monophyletic, otherwise False.
 
         """
@@ -551,7 +564,19 @@ class TreeMixin:
                     current = subclade
                     break
             else:
-                return False
+                break
+        if not unrooted:
+            return False
+        # Unrooted case: the targets are monophyletic if they are one side of
+        # a split, i.e. if the remaining terminals form a clade.
+        all_terminals = set(self.root.get_terminals())
+        if not target_set or not target_set <= all_terminals:
+            return False
+        rest = all_terminals - target_set
+        rest_mrca = self.common_ancestor(*rest)
+        if set(rest_mrca.get_terminals()) == rest:
+            return rest_mrca
+        return False
 
     def is_parent_of(self, target=None, **kwargs):
         """Check if target is a descendent of this tree.
