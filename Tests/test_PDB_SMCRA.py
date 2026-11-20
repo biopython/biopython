@@ -140,6 +140,8 @@ class Atom_Element(unittest.TestCase):
                 "3HG2",
                 "3HZ ",
                 "HE21",
+                "HNE2",
+                "HNZ1",
             ),
             "O": (" OH ",),  # noqa: E741
             "C": (" CH2",),

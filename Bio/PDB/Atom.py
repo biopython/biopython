@@ -212,7 +212,8 @@ class Atom:
 
         """
         if not element or element.capitalize() not in IUPACData.atom_weights:
-            if self.fullname[0].isalpha() and not self.fullname[2:].isdigit():
+            # Names ending in a digit, like HE21 or HNZ1, are not element symbols
+            if self.fullname[0].isalpha() and not self.fullname[-1].isdigit():
                 putative_element = self.name.strip()
             else:
                 # Hs may have digit in [0]
