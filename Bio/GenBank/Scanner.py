@@ -958,6 +958,8 @@ class EmblScanner(InsdcScanner):
                     consumer.project(data.rstrip(";"))
             elif line_type == "KW":
                 consumer.keywords(data.rstrip(";"))
+            elif line_type == "DT":
+                consumer.date(data.split()[0])
             elif line_type in consumer_dict:
                 # Its a semi-automatic entry!
                 getattr(consumer, consumer_dict[line_type])(data)
