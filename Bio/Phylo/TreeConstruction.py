@@ -544,7 +544,9 @@ class DistanceCalculator:
             max_score = max(max_score1, max_score2)
         if max_score == 0:
             return 1  # max possible scaled distance
-        return 1 - (score / max_score)
+        # The score can be negative for matrices with negative scores (e.g.
+        # blastn); clip it so that the distance stays within [0, 1].
+        return 1 - max(score, 0) / max_score
 
     def get_distance(self, msa):
         """Return a DistanceMatrix for an Alignment or MultipleSeqAlignment object.
