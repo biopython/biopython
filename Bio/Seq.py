@@ -2794,6 +2794,18 @@ def _translate_str(
     Traceback (most recent call last):
        ...
     Bio.Data.CodonTable.TranslationError: Extra in frame stop codon 'TAG' found.
+
+    When ``gap`` is provided, partial-gap codons (e.g. ``TC-``) are resolved
+    using IUPAC ambiguity codes by treating the gap position as ``N``
+    (unknown nucleotide).  Four-fold degenerate codons resolve to a specific
+    amino acid (e.g. ``TCN`` → ``S``), while ambiguous cases resolve to ``X``.
+
+    >>> Seq.translate("ATGTC-CGT", gap='-')
+    'MSR'
+    >>> Seq.translate("AT-", gap='-')
+    'X'
+    >>> Seq.translate("TC-", gap='-')
+    'S'
     """
     try:
         table_id = int(table)
@@ -2882,6 +2894,13 @@ def _translate_str(
             raise TypeError("Gap character should be a single character string.")
         elif len(gap) > 1:
             raise ValueError("Gap character should be a single character string.")
+        # Pad trailing partial codon with gap characters so that the
+        # partial-gap resolution logic can translate it instead of
+        # silently dropping it.
+        remainder = n % 3
+        if remainder:
+            sequence = sequence + gap * (3 - remainder)
+            n = len(sequence)
 
     for i in range(0, n - n % 3, 3):
         codon = sequence[i : i + 3]
@@ -2902,6 +2921,17 @@ def _translate_str(
             elif gap is not None and codon == gap * 3:
                 # Gapped translation
                 amino_acids.append(gap)
+            elif gap is not None and gap in codon:
+                ambiguous_codon = codon.replace(gap, "N")
+                try:
+                    amino_acids.append(forward_table[ambiguous_codon])
+                except (KeyError, CodonTable.TranslationError):
+                    if valid_letters.issuperset(set(ambiguous_codon)):
+                        amino_acids.append(pos_stop)
+                    else:
+                        raise CodonTable.TranslationError(
+                            f"Codon '{codon}' is invalid"
+                        ) from None
             else:
                 raise CodonTable.TranslationError(
                     f"Codon '{codon}' is invalid"
