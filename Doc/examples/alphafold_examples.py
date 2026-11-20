@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 Examples of using Bio.PDB.AlphaFoldList to access AlphaFold predicted structures.
 

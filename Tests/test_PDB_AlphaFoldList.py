@@ -62,7 +62,7 @@ class AlphaFoldListTests(unittest.TestCase):
 
         # Check file is not empty and has PDB content
         self.assertGreater(os.path.getsize(result), 1000)
-        with open(result, "r") as f:
+        with open(result) as f:
             content = f.read(200)
             # PDB files should have HEADER, ATOM, or MODEL lines
             self.assertTrue(

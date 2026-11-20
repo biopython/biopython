@@ -24,9 +24,7 @@ structure_file = afl.retrieve_alphafold_structure("P00520", file_format="pdb")
 
 # Download with confidence data
 structure_file = afl.retrieve_alphafold_structure(
-    "P00520",
-    include_pae=True,
-    include_confidence=True
+    "P00520", include_pae=True, include_confidence=True
 )
 ```
 
@@ -60,11 +58,7 @@ afl = AlphaFoldList()
 proteins = ["P00520", "P00533", "P04629", "P06239"]
 
 # Download with threading
-afl.download_structures_by_accessions(
-    proteins,
-    file_format="mmCif",
-    max_num_threads=4
-)
+afl.download_structures_by_accessions(proteins, file_format="mmCif", max_num_threads=4)
 ```
 
 ### 3. Proteome Downloads
@@ -94,8 +88,8 @@ afl = AlphaFoldList()
 
 structure = afl.retrieve_alphafold_structure(
     "P00520",
-    include_pae=True,          # Predicted Aligned Error matrix
-    include_confidence=True     # Per-residue pLDDT scores
+    include_pae=True,  # Predicted Aligned Error matrix
+    include_confidence=True,  # Per-residue pLDDT scores
 )
 ```
 
@@ -174,7 +168,7 @@ afl = AlphaFoldList(
     api_server="https://alphafold.ebi.ac.uk",
     ftp_server="https://ftp.ebi.ac.uk/pub/databases/alphafold",
     local_dir="/path/to/structures",
-    verbose=True  # Enable progress messages
+    verbose=True,  # Enable progress messages
 )
 ```
 
@@ -342,6 +336,7 @@ Common organisms available for bulk download:
 # Check internet connection
 # Verify API server is accessible:
 import urllib.request
+
 urllib.request.urlopen("https://alphafold.ebi.ac.uk/").read()
 ```
 
@@ -349,8 +344,7 @@ urllib.request.urlopen("https://alphafold.ebi.ac.uk/").read()
 ```python
 # Increase timeout or download in smaller batches
 afl.download_structures_by_accessions(
-    large_list[:100],  # First 100
-    max_num_threads=2  # Reduce load
+    large_list[:100], max_num_threads=2  # First 100  # Reduce load
 )
 ```
 
