@@ -4042,8 +4042,6 @@ class TestMEME(unittest.TestCase):
             )
         )
         self.assertEqual(motif[2:9].consensus, "CTGTATA")
-        with open("motifs/minimal_test.meme") as stream:
-            record = motifs.parse(stream, "minimal")
         motif = record[2]
         self.assertEqual(motif.name, "IFXA_no_nsites_no_evalue")
         self.assertEqual(record["IFXA_no_nsites_no_evalue"], motif)
@@ -4081,6 +4079,143 @@ class TestMEME(unittest.TestCase):
                         2.45152642,
                         1.72405228,
                         1.42793329,
+                    ]
+                ),
+            )
+        )
+        self.assertEqual(motif[2:9].consensus, "CTGTATA")
+
+    def test_minimal_meme_no_background_parser(self):
+        """Parse motifs/minimal_test_no_background.meme file."""
+        with open("motifs/minimal_test_no_background.meme") as stream:
+            record = motifs.parse(stream, "minimal")
+        self.assertEqual(record.version, "4")
+        self.assertEqual(record.alphabet, "ACGT")
+        self.assertEqual(len(record.sequences), 0)
+        self.assertEqual(record.command, "")
+        self.assertEqual(len(record), 3)
+        motif = record[0]
+        self.assertEqual(motif.name, "KRP")
+        self.assertEqual(record["KRP"], motif)
+        self.assertEqual(motif.num_occurrences, 17)
+        self.assertEqual(motif.length, 19)
+        self.assertAlmostEqual(motif.background["A"], 0.25)
+        self.assertAlmostEqual(motif.background["C"], 0.25)
+        self.assertAlmostEqual(motif.background["G"], 0.25)
+        self.assertAlmostEqual(motif.background["T"], 0.25)
+        self.assertAlmostEqual(motif.evalue, 4.1e-09, places=10)
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertIsNone(motif.alignment)
+        self.assertEqual(motif.consensus, "TGTGATCGAGGTCACACTT")
+        self.assertEqual(motif.degenerate_consensus, "TGTGANNNWGNTCACAYWW")
+        self.assertTrue(
+            np.allclose(
+                motif.relative_entropy,
+                np.array(
+                    [
+                        1.32770518,
+                        0.83391294,
+                        1.67724304,
+                        1.02198444,
+                        1.16565298,
+                        0.06719542,
+                        0.09603219,
+                        0.09603219,
+                        0.55335204,
+                        0.4548478,
+                        0.02866471,
+                        1.16565298,
+                        1.35979357,
+                        1.02198444,
+                        1.35979357,
+                        1.04800592,
+                        0.2605458,
+                        1.02258218,
+                        0.77895221,
+                    ]
+                ),
+            )
+        )
+        self.assertEqual(motif[2:9].consensus, "TGATCGA")
+        motif = record[1]
+        self.assertEqual(motif.name, "IFXA")
+        self.assertEqual(record["IFXA"], motif)
+        self.assertEqual(motif.num_occurrences, 14)
+        self.assertEqual(motif.length, 18)
+        self.assertAlmostEqual(motif.background["A"], 0.25)
+        self.assertAlmostEqual(motif.background["C"], 0.25)
+        self.assertAlmostEqual(motif.background["G"], 0.25)
+        self.assertAlmostEqual(motif.background["T"], 0.25)
+        self.assertAlmostEqual(motif.evalue, 3.2e-35, places=36)
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertIsNone(motif.alignment)
+        self.assertEqual(motif.consensus, "TACTGTATATATATCCAG")
+        self.assertEqual(motif.degenerate_consensus, "TACTGTATATAHAWMCAG")
+        self.assertTrue(
+            np.allclose(
+                motif.relative_entropy,
+                np.array(
+                    [
+                        1.25040474,
+                        1.26547008,
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0,
+                        1.26547008,
+                        1.62876767,
+                        1.26547008,
+                        1.40832722,
+                        0.38942276,
+                        0.44334329,
+                        2.0,
+                        0.50738593,
+                        0.70416361,
+                        2.0,
+                        2.0,
+                        1.25040474,
+                    ]
+                ),
+            )
+        )
+        self.assertEqual(motif[2:9].consensus, "CTGTATA")
+        motif = record[2]
+        self.assertEqual(motif.name, "IFXA_no_nsites_no_evalue")
+        self.assertEqual(record["IFXA_no_nsites_no_evalue"], motif)
+        self.assertEqual(motif.num_occurrences, 20)
+        self.assertEqual(motif.length, 18)
+        self.assertAlmostEqual(motif.background["A"], 0.25)
+        self.assertAlmostEqual(motif.background["C"], 0.25)
+        self.assertAlmostEqual(motif.background["G"], 0.25)
+        self.assertAlmostEqual(motif.background["T"], 0.25)
+        self.assertAlmostEqual(motif.evalue, 0.0, places=36)
+        self.assertEqual(motif.alphabet, "ACGT")
+        self.assertIsNone(motif.alignment)
+        self.assertEqual(motif.consensus, "TACTGTATATATATCCAG")
+        self.assertEqual(motif.degenerate_consensus, "TACTGTATATAHAWMCAG")
+        self.assertTrue(
+            np.allclose(
+                motif.relative_entropy,
+                np.array(
+                    [
+                        1.27807191,
+                        1.40927608,
+                        2.0,
+                        2.0,
+                        2.0,
+                        2.0,
+                        1.40927608,
+                        1.71360304,
+                        1.40927608,
+                        1.3901597,
+                        0.42621119,
+                        0.44334329,
+                        2.0,
+                        0.5145247,
+                        0.7655022,
+                        2.0,
+                        2.0,
+                        1.27807191,
                     ]
                 ),
             )
