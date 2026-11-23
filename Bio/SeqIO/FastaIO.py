@@ -1,4 +1,4 @@
-# Copyright 2006-2017,2020 by Peter Cock.  All rights reserved.
+# Copyright 2006-2017,2020,2026 by Peter Cock.  All rights reserved.
 #
 # This file is part of the Biopython distribution and governed by your
 # choice of the "Biopython License Agreement" or the "BSD 3-Clause License".
@@ -298,7 +298,7 @@ class FastaBlastIterator(SequenceIterator):
         source: _TextIOSource,
         alphabet: None = None,
     ) -> None:
-        """Iterate over Fasta records as SeqRecord objects.
+        r"""Iterate over Fasta records as SeqRecord objects.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
@@ -310,33 +310,14 @@ class FastaBlastIterator(SequenceIterator):
         This iterator acts like calling Bio.SeqIO.parse(handle, "fasta-blast")
         with no custom handling of the title lines:
 
-        >>> with open("Fasta/dups.fasta") as handle:
-        ...     for record in FastaIterator(handle):
-        ...         print(record.id)
+        >>> import io
+        >>> text = "#Comment\n>alpha\n;first seq\nACT\n>beta\nGGG\n!The end\n"
+        >>> with io.StringIO(text) as handle:
+        ...     for record in FastaBlastIterator(handle):
+        ...         print(record.id, record.seq)
         ...
-        alpha
-        beta
-        gamma
-        alpha
-        delta
-
-        If you want to modify the records before writing, for example to change
-        the ID of each record, you can use a generator function as follows:
-
-        >>> def modify_records(records):
-        ...     for record in records:
-        ...         record.id = record.id.upper()
-        ...         yield record
-        ...
-        >>> with open('Fasta/dups.fasta') as handle:
-        ...     for record in modify_records(FastaIterator(handle)):
-        ...         print(record.id)
-        ...
-        ALPHA
-        BETA
-        GAMMA
-        ALPHA
-        DELTA
+        alpha ACT
+        beta GGG
 
         """
         if alphabet is not None:
@@ -372,7 +353,7 @@ class FastaBlastIterator(SequenceIterator):
             if line[0] in "#!;":
                 pass
             elif line[0] == ">":
-                self_line = line
+                self._line = line
                 break
             else:
                 lines.append(line.rstrip())
@@ -389,7 +370,7 @@ class FastaBlastIterator(SequenceIterator):
 
 
 class FastaPearsonIterator(SequenceIterator):
-    """Parser for Fasta files, allowing for comments as in the FASTA aligner."""
+    """Parser for Fasta files, allowing for comments as in Pearson's FASTA aligner."""
 
     modes = "t"
 
@@ -398,7 +379,7 @@ class FastaPearsonIterator(SequenceIterator):
         source: _TextIOSource,
         alphabet: None = None,
     ) -> None:
-        """Iterate over Fasta records as SeqRecord objects.
+        r"""Iterate over Fasta records as SeqRecord objects.
 
         Arguments:
          - source - input stream opened in text mode, or a path to a file
@@ -411,33 +392,14 @@ class FastaPearsonIterator(SequenceIterator):
         This iterator acts as calling Bio.SeqIO.parse(handle, "fasta-pearson")
         with no custom handling of the title lines:
 
-        >>> with open("Fasta/dups.fasta") as handle:
-        ...     for record in FastaIterator(handle):
-        ...         print(record.id)
+        >>> import io
+        >>> text = "Free text\n>alpha\n;first seq\nACTG\n>beta\nAATT\n;The end\n"
+        >>> with io.StringIO(text) as handle:
+        ...     for record in FastaPearsonIterator(handle):
+        ...         print(record.id, record.seq)
         ...
-        alpha
-        beta
-        gamma
-        alpha
-        delta
-
-        If you want to modify the records before writing, for example to change
-        the ID of each record, you can use a generator function as follows:
-
-        >>> def modify_records(records):
-        ...     for record in records:
-        ...         record.id = record.id.upper()
-        ...         yield record
-        ...
-        >>> with open('Fasta/dups.fasta') as handle:
-        ...     for record in modify_records(FastaIterator(handle)):
-        ...         print(record.id)
-        ...
-        ALPHA
-        BETA
-        GAMMA
-        ALPHA
-        DELTA
+        alpha ACTG
+        beta AATT
 
         """
         if alphabet is not None:
