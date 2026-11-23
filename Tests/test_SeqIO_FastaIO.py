@@ -207,6 +207,15 @@ class TestFastaWithComments(unittest.TestCase):
         self.assertEqual(expected.description, record.description)
         self.assertEqual(expected.seq, record.seq)
 
+    def test_fasta_blast_multiple_records(self):
+        """Test FastaBlastIterator preserves each record's title."""
+        handle = StringIO(">a one\nACGT\n>b two\nGGGG\n")
+        records = list(SeqIO.parse(handle, "fasta-blast"))
+        self.assertEqual(
+            [(record.id, record.description, str(record.seq)) for record in records],
+            [("a", "a one", "ACGT"), ("b", "b two", "GGGG")],
+        )
+
     def test_fasta_pearson(self):
         """Test FastaPearsonIterator."""
 
