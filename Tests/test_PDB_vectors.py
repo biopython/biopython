@@ -7,6 +7,7 @@
 """Tests for the vector code in Bio.PDB."""
 
 import unittest
+import warnings
 
 try:
     import numpy as np
@@ -277,6 +278,42 @@ class VectorTests(unittest.TestCase):
             for i in range(3):
                 rslt[i] = mtxs[1][m].dot(rslt[i])
             self.assertTrue(np.array_equal(rslt, test_set[m]))
+
+    def test_multi_coord_space_zero_length(self):
+        """multi_coord_space with a zero-length vector emits no warning."""
+        # The second and third atoms coincide, so p = a2 - a1 is the zero
+        # vector. NumPy 2.5 warns when `divide` is called with `where`
+        # but without `out`, even when no entry is masked out (issue #5415).
+        point_set = np.array(
+            [
+                [
+                    [2.0, 0.0, 2.0, 1.0],
+                    [0.0, 0.0, 0.0, 1.0],
+                    [0.0, 0.0, 0.0, 1.0],
+                ]
+            ]
+        )
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            mtxs = multi_coord_space(point_set, 1, True)
+            self.assertEqual(
+                [
+                    str(x.message)
+                    for x in w
+                    if issubclass(x.category, UserWarning) and "where" in str(x.message)
+                ],
+                [],
+            )
+        # Deterministic and finite, and the polar angle is 0 for the
+        # zero-length vector (as in get_spherical_coordinates), so both
+        # transforms are the identity here (a1 is at the origin).
+        mtxs2 = multi_coord_space(point_set, 1, True)
+        self.assertTrue(np.array_equal(mtxs[0][0], mtxs2[0][0]))
+        self.assertTrue(np.isfinite(mtxs[0][0]).all())
+        self.assertTrue(np.isfinite(mtxs[1][0]).all())
+        homog_id = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
+        self.assertTrue(np.array_equal(mtxs[0][0], homog_id))
+        self.assertTrue(np.array_equal(mtxs[1][0], homog_id))
 
     def test_vector_to_axis(self):
         """Test vector_to_axis function for correctness"""
