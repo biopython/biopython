@@ -15,6 +15,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils import CodonAdaptationIndex
 from Bio.SeqUtils import gc_fraction
 from Bio.SeqUtils import GC_skew
+from Bio.SeqUtils import MeltingTemp
 from Bio.SeqUtils import molecular_weight
 from Bio.SeqUtils import seq1
 from Bio.SeqUtils import seq3
@@ -388,6 +389,38 @@ TTT	0.886
 
         with self.assertRaises(ValueError):
             gc_fraction(seq, "other string")
+
+    def test_Tm_NN_terminal_mismatch_and_dangling_end(self):
+        """Test Tm_NN initiation uses the trimmed duplex ends (see #1277).
+
+        Tm_NN trims a terminal mismatch or dangling end off the duplex
+        before the nearest-neighbor walk, but the initiation terms were
+        read off the untrimmed sequence, so the same duplex gave a
+        different Tm depending on which strand was passed as ``seq``.
+        """
+        kwargs = dict(
+            check=False,
+            strict=True,
+            nn_table=MeltingTemp.DNA_NN4,
+            dnac1=250,
+            dnac2=0,
+            saltcorr=0,
+        )
+        # The same duplex with a terminal mismatch, written from each
+        # strand, must give the same Tm:
+        tm1 = MeltingTemp.Tm_NN("AGCGCGCGCA", c_seq="CCGCGCGCGT", **kwargs)
+        tm2 = MeltingTemp.Tm_NN("TGCGCGCGCC", c_seq="ACGCGCGCGA", **kwargs)
+        self.assertAlmostEqual(tm1, tm2, places=4)
+        self.assertAlmostEqual(tm1, 63.6925, places=4)
+        # A 3' A with no partner must not pay a terminal-base-pair
+        # initiation term for the trimmed duplex:
+        tm3 = MeltingTemp.Tm_NN("GGGGGGCCCCGGGGGGA", c_seq="CCCCCCGGGGCCCCCC", **kwargs)
+        self.assertAlmostEqual(tm3, 87.5979, places=4)
+        # A fully paired duplex is untouched by the fix:
+        tm4 = MeltingTemp.Tm_NN("AGCGCGCGCG", c_seq="TCGCGCGCGC", **kwargs)
+        tm5 = MeltingTemp.Tm_NN("CGCGCGCGCT", c_seq="GCGCGCGCGA", **kwargs)
+        self.assertAlmostEqual(tm4, tm5, places=4)
+        self.assertAlmostEqual(tm4, 66.1557, places=4)
 
     def test_GC_skew(self):
         s = "A" * 50
