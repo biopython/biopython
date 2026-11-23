@@ -683,7 +683,12 @@ def multi_coord_space(a3: np.ndarray, dLen: int, rev: bool = False) -> np.ndarra
     # get spherical coords of translated a2 (p)
     r = np.linalg.norm(p, axis=1)
     azimuth = np.arctan2(p[:, 1], p[:, 0])
-    polar_angle = np.arccos(np.divide(p[:, 2], r, where=r != 0))
+    # NumPy 2.5 warns when `where` is used without `out`, even when no
+    # entry is masked out. Pass `out` explicitly: for a zero-length vector
+    # the ratio defaults to 1, so the polar angle is 0, matching
+    # `get_spherical_coordinates` above. This also avoids reading
+    # uninitialized memory for masked-out entries.
+    polar_angle = np.arccos(np.divide(p[:, 2], r, out=np.ones_like(r), where=r != 0))
 
     # build rz rotation matrix: translated a2 -azimuth around Z
     # (enables next step rotating around Y to align with Z)
