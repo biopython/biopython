@@ -10,6 +10,7 @@ import collections
 import warnings
 
 from Bio import BiopythonParserWarning
+from Bio.Data.PDBData import nucleic_letters_3to1
 from Bio.Data.PDBData import protein_letters_3to1
 from Bio.Data.PDBData import protein_letters_3to1_extended
 from Bio.Seq import Seq
@@ -22,16 +23,79 @@ _aa3to1_dict = {}
 _aa3to1_dict.update(protein_letters_3to1)
 _aa3to1_dict.update(protein_letters_3to1_extended)
 
+# Standard nucleotide residue names, as used in PDB SEQRES records and
+# mmCIF _pdbx_poly_seq_scheme records (keys in Bio.Data.PDBData are
+# padded to three characters). Only the standard monomers are listed
+# here, deliberately not the extended set: the extended set also maps
+# small-molecule ligands such as ADP and GDP, which must stay "X" so
+# that a ligand bound to a protein chain is not mistaken for sequence.
+# Modified bases (e.g. CBR in 6BNA) are therefore reported as "X".
+_nt3to1_dict = {key.strip(): value for key, value in nucleic_letters_3to1.items()}
+_nt3to1_dict.update({"T": "T", "DU": "U"})  # Thymine, deoxyuridine
 
-def _res2aacode(residue, undef_code="X"):
-    """Return the one-letter amino acid code from the residue name.
+_nt_kind = {
+    "DA": "DNA",
+    "DC": "DNA",
+    "DG": "DNA",
+    "DT": "DNA",
+    "DU": "DNA",
+    "T": "DNA",
+    "A": "RNA",
+    "C": "RNA",
+    "G": "RNA",
+    "U": "RNA",
+}
 
-    Non-amino acid are returned as "X".
+
+def _res2code(residue):
+    """Return the one-letter code and molecule kind for a residue.
+
+    The residue can be given as a name (string) or as a Bio.PDB
+    Residue object. Returns a tuple ``(code, kind)`` where ``kind``
+    is "protein", "DNA", "RNA", or None for an unrecognised residue
+    (reported as "X").
     """
     if isinstance(residue, str):
-        return _aa3to1_dict.get(residue, undef_code)
+        resname = residue.upper()
+    else:
+        resname = residue.resname.upper()
+    if resname in _aa3to1_dict:
+        return _aa3to1_dict[resname], "protein"
+    if resname in _nt3to1_dict:
+        return _nt3to1_dict[resname], _nt_kind[resname]
+    return "X", None
 
-    return _aa3to1_dict.get(residue.resname, undef_code)
+
+def _res2aacode(residue, undef_code="X"):
+    """Return the one-letter code from the residue name.
+
+    Unrecognised residues are returned as ``undef_code`` ("X" by default).
+    """
+    code, _kind = _res2code(residue)
+    return code if code != "X" else undef_code
+
+
+def _molecule_type(kinds):
+    """Return the molecule_type annotation for a chain.
+
+    ``kinds`` is an iterable of the per-residue kinds returned by
+    ``_res2code`` ("protein", "DNA", "RNA", or None). A chain mixing
+    amino acids with nucleotides raises ValueError, as such a chain
+    has no single molecule type. A chain mixing DNA and RNA residues
+    is kept as one sequence (using both "T" and "U") and labelled
+    "DNA" when it contains any DNA residue, else "RNA".
+    """
+    kinds = {kind for kind in kinds if kind is not None}
+    if "protein" in kinds and ("DNA" in kinds or "RNA" in kinds):
+        raise ValueError(
+            "Chain mixes amino acid and nucleotide residues; "
+            "cannot assign a single molecule_type"
+        )
+    if "DNA" in kinds:
+        return "DNA"
+    if "RNA" in kinds:
+        return "RNA"
+    return "protein"
 
 
 def AtomIterator(pdb_id, structure):
@@ -57,7 +121,7 @@ def AtomIterator(pdb_id, structure):
         residues = [
             res
             for res in chain.get_unpacked_list()
-            if _res2aacode(res.get_resname().upper()) != "X"
+            if _res2code(res.get_resname().upper())[0] != "X"
         ]
         if not residues:
             continue
@@ -100,8 +164,9 @@ def AtomIterator(pdb_id, structure):
         #     id = ("Model%s|" % str(model.id)) + id
 
         record = SeqRecord(Seq("".join(res_out)), id=record_id, description=record_id)
-        # TODO: Test PDB files with DNA and RNA too:
-        record.annotations["molecule_type"] = "protein"
+        record.annotations["molecule_type"] = _molecule_type(
+            _res2code(res.get_resname().upper())[1] for res in residues
+        )
 
         record.annotations["model"] = model.id
         record.annotations["chain"] = chain.id
@@ -178,7 +243,7 @@ class PdbSeqresIterator(SequenceIterator):
                     chn_id = line[11]
                     # Number of residues in the chain (repeated on every record)
                     # num_res = int(line[13:17])
-                    residues = [_res2aacode(res) for res in line[19:].split()]
+                    residues = [_res2code(res) for res in line[19:].split()]
                     chains[chn_id].extend(residues)
                 elif rec_name == "DBREF":
                     #  ID code of this entry (PDB ID)
@@ -247,10 +312,11 @@ class PdbSeqresIterator(SequenceIterator):
 
             self.cache = []
             for chn_id, residues in sorted(chains.items()):
-                record = SeqRecord(Seq("".join(residues)))
+                record = SeqRecord(Seq("".join(code for code, _kind in residues)))
                 record.annotations = {"chain": chn_id}
-                # TODO: Test PDB files with DNA and RNA too:
-                record.annotations["molecule_type"] = "protein"
+                record.annotations["molecule_type"] = _molecule_type(
+                    kind for _code, kind in residues
+                )
                 if chn_id in metadata:
                     m = metadata[chn_id][0]
                     record.id = record.name = f"{m['pdb_id']}:{chn_id}"
@@ -445,8 +511,7 @@ class CifSeqresIterator(SequenceIterator):
             records["_pdbx_poly_seq_scheme.asym_id"],
             records["_pdbx_poly_seq_scheme.mon_id"],
         ):
-            mon_id_1l = _res2aacode(mon_id)
-            chains[asym_id].append(mon_id_1l)
+            chains[asym_id].append(_res2code(mon_id))
 
         # Build a dict of _struct_ref records, indexed by the id field:
         struct_refs = {}
@@ -477,10 +542,11 @@ class CifSeqresIterator(SequenceIterator):
 
         records = []  # type: ignore
         for chn_id, residues in sorted(chains.items()):
-            record = SeqRecord(Seq("".join(residues)))
+            record = SeqRecord(Seq("".join(code for code, _kind in residues)))
             record.annotations = {"chain": chn_id}
-            # TODO: Test PDB files with DNA and RNA too:
-            record.annotations["molecule_type"] = "protein"
+            record.annotations["molecule_type"] = _molecule_type(
+                kind for _code, kind in residues
+            )
             if chn_id in metadata:
                 m = metadata[chn_id][0]
                 record.id = record.name = f"{m['pdb_id']}:{chn_id}"
