@@ -256,7 +256,7 @@ class TestPdbSeqresRnaAndMixed(unittest.TestCase):
 
     def test_seqres_mixed_dna_rna(self):
         """A chain mixing DNA and RNA residues is kept as one sequence."""
-        data = "HEADER    TEST\n" "SEQRES   1 A    2    DA  U\n"
+        data = "HEADER    TEST\nSEQRES   1 A    2    DA  U\n"
         chains = list(SeqIO.parse(io.StringIO(data), "pdb-seqres"))
         self.assertEqual(len(chains), 1)
         self.assertEqual(chains[0].seq, "AU")
@@ -264,7 +264,7 @@ class TestPdbSeqresRnaAndMixed(unittest.TestCase):
 
     def test_seqres_mixed_protein_nucleotide(self):
         """A chain mixing amino acids and nucleotides is rejected."""
-        data = "HEADER    TEST\n" "SEQRES   1 A    2    ALA DA\n"
+        data = "HEADER    TEST\nSEQRES   1 A    2    ALA DA\n"
         with self.assertRaises(ValueError):
             list(SeqIO.parse(io.StringIO(data), "pdb-seqres"))
 
