@@ -24,9 +24,15 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+``Bio.Phylo.TreeConstruction.DistanceCalculator`` with the ``identity`` model
+and ``skip_letters`` now excludes skipped columns from the distance denominator
+as well as the score, so identical sequences with gap columns are at distance
+zero instead of being inflated by the skipped columns.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Aryan Kalantri (first contribution)
 - Brandon Mokrytzki (first contribution)
 - Mohit Arvind Khakharia (first contribution)
 - Peter Cock
