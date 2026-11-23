@@ -24,6 +24,11 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+``Bio.motifs.matrix.Counts.calculate_consensus`` no longer raises
+``UnboundLocalError`` for a column with all zero counts (for example when
+the motif alphabet does not cover the alignment letters); such columns
+now give the undefined character (``N`` for nucleotides, ``X`` otherwise).
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
