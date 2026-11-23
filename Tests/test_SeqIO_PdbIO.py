@@ -4,6 +4,7 @@
 # as part of this package.
 """Tests for SeqIO PdbIO module."""
 
+import io
 import unittest
 import warnings
 
@@ -85,6 +86,21 @@ def SeqresTestGenerator(extension, parser):
             chains = list(SeqIO.parse("PDB/a_structure." + extension, parser))
             self.assertEqual(len(chains), 0)
 
+        def test_seqres_dna(self):
+            """Parse a DNA structure by SEQRES entries (see #3125).
+
+            Reference:
+            https://www.rcsb.org/fasta/entry/6BNA/display
+            """
+            chains = list(SeqIO.parse("PDB/6BNA." + extension, parser))
+            self.assertEqual(len(chains), 2)
+            for chain, chn_id in zip(chains, "AB"):
+                self.assertEqual(chain.id, "6BNA:" + chn_id)
+                self.assertEqual(chain.annotations["chain"], chn_id)
+                self.assertEqual(chain.annotations["molecule_type"], "DNA")
+                # The modified base CBR is reported as X:
+                self.assertEqual(chain.seq, "CGCGAATTXGCG")
+
     return SeqresTests
 
 
@@ -147,6 +163,23 @@ def AtomTestGenerator(extension, parser):
                 "KALGPGATLEEMMTACQG",
             )
 
+        def test_atom_dna(self):
+            """Parse a DNA structure by ATOM entries (see #3125).
+
+            Reference:
+            https://www.rcsb.org/fasta/entry/6BNA/display
+            """
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", PDBConstructionWarning)
+                chains = list(SeqIO.parse("PDB/6BNA." + extension, parser))
+            self.assertEqual(len(chains), 2)
+            for chain, chn_id in zip(chains, "AB"):
+                self.assertEqual(chain.id, "6BNA:" + chn_id)
+                self.assertEqual(chain.annotations["chain"], chn_id)
+                self.assertEqual(chain.annotations["molecule_type"], "DNA")
+                # The modified base CBR is reported as X:
+                self.assertEqual(chain.seq, "CGCGAATTXGCG")
+
     return AtomTests
 
 
@@ -160,10 +193,16 @@ class TestPdbAtom(AtomTestGenerator("pdb", "pdb-atom")):
             warnings.simplefilter("ignore", BiopythonParserWarning)
             chains = list(SeqIO.parse("PDB/1LCD.pdb", "pdb-atom"))
 
-        self.assertEqual(len(chains), 1)
+        # 1LCD holds a protein chain and two DNA chains (see #3125):
+        self.assertEqual(len(chains), 3)
         self.assertEqual(
             chains[0].seq, "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEAAMAELNYIPNR"
         )
+        self.assertEqual(chains[0].annotations["molecule_type"], "protein")
+        self.assertEqual(chains[1].seq, "AATTGTGAGCG")
+        self.assertEqual(chains[1].annotations["molecule_type"], "DNA")
+        self.assertEqual(chains[2].seq, "CGCTCACAATT")
+        self.assertEqual(chains[2].annotations["molecule_type"], "DNA")
 
     def test_atom_read_noheader(self):
         """Read a single-chain PDB without a header by ATOM entries."""
@@ -196,6 +235,38 @@ class TestCifAtom(AtomTestGenerator("cif", "cif-atom")):
             chain.seq,
             "MDIRQGPKEPFRDYVDRFYKTLRAEQASQEVKNWMTETLLVQNANPDCKTILKALGPGATLEEMMTACQG",
         )
+
+
+class TestPdbSeqresRnaAndMixed(unittest.TestCase):
+    """Test RNA, DNA/RNA and mixed chains via SEQRES records (see #3125)."""
+
+    def test_seqres_rna_and_dna(self):
+        """Parse RNA and DNA chains from SEQRES records."""
+        data = (
+            "HEADER    TEST\n"
+            "SEQRES   1 A    4    A   C   G   U\n"
+            "SEQRES   1 B    4    DA  DC  DG  DT\n"
+        )
+        chains = list(SeqIO.parse(io.StringIO(data), "pdb-seqres"))
+        self.assertEqual(len(chains), 2)
+        self.assertEqual(chains[0].seq, "ACGU")
+        self.assertEqual(chains[0].annotations["molecule_type"], "RNA")
+        self.assertEqual(chains[1].seq, "ACGT")
+        self.assertEqual(chains[1].annotations["molecule_type"], "DNA")
+
+    def test_seqres_mixed_dna_rna(self):
+        """A chain mixing DNA and RNA residues is kept as one sequence."""
+        data = "HEADER    TEST\n" "SEQRES   1 A    2    DA  U\n"
+        chains = list(SeqIO.parse(io.StringIO(data), "pdb-seqres"))
+        self.assertEqual(len(chains), 1)
+        self.assertEqual(chains[0].seq, "AU")
+        self.assertEqual(chains[0].annotations["molecule_type"], "DNA")
+
+    def test_seqres_mixed_protein_nucleotide(self):
+        """A chain mixing amino acids and nucleotides is rejected."""
+        data = "HEADER    TEST\n" "SEQRES   1 A    2    ALA DA\n"
+        with self.assertRaises(ValueError):
+            list(SeqIO.parse(io.StringIO(data), "pdb-seqres"))
 
 
 if __name__ == "__main__":
