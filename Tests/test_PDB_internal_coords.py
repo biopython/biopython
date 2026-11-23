@@ -89,6 +89,23 @@ class Rebuild(unittest.TestCase):
         c2.internal_to_atom_coordinates()
         np.allclose(cic2.atomArray, cic.atomArray)
 
+    def test_atom_to_internal_coordinates_no_warning(self):
+        """atom_to_internal_coordinates on 1A8O emits no UserWarning."""
+        # Regression test for issue #5415: NumPy 2.5 warns when `divide`
+        # is called with `where` but without `out` in multi_coord_space.
+        structure = self.PDB_parser.get_structure("1A8O", "PDB/1A8O.pdb")
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter("always")
+            structure.atom_to_internal_coordinates()
+            self.assertEqual(
+                [
+                    str(x.message)
+                    for x in w
+                    if issubclass(x.category, UserWarning) and "where" in str(x.message)
+                ],
+                [],
+            )
+
     def test_rebuild_multichain_missing(self):
         """Convert multichain missing atom struct to, from internal coords."""
         # 2XHE has regions of missing chain, last residue has only N
