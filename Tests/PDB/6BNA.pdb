@@ -1,0 +1,1102 @@
+HEADER    DNA                                     30-AUG-84   6BNA              
+TITLE     BINDING OF AN ANTITUMOR DRUG TO DNA. NETROPSIN AND C-G-C-G-A-A-T-T-   
+TITLE    2 BRC-G-C-G                                                            
+COMPND    MOL_ID: 1;                                                            
+COMPND   2 MOLECULE: DNA (5'-D(*CP*GP*CP*GP*AP*AP*TP*TP*(CBR)P*GP*CP*G)-3');    
+COMPND   3 CHAIN: A, B;                                                         
+COMPND   4 ENGINEERED: YES                                                      
+SOURCE    MOL_ID: 1;                                                            
+SOURCE   2 SYNTHETIC: YES                                                       
+KEYWDS    B-DNA, DOUBLE HELIX, COMPLEXED WITH DRUG, MODIFIED, DNA               
+EXPDTA    X-RAY DIFFRACTION                                                     
+AUTHOR    M.L.KOPKA,C.YOON,D.GOODSELL,P.PJURA,R.E.DICKERSON                     
+REVDAT   4   13-MAR-24 6BNA    1       REMARK LINK                              
+REVDAT   3   24-FEB-09 6BNA    1       VERSN                                    
+REVDAT   2   01-APR-03 6BNA    1       JRNL                                     
+REVDAT   1   29-OCT-84 6BNA    0                                                
+JRNL        AUTH   M.L.KOPKA,C.YOON,D.GOODSELL,P.PJURA,R.E.DICKERSON            
+JRNL        TITL   BINDING OF AN ANTITUMOR DRUG TO DNA, NETROPSIN AND           
+JRNL        TITL 2 C-G-C-G-A-A-T-T-BRC-G-C-G.                                   
+JRNL        REF    J.MOL.BIOL.                   V. 183   553 1985              
+JRNL        REFN                   ISSN 0022-2836                               
+JRNL        PMID   2991536                                                      
+JRNL        DOI    10.1016/0022-2836(85)90171-8                                 
+REMARK   1                                                                      
+REMARK   1 REFERENCE 1                                                          
+REMARK   1  AUTH   M.L.KOPKA,P.PJURA,C.YOON,D.GOODSELL,R.E.DICKERSON            
+REMARK   1  TITL   THE BINDING OF NETROPSIN TO DOUBLE-HELICAL B-DNA OF SEQUENCE 
+REMARK   1  TITL 2 C-G-C-G-A-A-T-T-BRC-G-C-G. SINGLE CRYSTAL X-RAY STRUCTURE    
+REMARK   1  TITL 3 ANALYSIS                                                     
+REMARK   1  REF    STRUCTURE AND MOTION.                                        
+REMARK   1  REF  2 MEMBRANES, NUCLEIC ACIDS AND                                 
+REMARK   1  REF  3 PROTEIN.                                                     
+REMARK   1  PUBL   ADENINE PRESS,GUILDERLAND,NEW YORK                           
+REMARK   1 REFERENCE 2                                                          
+REMARK   1  AUTH   M.L.KOPKA,C.YOON,D.GOODSELL,P.PJURA,R.E.DICKERSON            
+REMARK   1  TITL   THE MOLECULAR ORIGIN OF DNA-DRUG SPECIFICITY IN NETROPSIN    
+REMARK   1  TITL 2 AND DISTAMYCIN                                               
+REMARK   1  REF    PROC.NATL.ACAD.SCI.USA        V.  82  1376 1985              
+REMARK   1  REFN                   ISSN 0027-8424                               
+REMARK   2                                                                      
+REMARK   2 RESOLUTION.    2.21 ANGSTROMS.                                       
+REMARK   3                                                                      
+REMARK   3 REFINEMENT.                                                          
+REMARK   3   PROGRAM     : JACK-LEVITT                                          
+REMARK   3   AUTHORS     : JACK,LEVITT                                          
+REMARK   3                                                                      
+REMARK   3  DATA USED IN REFINEMENT.                                            
+REMARK   3   RESOLUTION RANGE HIGH (ANGSTROMS) : 2.21                           
+REMARK   3   RESOLUTION RANGE LOW  (ANGSTROMS) : 8.00                           
+REMARK   3   DATA CUTOFF            (SIGMA(F)) : 2.000                          
+REMARK   3   DATA CUTOFF HIGH         (ABS(F)) : NULL                           
+REMARK   3   DATA CUTOFF LOW          (ABS(F)) : NULL                           
+REMARK   3   COMPLETENESS (WORKING+TEST)   (%) : NULL                           
+REMARK   3   NUMBER OF REFLECTIONS             : 2528                           
+REMARK   3                                                                      
+REMARK   3  FIT TO DATA USED IN REFINEMENT.                                     
+REMARK   3   CROSS-VALIDATION METHOD          : NULL                            
+REMARK   3   FREE R VALUE TEST SET SELECTION  : NULL                            
+REMARK   3   R VALUE            (WORKING SET) : 0.211                           
+REMARK   3   FREE R VALUE                     : NULL                            
+REMARK   3   FREE R VALUE TEST SET SIZE   (%) : NULL                            
+REMARK   3   FREE R VALUE TEST SET COUNT      : NULL                            
+REMARK   3   ESTIMATED ERROR OF FREE R VALUE  : NULL                            
+REMARK   3                                                                      
+REMARK   3  FIT IN THE HIGHEST RESOLUTION BIN.                                  
+REMARK   3   TOTAL NUMBER OF BINS USED           : NULL                         
+REMARK   3   BIN RESOLUTION RANGE HIGH       (A) : NULL                         
+REMARK   3   BIN RESOLUTION RANGE LOW        (A) : NULL                         
+REMARK   3   BIN COMPLETENESS (WORKING+TEST) (%) : NULL                         
+REMARK   3   REFLECTIONS IN BIN    (WORKING SET) : NULL                         
+REMARK   3   BIN R VALUE           (WORKING SET) : NULL                         
+REMARK   3   BIN FREE R VALUE                    : NULL                         
+REMARK   3   BIN FREE R VALUE TEST SET SIZE  (%) : NULL                         
+REMARK   3   BIN FREE R VALUE TEST SET COUNT     : NULL                         
+REMARK   3   ESTIMATED ERROR OF BIN FREE R VALUE : NULL                         
+REMARK   3                                                                      
+REMARK   3  NUMBER OF NON-HYDROGEN ATOMS USED IN REFINEMENT.                    
+REMARK   3   PROTEIN ATOMS            : 0                                       
+REMARK   3   NUCLEIC ACID ATOMS       : 488                                     
+REMARK   3   HETEROGEN ATOMS          : 31                                      
+REMARK   3   SOLVENT ATOMS            : 75                                      
+REMARK   3                                                                      
+REMARK   3  B VALUES.                                                           
+REMARK   3   FROM WILSON PLOT           (A**2) : NULL                           
+REMARK   3   MEAN B VALUE      (OVERALL, A**2) : NULL                           
+REMARK   3   OVERALL ANISOTROPIC B VALUE.                                       
+REMARK   3    B11 (A**2) : NULL                                                 
+REMARK   3    B22 (A**2) : NULL                                                 
+REMARK   3    B33 (A**2) : NULL                                                 
+REMARK   3    B12 (A**2) : NULL                                                 
+REMARK   3    B13 (A**2) : NULL                                                 
+REMARK   3    B23 (A**2) : NULL                                                 
+REMARK   3                                                                      
+REMARK   3  ESTIMATED COORDINATE ERROR.                                         
+REMARK   3   ESD FROM LUZZATI PLOT        (A) : NULL                            
+REMARK   3   ESD FROM SIGMAA              (A) : NULL                            
+REMARK   3   LOW RESOLUTION CUTOFF        (A) : NULL                            
+REMARK   3                                                                      
+REMARK   3  CROSS-VALIDATED ESTIMATED COORDINATE ERROR.                         
+REMARK   3   ESD FROM C-V LUZZATI PLOT    (A) : NULL                            
+REMARK   3   ESD FROM C-V SIGMAA          (A) : NULL                            
+REMARK   3                                                                      
+REMARK   3  RMS DEVIATIONS FROM IDEAL VALUES.                                   
+REMARK   3   BOND LENGTHS                 (A) : NULL                            
+REMARK   3   BOND ANGLES            (DEGREES) : NULL                            
+REMARK   3   DIHEDRAL ANGLES        (DEGREES) : NULL                            
+REMARK   3   IMPROPER ANGLES        (DEGREES) : NULL                            
+REMARK   3                                                                      
+REMARK   3  ISOTROPIC THERMAL MODEL : NULL                                      
+REMARK   3                                                                      
+REMARK   3  ISOTROPIC THERMAL FACTOR RESTRAINTS.    RMS    SIGMA                
+REMARK   3   MAIN-CHAIN BOND              (A**2) : NULL  ; NULL                 
+REMARK   3   MAIN-CHAIN ANGLE             (A**2) : NULL  ; NULL                 
+REMARK   3   SIDE-CHAIN BOND              (A**2) : NULL  ; NULL                 
+REMARK   3   SIDE-CHAIN ANGLE             (A**2) : NULL  ; NULL                 
+REMARK   3                                                                      
+REMARK   3  NCS MODEL : NULL                                                    
+REMARK   3                                                                      
+REMARK   3  NCS RESTRAINTS.                         RMS   SIGMA/WEIGHT          
+REMARK   3   GROUP  1  POSITIONAL            (A) : NULL  ; NULL                 
+REMARK   3   GROUP  1  B-FACTOR           (A**2) : NULL  ; NULL                 
+REMARK   3                                                                      
+REMARK   3  PARAMETER FILE  1  : NULL                                           
+REMARK   3  TOPOLOGY FILE  1   : NULL                                           
+REMARK   3                                                                      
+REMARK   3  OTHER REFINEMENT REMARKS: NULL                                      
+REMARK   4                                                                      
+REMARK   4 6BNA COMPLIES WITH FORMAT V. 3.30, 13-JUL-11                         
+REMARK 100                                                                      
+REMARK 100 THIS ENTRY HAS BEEN PROCESSED BY BNL.                                
+REMARK 100 THE DEPOSITION ID IS D_1000179799.                                   
+REMARK 200                                                                      
+REMARK 200 EXPERIMENTAL DETAILS                                                 
+REMARK 200  EXPERIMENT TYPE                : X-RAY DIFFRACTION                  
+REMARK 200  DATE OF DATA COLLECTION        : NULL                               
+REMARK 200  TEMPERATURE           (KELVIN) : NULL                               
+REMARK 200  PH                             : NULL                               
+REMARK 200  NUMBER OF CRYSTALS USED        : NULL                               
+REMARK 200                                                                      
+REMARK 200  SYNCHROTRON              (Y/N) : N                                  
+REMARK 200  RADIATION SOURCE               : NULL                               
+REMARK 200  BEAMLINE                       : NULL                               
+REMARK 200  X-RAY GENERATOR MODEL          : NULL                               
+REMARK 200  MONOCHROMATIC OR LAUE    (M/L) : NULL                               
+REMARK 200  WAVELENGTH OR RANGE        (A) : NULL                               
+REMARK 200  MONOCHROMATOR                  : NULL                               
+REMARK 200  OPTICS                         : NULL                               
+REMARK 200                                                                      
+REMARK 200  DETECTOR TYPE                  : DIFFRACTOMETER                     
+REMARK 200  DETECTOR MANUFACTURER          : NULL                               
+REMARK 200  INTENSITY-INTEGRATION SOFTWARE : NULL                               
+REMARK 200  DATA SCALING SOFTWARE          : NULL                               
+REMARK 200                                                                      
+REMARK 200  NUMBER OF UNIQUE REFLECTIONS   : 3240                               
+REMARK 200  RESOLUTION RANGE HIGH      (A) : 2.200                              
+REMARK 200  RESOLUTION RANGE LOW       (A) : NULL                               
+REMARK 200  REJECTION CRITERIA  (SIGMA(I)) : NULL                               
+REMARK 200                                                                      
+REMARK 200 OVERALL.                                                             
+REMARK 200  COMPLETENESS FOR RANGE     (%) : NULL                               
+REMARK 200  DATA REDUNDANCY                : NULL                               
+REMARK 200  R MERGE                    (I) : NULL                               
+REMARK 200  R SYM                      (I) : NULL                               
+REMARK 200  <I/SIGMA(I)> FOR THE DATA SET  : NULL                               
+REMARK 200                                                                      
+REMARK 200 IN THE HIGHEST RESOLUTION SHELL.                                     
+REMARK 200  HIGHEST RESOLUTION SHELL, RANGE HIGH (A) : NULL                     
+REMARK 200  HIGHEST RESOLUTION SHELL, RANGE LOW  (A) : NULL                     
+REMARK 200  COMPLETENESS FOR SHELL     (%) : NULL                               
+REMARK 200  DATA REDUNDANCY IN SHELL       : NULL                               
+REMARK 200  R MERGE FOR SHELL          (I) : NULL                               
+REMARK 200  R SYM FOR SHELL            (I) : NULL                               
+REMARK 200  <I/SIGMA(I)> FOR SHELL         : NULL                               
+REMARK 200                                                                      
+REMARK 200 DIFFRACTION PROTOCOL: NULL                                           
+REMARK 200 METHOD USED TO DETERMINE THE STRUCTURE: NULL                         
+REMARK 200 SOFTWARE USED: NULL                                                  
+REMARK 200 STARTING MODEL: NULL                                                 
+REMARK 200                                                                      
+REMARK 200 REMARK: NULL                                                         
+REMARK 280                                                                      
+REMARK 280 CRYSTAL                                                              
+REMARK 280 SOLVENT CONTENT, VS   (%): 39.76                                     
+REMARK 280 MATTHEWS COEFFICIENT, VM (ANGSTROMS**3/DA): 2.04                     
+REMARK 280                                                                      
+REMARK 280 CRYSTALLIZATION CONDITIONS: VAPOR DIFFUSION, TEMPERATURE 277.00K     
+REMARK 290                                                                      
+REMARK 290 CRYSTALLOGRAPHIC SYMMETRY                                            
+REMARK 290 SYMMETRY OPERATORS FOR SPACE GROUP: P 21 21 21                       
+REMARK 290                                                                      
+REMARK 290      SYMOP   SYMMETRY                                                
+REMARK 290     NNNMMM   OPERATOR                                                
+REMARK 290       1555   X,Y,Z                                                   
+REMARK 290       2555   -X+1/2,-Y,Z+1/2                                         
+REMARK 290       3555   -X,Y+1/2,-Z+1/2                                         
+REMARK 290       4555   X+1/2,-Y+1/2,-Z                                         
+REMARK 290                                                                      
+REMARK 290     WHERE NNN -> OPERATOR NUMBER                                     
+REMARK 290           MMM -> TRANSLATION VECTOR                                  
+REMARK 290                                                                      
+REMARK 290 CRYSTALLOGRAPHIC SYMMETRY TRANSFORMATIONS                            
+REMARK 290 THE FOLLOWING TRANSFORMATIONS OPERATE ON THE ATOM/HETATM             
+REMARK 290 RECORDS IN THIS ENTRY TO PRODUCE CRYSTALLOGRAPHICALLY                
+REMARK 290 RELATED MOLECULES.                                                   
+REMARK 290   SMTRY1   1  1.000000  0.000000  0.000000        0.00000            
+REMARK 290   SMTRY2   1  0.000000  1.000000  0.000000        0.00000            
+REMARK 290   SMTRY3   1  0.000000  0.000000  1.000000        0.00000            
+REMARK 290   SMTRY1   2 -1.000000  0.000000  0.000000       12.13500            
+REMARK 290   SMTRY2   2  0.000000 -1.000000  0.000000        0.00000            
+REMARK 290   SMTRY3   2  0.000000  0.000000  1.000000       31.78500            
+REMARK 290   SMTRY1   3 -1.000000  0.000000  0.000000        0.00000            
+REMARK 290   SMTRY2   3  0.000000  1.000000  0.000000       19.81000            
+REMARK 290   SMTRY3   3  0.000000  0.000000 -1.000000       31.78500            
+REMARK 290   SMTRY1   4  1.000000  0.000000  0.000000       12.13500            
+REMARK 290   SMTRY2   4  0.000000 -1.000000  0.000000       19.81000            
+REMARK 290   SMTRY3   4  0.000000  0.000000 -1.000000        0.00000            
+REMARK 290                                                                      
+REMARK 290 REMARK: NULL                                                         
+REMARK 300                                                                      
+REMARK 300 BIOMOLECULE: 1                                                       
+REMARK 300 SEE REMARK 350 FOR THE AUTHOR PROVIDED AND/OR PROGRAM                
+REMARK 300 GENERATED ASSEMBLY INFORMATION FOR THE STRUCTURE IN                  
+REMARK 300 THIS ENTRY. THE REMARK MAY ALSO PROVIDE INFORMATION ON               
+REMARK 300 BURIED SURFACE AREA.                                                 
+REMARK 350                                                                      
+REMARK 350 COORDINATES FOR A COMPLETE MULTIMER REPRESENTING THE KNOWN           
+REMARK 350 BIOLOGICALLY SIGNIFICANT OLIGOMERIZATION STATE OF THE                
+REMARK 350 MOLECULE CAN BE GENERATED BY APPLYING BIOMT TRANSFORMATIONS          
+REMARK 350 GIVEN BELOW.  BOTH NON-CRYSTALLOGRAPHIC AND                          
+REMARK 350 CRYSTALLOGRAPHIC OPERATIONS ARE GIVEN.                               
+REMARK 350                                                                      
+REMARK 350 BIOMOLECULE: 1                                                       
+REMARK 350 AUTHOR DETERMINED BIOLOGICAL UNIT: DIMERIC                           
+REMARK 350 APPLY THE FOLLOWING TO CHAINS: A, B                                  
+REMARK 350   BIOMT1   1  1.000000  0.000000  0.000000        0.00000            
+REMARK 350   BIOMT2   1  0.000000  1.000000  0.000000        0.00000            
+REMARK 350   BIOMT3   1  0.000000  0.000000  1.000000        0.00000            
+REMARK 500                                                                      
+REMARK 500 GEOMETRY AND STEREOCHEMISTRY                                         
+REMARK 500 SUBTOPIC: COVALENT BOND LENGTHS                                      
+REMARK 500                                                                      
+REMARK 500 THE STEREOCHEMICAL PARAMETERS OF THE FOLLOWING RESIDUES              
+REMARK 500 HAVE VALUES WHICH DEVIATE FROM EXPECTED VALUES BY MORE               
+REMARK 500 THAN 6*RMSD (M=MODEL NUMBER; RES=RESIDUE NAME; C=CHAIN               
+REMARK 500 IDENTIFIER; SSEQ=SEQUENCE NUMBER; I=INSERTION CODE).                 
+REMARK 500                                                                      
+REMARK 500 STANDARD TABLE:                                                      
+REMARK 500 FORMAT: (10X,I3,1X,2(A3,1X,A1,I4,A1,1X,A4,3X),1X,F6.3)               
+REMARK 500                                                                      
+REMARK 500 EXPECTED VALUES PROTEIN: ENGH AND HUBER, 1999                        
+REMARK 500 EXPECTED VALUES NUCLEIC ACID: CLOWNEY ET AL 1996                     
+REMARK 500                                                                      
+REMARK 500  M RES CSSEQI ATM1   RES CSSEQI ATM2   DEVIATION                     
+REMARK 500     DC A   1   C4'    DC A   1   C3'    -0.103                       
+REMARK 500     DC A   1   O3'    DC A   1   C3'    -0.067                       
+REMARK 500     DC A   1   C5     DC A   1   C6      0.059                       
+REMARK 500     DC A   1   O3'    DG A   2   P      -0.075                       
+REMARK 500     DG A   2   N3     DG A   2   C4      0.051                       
+REMARK 500     DG A   2   C5     DG A   2   N7     -0.072                       
+REMARK 500     DC A   3   P      DC A   3   O5'     0.067                       
+REMARK 500     DC A   3   N1     DC A   3   C2     -0.061                       
+REMARK 500     DG A   4   O4'    DG A   4   C4'    -0.087                       
+REMARK 500     DG A   4   N9     DG A   4   C4     -0.051                       
+REMARK 500     DA A   5   O3'    DA A   5   C3'    -0.057                       
+REMARK 500     DA A   5   C5     DA A   5   N7     -0.071                       
+REMARK 500     DA A   6   C4'    DA A   6   C3'    -0.117                       
+REMARK 500     DA A   6   C2'    DA A   6   C1'    -0.087                       
+REMARK 500     DA A   6   C5     DA A   6   C6      0.071                       
+REMARK 500     DA A   6   C5     DA A   6   N7     -0.037                       
+REMARK 500     DA A   6   C6     DA A   6   N6      0.059                       
+REMARK 500     DA A   6   O3'    DT A   7   P      -0.121                       
+REMARK 500     DT A   7   P      DT A   7   O5'    -0.093                       
+REMARK 500     DT A   7   O4'    DT A   7   C4'    -0.106                       
+REMARK 500     DT A   7   O3'    DT A   7   C3'    -0.045                       
+REMARK 500     DT A   7   C5     DT A   7   C6      0.066                       
+REMARK 500     DT A   8   P      DT A   8   OP2    -0.193                       
+REMARK 500     DT A   8   O4'    DT A   8   C4'    -0.066                       
+REMARK 500     DT A   8   C5     DT A   8   C6      0.068                       
+REMARK 500     DG A  10   N3     DG A  10   C4      0.062                       
+REMARK 500     DG A  10   C5     DG A  10   N7     -0.053                       
+REMARK 500     DC A  11   C5     DC A  11   C6      0.066                       
+REMARK 500     DG A  12   C5     DG A  12   N7     -0.039                       
+REMARK 500     DG A  12   N9     DG A  12   C4     -0.055                       
+REMARK 500     DC B  13   C5     DC B  13   C6      0.060                       
+REMARK 500     DC B  15   P      DC B  15   OP1    -0.143                       
+REMARK 500     DG B  16   N3     DG B  16   C4      0.044                       
+REMARK 500     DG B  16   C5     DG B  16   N7     -0.041                       
+REMARK 500     DA B  17   N3     DA B  17   C4      0.051                       
+REMARK 500     DA B  17   C5     DA B  17   N7     -0.063                       
+REMARK 500     DA B  18   N3     DA B  18   C4      0.039                       
+REMARK 500     DT B  19   C5     DT B  19   C6      0.062                       
+REMARK 500     DT B  20   C5     DT B  20   C6      0.059                       
+REMARK 500     DG B  22   O3'    DG B  22   C3'    -0.068                       
+REMARK 500     DG B  22   C5     DG B  22   N7     -0.049                       
+REMARK 500     DG B  22   N7     DG B  22   C8      0.045                       
+REMARK 500     DG B  22   O3'    DC B  23   P      -0.072                       
+REMARK 500     DC B  23   O4'    DC B  23   C4'    -0.084                       
+REMARK 500     DC B  23   C5     DC B  23   C6      0.051                       
+REMARK 500     DG B  24   C5     DG B  24   N7     -0.041                       
+REMARK 500     DG B  24   N7     DG B  24   C8      0.058                       
+REMARK 500                                                                      
+REMARK 500 REMARK: NULL                                                         
+REMARK 500                                                                      
+REMARK 500 GEOMETRY AND STEREOCHEMISTRY                                         
+REMARK 500 SUBTOPIC: COVALENT BOND ANGLES                                       
+REMARK 500                                                                      
+REMARK 500 THE STEREOCHEMICAL PARAMETERS OF THE FOLLOWING RESIDUES              
+REMARK 500 HAVE VALUES WHICH DEVIATE FROM EXPECTED VALUES BY MORE               
+REMARK 500 THAN 6*RMSD (M=MODEL NUMBER; RES=RESIDUE NAME; C=CHAIN               
+REMARK 500 IDENTIFIER; SSEQ=SEQUENCE NUMBER; I=INSERTION CODE).                 
+REMARK 500                                                                      
+REMARK 500 STANDARD TABLE:                                                      
+REMARK 500 FORMAT: (10X,I3,1X,A3,1X,A1,I4,A1,3(1X,A4,2X),12X,F5.1)              
+REMARK 500                                                                      
+REMARK 500 EXPECTED VALUES PROTEIN: ENGH AND HUBER, 1999                        
+REMARK 500 EXPECTED VALUES NUCLEIC ACID: CLOWNEY ET AL 1996                     
+REMARK 500                                                                      
+REMARK 500  M RES CSSEQI ATM1   ATM2   ATM3                                     
+REMARK 500     DC A   1   C5' -  C4' -  O4' ANGL. DEV. =  12.6 DEGREES          
+REMARK 500     DC A   1   C4' -  C3' -  C2' ANGL. DEV. =   7.2 DEGREES          
+REMARK 500     DC A   1   O4' -  C1' -  N1  ANGL. DEV. =   4.8 DEGREES          
+REMARK 500     DG A   2   O5' -  C5' -  C4' ANGL. DEV. = -10.1 DEGREES          
+REMARK 500     DG A   2   C2  -  N3  -  C4  ANGL. DEV. =   3.8 DEGREES          
+REMARK 500     DG A   2   N3  -  C4  -  C5  ANGL. DEV. =  -4.4 DEGREES          
+REMARK 500     DG A   2   N3  -  C4  -  N9  ANGL. DEV. =   4.4 DEGREES          
+REMARK 500     DC A   3   C1' -  O4' -  C4' ANGL. DEV. =  -7.5 DEGREES          
+REMARK 500     DC A   3   O4' -  C1' -  C2' ANGL. DEV. =   4.2 DEGREES          
+REMARK 500     DC A   3   C2  -  N3  -  C4  ANGL. DEV. =   3.6 DEGREES          
+REMARK 500     DG A   4   N9  -  C4  -  C5  ANGL. DEV. =   3.3 DEGREES          
+REMARK 500     DG A   4   C3' -  O3' -  P   ANGL. DEV. =   7.5 DEGREES          
+REMARK 500     DA A   5   O4' -  C1' -  N9  ANGL. DEV. =   2.0 DEGREES          
+REMARK 500     DA A   5   C2  -  N3  -  C4  ANGL. DEV. =   3.3 DEGREES          
+REMARK 500     DA A   5   C8  -  N9  -  C4  ANGL. DEV. =  -3.8 DEGREES          
+REMARK 500     DA A   5   N9  -  C4  -  C5  ANGL. DEV. =   2.9 DEGREES          
+REMARK 500     DA A   6   C5' -  C4' -  O4' ANGL. DEV. =  10.1 DEGREES          
+REMARK 500     DA A   6   C1' -  O4' -  C4' ANGL. DEV. =   5.3 DEGREES          
+REMARK 500     DA A   6   O4' -  C1' -  C2' ANGL. DEV. =  -6.7 DEGREES          
+REMARK 500     DT A   7   O5' -  C5' -  C4' ANGL. DEV. = -10.7 DEGREES          
+REMARK 500     DT A   7   C2  -  N3  -  C4  ANGL. DEV. =  -4.4 DEGREES          
+REMARK 500     DT A   7   C5  -  C6  -  N1  ANGL. DEV. =  -4.4 DEGREES          
+REMARK 500     DT A   7   N3  -  C4  -  O4  ANGL. DEV. =  -5.3 DEGREES          
+REMARK 500     DT A   7   C4  -  C5  -  C7  ANGL. DEV. =   5.4 DEGREES          
+REMARK 500     DT A   7   C6  -  C5  -  C7  ANGL. DEV. =  -6.7 DEGREES          
+REMARK 500     DT A   7   C3' -  O3' -  P   ANGL. DEV. =   9.2 DEGREES          
+REMARK 500     DT A   8   N3  -  C4  -  C5  ANGL. DEV. =   4.0 DEGREES          
+REMARK 500     DT A   8   N3  -  C4  -  O4  ANGL. DEV. =  -3.6 DEGREES          
+REMARK 500     DT A   8   C4  -  C5  -  C7  ANGL. DEV. =   5.7 DEGREES          
+REMARK 500     DT A   8   C6  -  C5  -  C7  ANGL. DEV. =  -6.0 DEGREES          
+REMARK 500     DG A  10   O5' -  P   -  OP2 ANGL. DEV. =  -6.6 DEGREES          
+REMARK 500     DG A  10   O5' -  C5' -  C4' ANGL. DEV. =  -5.6 DEGREES          
+REMARK 500     DC A  11   C5' -  C4' -  C3' ANGL. DEV. =   8.2 DEGREES          
+REMARK 500     DC A  11   C4' -  C3' -  C2' ANGL. DEV. =  -5.7 DEGREES          
+REMARK 500     DC A  11   O4' -  C1' -  N1  ANGL. DEV. =   5.8 DEGREES          
+REMARK 500     DG A  12   O5' -  C5' -  C4' ANGL. DEV. = -10.8 DEGREES          
+REMARK 500     DG A  12   O4' -  C1' -  N9  ANGL. DEV. =  -6.7 DEGREES          
+REMARK 500     DG A  12   C2  -  N3  -  C4  ANGL. DEV. =   4.1 DEGREES          
+REMARK 500     DG A  12   C5  -  C6  -  N1  ANGL. DEV. =   3.1 DEGREES          
+REMARK 500     DC B  13   O4' -  C4' -  C3' ANGL. DEV. =   4.1 DEGREES          
+REMARK 500     DC B  13   O4' -  C1' -  N1  ANGL. DEV. =   2.8 DEGREES          
+REMARK 500     DC B  13   C6  -  N1  -  C2  ANGL. DEV. =   3.7 DEGREES          
+REMARK 500     DG B  14   O4' -  C4' -  C3' ANGL. DEV. =   3.8 DEGREES          
+REMARK 500     DG B  14   N1  -  C2  -  N3  ANGL. DEV. =  -4.1 DEGREES          
+REMARK 500     DG B  14   C2  -  N3  -  C4  ANGL. DEV. =   5.3 DEGREES          
+REMARK 500     DG B  14   N3  -  C4  -  C5  ANGL. DEV. =  -3.0 DEGREES          
+REMARK 500     DG B  14   C5  -  C6  -  N1  ANGL. DEV. =   3.1 DEGREES          
+REMARK 500     DG B  14   C8  -  N9  -  C4  ANGL. DEV. =  -2.4 DEGREES          
+REMARK 500     DG B  14   N1  -  C6  -  O6  ANGL. DEV. =  -4.3 DEGREES          
+REMARK 500     DC B  15   O5' -  P   -  OP2 ANGL. DEV. = -10.2 DEGREES          
+REMARK 500                                                                      
+REMARK 500 THIS ENTRY HAS      78 ANGLE DEVIATIONS.                             
+REMARK 500                                                                      
+REMARK 500 REMARK: NULL                                                         
+REMARK 500                                                                      
+REMARK 500 GEOMETRY AND STEREOCHEMISTRY                                         
+REMARK 500 SUBTOPIC: PLANAR GROUPS                                              
+REMARK 500                                                                      
+REMARK 500 PLANAR GROUPS IN THE FOLLOWING RESIDUES HAVE A TOTAL                 
+REMARK 500 RMS DISTANCE OF ALL ATOMS FROM THE BEST-FIT PLANE                    
+REMARK 500 BY MORE THAN AN EXPECTED VALUE OF 6*RMSD, WITH AN                    
+REMARK 500 RMSD 0.02 ANGSTROMS, OR AT LEAST ONE ATOM HAS                        
+REMARK 500 AN RMSD GREATER THAN THIS VALUE                                      
+REMARK 500 (M=MODEL NUMBER; RES=RESIDUE NAME; C=CHAIN IDENTIFIER;               
+REMARK 500 SSEQ=SEQUENCE NUMBER; I=INSERTION CODE).                             
+REMARK 500                                                                      
+REMARK 500  M RES CSSEQI        RMS     TYPE                                    
+REMARK 500     DG A   4         0.07    SIDE CHAIN                              
+REMARK 500     DG A  10         0.09    SIDE CHAIN                              
+REMARK 500     DC A  11         0.06    SIDE CHAIN                              
+REMARK 500     DG A  12         0.06    SIDE CHAIN                              
+REMARK 500     DG B  14         0.07    SIDE CHAIN                              
+REMARK 500     DC B  15         0.10    SIDE CHAIN                              
+REMARK 500     DG B  16         0.10    SIDE CHAIN                              
+REMARK 500     DT B  19         0.10    SIDE CHAIN                              
+REMARK 500     DG B  24         0.09    SIDE CHAIN                              
+REMARK 500                                                                      
+REMARK 500 REMARK: NULL                                                         
+REMARK 800                                                                      
+REMARK 800 SITE                                                                 
+REMARK 800 SITE_IDENTIFIER: AC1                                                 
+REMARK 800 EVIDENCE_CODE: SOFTWARE                                              
+REMARK 800 SITE_DESCRIPTION: BINDING SITE FOR RESIDUE NT B 25                   
+DBREF  6BNA A    1    12  PDB    6BNA     6BNA             1     12             
+DBREF  6BNA B   13    24  PDB    6BNA     6BNA            13     24             
+SEQRES   1 A   12   DC  DG  DC  DG  DA  DA  DT  DT CBR  DG  DC  DG              
+SEQRES   1 B   12   DC  DG  DC  DG  DA  DA  DT  DT CBR  DG  DC  DG              
+MODRES 6BNA CBR A    9   DC                                                     
+MODRES 6BNA CBR B   21   DC                                                     
+HET    CBR  A   9      20                                                       
+HET    CBR  B  21      20                                                       
+HET     NT  B  25      31                                                       
+HETNAM     CBR 5-BROMO-2'-DEOXY-CYTIDINE-5'-MONOPHOSPHATE                       
+HETNAM      NT NETROPSIN                                                        
+FORMUL   1  CBR    2(C9 H13 BR N3 O7 P)                                         
+FORMUL   3   NT    C18 H26 N10 O3                                               
+FORMUL   4  HOH   *75(H2 O)                                                     
+LINK         O3'  DT A   8                 P   CBR A   9     1555   1555  1.59  
+LINK         O3' CBR A   9                 P    DG A  10     1555   1555  1.61  
+LINK         O3'  DT B  20                 P   CBR B  21     1555   1555  1.59  
+LINK         O3' CBR B  21                 P    DG B  22     1555   1555  1.65  
+SITE     1 AC1 11  DA A   5   DA A   6   DT A   7   DT A   8                    
+SITE     2 AC1 11 CBR A   9   DA B  17   DA B  18   DT B  20                    
+SITE     3 AC1 11 CBR B  21   DG B  22  HOH B  66                               
+CRYST1   24.270   39.620   63.570  90.00  90.00  90.00 P 21 21 21    8          
+ORIGX1      1.000000  0.000000  0.000000        0.00000                         
+ORIGX2      0.000000  1.000000  0.000000        0.00000                         
+ORIGX3      0.000000  0.000000  1.000000        0.00000                         
+SCALE1      0.041203  0.000000  0.000000        0.00000                         
+SCALE2      0.000000  0.025240  0.000000        0.00000                         
+SCALE3      0.000000  0.000000  0.015731        0.00000                         
+ATOM      1  O5'  DC A   1      18.233  34.429  24.341  1.00 26.29           O  
+ATOM      2  C5'  DC A   1      19.537  34.693  23.728  1.00  1.47           C  
+ATOM      3  C4'  DC A   1      20.158  33.336  23.457  1.00  7.30           C  
+ATOM      4  O4'  DC A   1      19.600  32.146  23.938  1.00  8.45           O  
+ATOM      5  C3'  DC A   1      20.521  32.996  22.129  1.00  9.63           C  
+ATOM      6  O3'  DC A   1      21.828  32.651  22.167  1.00 17.34           O  
+ATOM      7  C2'  DC A   1      19.624  31.903  21.606  1.00 13.61           C  
+ATOM      8  C1'  DC A   1      19.475  31.139  22.862  1.00  4.61           C  
+ATOM      9  N1   DC A   1      18.192  30.350  22.937  1.00  2.81           N  
+ATOM     10  C2   DC A   1      18.264  29.062  23.440  1.00  2.20           C  
+ATOM     11  O2   DC A   1      19.352  28.512  23.629  1.00  4.39           O  
+ATOM     12  N3   DC A   1      17.111  28.409  23.707  1.00  7.87           N  
+ATOM     13  C4   DC A   1      15.914  28.985  23.553  1.00  4.62           C  
+ATOM     14  N4   DC A   1      14.795  28.227  23.777  1.00  8.71           N  
+ATOM     15  C5   DC A   1      15.801  30.339  23.155  1.00  6.26           C  
+ATOM     16  C6   DC A   1      16.977  31.005  22.799  1.00  2.07           C  
+ATOM     17  P    DG A   2      22.589  32.741  20.841  1.00 19.50           P  
+ATOM     18  OP1  DG A   2      24.039  33.216  21.173  1.00 20.12           O  
+ATOM     19  OP2  DG A   2      21.885  33.397  19.755  1.00 29.09           O  
+ATOM     20  O5'  DG A   2      22.647  31.200  20.493  1.00 15.57           O  
+ATOM     21  C5'  DG A   2      23.620  30.385  21.068  1.00 18.69           C  
+ATOM     22  C4'  DG A   2      23.264  29.109  20.439  1.00  3.97           C  
+ATOM     23  O4'  DG A   2      21.918  28.805  20.729  1.00  5.79           O  
+ATOM     24  C3'  DG A   2      23.462  28.963  18.919  1.00  3.10           C  
+ATOM     25  O3'  DG A   2      24.349  27.815  18.686  1.00 29.84           O  
+ATOM     26  C2'  DG A   2      22.018  28.759  18.450  1.00  3.36           C  
+ATOM     27  C1'  DG A   2      21.470  28.001  19.629  1.00  4.38           C  
+ATOM     28  N9   DG A   2      20.025  27.958  19.702  1.00  1.52           N  
+ATOM     29  C8   DG A   2      19.197  29.018  19.527  1.00  1.91           C  
+ATOM     30  N7   DG A   2      17.931  28.722  19.740  1.00  5.27           N  
+ATOM     31  C5   DG A   2      17.932  27.464  20.127  1.00  2.68           C  
+ATOM     32  C6   DG A   2      16.826  26.644  20.569  1.00  1.36           C  
+ATOM     33  O6   DG A   2      15.673  26.948  20.667  1.00  0.94           O  
+ATOM     34  N1   DG A   2      17.202  25.372  20.971  1.00  9.07           N  
+ATOM     35  C2   DG A   2      18.498  24.886  20.955  1.00  6.96           C  
+ATOM     36  N2   DG A   2      18.712  23.670  21.518  1.00  5.09           N  
+ATOM     37  N3   DG A   2      19.532  25.629  20.510  1.00  2.65           N  
+ATOM     38  C4   DG A   2      19.215  26.934  20.112  1.00  6.79           C  
+ATOM     39  P    DC A   3      25.111  27.529  17.317  1.00 12.54           P  
+ATOM     40  OP1  DC A   3      26.617  27.293  17.448  1.00 12.25           O  
+ATOM     41  OP2  DC A   3      24.641  28.476  16.243  1.00 13.64           O  
+ATOM     42  O5'  DC A   3      24.565  26.017  16.904  1.00  4.59           O  
+ATOM     43  C5'  DC A   3      24.730  24.944  17.760  1.00 22.93           C  
+ATOM     44  C4'  DC A   3      23.471  24.153  17.639  1.00  8.10           C  
+ATOM     45  O4'  DC A   3      22.339  24.840  18.064  1.00 13.17           O  
+ATOM     46  C3'  DC A   3      23.093  23.517  16.317  1.00 12.76           C  
+ATOM     47  O3'  DC A   3      24.061  22.490  16.038  1.00 27.49           O  
+ATOM     48  C2'  DC A   3      21.739  22.961  16.677  1.00 10.00           C  
+ATOM     49  C1'  DC A   3      21.257  23.966  17.637  1.00  0.32           C  
+ATOM     50  N1   DC A   3      20.175  24.856  17.121  1.00  7.70           N  
+ATOM     51  C2   DC A   3      18.914  24.644  17.509  1.00  3.08           C  
+ATOM     52  O2   DC A   3      18.634  23.679  18.158  1.00  3.30           O  
+ATOM     53  N3   DC A   3      17.992  25.514  17.169  1.00  8.69           N  
+ATOM     54  C4   DC A   3      18.251  26.633  16.528  1.00  8.18           C  
+ATOM     55  N4   DC A   3      17.209  27.479  16.225  1.00 13.84           N  
+ATOM     56  C5   DC A   3      19.552  26.954  16.163  1.00  4.56           C  
+ATOM     57  C6   DC A   3      20.520  26.017  16.450  1.00 11.21           C  
+ATOM     58  P    DG A   4      24.124  21.670  14.713  1.00  8.29           P  
+ATOM     59  OP1  DG A   4      25.369  20.957  14.665  1.00 32.12           O  
+ATOM     60  OP2  DG A   4      23.812  22.441  13.567  1.00  7.51           O  
+ATOM     61  O5'  DG A   4      23.000  20.536  14.882  1.00  6.74           O  
+ATOM     62  C5'  DG A   4      22.904  19.662  16.084  1.00  3.43           C  
+ATOM     63  C4'  DG A   4      21.585  18.959  16.050  1.00  1.55           C  
+ATOM     64  O4'  DG A   4      20.567  19.860  16.053  1.00  6.32           O  
+ATOM     65  C3'  DG A   4      21.288  18.086  14.857  1.00 19.35           C  
+ATOM     66  O3'  DG A   4      20.652  16.891  15.287  1.00 12.45           O  
+ATOM     67  C2'  DG A   4      20.430  18.924  13.970  1.00 13.40           C  
+ATOM     68  C1'  DG A   4      19.636  19.665  15.028  1.00  3.73           C  
+ATOM     69  N9   DG A   4      19.277  21.005  14.582  1.00 10.00           N  
+ATOM     70  C8   DG A   4      20.025  21.945  13.950  1.00  2.47           C  
+ATOM     71  N7   DG A   4      19.387  23.073  13.715  1.00  7.81           N  
+ATOM     72  C5   DG A   4      18.156  22.863  14.234  1.00  7.07           C  
+ATOM     73  C6   DG A   4      17.030  23.744  14.381  1.00  2.47           C  
+ATOM     74  O6   DG A   4      16.909  24.936  14.048  1.00  4.66           O  
+ATOM     75  N1   DG A   4      16.038  23.153  15.140  1.00 10.18           N  
+ATOM     76  C2   DG A   4      16.039  21.862  15.614  1.00  4.14           C  
+ATOM     77  N2   DG A   4      15.000  21.442  16.373  1.00 11.14           N  
+ATOM     78  N3   DG A   4      17.065  21.027  15.373  1.00  4.49           N  
+ATOM     79  C4   DG A   4      18.100  21.586  14.755  1.00  2.18           C  
+ATOM     80  P    DA A   5      20.088  15.714  14.369  1.00  8.96           P  
+ATOM     81  OP1  DA A   5      20.309  14.508  15.046  1.00 27.62           O  
+ATOM     82  OP2  DA A   5      20.536  15.789  13.004  1.00 13.78           O  
+ATOM     83  O5'  DA A   5      18.508  15.991  14.440  1.00  6.37           O  
+ATOM     84  C5'  DA A   5      17.841  16.098  15.706  1.00 12.19           C  
+ATOM     85  C4'  DA A   5      16.387  16.120  15.386  1.00  7.11           C  
+ATOM     86  O4'  DA A   5      16.024  17.423  15.026  1.00 15.72           O  
+ATOM     87  C3'  DA A   5      15.782  15.202  14.408  1.00  6.06           C  
+ATOM     88  O3'  DA A   5      14.618  14.761  14.962  1.00  8.87           O  
+ATOM     89  C2'  DA A   5      15.601  16.092  13.196  1.00  9.47           C  
+ATOM     90  C1'  DA A   5      15.402  17.466  13.770  1.00  2.31           C  
+ATOM     91  N9   DA A   5      15.947  18.580  12.965  1.00  1.40           N  
+ATOM     92  C8   DA A   5      17.166  18.679  12.377  1.00  3.93           C  
+ATOM     93  N7   DA A   5      17.434  19.841  11.820  1.00  3.42           N  
+ATOM     94  C5   DA A   5      16.344  20.546  12.043  1.00  0.49           C  
+ATOM     95  C6   DA A   5      15.887  21.847  11.635  1.00  7.67           C  
+ATOM     96  N6   DA A   5      16.602  22.725  10.854  1.00  9.36           N  
+ATOM     97  N1   DA A   5      14.646  22.208  11.992  1.00  5.79           N  
+ATOM     98  C2   DA A   5      13.925  21.418  12.784  1.00  2.24           C  
+ATOM     99  N3   DA A   5      14.289  20.237  13.253  1.00  3.04           N  
+ATOM    100  C4   DA A   5      15.458  19.819  12.802  1.00  0.19           C  
+ATOM    101  P    DA A   6      13.480  13.995  14.184  1.00 12.03           P  
+ATOM    102  OP1  DA A   6      12.500  13.409  15.165  1.00  9.59           O  
+ATOM    103  OP2  DA A   6      14.120  13.188  13.077  1.00 16.58           O  
+ATOM    104  O5'  DA A   6      12.645  15.184  13.514  1.00 20.37           O  
+ATOM    105  C5'  DA A   6      11.507  15.720  14.153  1.00  2.55           C  
+ATOM    106  C4'  DA A   6      10.719  16.483  13.121  1.00  6.50           C  
+ATOM    107  O4'  DA A   6      11.350  17.523  12.368  1.00  4.55           O  
+ATOM    108  C3'  DA A   6      10.072  15.691  12.159  1.00  4.77           C  
+ATOM    109  O3'  DA A   6       8.744  16.130  12.196  1.00 11.97           O  
+ATOM    110  C2'  DA A   6      10.876  16.062  10.904  1.00  3.87           C  
+ATOM    111  C1'  DA A   6      11.188  17.453  11.024  1.00 10.00           C  
+ATOM    112  N9   DA A   6      12.514  17.840  10.477  1.00  6.80           N  
+ATOM    113  C8   DA A   6      13.695  17.168  10.245  1.00  3.11           C  
+ATOM    114  N7   DA A   6      14.641  17.998   9.757  1.00  0.75           N  
+ATOM    115  C5   DA A   6      14.052  19.206   9.620  1.00  5.29           C  
+ATOM    116  C6   DA A   6      14.468  20.517   9.081  1.00  8.15           C  
+ATOM    117  N6   DA A   6      15.742  20.815   8.599  1.00  7.40           N  
+ATOM    118  N1   DA A   6      13.553  21.497   9.054  1.00  3.66           N  
+ATOM    119  C2   DA A   6      12.312  21.284   9.487  1.00 10.68           C  
+ATOM    120  N3   DA A   6      11.833  20.145  10.017  1.00  3.86           N  
+ATOM    121  C4   DA A   6      12.768  19.152  10.064  1.00  4.59           C  
+ATOM    122  P    DT A   7       7.760  15.577  11.230  1.00  5.65           P  
+ATOM    123  OP1  DT A   7       6.504  15.155  12.066  1.00 22.74           O  
+ATOM    124  OP2  DT A   7       8.356  14.378  10.446  1.00 16.76           O  
+ATOM    125  O5'  DT A   7       7.408  16.659  10.253  1.00 11.66           O  
+ATOM    126  C5'  DT A   7       7.191  17.937  10.651  1.00  9.99           C  
+ATOM    127  C4'  DT A   7       7.320  18.602   9.343  1.00  0.69           C  
+ATOM    128  O4'  DT A   7       8.605  18.447   8.997  1.00  2.92           O  
+ATOM    129  C3'  DT A   7       6.570  18.124   8.109  1.00  7.72           C  
+ATOM    130  O3'  DT A   7       5.552  19.003   7.829  1.00  7.66           O  
+ATOM    131  C2'  DT A   7       7.647  18.087   7.033  1.00  5.67           C  
+ATOM    132  C1'  DT A   7       8.740  18.847   7.700  1.00  4.27           C  
+ATOM    133  N1   DT A   7      10.164  18.680   7.289  1.00  8.14           N  
+ATOM    134  C2   DT A   7      10.805  19.797   6.756  1.00 21.77           C  
+ATOM    135  O2   DT A   7      10.182  20.869   6.567  1.00 11.13           O  
+ATOM    136  N3   DT A   7      12.139  19.660   6.353  1.00  4.63           N  
+ATOM    137  C4   DT A   7      12.840  18.511   6.513  1.00  5.82           C  
+ATOM    138  O4   DT A   7      14.044  18.593   6.212  1.00  6.11           O  
+ATOM    139  C5   DT A   7      12.147  17.345   7.009  1.00  5.00           C  
+ATOM    140  C7   DT A   7      12.786  15.993   7.202  1.00  3.53           C  
+ATOM    141  C6   DT A   7      10.804  17.458   7.406  1.00  1.78           C  
+ATOM    142  P    DT A   8       4.276  18.796   6.886  1.00  8.18           P  
+ATOM    143  OP1  DT A   8       3.114  19.490   7.445  1.00 25.96           O  
+ATOM    144  OP2  DT A   8       4.156  17.623   6.357  1.00 31.40           O  
+ATOM    145  O5'  DT A   8       4.771  19.729   5.640  1.00  9.33           O  
+ATOM    146  C5'  DT A   8       5.035  21.183   5.728  1.00  8.65           C  
+ATOM    147  C4'  DT A   8       5.837  21.535   4.550  1.00  3.40           C  
+ATOM    148  O4'  DT A   8       6.947  20.715   4.519  1.00  6.47           O  
+ATOM    149  C3'  DT A   8       5.296  21.446   3.144  1.00  7.02           C  
+ATOM    150  O3'  DT A   8       4.823  22.737   2.702  1.00 28.55           O  
+ATOM    151  C2'  DT A   8       6.548  20.965   2.340  1.00  4.68           C  
+ATOM    152  C1'  DT A   8       7.620  21.087   3.361  1.00  1.91           C  
+ATOM    153  N1   DT A   8       8.721  20.105   3.206  1.00  6.80           N  
+ATOM    154  C2   DT A   8       9.976  20.507   2.759  1.00  7.27           C  
+ATOM    155  O2   DT A   8      10.215  21.706   2.465  1.00  4.94           O  
+ATOM    156  N3   DT A   8      10.975  19.534   2.719  1.00  3.21           N  
+ATOM    157  C4   DT A   8      10.810  18.269   3.131  1.00  0.33           C  
+ATOM    158  O4   DT A   8      11.794  17.604   3.195  1.00  4.63           O  
+ATOM    159  C5   DT A   8       9.550  17.854   3.576  1.00  9.71           C  
+ATOM    160  C7   DT A   8       9.213  16.455   4.006  1.00 13.31           C  
+ATOM    161  C6   DT A   8       8.506  18.797   3.600  1.00 17.61           C  
+HETATM  162 BR   CBR A   9       7.065  17.430   0.161  1.00 37.60          BR  
+HETATM  163  P   CBR A   9       4.017  22.951   1.350  1.00 10.33           P  
+HETATM  164  OP1 CBR A   9       3.367  24.300   1.392  1.00 19.43           O  
+HETATM  165  OP2 CBR A   9       3.452  21.682   0.846  1.00 18.55           O  
+HETATM  166  O5' CBR A   9       5.165  23.265   0.335  1.00 36.03           O  
+HETATM  167  N1  CBR A   9       8.883  20.960  -0.941  1.00  8.20           N  
+HETATM  168  C6  CBR A   9       7.917  20.034  -0.659  1.00 12.94           C  
+HETATM  169  C2  CBR A   9      10.181  20.600  -1.114  1.00  4.69           C  
+HETATM  170  O2  CBR A   9      10.974  21.439  -1.516  1.00  5.80           O  
+HETATM  171  N3  CBR A   9      10.531  19.307  -0.932  1.00 11.69           N  
+HETATM  172  C4  CBR A   9       9.618  18.392  -0.539  1.00 14.66           C  
+HETATM  173  N4  CBR A   9      10.000  17.131  -0.184  1.00 19.07           N  
+HETATM  174  C5  CBR A   9       8.261  18.695  -0.483  1.00  5.42           C  
+HETATM  175  C2' CBR A   9       7.472  22.647  -2.348  1.00  7.46           C  
+HETATM  176  C5' CBR A   9       6.094  24.298   0.584  1.00 24.33           C  
+HETATM  177  C4' CBR A   9       7.183  23.978  -0.385  1.00 13.59           C  
+HETATM  178  O4' CBR A   9       7.727  22.730  -0.032  1.00 24.61           O  
+HETATM  179  C1' CBR A   9       8.454  22.359  -1.180  1.00 13.20           C  
+HETATM  180  C3' CBR A   9       6.796  23.911  -1.852  1.00 13.43           C  
+HETATM  181  O3' CBR A   9       7.159  25.144  -2.580  1.00 32.28           O  
+ATOM    182  P    DG A  10       6.481  25.476  -4.001  1.00 28.62           P  
+ATOM    183  OP1  DG A  10       5.880  26.828  -3.816  1.00 28.75           O  
+ATOM    184  OP2  DG A  10       5.695  24.287  -4.564  1.00  4.89           O  
+ATOM    185  O5'  DG A  10       7.713  25.466  -5.012  1.00 30.60           O  
+ATOM    186  C5'  DG A  10       9.077  25.855  -4.604  1.00 29.90           C  
+ATOM    187  C4'  DG A  10       9.985  25.021  -5.522  1.00 31.91           C  
+ATOM    188  O4'  DG A  10      10.135  23.626  -5.079  1.00 29.87           O  
+ATOM    189  C3'  DG A  10       9.553  24.884  -6.991  1.00 18.10           C  
+ATOM    190  O3'  DG A  10      10.700  24.984  -7.800  1.00 29.97           O  
+ATOM    191  C2'  DG A  10       8.969  23.491  -7.045  1.00  9.21           C  
+ATOM    192  C1'  DG A  10       9.987  22.768  -6.188  1.00  3.38           C  
+ATOM    193  N9   DG A  10       9.530  21.505  -5.635  1.00  9.76           N  
+ATOM    194  C8   DG A  10       8.296  20.921  -5.473  1.00  5.16           C  
+ATOM    195  N7   DG A  10       8.369  19.734  -4.889  1.00  2.38           N  
+ATOM    196  C5   DG A  10       9.670  19.550  -4.654  1.00  2.48           C  
+ATOM    197  C6   DG A  10      10.340  18.391  -4.106  1.00 14.80           C  
+ATOM    198  O6   DG A  10       9.776  17.388  -3.651  1.00  5.23           O  
+ATOM    199  N1   DG A  10      11.757  18.420  -4.273  1.00  4.15           N  
+ATOM    200  C2   DG A  10      12.465  19.547  -4.767  1.00  9.26           C  
+ATOM    201  N2   DG A  10      13.815  19.490  -4.942  1.00  5.45           N  
+ATOM    202  N3   DG A  10      11.832  20.692  -5.132  1.00  8.42           N  
+ATOM    203  C4   DG A  10      10.423  20.602  -5.095  1.00  9.15           C  
+ATOM    204  P    DC A  11      10.700  25.914  -9.022  1.00 30.62           P  
+ATOM    205  OP1  DC A  11      10.520  27.330  -8.444  1.00 21.97           O  
+ATOM    206  OP2  DC A  11       9.713  25.379 -10.018  1.00 32.46           O  
+ATOM    207  O5'  DC A  11      12.115  25.645  -9.656  1.00 29.47           O  
+ATOM    208  C5'  DC A  11      13.331  25.847  -8.868  1.00 26.46           C  
+ATOM    209  C4'  DC A  11      14.203  24.614  -8.866  1.00 15.68           C  
+ATOM    210  O4'  DC A  11      13.562  23.686  -8.040  1.00 22.74           O  
+ATOM    211  C3'  DC A  11      14.603  23.839 -10.142  1.00  3.87           C  
+ATOM    212  O3'  DC A  11      15.717  24.505 -10.814  1.00 20.01           O  
+ATOM    213  C2'  DC A  11      15.086  22.601  -9.445  1.00 18.73           C  
+ATOM    214  C1'  DC A  11      14.032  22.384  -8.407  1.00 10.54           C  
+ATOM    215  N1   DC A  11      12.906  21.363  -8.686  1.00 14.39           N  
+ATOM    216  C2   DC A  11      13.038  20.050  -8.266  1.00 19.38           C  
+ATOM    217  O2   DC A  11      14.143  19.653  -7.852  1.00 10.15           O  
+ATOM    218  N3   DC A  11      11.946  19.248  -8.286  1.00  6.10           N  
+ATOM    219  C4   DC A  11      10.751  19.680  -8.781  1.00  8.77           C  
+ATOM    220  N4   DC A  11       9.674  18.840  -8.843  1.00  4.16           N  
+ATOM    221  C5   DC A  11      10.576  20.997  -9.217  1.00 17.34           C  
+ATOM    222  C6   DC A  11      11.688  21.852  -9.137  1.00 20.05           C  
+ATOM    223  P    DG A  12      16.193  24.189 -12.290  1.00 19.78           P  
+ATOM    224  OP1  DG A  12      17.320  25.085 -12.610  1.00 27.92           O  
+ATOM    225  OP2  DG A  12      15.056  24.264 -13.223  1.00 21.30           O  
+ATOM    226  O5'  DG A  12      16.785  22.757 -12.160  1.00 20.44           O  
+ATOM    227  C5'  DG A  12      18.109  22.566 -11.684  1.00  2.44           C  
+ATOM    228  C4'  DG A  12      18.173  21.053 -11.796  1.00 21.91           C  
+ATOM    229  O4'  DG A  12      17.063  20.463 -11.083  1.00  6.80           O  
+ATOM    230  C3'  DG A  12      18.154  20.440 -13.164  1.00 10.86           C  
+ATOM    231  O3'  DG A  12      19.401  20.532 -13.908  1.00 19.26           O  
+ATOM    232  C2'  DG A  12      17.619  19.045 -12.881  1.00 15.15           C  
+ATOM    233  C1'  DG A  12      16.741  19.253 -11.625  1.00  4.91           C  
+ATOM    234  N9   DG A  12      15.286  19.379 -11.768  1.00  0.69           N  
+ATOM    235  C8   DG A  12      14.544  20.425 -12.261  1.00  1.77           C  
+ATOM    236  N7   DG A  12      13.250  20.213 -12.316  1.00  2.81           N  
+ATOM    237  C5   DG A  12      13.158  18.966 -11.811  1.00  4.78           C  
+ATOM    238  C6   DG A  12      12.007  18.109 -11.551  1.00 22.63           C  
+ATOM    239  O6   DG A  12      10.829  18.372 -11.698  1.00 23.50           O  
+ATOM    240  N1   DG A  12      12.327  16.842 -11.031  1.00 11.15           N  
+ATOM    241  C2   DG A  12      13.574  16.435 -10.715  1.00  2.19           C  
+ATOM    242  N2   DG A  12      13.676  15.183 -10.313  1.00  5.31           N  
+ATOM    243  N3   DG A  12      14.629  17.248 -10.808  1.00  2.21           N  
+ATOM    244  C4   DG A  12      14.403  18.463 -11.416  1.00  5.70           C  
+TER     245       DG A  12                                                      
+ATOM    246  O5'  DC B  13       6.926   9.012 -10.100  1.00 26.22           O  
+ATOM    247  C5'  DC B  13       8.176   8.384  -9.821  1.00 25.44           C  
+ATOM    248  C4'  DC B  13       9.216   9.317  -9.186  1.00 16.59           C  
+ATOM    249  O4'  DC B  13       9.622  10.434 -10.049  1.00 12.38           O  
+ATOM    250  C3'  DC B  13       9.041   9.807  -7.733  1.00 20.14           C  
+ATOM    251  O3'  DC B  13      10.196   9.617  -6.896  1.00 23.84           O  
+ATOM    252  C2'  DC B  13       8.862  11.294  -7.976  1.00 23.70           C  
+ATOM    253  C1'  DC B  13       9.771  11.543  -9.188  1.00  7.50           C  
+ATOM    254  N1   DC B  13       9.528  12.796  -9.898  1.00  2.10           N  
+ATOM    255  C2   DC B  13      10.604  13.556 -10.130  1.00  1.85           C  
+ATOM    256  O2   DC B  13      11.729  13.223  -9.711  1.00  4.46           O  
+ATOM    257  N3   DC B  13      10.429  14.682 -10.774  1.00  7.78           N  
+ATOM    258  C4   DC B  13       9.196  15.141 -11.116  1.00  4.99           C  
+ATOM    259  N4   DC B  13       9.106  16.252 -11.883  1.00  8.48           N  
+ATOM    260  C5   DC B  13       8.056  14.371 -10.892  1.00 17.11           C  
+ATOM    261  C6   DC B  13       8.259  13.143 -10.254  1.00  1.58           C  
+ATOM    262  P    DG B  14      10.367   8.445  -5.836  1.00 11.48           P  
+ATOM    263  OP1  DG B  14      10.149   7.066  -6.451  1.00 25.73           O  
+ATOM    264  OP2  DG B  14       9.533   8.944  -4.663  1.00 12.02           O  
+ATOM    265  O5'  DG B  14      11.919   8.532  -5.561  1.00 27.31           O  
+ATOM    266  C5'  DG B  14      12.828   8.547  -6.669  1.00  7.04           C  
+ATOM    267  C4'  DG B  14      13.909   9.566  -6.415  1.00  7.29           C  
+ATOM    268  O4'  DG B  14      13.572  10.837  -7.028  1.00  2.10           O  
+ATOM    269  C3'  DG B  14      14.407   9.799  -4.963  1.00  7.53           C  
+ATOM    270  O3'  DG B  14      15.845   9.555  -4.718  1.00 20.95           O  
+ATOM    271  C2'  DG B  14      13.932  11.226  -4.686  1.00 21.83           C  
+ATOM    272  C1'  DG B  14      13.915  11.885  -6.052  1.00  4.64           C  
+ATOM    273  N9   DG B  14      12.791  12.876  -6.067  1.00 12.01           N  
+ATOM    274  C8   DG B  14      11.431  12.719  -5.780  1.00  4.61           C  
+ATOM    275  N7   DG B  14      10.707  13.802  -6.092  1.00 12.36           N  
+ATOM    276  C5   DG B  14      11.640  14.675  -6.574  1.00  6.69           C  
+ATOM    277  C6   DG B  14      11.515  16.036  -7.069  1.00  3.23           C  
+ATOM    278  O6   DG B  14      10.537  16.728  -7.125  1.00 11.46           O  
+ATOM    279  N1   DG B  14      12.693  16.671  -7.279  1.00  4.81           N  
+ATOM    280  C2   DG B  14      13.916  16.120  -7.163  1.00  3.66           C  
+ATOM    281  N2   DG B  14      14.963  16.824  -7.616  1.00  7.04           N  
+ATOM    282  N3   DG B  14      14.034  14.837  -6.836  1.00 19.95           N  
+ATOM    283  C4   DG B  14      12.888  14.167  -6.517  1.00  1.32           C  
+ATOM    284  P    DC B  15      16.526   9.549  -3.268  1.00  7.43           P  
+ATOM    285  OP1  DC B  15      17.599   8.746  -3.194  1.00 17.63           O  
+ATOM    286  OP2  DC B  15      15.630   9.720  -2.151  1.00 18.11           O  
+ATOM    287  O5'  DC B  15      17.196  11.032  -3.160  1.00  3.41           O  
+ATOM    288  C5'  DC B  15      18.228  11.555  -4.038  1.00  5.56           C  
+ATOM    289  C4'  DC B  15      18.153  13.099  -4.021  1.00  0.12           C  
+ATOM    290  O4'  DC B  15      16.878  13.641  -4.495  1.00  1.18           O  
+ATOM    291  C3'  DC B  15      18.353  13.759  -2.706  1.00  4.04           C  
+ATOM    292  O3'  DC B  15      19.724  14.050  -2.466  1.00 21.41           O  
+ATOM    293  C2'  DC B  15      17.639  15.089  -2.902  1.00  5.91           C  
+ATOM    294  C1'  DC B  15      16.579  14.827  -3.884  1.00  5.43           C  
+ATOM    295  N1   DC B  15      15.189  14.966  -3.321  1.00  3.97           N  
+ATOM    296  C2   DC B  15      14.441  16.108  -3.523  1.00  3.29           C  
+ATOM    297  O2   DC B  15      14.944  17.150  -3.978  1.00  4.96           O  
+ATOM    298  N3   DC B  15      13.153  16.067  -3.221  1.00  6.44           N  
+ATOM    299  C4   DC B  15      12.588  14.981  -2.671  1.00  4.66           C  
+ATOM    300  N4   DC B  15      11.256  14.959  -2.446  1.00  4.18           N  
+ATOM    301  C5   DC B  15      13.343  13.845  -2.330  1.00  4.94           C  
+ATOM    302  C6   DC B  15      14.673  13.856  -2.675  1.00  3.76           C  
+ATOM    303  P    DG B  16      20.316  14.399  -1.031  1.00 12.13           P  
+ATOM    304  OP1  DG B  16      21.658  13.778  -1.052  1.00 36.37           O  
+ATOM    305  OP2  DG B  16      19.362  13.986   0.010  1.00 24.72           O  
+ATOM    306  O5'  DG B  16      20.598  15.938  -0.964  1.00 20.00           O  
+ATOM    307  C5'  DG B  16      20.950  16.665  -2.132  1.00 25.74           C  
+ATOM    308  C4'  DG B  16      20.328  18.023  -1.916  1.00 13.71           C  
+ATOM    309  O4'  DG B  16      18.871  18.031  -2.028  1.00 14.05           O  
+ATOM    310  C3'  DG B  16      20.760  18.745  -0.659  1.00 16.85           C  
+ATOM    311  O3'  DG B  16      21.527  19.857  -0.979  1.00 25.77           O  
+ATOM    312  C2'  DG B  16      19.468  19.062   0.085  1.00  4.72           C  
+ATOM    313  C1'  DG B  16      18.350  18.738  -0.901  1.00  6.77           C  
+ATOM    314  N9   DG B  16      17.149  18.023  -0.404  1.00  4.69           N  
+ATOM    315  C8   DG B  16      17.014  16.973   0.434  1.00  5.01           C  
+ATOM    316  N7   DG B  16      15.743  16.561   0.532  1.00 13.43           N  
+ATOM    317  C5   DG B  16      15.052  17.459  -0.197  1.00 12.01           C  
+ATOM    318  C6   DG B  16      13.609  17.637  -0.385  1.00  4.97           C  
+ATOM    319  O6   DG B  16      12.651  16.925  -0.015  1.00  2.98           O  
+ATOM    320  N1   DG B  16      13.318  18.824  -1.014  1.00  9.94           N  
+ATOM    321  C2   DG B  16      14.224  19.711  -1.561  1.00  3.46           C  
+ATOM    322  N2   DG B  16      13.755  20.843  -2.097  1.00 16.56           N  
+ATOM    323  N3   DG B  16      15.536  19.478  -1.507  1.00 11.44           N  
+ATOM    324  C4   DG B  16      15.897  18.340  -0.788  1.00  2.12           C  
+ATOM    325  P    DA B  17      21.826  21.034   0.050  1.00 28.03           P  
+ATOM    326  OP1  DA B  17      22.962  21.742  -0.491  1.00 35.81           O  
+ATOM    327  OP2  DA B  17      22.019  20.497   1.424  1.00 26.25           O  
+ATOM    328  O5'  DA B  17      20.585  22.027  -0.134  1.00 17.72           O  
+ATOM    329  C5'  DA B  17      20.364  22.802  -1.353  1.00 25.63           C  
+ATOM    330  C4'  DA B  17      19.191  23.752  -1.124  1.00 20.51           C  
+ATOM    331  O4'  DA B  17      17.970  23.116  -0.785  1.00 11.20           O  
+ATOM    332  C3'  DA B  17      19.378  24.847  -0.112  1.00 17.70           C  
+ATOM    333  O3'  DA B  17      18.761  26.140  -0.524  1.00 25.62           O  
+ATOM    334  C2'  DA B  17      18.795  24.177   1.113  1.00  9.35           C  
+ATOM    335  C1'  DA B  17      17.612  23.425   0.546  1.00  5.61           C  
+ATOM    336  N9   DA B  17      17.210  22.219   1.316  1.00  5.42           N  
+ATOM    337  C8   DA B  17      18.030  21.340   1.949  1.00  7.93           C  
+ATOM    338  N7   DA B  17      17.369  20.304   2.505  1.00 10.63           N  
+ATOM    339  C5   DA B  17      16.101  20.562   2.222  1.00  4.99           C  
+ATOM    340  C6   DA B  17      14.900  19.819   2.482  1.00  4.11           C  
+ATOM    341  N6   DA B  17      14.853  18.644   3.200  1.00  2.32           N  
+ATOM    342  N1   DA B  17      13.759  20.349   2.040  1.00  5.58           N  
+ATOM    343  C2   DA B  17      13.720  21.495   1.324  1.00  8.28           C  
+ATOM    344  N3   DA B  17      14.777  22.258   0.973  1.00 13.14           N  
+ATOM    345  C4   DA B  17      15.961  21.729   1.488  1.00  3.94           C  
+ATOM    346  P    DA B  18      18.827  27.448   0.392  1.00 21.86           P  
+ATOM    347  OP1  DA B  18      19.316  28.554  -0.348  1.00 27.81           O  
+ATOM    348  OP2  DA B  18      19.460  27.075   1.656  1.00 16.63           O  
+ATOM    349  O5'  DA B  18      17.368  27.757   0.804  1.00 28.97           O  
+ATOM    350  C5'  DA B  18      16.254  27.362   0.003  1.00 20.84           C  
+ATOM    351  C4'  DA B  18      15.069  27.394   0.933  1.00  5.83           C  
+ATOM    352  O4'  DA B  18      14.942  26.144   1.599  1.00 10.15           O  
+ATOM    353  C3'  DA B  18      14.986  28.461   1.987  1.00 10.69           C  
+ATOM    354  O3'  DA B  18      13.737  29.166   1.918  1.00 34.13           O  
+ATOM    355  C2'  DA B  18      15.241  27.653   3.266  1.00  7.93           C  
+ATOM    356  C1'  DA B  18      14.624  26.319   2.922  1.00  3.88           C  
+ATOM    357  N9   DA B  18      15.158  25.161   3.595  1.00  4.63           N  
+ATOM    358  C8   DA B  18      16.469  24.852   3.891  1.00  8.06           C  
+ATOM    359  N7   DA B  18      16.649  23.683   4.482  1.00  7.79           N  
+ATOM    360  C5   DA B  18      15.349  23.260   4.617  1.00  3.14           C  
+ATOM    361  C6   DA B  18      14.780  22.072   5.165  1.00  4.74           C  
+ATOM    362  N6   DA B  18      15.569  21.051   5.651  1.00 11.35           N  
+ATOM    363  N1   DA B  18      13.440  21.913   5.098  1.00  2.82           N  
+ATOM    364  C2   DA B  18      12.643  22.808   4.518  1.00  1.49           C  
+ATOM    365  N3   DA B  18      13.059  23.937   3.975  1.00 10.03           N  
+ATOM    366  C4   DA B  18      14.428  24.120   4.053  1.00  3.01           C  
+ATOM    367  P    DT B  19      13.326  30.219   3.040  1.00 27.91           P  
+ATOM    368  OP1  DT B  19      12.579  31.264   2.386  1.00 28.67           O  
+ATOM    369  OP2  DT B  19      14.519  30.627   3.752  1.00 26.71           O  
+ATOM    370  O5'  DT B  19      12.389  29.377   4.060  1.00 22.51           O  
+ATOM    371  C5'  DT B  19      11.285  28.609   3.603  1.00 10.64           C  
+ATOM    372  C4'  DT B  19      10.869  27.757   4.788  1.00  1.25           C  
+ATOM    373  O4'  DT B  19      11.744  26.675   5.075  1.00  1.23           O  
+ATOM    374  C3'  DT B  19      10.581  28.502   6.072  1.00  4.66           C  
+ATOM    375  O3'  DT B  19       9.196  28.513   6.336  1.00 18.54           O  
+ATOM    376  C2'  DT B  19      11.377  27.752   7.121  1.00  8.54           C  
+ATOM    377  C1'  DT B  19      11.669  26.420   6.486  1.00  2.15           C  
+ATOM    378  N1   DT B  19      12.979  25.771   6.989  1.00  5.42           N  
+ATOM    379  C2   DT B  19      12.908  24.601   7.625  1.00  4.43           C  
+ATOM    380  O2   DT B  19      11.896  23.995   7.729  1.00  4.50           O  
+ATOM    381  N3   DT B  19      14.046  23.989   7.958  1.00  4.79           N  
+ATOM    382  C4   DT B  19      15.311  24.472   7.766  1.00 10.46           C  
+ATOM    383  O4   DT B  19      16.258  23.649   7.938  1.00  5.89           O  
+ATOM    384  C5   DT B  19      15.392  25.784   7.258  1.00 12.95           C  
+ATOM    385  C7   DT B  19      16.692  26.464   6.974  1.00 27.21           C  
+ATOM    386  C6   DT B  19      14.203  26.406   6.855  1.00  3.36           C  
+ATOM    387  P    DT B  20       8.566  29.351   7.515  1.00 10.68           P  
+ATOM    388  OP1  DT B  20       7.204  29.708   7.036  1.00 23.04           O  
+ATOM    389  OP2  DT B  20       9.420  30.473   8.004  1.00 26.33           O  
+ATOM    390  O5'  DT B  20       8.519  28.346   8.701  1.00  9.06           O  
+ATOM    391  C5'  DT B  20       7.578  27.236   8.612  1.00 22.97           C  
+ATOM    392  C4'  DT B  20       7.825  26.317   9.781  1.00  4.48           C  
+ATOM    393  O4'  DT B  20       9.197  26.080   9.782  1.00  6.04           O  
+ATOM    394  C3'  DT B  20       7.638  26.888  11.200  1.00  7.72           C  
+ATOM    395  O3'  DT B  20       6.753  26.023  11.873  1.00 21.24           O  
+ATOM    396  C2'  DT B  20       9.013  26.903  11.798  1.00  3.13           C  
+ATOM    397  C1'  DT B  20       9.614  25.756  11.043  1.00  1.84           C  
+ATOM    398  N1   DT B  20      11.073  25.617  10.969  1.00  3.67           N  
+ATOM    399  C2   DT B  20      11.668  24.491  11.443  1.00 10.00           C  
+ATOM    400  O2   DT B  20      11.020  23.540  11.863  1.00  6.87           O  
+ATOM    401  N3   DT B  20      13.021  24.435  11.411  1.00  3.73           N  
+ATOM    402  C4   DT B  20      13.828  25.481  10.919  1.00  4.58           C  
+ATOM    403  O4   DT B  20      15.062  25.319  10.874  1.00  5.94           O  
+ATOM    404  C5   DT B  20      13.204  26.646  10.470  1.00  7.28           C  
+ATOM    405  C7   DT B  20      13.982  27.882  10.123  1.00 14.93           C  
+ATOM    406  C6   DT B  20      11.807  26.690  10.489  1.00  3.01           C  
+HETATM  407 BR   CBR B  21      12.028  28.332  14.140  1.00 29.54          BR  
+HETATM  408  P   CBR B  21       6.181  26.360  13.314  1.00 11.95           P  
+HETATM  409  OP1 CBR B  21       4.767  25.933  13.208  1.00 22.41           O  
+HETATM  410  OP2 CBR B  21       6.572  27.587  13.892  1.00  5.05           O  
+HETATM  411  O5' CBR B  21       7.026  25.286  14.126  1.00 11.74           O  
+HETATM  412  N1  CBR B  21      11.153  24.407  15.448  1.00  7.74           N  
+HETATM  413  C6  CBR B  21      11.007  25.716  15.066  1.00 19.52           C  
+HETATM  414  C2  CBR B  21      12.384  23.810  15.428  1.00  2.26           C  
+HETATM  415  O2  CBR B  21      12.465  22.641  15.666  1.00  3.44           O  
+HETATM  416  N3  CBR B  21      13.446  24.489  14.982  1.00  3.93           N  
+HETATM  417  C4  CBR B  21      13.331  25.730  14.562  1.00  3.94           C  
+HETATM  418  N4  CBR B  21      14.431  26.318  14.021  1.00 10.20           N  
+HETATM  419  C5  CBR B  21      12.125  26.449  14.640  1.00  9.32           C  
+HETATM  420  C2' CBR B  21       9.019  23.942  16.784  1.00  6.15           C  
+HETATM  421  C5' CBR B  21       6.832  23.918  13.937  1.00  5.41           C  
+HETATM  422  C4' CBR B  21       7.823  23.238  14.806  1.00  9.13           C  
+HETATM  423  O4' CBR B  21       9.144  23.615  14.483  1.00  4.36           O  
+HETATM  424  C1' CBR B  21       9.933  23.541  15.666  1.00  6.46           C  
+HETATM  425  C3' CBR B  21       7.635  23.479  16.289  1.00 15.08           C  
+HETATM  426  O3' CBR B  21       7.040  22.303  16.980  1.00 20.63           O  
+ATOM    427  P    DG B  22       6.198  22.371  18.393  1.00 10.83           P  
+ATOM    428  OP1  DG B  22       5.080  21.405  18.158  1.00 26.66           O  
+ATOM    429  OP2  DG B  22       5.921  23.724  18.736  1.00  3.91           O  
+ATOM    430  O5'  DG B  22       7.297  21.702  19.407  1.00 17.59           O  
+ATOM    431  C5'  DG B  22       8.409  20.815  18.965  1.00 14.52           C  
+ATOM    432  C4'  DG B  22       9.737  20.955  19.743  1.00  8.42           C  
+ATOM    433  O4'  DG B  22      10.723  21.827  19.161  1.00  8.13           O  
+ATOM    434  C3'  DG B  22       9.662  21.459  21.121  1.00  8.60           C  
+ATOM    435  O3'  DG B  22      10.515  20.810  21.944  1.00 22.63           O  
+ATOM    436  C2'  DG B  22      10.128  22.867  21.035  1.00  5.54           C  
+ATOM    437  C1'  DG B  22      11.241  22.705  20.089  1.00  0.87           C  
+ATOM    438  N9   DG B  22      11.723  23.953  19.432  1.00  1.89           N  
+ATOM    439  C8   DG B  22      11.091  25.129  19.096  1.00  2.91           C  
+ATOM    440  N7   DG B  22      11.922  26.038  18.542  1.00 15.59           N  
+ATOM    441  C5   DG B  22      13.096  25.397  18.481  1.00  1.36           C  
+ATOM    442  C6   DG B  22      14.357  25.787  17.956  1.00  0.92           C  
+ATOM    443  O6   DG B  22      14.700  26.841  17.493  1.00 15.25           O  
+ATOM    444  N1   DG B  22      15.318  24.806  18.090  1.00  6.71           N  
+ATOM    445  C2   DG B  22      15.176  23.604  18.700  1.00  2.04           C  
+ATOM    446  N2   DG B  22      16.211  22.766  18.638  1.00  4.74           N  
+ATOM    447  N3   DG B  22      14.030  23.232  19.244  1.00  1.83           N  
+ATOM    448  C4   DG B  22      13.004  24.138  19.082  1.00  5.71           C  
+ATOM    449  P    DC B  23      10.139  19.521  22.687  1.00 18.02           P  
+ATOM    450  OP1  DC B  23       9.158  18.793  21.949  1.00 23.91           O  
+ATOM    451  OP2  DC B  23       9.660  20.080  23.990  1.00 22.26           O  
+ATOM    452  O5'  DC B  23      11.555  18.819  22.941  1.00  7.03           O  
+ATOM    453  C5'  DC B  23      12.159  18.049  21.955  1.00 22.46           C  
+ATOM    454  C4'  DC B  23      13.611  18.297  22.213  1.00 24.93           C  
+ATOM    455  O4'  DC B  23      14.021  19.529  21.803  1.00 10.22           O  
+ATOM    456  C3'  DC B  23      14.230  18.164  23.550  1.00 11.05           C  
+ATOM    457  O3'  DC B  23      15.425  17.463  23.363  1.00 27.05           O  
+ATOM    458  C2'  DC B  23      14.416  19.602  24.049  1.00  4.35           C  
+ATOM    459  C1'  DC B  23      14.826  20.220  22.774  1.00  5.58           C  
+ATOM    460  N1   DC B  23      14.465  21.716  22.588  1.00  7.08           N  
+ATOM    461  C2   DC B  23      15.374  22.577  22.058  1.00  5.15           C  
+ATOM    462  O2   DC B  23      16.480  22.147  21.743  1.00  2.33           O  
+ATOM    463  N3   DC B  23      15.039  23.878  21.943  1.00  4.81           N  
+ATOM    464  C4   DC B  23      13.839  24.354  22.282  1.00  4.20           C  
+ATOM    465  N4   DC B  23      13.539  25.654  22.041  1.00  2.88           N  
+ATOM    466  C5   DC B  23      12.851  23.519  22.808  1.00  2.34           C  
+ATOM    467  C6   DC B  23      13.207  22.185  22.965  1.00 16.18           C  
+ATOM    468  P    DG B  24      15.981  16.419  24.438  1.00 30.53           P  
+ATOM    469  OP1  DG B  24      16.568  15.182  23.771  1.00 35.44           O  
+ATOM    470  OP2  DG B  24      14.977  16.208  25.518  1.00 31.74           O  
+ATOM    471  O5'  DG B  24      17.191  17.234  25.137  1.00 28.97           O  
+ATOM    472  C5'  DG B  24      18.256  17.772  24.338  1.00 19.16           C  
+ATOM    473  C4'  DG B  24      18.952  18.854  25.113  1.00  8.87           C  
+ATOM    474  O4'  DG B  24      18.204  20.010  24.863  1.00  5.78           O  
+ATOM    475  C3'  DG B  24      19.010  18.728  26.627  1.00 10.30           C  
+ATOM    476  O3'  DG B  24      20.280  18.251  27.092  1.00 31.28           O  
+ATOM    477  C2'  DG B  24      18.766  20.130  27.124  1.00 19.26           C  
+ATOM    478  C1'  DG B  24      18.605  20.939  25.861  1.00  6.40           C  
+ATOM    479  N9   DG B  24      17.576  21.972  25.961  1.00  5.62           N  
+ATOM    480  C8   DG B  24      16.330  21.972  26.539  1.00  9.73           C  
+ATOM    481  N7   DG B  24      15.638  23.117  26.278  1.00  7.67           N  
+ATOM    482  C5   DG B  24      16.484  23.863  25.541  1.00  7.65           C  
+ATOM    483  C6   DG B  24      16.348  25.216  25.038  1.00  5.19           C  
+ATOM    484  O6   DG B  24      15.403  25.980  25.147  1.00 21.43           O  
+ATOM    485  N1   DG B  24      17.500  25.675  24.459  1.00 14.29           N  
+ATOM    486  C2   DG B  24      18.697  24.988  24.311  1.00  9.64           C  
+ATOM    487  N2   DG B  24      19.825  25.669  23.905  1.00  5.57           N  
+ATOM    488  N3   DG B  24      18.786  23.748  24.741  1.00  9.92           N  
+ATOM    489  C4   DG B  24      17.669  23.217  25.357  1.00  7.28           C  
+TER     490       DG B  24                                                      
+HETATM  491  C1   NT B  25      10.566  19.099  15.612  1.00  9.16           C  
+HETATM  492  N1   NT B  25      11.781  18.698  15.426  1.00 12.13           N  
+HETATM  493  N2   NT B  25       9.863  18.627  16.583  1.00 14.59           N  
+HETATM  494  N3   NT B  25      10.001  19.944  14.784  1.00 19.72           N  
+HETATM  495  C2   NT B  25      10.268  20.195  13.335  1.00  7.48           C  
+HETATM  496  C3   NT B  25       9.036  20.726  12.645  1.00  4.21           C  
+HETATM  497  O1   NT B  25       7.859  20.501  13.076  1.00  9.42           O  
+HETATM  498  N4   NT B  25       9.294  21.513  11.584  1.00  6.73           N  
+HETATM  499  C4   NT B  25       8.268  21.983  10.724  1.00  6.08           C  
+HETATM  500  C5   NT B  25       8.461  22.565   9.524  1.00  6.75           C  
+HETATM  501  C6   NT B  25       7.263  22.933   8.981  1.00  8.60           C  
+HETATM  502  N5   NT B  25       6.270  22.562   9.843  1.00  9.80           N  
+HETATM  503  C8   NT B  25       4.776  22.805   9.731  1.00  7.69           C  
+HETATM  504  C7   NT B  25       6.903  21.940  10.916  1.00  6.55           C  
+HETATM  505  C9   NT B  25       7.106  23.687   7.769  1.00 18.75           C  
+HETATM  506  O2   NT B  25       6.008  24.225   7.502  1.00 30.12           O  
+HETATM  507  N6   NT B  25       8.123  23.716   6.957  1.00  6.63           N  
+HETATM  508  C10  NT B  25       8.093  24.330   5.669  1.00 11.60           C  
+HETATM  509  C11  NT B  25       9.002  24.105   4.633  1.00 10.80           C  
+HETATM  510  C12  NT B  25       8.683  24.966   3.607  1.00 13.12           C  
+HETATM  511  N7   NT B  25       7.535  25.658   4.001  1.00 10.62           N  
+HETATM  512  C14  NT B  25       6.835  26.735   3.211  1.00 15.19           C  
+HETATM  513  C13  NT B  25       7.209  25.285   5.259  1.00  4.49           C  
+HETATM  514  C15  NT B  25       9.407  25.169   2.343  1.00 13.85           C  
+HETATM  515  O3   NT B  25       9.189  26.186   1.610  1.00 17.09           O  
+HETATM  516  N8   NT B  25      10.260  24.222   1.972  1.00  7.92           N  
+HETATM  517  C16  NT B  25      11.048  24.311   0.649  1.00 23.70           C  
+HETATM  518  C17  NT B  25      12.126  25.443   0.538  1.00 18.53           C  
+HETATM  519  C18  NT B  25      13.122  25.253  -0.640  1.00 28.05           C  
+HETATM  520  N9   NT B  25      13.418  26.213  -1.545  1.00 35.29           N  
+HETATM  521  N10  NT B  25      14.124  24.433  -0.399  1.00 32.53           N  
+HETATM  522  O   HOH A  26      14.358  13.453  10.583  1.00 20.38           O  
+HETATM  523  O   HOH A  27      14.982  34.067  24.265  1.00 18.73           O  
+HETATM  524  O   HOH A  28      26.790  19.599  17.855  1.00 24.67           O  
+HETATM  525  O   HOH A  30      19.477  21.213  10.237  1.00 13.51           O  
+HETATM  526  O   HOH A  34       7.000  29.937  -8.583  1.00 18.59           O  
+HETATM  527  O   HOH A  38      22.499  25.527 -12.813  1.00 16.36           O  
+HETATM  528  O   HOH A  39      18.192  27.981 -10.502  1.00 24.45           O  
+HETATM  529  O   HOH A  42      17.049  34.508  26.326  1.00 17.24           O  
+HETATM  530  O   HOH A  46      13.085  32.500  22.740  1.00 16.27           O  
+HETATM  531  O   HOH A  49      21.166  35.459  16.382  1.00 21.90           O  
+HETATM  532  O   HOH A  50       3.484  12.020  15.147  1.00 24.15           O  
+HETATM  533  O   HOH A  51      19.946  11.591  16.155  1.00 20.15           O  
+HETATM  534  O   HOH A  52      19.250  27.282 -15.596  1.00 24.86           O  
+HETATM  535  O   HOH A  55      21.510  28.866  14.285  1.00 28.19           O  
+HETATM  536  O   HOH A  56      20.124  25.449  12.592  1.00 21.66           O  
+HETATM  537  O   HOH A  57      18.311  27.418  12.408  1.00 20.29           O  
+HETATM  538  O   HOH A  58      16.941  30.047  12.394  1.00 24.24           O  
+HETATM  539  O   HOH A  60      19.034  17.365   8.162  1.00 30.89           O  
+HETATM  540  O   HOH A  61      15.490  14.143   6.705  1.00 26.47           O  
+HETATM  541  O   HOH A  72       9.920  32.810  -8.827  1.00 28.80           O  
+HETATM  542  O   HOH A  73       7.111  24.846 -11.562  1.00 29.01           O  
+HETATM  543  O   HOH A  78       5.791  12.985  13.523  1.00 17.64           O  
+HETATM  544  O   HOH A  79       7.869  13.475  15.941  1.00 19.16           O  
+HETATM  545  O   HOH A  82      17.655  14.857   8.083  1.00 26.50           O  
+HETATM  546  O   HOH A  84      15.072  31.344  25.834  1.00 24.02           O  
+HETATM  547  O   HOH A  85      22.533  17.673  10.613  1.00 26.74           O  
+HETATM  548  O   HOH A  89       6.552  22.021 -14.055  1.00 25.99           O  
+HETATM  549  O   HOH A  90       6.423  24.857 -15.175  1.00 25.48           O  
+HETATM  550  O   HOH A  91      21.031   9.645  12.642  1.00 23.60           O  
+HETATM  551  O   HOH A  92      22.786  19.843   8.070  1.00 24.59           O  
+HETATM  552  O   HOH A  94       8.108  13.402   1.857  1.00 24.38           O  
+HETATM  553  O   HOH A  97       2.059  16.289  -2.424  1.00 27.42           O  
+HETATM  554  O   HOH A 100       6.902  21.633 -11.197  1.00 25.25           O  
+HETATM  555  O   HOH B  29       7.589  20.957  25.426  1.00 24.39           O  
+HETATM  556  O   HOH B  31      18.521  21.927   5.274  1.00 17.90           O  
+HETATM  557  O   HOH B  32      19.480  25.243   5.683  1.00 22.20           O  
+HETATM  558  O   HOH B  33      13.875  30.257   7.744  1.00 17.56           O  
+HETATM  559  O   HOH B  35      24.558  22.675  -3.256  1.00 28.57           O  
+HETATM  560  O   HOH B  36       9.201  12.805  -1.660  1.00 30.45           O  
+HETATM  561  O   HOH B  37       7.625  15.301  -6.103  1.00 19.40           O  
+HETATM  562  O   HOH B  40      14.065  20.662  19.274  1.00 14.74           O  
+HETATM  563  O   HOH B  41      13.384  32.243  11.991  1.00 26.29           O  
+HETATM  564  O   HOH B  43       9.020  15.276  22.392  1.00 25.77           O  
+HETATM  565  O   HOH B  44       7.711  25.895  22.327  1.00 15.10           O  
+HETATM  566  O   HOH B  45       4.068  10.164  -9.507  1.00 21.92           O  
+HETATM  567  O   HOH B  47       6.421  28.589  20.213  1.00 25.51           O  
+HETATM  568  O   HOH B  48      10.825  36.606  13.867  1.00 19.10           O  
+HETATM  569  O   HOH B  53       4.606  19.405  14.114  1.00 23.44           O  
+HETATM  570  O   HOH B  54       9.251  31.330  14.228  1.00 23.71           O  
+HETATM  571  O   HOH B  59      10.356  34.653  10.578  1.00 19.67           O  
+HETATM  572  O   HOH B  62       2.164  28.651   6.831  1.00 20.45           O  
+HETATM  573  O   HOH B  63      16.771  17.948   4.589  1.00 25.43           O  
+HETATM  574  O   HOH B  64      15.613  12.937   3.855  1.00 28.10           O  
+HETATM  575  O   HOH B  65      18.664  27.288   4.145  1.00 24.73           O  
+HETATM  576  O   HOH B  66      15.544  26.915  -3.423  1.00 25.08           O  
+HETATM  577  O   HOH B  67      11.605   9.998   2.024  1.00 28.88           O  
+HETATM  578  O   HOH B  68      18.864  10.282   0.313  1.00 27.85           O  
+HETATM  579  O   HOH B  69      13.621  12.101   0.499  1.00 24.83           O  
+HETATM  580  O   HOH B  70      16.442  23.805  -2.751  1.00 21.55           O  
+HETATM  581  O   HOH B  71      12.123   3.152   5.116  1.00 16.17           O  
+HETATM  582  O   HOH B  74       0.844  24.499  12.759  1.00 26.26           O  
+HETATM  583  O   HOH B  75      13.901  30.204  19.843  1.00 13.85           O  
+HETATM  584  O   HOH B  76      10.678  28.449  18.358  1.00 19.90           O  
+HETATM  585  O   HOH B  77      11.930  30.932  18.517  1.00 20.23           O  
+HETATM  586  O   HOH B  80      15.635   5.907   3.817  1.00 25.30           O  
+HETATM  587  O   HOH B  81       3.110  29.617  12.823  1.00 27.89           O  
+HETATM  588  O   HOH B  83      12.500   9.661   5.122  1.00 28.47           O  
+HETATM  589  O   HOH B  86      21.243   6.066  25.980  1.00 21.84           O  
+HETATM  590  O   HOH B  87       5.782  22.850  23.634  1.00 24.45           O  
+HETATM  591  O   HOH B  88       0.728  10.777  -9.388  1.00 24.51           O  
+HETATM  592  O   HOH B  93      22.499  26.252   3.765  1.00 24.23           O  
+HETATM  593  O   HOH B  95      11.331  13.618   1.515  1.00 23.14           O  
+HETATM  594  O   HOH B  96      10.737  27.896  -1.320  1.00 24.13           O  
+HETATM  595  O   HOH B  98      12.189   3.562  -4.080  1.00 24.80           O  
+HETATM  596  O   HOH B  99      15.673   6.314  -4.392  1.00 23.97           O  
+CONECT  150  163                                                                
+CONECT  162  174                                                                
+CONECT  163  150  164  165  166                                                 
+CONECT  164  163                                                                
+CONECT  165  163                                                                
+CONECT  166  163  176                                                           
+CONECT  167  168  169  179                                                      
+CONECT  168  167  174                                                           
+CONECT  169  167  170  171                                                      
+CONECT  170  169                                                                
+CONECT  171  169  172                                                           
+CONECT  172  171  173  174                                                      
+CONECT  173  172                                                                
+CONECT  174  162  168  172                                                      
+CONECT  175  179  180                                                           
+CONECT  176  166  177                                                           
+CONECT  177  176  178  180                                                      
+CONECT  178  177  179                                                           
+CONECT  179  167  175  178                                                      
+CONECT  180  175  177  181                                                      
+CONECT  181  180  182                                                           
+CONECT  182  181                                                                
+CONECT  395  408                                                                
+CONECT  407  419                                                                
+CONECT  408  395  409  410  411                                                 
+CONECT  409  408                                                                
+CONECT  410  408                                                                
+CONECT  411  408  421                                                           
+CONECT  412  413  414  424                                                      
+CONECT  413  412  419                                                           
+CONECT  414  412  415  416                                                      
+CONECT  415  414                                                                
+CONECT  416  414  417                                                           
+CONECT  417  416  418  419                                                      
+CONECT  418  417                                                                
+CONECT  419  407  413  417                                                      
+CONECT  420  424  425                                                           
+CONECT  421  411  422                                                           
+CONECT  422  421  423  425                                                      
+CONECT  423  422  424                                                           
+CONECT  424  412  420  423                                                      
+CONECT  425  420  422  426                                                      
+CONECT  426  425  427                                                           
+CONECT  427  426                                                                
+CONECT  491  492  493  494                                                      
+CONECT  492  491                                                                
+CONECT  493  491                                                                
+CONECT  494  491  495                                                           
+CONECT  495  494  496                                                           
+CONECT  496  495  497  498                                                      
+CONECT  497  496                                                                
+CONECT  498  496  499                                                           
+CONECT  499  498  500  504                                                      
+CONECT  500  499  501                                                           
+CONECT  501  500  502  505                                                      
+CONECT  502  501  503  504                                                      
+CONECT  503  502                                                                
+CONECT  504  499  502                                                           
+CONECT  505  501  506  507                                                      
+CONECT  506  505                                                                
+CONECT  507  505  508                                                           
+CONECT  508  507  509  513                                                      
+CONECT  509  508  510                                                           
+CONECT  510  509  511  514                                                      
+CONECT  511  510  512  513                                                      
+CONECT  512  511                                                                
+CONECT  513  508  511                                                           
+CONECT  514  510  515  516                                                      
+CONECT  515  514                                                                
+CONECT  516  514  517                                                           
+CONECT  517  516  518                                                           
+CONECT  518  517  519                                                           
+CONECT  519  518  520  521                                                      
+CONECT  520  519                                                                
+CONECT  521  519                                                                
+MASTER      378    0    3    0    0    0    3    6  594    2   75    2          
+END                                                                             
