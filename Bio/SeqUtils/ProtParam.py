@@ -81,6 +81,17 @@ class ProteinAnalysis:
         self.length = len(self.sequence)
         self.monoisotopic = monoisotopic
 
+    def _check_nonempty(self):
+        """Raise a ValueError if the sequence is empty (PRIVATE).
+
+        The properties calculated by this class are undefined for an empty
+        protein sequence.  Check this explicitly so that callers get a clear
+        error instead of a ZeroDivisionError or an IndexError from the
+        underlying calculation.
+        """
+        if not self.length:
+            raise ValueError("Protein sequence is empty")
+
     def count_amino_acids(self):
         """Count standard amino acids, return a dict.
 
@@ -107,6 +118,7 @@ class ProteinAnalysis:
         of the sequence length. Returns a dictionary of {AminoAcid:percentage},
         where the percentage is in the range 0-100.
         """
+        self._check_nonempty()
         aa_counts = self.count_amino_acids()
         percentages = {
             aa: (count * 100 / self.length) for aa, count in aa_counts.items()
@@ -116,6 +128,7 @@ class ProteinAnalysis:
 
     def molecular_weight(self):
         """Calculate MW from Protein sequence."""
+        self._check_nonempty()
         return molecular_weight(
             self.sequence, seq_type="protein", monoisotopic=self.monoisotopic
         )
@@ -126,6 +139,7 @@ class ProteinAnalysis:
         Calculates the aromaticity value of a protein according to Lobry, 1994.
         It is simply the relative frequency of Phe+Trp+Tyr.
         """
+        self._check_nonempty()
         aromatic_aas = "YWF"
         aa_percentages = self.amino_acids_percent
 
@@ -143,6 +157,7 @@ class ProteinAnalysis:
         See: Guruprasad K., Reddy B.V.B., Pandit M.W.
         Protein Engineering 4:155-161(1990).
         """
+        self._check_nonempty()
         index = ProtParamData.DIWV
         score = 0.0
 
@@ -193,6 +208,7 @@ class ProteinAnalysis:
 
         New scales can be added in ProtParamData.
         """
+        self._check_nonempty()
         selected_scale = ProtParamData.gravy_scales.get(scale, -1)
 
         if selected_scale == -1:
@@ -297,6 +313,7 @@ class ProteinAnalysis:
 
         Uses the module IsoelectricPoint to calculate the pI of a protein.
         """
+        self._check_nonempty()
         aa_content = self.count_amino_acids()
 
         ie_point = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
@@ -304,6 +321,7 @@ class ProteinAnalysis:
 
     def charge_at_pH(self, pH):
         """Calculate the charge of a protein at given pH."""
+        self._check_nonempty()
         aa_content = self.count_amino_acids()
         charge = IsoelectricPoint.IsoelectricPoint(self.sequence, aa_content)
         return charge.charge_at_pH(pH)
@@ -324,6 +342,7 @@ class ProteinAnalysis:
 
         Returns a tuple of three floats (Helix, Turn, Sheet).
         """
+        self._check_nonempty()
         aa_percentages = self.amino_acids_percent
 
         helix = sum(aa_percentages[r] / 100 for r in "EMALK")

@@ -253,6 +253,33 @@ class ProtParamTest(unittest.TestCase):
                 analysis.molar_extinction_coefficient()[1], 17545, places=5
             )
 
+    def test_empty_sequence_raises_value_error(self):
+        """All quantitative properties reject an empty sequence uniformly."""
+        analysis = ProtParam.ProteinAnalysis("")
+        properties = (
+            "amino_acids_percent",
+            "molecular_weight",
+            "aromaticity",
+            "instability_index",
+            "gravy",
+            "isoelectric_point",
+            "secondary_structure_fraction",
+        )
+        for name in properties:
+            with self.subTest(property=name):
+                with self.assertRaisesRegex(ValueError, "empty"):
+                    attr = getattr(analysis, name)
+                    attr() if callable(attr) else attr
+
+        with self.subTest(property="charge_at_pH"):
+            with self.assertRaisesRegex(ValueError, "empty"):
+                analysis.charge_at_pH(7)
+
+        # Methods that do not divide by the sequence length keep working.
+        self.assertEqual(sum(analysis.count_amino_acids().values()), 0)
+        self.assertEqual(analysis.flexibility(), [])
+        self.assertEqual(analysis.molar_extinction_coefficient(), (0, 0))
+
 
 if __name__ == "__main__":
     runner = unittest.TextTestRunner(verbosity=2)
