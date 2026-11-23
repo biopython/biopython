@@ -5542,26 +5542,31 @@ class TestSeqIO(SeqIOTestBaseClass):
         )
 
     def test_pdb_atom3(self):
-        sequences = ["MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEA...LNYIPNR"]
-        ids = ["????:A"]
-        names = ["<unknown name>"]
-        lengths = [51]
+        sequences = [
+            "MKPVTLYDVAEYAGVSYQTVSRVVNQASHVSAKTREKVEA...LNYIPNR",
+            "AATTGTGAGCG",
+            "CGCTCACAATT",
+        ]
+        ids = ["????:A", "????:B", "????:C"]
+        names = ["<unknown name>", "<unknown name>", "<unknown name>"]
+        lengths = [51, 11, 11]
         alignment = None
         messages = {
-            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
-            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
-            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
-            "nib": "Sequence should contain A,C,G,T,N,a,c,g,t,n only",
-            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
-            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:A).",
+            "fastq": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:C).",
+            "fastq-illumina": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:C).",
+            "fastq-solexa": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:C).",
+            "nib": "More than one sequence found",
+            "phd": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:C).",
+            "qual": "No suitable quality scores found in letter_annotations of SeqRecord (id=????:C).",
             "seqxml": "source should be of type string",
             "sff": "Missing SFF flow information",
+            "xdna": "More than one sequence found",
         }
         self.perform_test(
             "pdb-atom",
             False,
             "PDB/1LCD.pdb",
-            1,
+            3,
             ids,
             names,
             sequences,
