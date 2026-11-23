@@ -24,9 +24,15 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+``Bio.SeqUtils.MeltingTemp.Tm_NN`` now reads the initiation terms from the
+trimmed duplex ends instead of the untrimmed sequence, so a terminal
+mismatch or dangling end no longer changes the Tm depending on which
+strand is passed as ``seq``.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Aryan Kalantri (first contribution)
 - Brandon Mokrytzki (first contribution)
 - Mohit Arvind Khakharia (first contribution)
 - Peter Cock
