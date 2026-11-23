@@ -22,6 +22,7 @@ except ImportError:
     ) from None
 
 from Bio import motifs
+from Bio.Align import Alignment
 from Bio.Seq import Seq
 
 
@@ -5155,6 +5156,16 @@ class MotifTestPWM(unittest.TestCase):
         self.assertAlmostEqual(pseudocounts["C"], 1.695582495781317, places=5)
         self.assertAlmostEqual(pseudocounts["G"], 1.695582495781317, places=5)
         self.assertAlmostEqual(pseudocounts["T"], 1.695582495781317, places=5)
+
+    def test_calculate_consensus_zero_counts(self):
+        """Counts.calculate_consensus with a column of all zero counts."""
+        # Lowercase sequences against an uppercase alphabet: no letter in
+        # the alignment is in the alphabet, so every column has zero counts
+        # except the gap column (see issue #5000).
+        alignment = Alignment([Seq("acgt"), Seq("acgg"), Seq("ac-t")])
+        motif = motifs.Motif("ACGT-", alignment)
+        consensus = motif.counts.calculate_consensus(identity=0.4)
+        self.assertEqual(consensus, "NN-N")
 
 
 if __name__ == "__main__":
