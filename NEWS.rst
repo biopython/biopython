@@ -24,6 +24,11 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+``Bio.PDB.vectors.multi_coord_space`` now passes ``out`` explicitly to
+``numpy.divide``, so calling ``atom_to_internal_coordinates`` no longer
+emits a ``UserWarning`` on NumPy 2.5 and later. For a zero-length vector
+the polar angle is 0, matching ``get_spherical_coordinates``.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
