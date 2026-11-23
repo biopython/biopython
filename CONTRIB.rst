@@ -50,6 +50,7 @@ please open an issue on GitHub or mention it on the mailing list.
 - Arpan Sahoo <https://github.com/arpansahoo>
 - Artemi Bendandi <https://github.com/artbendandi>
 - Arup Ghosh <https://github.com/arupgsh>
+- Aryan Kalantri <https://github.com/aryankalantri>
 - Austin Varela <https://github.com/austinv11>
 - Aziz Khan <https://github.com/asntech>
 - Barbara Mühlemann <https://github.com/bamueh>
