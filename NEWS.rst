@@ -24,9 +24,17 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+``Bio.SeqIO`` now recognises DNA and RNA chains in PDB and mmCIF files:
+the ``pdb-seqres``, ``cif-seqres``, ``pdb-atom`` and ``cif-atom`` parsers
+report the correct sequence (instead of all ``X``) and molecule type for
+non-protein chains, based on the standard residue names. Modified bases
+are reported as ``X``, and a chain mixing amino acids with nucleotides
+raises ``ValueError``.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Aryan Kalantri (first contribution)
 - Brandon Mokrytzki (first contribution)
 - Mohit Arvind Khakharia (first contribution)
 - Peter Cock
