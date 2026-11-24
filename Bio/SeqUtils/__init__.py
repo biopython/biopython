@@ -19,6 +19,7 @@ from math import sin
 
 from Bio.Data import IUPACData
 from Bio.Data.CodonTable import standard_dna_table
+from Bio.Seq import back_transcribe
 from Bio.Seq import complement
 from Bio.Seq import complement_rna
 from Bio.Seq import Seq
@@ -680,6 +681,7 @@ class CodonAdaptationIndex(dict):
 
         Uses the codon adaptiveness table defined by the CodonAdaptationIndex
         object to generate DNA sequences with only preferred codons.
+        DNA and RNA inputs are translated using the index's genetic code.
         May be useful when designing DNA sequences for transgenic protein
         expression or codon-optimized proteins like fluorophores.
 
@@ -715,7 +717,11 @@ class CodonAdaptationIndex(dict):
                 pref_codons["*"] = codon
         # Create amino acid sequence if DNA was provided
         if seq_type == "DNA" or seq_type == "RNA":
-            aa_seq = translate(seq)
+            if self._table is standard_dna_table:
+                # Keep the default translation's support for IUPAC ambiguity.
+                aa_seq = translate(seq)
+            else:
+                aa_seq = translate(back_transcribe(seq), table=self._table)
         elif seq_type == "protein":
             aa_seq = seq
         else:
