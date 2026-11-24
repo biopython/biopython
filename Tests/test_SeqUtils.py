@@ -9,6 +9,7 @@ import os
 import unittest
 
 from Bio import SeqIO
+from Bio.Data.CodonTable import unambiguous_dna_by_id
 from Bio.Seq import MutableSeq
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
@@ -153,6 +154,23 @@ TTG	0.212
 TTT	0.886
 """,
         )
+
+    def test_codon_optimization_with_alternative_genetic_code(self):
+        """Preserve an internal mitochondrial Trp in both DNA and RNA."""
+        table = unambiguous_dna_by_id[2]
+        cai = CodonAdaptationIndex(["ATGTGATTTTAA"], table=table)
+        dna = Seq("ATGTGATTTTAG")
+        for seq_type, sequence in (("DNA", dna), ("RNA", dna.transcribe())):
+            with self.subTest(seq_type=seq_type):
+                optimized = cai.optimize(sequence, seq_type=seq_type, strict=False)
+                self.assertEqual(optimized.translate(table), "MWF*")
+                self.assertEqual(optimized, Seq("ATGTGATTTTAA"))
+
+    def test_codon_optimization_with_ambiguous_standard_codon(self):
+        """Keep accepting standard degenerate codons with a unique translation."""
+        cai = CodonAdaptationIndex(["ATGGCATAA"])
+        optimized = cai.optimize("AUGGCNUAA", seq_type="RNA", strict=False)
+        self.assertEqual(optimized, Seq("ATGGCATAA"))
 
     def test_codon_adaptation_index_calculation(self):
         """Test Codon Adaptation Index (CAI) calculation for an mRNA."""
