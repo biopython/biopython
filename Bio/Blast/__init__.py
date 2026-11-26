@@ -725,7 +725,7 @@ class Records(UserList):
                 data = stream.read(BLOCK)
                 if data == b"":
                     try:
-                        handler._parser
+                        handler._parser  # noqa: B018
                     except AttributeError:
                         break
                     else:
@@ -754,7 +754,7 @@ class Records(UserList):
                         # probably the input data is not in XML format.
                         raise NotXMLError(e) from None
                 try:
-                    self._cache
+                    self._cache  # noqa: B018
                 except AttributeError:
                     pass
                 else:

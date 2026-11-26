@@ -149,7 +149,7 @@ class AlignmentIterator(interfaces.AlignmentIterator):
 
     def _read_next_alignment(self, stream):
         try:
-            self._number_of_seqs
+            self._number_of_seqs  # noqa: B018
         except AttributeError:
             return
         names, seqs = self._read_file(stream)

@@ -4443,7 +4443,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                 substitution_matrix = self.substitution_matrix
                 if substitution_matrix is None:
                     try:
-                        alphabet
+                        alphabet  # noqa: B018
                     except NameError:
                         alphabet = []
                     for item in seqB:
@@ -4496,7 +4496,7 @@ class PairwiseAligner(_pairwisealigner.PairwiseAligner):
                 substitution_matrix = self.substitution_matrix
                 if substitution_matrix is None:
                     try:
-                        alphabet
+                        alphabet  # noqa: B018
                     except NameError:
                         alphabet = []
                     for item in seqB:
