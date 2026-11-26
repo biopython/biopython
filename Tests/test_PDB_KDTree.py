@@ -65,6 +65,45 @@ class NeighborTest(unittest.TestCase):
         self.assertEqual([], ns.search(x, 5.0, "M"))
         self.assertEqual([], ns.search(x, 5.0, "S"))
 
+    def test_neighbor_search_all(self):
+        """NeighborSearch: search_all at A, R and C level matches brute force."""
+
+        from Bio.PDB.StructureBuilder import StructureBuilder
+
+        builder = StructureBuilder()
+        builder.init_structure("X")
+        builder.init_model(0)
+        serial = 0
+        for chain_id in "ABC":
+            builder.init_chain(chain_id)
+            builder.init_seg(" ")
+            for rseq in range(1, 21):
+                builder.init_residue("ALA", " ", rseq, " ")
+                center = 20 * random(3)
+                for k in range(rseq):
+                    coord = center + random(3)
+                    builder.init_atom(f"X{k}", coord, 0, 1, " ", f"X{k}", serial, "C")
+                    serial += 1
+        atoms = list(builder.get_structure().get_atoms())
+        ns = NeighborSearch(atoms)
+        radius = 5
+        coords = array([a.coord for a in atoms])
+        for level in "ARC":
+            depth = "ARCMS".index(level)
+            expected = set()
+            for i in range(len(atoms)):
+                for j in range(len(atoms)):
+                    if sum((coords[i] - coords[j]) ** 2) <= radius**2:
+                        p1, p2 = atoms[i], atoms[j]
+                        for _ in range(depth):
+                            p1, p2 = p1.get_parent(), p2.get_parent()
+
+                        if p1 is not p2:
+                            expected.add(frozenset((id(p1), id(p2))))
+            hits = ns.search_all(radius, level)
+            self.assertEqual(len(hits), len(expected))
+            self.assertEqual({frozenset((id(a), id(b))) for a, b in hits}, expected)
+
 
 class KDTreeTest(unittest.TestCase):
     nr_points = 5000  # number of points used in test

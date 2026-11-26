@@ -13,7 +13,6 @@ import numpy as np
 from Bio.PDB.PDBExceptions import PDBException
 from Bio.PDB.Selection import entity_levels
 from Bio.PDB.Selection import unfold_entities
-from Bio.PDB.Selection import uniqueify
 
 
 class NeighborSearch:
@@ -49,26 +48,6 @@ class NeighborSearch:
         assert bucket_size > 1
         assert self.coords.shape[1] == 3
         self.kdt = KDTree(self.coords, bucket_size)
-
-    # Private
-
-    def _get_unique_parent_pairs(self, pair_list):
-        # translate a list of (entity, entity) tuples to
-        # a list of (parent entity, parent entity) tuples,
-        # thereby removing duplicate (parent entity, parent entity)
-        # pairs.
-        # o pair_list - a list of (entity, entity) tuples
-        parent_pair_list = []
-        for e1, e2 in pair_list:
-            p1 = e1.get_parent()
-            p2 = e2.get_parent()
-            if p1 == p2:
-                continue
-            elif p1 < p2:
-                parent_pair_list.append((p1, p2))
-            else:
-                parent_pair_list.append((p2, p1))
-        return uniqueify(parent_pair_list)
 
     # Public
 
@@ -114,18 +93,41 @@ class NeighborSearch:
             raise PDBException(f"{level}: Unknown level")
         neighbors = self.kdt.neighbor_search(radius)
         atom_list = self.atom_list
-        atom_pair_list = []
-        for neighbor in neighbors:
-            i1 = neighbor.index1
-            i2 = neighbor.index2
-            a1 = atom_list[i1]
-            a2 = atom_list[i2]
-            atom_pair_list.append((a1, a2))
+
         if level == "A":
             # return atoms
-            return atom_pair_list
-        next_level_pair_list = atom_pair_list
-        for next_level in ["R", "C", "M", "S"]:
-            next_level_pair_list = self._get_unique_parent_pairs(next_level_pair_list)
-            if level == next_level:
-                return next_level_pair_list
+            return [(atom_list[n.index1], atom_list[n.index2]) for n in neighbors]
+        # Atom indexes as pairs (N,2) for vectorised mapping
+        pairs = np.fromiter(
+            (i for n in neighbors for i in (n.index1, n.index2)),
+            dtype=np.intp,
+            count=2 * len(neighbors),
+        ).reshape(-1, 2)
+
+        depth = "ARCMS".index(level)
+        entities, seen = [], {}
+        parent_idx = np.empty(len(self.atom_list), dtype=np.intp)
+        for k, atom in enumerate(self.atom_list):
+            parent = atom
+            # Map each atom to its parent at the requested level
+            # Computed once per atom instead of once per pair
+            for _ in range(depth):
+                parent = parent.get_parent()
+            # Assign a new index the first time the parent is seen
+            key = id(parent)
+            if key not in seen:
+                seen[key] = len(entities)
+                # List of all atom parents
+                entities.append(parent)
+            # Mapping each atom to its parents index
+            parent_idx[k] = seen[key]
+
+        # Translate atom pairs into parent pairs
+        p = parent_idx[pairs]
+        # Drop pairs where both atoms belong to the same parent
+        p = p[p[:, 1] != p[:, 0]]
+        # Order each pair so (a, b) and (b, a) become identical, then deduplicate
+        p.sort(axis=1)
+        unique_pairs = np.unique(p, axis=0)
+
+        return [(entities[i], entities[j]) for i, j in unique_pairs.tolist()]
