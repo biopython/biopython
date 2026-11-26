@@ -988,14 +988,13 @@ class HSPFragment(_BaseHSP):
         # alignment span can be its own attribute, or computed from
         # query / hit length
         try:
-            self._aln_span
+            return self._aln_span
         except AttributeError:
             if self.query is not None:
                 self._aln_span = len(self.query)
             elif self.hit is not None:
                 self._aln_span = len(self.hit)
-
-        return self._aln_span
+            return self._aln_span
 
     def _aln_span_set(self, value):
         self._aln_span = value
