@@ -53,7 +53,7 @@ extend-ignore=[
     # Bugbear
     "B007","B009","B010","B028","B904","B905",
     # Others
-    "N999","RUF022","RUF023","UP031","UP031"
+    "N999","RUF022","RUF023","UP031",
 ]
 
 [tool.ruff.lint.extend-per-file-ignores]
