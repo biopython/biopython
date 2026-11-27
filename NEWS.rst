@@ -24,9 +24,14 @@ life, our support for it is now deprecated.
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
 
+The ``search_all`` method of ``Bio.PDB.NeighborSearch`` is now faster at the
+residue, chain, model and structure levels, atom pairs are mapped to their
+parent entities using NumPy instead of per-pair Python loops.
+
 Many thanks to the Biopython developers and community for making this release
 possible, especially the following contributors:
 
+- Aljaž Krašna (first contribution)
 - Brandon Mokrytzki (first contribution)
 - Mohit Arvind Khakharia (first contribution)
 - Peter Cock
