@@ -7,9 +7,30 @@ followed by code (modules, methods, functions).
 Python
 ======
 
+Python 3.15
+-----------
+First supported in release 1.88 (wheels built against the release candidate).
+
+Python 3.14
+-----------
+First supported in release 1.86.
+
+Python 3.13
+-----------
+First supported in release 1.84.
+
+Python 3.12
+-----------
+First supported in release 1.81 (wheels added to PyPI after the release).
+
+Python 3.11
+-----------
+First supported in release 1.79 (wheels added to PyPI after the release).
+
 Python 3.10
 -----------
-First supported in release 1.80. Support deprecated as of Release 1.88.
+First supported in release 1.79 (wheels added to PyPI after the release).
+Support deprecated as of Release 1.88.
 
 Python 3.9
 ----------

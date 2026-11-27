@@ -13,13 +13,13 @@ The latest news is at the top of this file.
 (In progress, not yet released): Biopython 1.89
 ===============================================
 
-This release of Biopython supports Python 3.10, 3.11, 3.12, 3.13, 3.14 and the
-Python 3.15 release candidate. It has also been tested on PyPy3.10 v7.3.19, as
-well as Python 3.11+ on Windows for ARM64. Python 3.10 is approaching end of
-life, our support for it is now deprecated.
+This release of Biopython supports Python 3.10, 3.11, 3.12, 3.13, 3.14 and
+3.15. It has also been tested on PyPy3.10 v7.3.19, as well as Python 3.11+ on
+Windows for ARM64. Python 3.10 is approaching end of life, our support for it
+is now deprecated.
 
-* ``Bio.PDB.PDBIO`` now raises ``PDBIOException`` when writing a modern residue
-  name longer than the legacy PDB format three character limit.
+``Bio.PDB.PDBIO`` now raises ``PDBIOException`` when writing a modern residue
+name longer than the legacy PDB format three character limit.
 
 The Clustal parsers in ``Bio.AlignIO`` and ``Bio.Align`` now accept files whose
 header line starts with ``CLUSTALW`` as a single word, as written by some tools.
