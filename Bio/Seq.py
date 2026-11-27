@@ -29,9 +29,10 @@ from typing import Union
 from Bio import BiopythonWarning
 from Bio.Data import CodonTable
 from Bio.Data import IUPACData
+from Bio.SeqRecord import SeqRecord
 
 
-def _maketrans(complement_mapping):
+def _maketrans(complement_mapping: dict[str, str]) -> bytes:
     """Make a python string translation table (PRIVATE).
 
     Arguments:
@@ -101,14 +102,14 @@ class SequenceDataAbstractBaseClass(ABC):
         assert self[:0] == b""
 
     @abstractmethod
-    def __len__(self):
+    def __len__(self) -> int:
         pass
 
     @abstractmethod
     def __getitem__(self, key):
         pass
 
-    def __bytes__(self):
+    def __bytes__(self) -> bytes:
         return self[:]
 
     def __hash__(self):
@@ -2686,7 +2687,7 @@ class _PartiallyDefinedSequenceData(SequenceDataAbstractBaseClass):
 # The functions work both on Seq objects, and on strings.
 
 
-def transcribe(dna):
+def transcribe(dna: Union[str, Seq, MutableSeq]) -> Union[str, Seq]:
     """Transcribe a DNA sequence into RNA.
 
     Following the usual convention, the sequence is interpreted as the
@@ -2710,7 +2711,7 @@ def transcribe(dna):
         return dna.replace("T", "U").replace("t", "u")
 
 
-def back_transcribe(rna):
+def back_transcribe(rna: Union[str, Seq, MutableSeq]) -> Union[str, Seq]:
     """Return the RNA sequence back-transcribed into DNA.
 
     If given a string, returns a new string object.
@@ -2731,8 +2732,14 @@ def back_transcribe(rna):
 
 
 def _translate_str(
-    sequence, table, stop_symbol="*", to_stop=False, cds=False, pos_stop="X", gap=None
-):
+    sequence: str,
+    table: Union[str, int, CodonTable.CodonTable],
+    stop_symbol: str = "*",
+    to_stop: bool = False,
+    cds: bool = False,
+    pos_stop: str = "X",
+    gap: Optional[str] = None,
+) -> str:
     """Translate nucleotide string into a protein string (PRIVATE).
 
     Arguments:
@@ -2796,7 +2803,8 @@ def _translate_str(
     Bio.Data.CodonTable.TranslationError: Extra in frame stop codon 'TAG' found.
     """
     try:
-        table_id = int(table)
+        # TODO: only call int if table is of type int
+        table_id = int(table)  # type: ignore
     except ValueError:
         # Assume it's a table name
         # The same table can be used for RNA or DNA
@@ -2910,8 +2918,13 @@ def _translate_str(
 
 
 def translate(
-    sequence, table="Standard", stop_symbol="*", to_stop=False, cds=False, gap=None
-):
+    sequence: Union[str, Seq, MutableSeq],
+    table: Union[str, int, CodonTable.CodonTable] = "Standard",
+    stop_symbol: str = "*",
+    to_stop: bool = False,
+    cds: bool = False,
+    gap: Optional[str] = None,
+) -> Union[str, Seq]:
     """Translate a nucleotide sequence into amino acids.
 
     If given a string, returns a new string object. Given a Seq or
@@ -3013,7 +3026,10 @@ def translate(
         return _translate_str(sequence, table, stop_symbol, to_stop, cds, gap=gap)
 
 
-def reverse_complement(sequence, inplace=False):
+SomeSequence = Union[str, Seq, MutableSeq, SeqRecord]
+
+
+def reverse_complement(sequence: SomeSequence, inplace: bool = False) -> SomeSequence:
     """Return the reverse complement as a DNA sequence.
 
     If given a string, returns a new string object.
@@ -3072,13 +3088,15 @@ def reverse_complement(sequence, inplace=False):
     # Assume it's a string.
     if inplace:
         raise TypeError("strings are immutable")
-    sequence = sequence.encode("ASCII")
-    sequence = sequence.translate(_dna_complement_table)
-    sequence = sequence.decode("ASCII")
+    encoded_sequence = sequence.encode("ASCII")
+    encoded_sequence = encoded_sequence.translate(_dna_complement_table)
+    sequence = encoded_sequence.decode("ASCII")
     return sequence[::-1]
 
 
-def reverse_complement_rna(sequence, inplace=False):
+def reverse_complement_rna(
+    sequence: SomeSequence, inplace: bool = False
+) -> SomeSequence:
     """Return the reverse complement as an RNA sequence.
 
     If given a string, returns a new string object.
@@ -3133,17 +3151,17 @@ def reverse_complement_rna(sequence, inplace=False):
     if isinstance(sequence, SeqRecord):
         if inplace:
             raise TypeError("SeqRecords are immutable")
-        return sequence.reverse_complement_rna()
+        return sequence.reverse_complement_rna()  # type: ignore[attr-defined]
     # Assume it's a string.
     if inplace:
         raise TypeError("strings are immutable")
-    sequence = sequence.encode("ASCII")
-    sequence = sequence.translate(_rna_complement_table)
-    sequence = sequence.decode("ASCII")
+    encoded_sequence = sequence.encode("ASCII")
+    encoded_sequence = encoded_sequence.translate(_rna_complement_table)
+    sequence = encoded_sequence.decode("ASCII")
     return sequence[::-1]
 
 
-def complement(sequence, inplace=False):
+def complement(sequence: SomeSequence, inplace: bool = False) -> SomeSequence:
     """Return the complement as a DNA sequence.
 
     If given a string, returns a new string object.
@@ -3198,16 +3216,16 @@ def complement(sequence, inplace=False):
     if isinstance(sequence, SeqRecord):
         if inplace:
             raise TypeError("SeqRecords are immutable")
-        return sequence.complement()
+        return sequence.complement()  # type: ignore[attr-defined]
     # Assume it's a string.
     if inplace is True:
         raise TypeError("strings are immutable")
-    sequence = sequence.encode("ASCII")
-    sequence = sequence.translate(_dna_complement_table)
-    return sequence.decode("ASCII")
+    encoded_sequence = sequence.encode("ASCII")
+    encoded_sequence = encoded_sequence.translate(_dna_complement_table)
+    return encoded_sequence.decode("ASCII")
 
 
-def complement_rna(sequence, inplace=False):
+def complement_rna(sequence: SomeSequence, inplace: bool = False) -> SomeSequence:
     """Return the complement as an RNA sequence.
 
     If given a string, returns a new string object.
@@ -3262,13 +3280,13 @@ def complement_rna(sequence, inplace=False):
     if isinstance(sequence, SeqRecord):
         if inplace:
             raise TypeError("SeqRecords are immutable")
-        return sequence.complement_rna()
+        return sequence.complement_rna()  # type: ignore[attr-defined]
     # Assume it's a string.
     if inplace:
         raise TypeError("strings are immutable")
-    sequence = sequence.encode("ASCII")
-    sequence = sequence.translate(_rna_complement_table)
-    return sequence.decode("ASCII")
+    encoded_sequence = sequence.encode("ASCII")
+    encoded_sequence = encoded_sequence.translate(_rna_complement_table)
+    return encoded_sequence.decode("ASCII")
 
 
 if __name__ == "__main__":
