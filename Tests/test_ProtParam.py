@@ -202,6 +202,26 @@ class ProtParamTest(unittest.TestCase):
                 # Expected values have 4 decimal places, so restrict to that exactness
                 self.assertAlmostEqual(i, e, places=4)
 
+    def test_protein_scale_window_one(self):
+        """A window of 1 returns the scale value for each residue."""
+        scale = {aa: float(i + 1) for i, aa in enumerate("ACDEFGHIK")}
+        analysis = ProtParam.ProteinAnalysis("ACDEFGHIK")
+        result = analysis.protein_scale(scale, 1, edge=1.0)
+        self.assertEqual(result, [float(i + 1) for i in range(9)])
+
+    def test_protein_scale_even_window_direction_invariant(self):
+        """An even window must not double-count a residue: the profile of a
+        reversed sequence is the reversed profile."""
+        scale = {aa: float(i + 1) for i, aa in enumerate("ACDEFGHIK")}
+        forward = ProtParam.ProteinAnalysis("ACDEFGHIK").protein_scale(
+            scale, 4, edge=0.4
+        )
+        reverse = ProtParam.ProteinAnalysis("KIHGFEDCA").protein_scale(
+            scale, 4, edge=0.4
+        )[::-1]
+        for f, r in zip(forward, reverse):
+            self.assertAlmostEqual(f, r, places=7)
+
     def test_gravy(self):
         """Calculate gravy. Tests all pre-defined scales."""
         expected_values = {
