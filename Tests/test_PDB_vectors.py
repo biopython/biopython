@@ -278,6 +278,15 @@ class VectorTests(unittest.TestCase):
                 rslt[i] = mtxs[1][m].dot(rslt[i])
             self.assertTrue(np.array_equal(rslt, test_set[m]))
 
+    def test_multi_coord_space_zero_length(self):
+        """Confirm zero-length vectors produce a finite identity transform."""
+        point_set = np.array(
+            [[[1.0, 0.0, 0.0, 1.0], [0.0, 0.0, 0.0, 1.0], [0.0, 0.0, 0.0, 1.0]]]
+        )
+        transform = multi_coord_space(point_set, 1)
+        self.assertTrue(np.all(np.isfinite(transform)))
+        self.assertTrue(np.array_equal(transform[0], np.identity(4)))
+
     def test_vector_to_axis(self):
         """Test vector_to_axis function for correctness"""
         # Case 1: the line direction is along +x. The point (1,1,0) lies 1 unit above the line

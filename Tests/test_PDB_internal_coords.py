@@ -67,6 +67,14 @@ class Rebuild(unittest.TestCase):
         ic_chain = IC_Chain(chain)
         self.assertEqual(len(ic_chain.ordered_aa_ic_list), 70)
 
+    def test_atom_to_internal_coordinates_no_warnings(self):
+        """Convert 1A8O to internal coordinates without warnings."""
+        structure = self.PDB_parser.get_structure("1A8O", "PDB/1A8O.pdb")
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            structure.atom_to_internal_coordinates()
+        self.assertEqual(caught, [])
+
     def test_rebuild_1a8o(self):
         """Duplicate tutorial doctests which fail under linux."""
         IC_Chain.MaxPeptideBond = 4.0
